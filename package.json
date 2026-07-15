@@ -1,0 +1,23 @@
+{
+  "name": "superior-plus-painting",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "framer-motion": "^12.23.3",
+    "gsap": "^3.13.0",
+    "lucide-react": "^0.525.0",
+    "tailwindcss": "^4.1.11",
+    "vite": "^7.0.4",
+    "@vitejs/plugin-react": "^4.6.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {}
+}
