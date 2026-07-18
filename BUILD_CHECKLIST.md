@@ -17,7 +17,7 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` needs 
 
 - [x] Add React Router and GitHub Pages-compatible hash routing
 - [x] Create route-aware shared header and mobile navigation
-- [x] Add folder-style Services submenu exposing all nine service pages on desktop and mobile
+- [x] Add a clear Services dropdown exposing all nine service pages on desktop and mobile
 - [x] Create shared footer and global quote CTA
 - [x] Refactor paint dividers, reveals, buttons and typography primitives
 - [x] Create reusable page hero and trust strip
@@ -107,4 +107,4 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` needs 
 
 ## Current focus
 
-**Frontend navigation refinement.** The 15-page frontend is live, and the Services folder now exposes all nine service subpages on desktop and mobile. Automated browser QA passes across every route and viewport. Remaining work can focus on frontend content polish, final photography and client-confirmed copy; form-backend integration is outside the current scope.
+**Frontend navigation refinement.** The 15-page frontend is live, and a clean Services dropdown exposes all nine service subpages on desktop and mobile. Automated browser QA passes across every route and viewport. Remaining work can focus on frontend content polish, final photography and client-confirmed copy; form-backend integration is outside the current scope.

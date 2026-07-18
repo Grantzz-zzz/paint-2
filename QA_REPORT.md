@@ -26,7 +26,7 @@ Each route was checked for:
 The suite also exercised:
 
 - mobile menu navigation to Services;
-- folder-style mobile submenu visibility and service-page navigation;
+- mobile Services submenu visibility and service-page navigation;
 - FAQ accordion interaction and `aria-expanded` state;
 - contact-form validation and success state;
 - related-service navigation.
