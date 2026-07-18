@@ -30,6 +30,10 @@ The suite also exercised:
 - contact-form validation and success state;
 - related-service navigation.
 
+## Live deployment smoke test
+
+GitHub Pages workflow `29633841712` completed successfully for commit `ba6699c`. The deployed desktop homepage and mobile FAQ route both returned HTTP 200 with correct page metadata and headings, zero broken images, zero page errors, and no horizontal overflow.
+
 ## Known release dependencies
 
 The visual form flow is tested, but real message delivery remains pending selection of an email/form backend. Privacy wording and client-confirmed business details also remain open in `BUILD_CHECKLIST.md`.

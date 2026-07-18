@@ -100,9 +100,9 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` needs 
 - [x] No broken links or missing assets
 - [ ] Contact form delivery tested
 - [x] Commit completed implementation
-- [ ] Push to `Grantzz-zzz/paint-2`
-- [ ] GitHub Pages workflow succeeds
-- [ ] Live desktop and mobile smoke test
+- [x] Push to `Grantzz-zzz/paint-2`
+- [x] GitHub Pages workflow succeeds
+- [x] Live desktop and mobile smoke test
 
 ## Current focus
 
