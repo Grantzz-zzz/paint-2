@@ -5,9 +5,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   ArrowRight, BadgeCheck, Brush, Building2, Check, ChevronLeft, ChevronRight,
-  Clock3, Hammer, HeartHandshake, Home, Instagram, Mail, MapPin, Menu, PaintRoller,
+  ChevronDown, Clock3, FolderOpen, Hammer, HeartHandshake, Home, Instagram, Mail, MapPin, Menu, PaintRoller,
   Palette, Phone, ShieldCheck, Sparkles, SprayCan, Star, Trees, Warehouse, X
 } from 'lucide-react'
+import { serviceList } from './data/siteData'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -81,20 +82,39 @@ function Logo({ dark = false }) {
 
 function Navbar() {
   const [open, setOpen] = useState(false)
+  const [servicesOpen, setServicesOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
-  const go = (path) => { navigate(path); setOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  const go = (path) => { navigate(path); setOpen(false); setServicesOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  const toggleMobileMenu = () => {
+    const nextOpen = !open
+    setOpen(nextOpen)
+    setServicesOpen(nextOpen)
+  }
   return <header className="nav-shell">
     <nav className="nav-inner">
       <Logo />
       <div className="nav-links">
-        {nav.map(([path,label]) => <button key={path} className={location.pathname === path || (path === '/services' && location.pathname.startsWith('/services/')) ? 'active' : ''} onClick={() => go(path)}>{label}</button>)}
+        {nav.map(([path,label]) => path === '/services' ? <div className="nav-folder" key={path} onMouseEnter={()=>setServicesOpen(true)} onMouseLeave={()=>setServicesOpen(false)}>
+          <button className={`nav-main-link ${location.pathname.startsWith('/services') ? 'active' : ''}`} onClick={() => go(path)}>Services</button>
+          <button className="folder-trigger" onClick={()=>setServicesOpen(value=>!value)} aria-label="Show service pages" aria-expanded={servicesOpen} aria-controls="desktop-services-folder"><ChevronDown size={14}/></button>
+          <AnimatePresence>{servicesOpen&&<motion.div id="desktop-services-folder" className="folder-menu" role="navigation" aria-label="Service pages" initial={{opacity:0,y:-8,scale:.98}} animate={{opacity:1,y:0,scale:1}} exit={{opacity:0,y:-6,scale:.98}} transition={{duration:.16}}>
+            <div className="folder-tab"><FolderOpen size={17}/><span>Services folder</span><small>{serviceList.length} pages</small></div>
+            <button className="folder-overview" onClick={()=>go('/services')}><span><b>All services</b><small>Browse the complete service directory</small></span><ArrowRight size={17}/></button>
+            <div className="folder-grid">{serviceList.map((service,index)=><button key={service.slug} className={location.pathname.endsWith(service.slug)?'current':''} onClick={()=>go(`/services/${service.slug}`)}><span>{String(index+1).padStart(2,'0')}</span><b>{service.title}</b><ArrowRight size={14}/></button>)}</div>
+          </motion.div>}</AnimatePresence>
+        </div> : <button key={path} className={`nav-main-link ${location.pathname === path ? 'active' : ''}`} onClick={() => go(path)}>{label}</button>)}
       </div>
       <div className="nav-actions"><a href="tel:0470234567"><Phone size={15} /> 0470 234 567</a><button className="btn btn-small" onClick={() => go('/contact')}>Free quote <ArrowRight size={15} /></button></div>
-      <button className="menu-btn" onClick={() => setOpen(!open)} aria-label="Toggle menu" aria-expanded={open} aria-controls="mobile-navigation">{open ? <X /> : <Menu />}</button>
+      <button className="menu-btn" onClick={toggleMobileMenu} aria-label="Toggle menu" aria-expanded={open} aria-controls="mobile-navigation">{open ? <X /> : <Menu />}</button>
     </nav>
     <AnimatePresence>{open && <motion.div id="mobile-navigation" className="mobile-menu" initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }} exit={{ opacity:0, height:0 }}>
-      {nav.map(([path,label]) => <button key={path} onClick={() => go(path)}>{label}<ArrowRight size={16}/></button>)}
+      {nav.map(([path,label]) => path === '/services' ? <div className={`mobile-folder ${servicesOpen?'open':''}`} key={path}>
+        <div className="mobile-folder-head"><button onClick={()=>go(path)}><FolderOpen size={17}/><span>Services</span><small>{serviceList.length} pages</small></button><button onClick={()=>setServicesOpen(value=>!value)} aria-label="Toggle service pages" aria-expanded={servicesOpen} aria-controls="mobile-services-folder"><ChevronDown size={18}/></button></div>
+        <AnimatePresence>{servicesOpen&&<motion.div id="mobile-services-folder" className="mobile-folder-pages" initial={{height:0,opacity:0}} animate={{height:'auto',opacity:1}} exit={{height:0,opacity:0}}>
+          {serviceList.map((service,index)=><button key={service.slug} className={location.pathname.endsWith(service.slug)?'current':''} onClick={()=>go(`/services/${service.slug}`)}><span>{String(index+1).padStart(2,'0')}</span>{service.title}<ArrowRight size={14}/></button>)}
+        </motion.div>}</AnimatePresence>
+      </div> : <button key={path} onClick={() => go(path)}>{label}<ArrowRight size={16}/></button>)}
       <a className="btn" href="tel:0470234567"><Phone size={17}/> 0470 234 567</a>
     </motion.div>}</AnimatePresence>
   </header>
