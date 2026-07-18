@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   ArrowRight, BadgeCheck, Brush, Building2, Check, ChevronLeft, ChevronRight,
   Clock3, Hammer, HeartHandshake, Home, Instagram, Mail, MapPin, Menu, PaintRoller,
@@ -11,8 +12,8 @@ import {
 gsap.registerPlugin(ScrollTrigger)
 
 const nav = [
-  ['home', 'Home'], ['services', 'Services'], ['commercial', 'Commercial'],
-  ['projects', 'Projects'], ['about', 'Why us'], ['contact', 'Contact']
+  ['/', 'Home'], ['/services', 'Services'], ['/about', 'About'],
+  ['/our-process', 'Our Process'], ['/faqs', 'FAQs'], ['/contact', 'Contact']
 ]
 
 const services = [
@@ -74,37 +75,42 @@ function Divider({ color = '#fff', variant = 'wave' }) {
 }
 
 function Logo({ dark = false }) {
-  return <button onClick={() => scrollTo('home')} className="logo-wrap" aria-label="Go to top"><img src="./assets/logo.jpeg" alt="Superior Plus Painting & Remodeling" /><span className={dark ? 'text-white' : 'text-ink'}><b>Superior Plus</b><small>Painting & Remodeling</small></span></button>
+  const navigate = useNavigate()
+  return <button onClick={() => navigate('/')} className="logo-wrap" aria-label="Go to home page"><img src="./assets/logo.jpeg" alt="Superior Plus Painting & Remodeling" /><span className={dark ? 'text-white' : 'text-ink'}><b>Superior Plus</b><small>Painting & Remodeling</small></span></button>
 }
 
-function Navbar({ active }) {
+function Navbar() {
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const go = (path) => { navigate(path); setOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }
   return <header className="nav-shell">
     <nav className="nav-inner">
       <Logo />
       <div className="nav-links">
-        {nav.map(([id,label]) => <button key={id} className={active === id ? 'active' : ''} onClick={() => scrollTo(id)}>{label}</button>)}
+        {nav.map(([path,label]) => <button key={path} className={location.pathname === path || (path === '/services' && location.pathname.startsWith('/services/')) ? 'active' : ''} onClick={() => go(path)}>{label}</button>)}
       </div>
-      <div className="nav-actions"><a href="tel:0470234567"><Phone size={15} /> 0470 234 567</a><button className="btn btn-small" onClick={() => scrollTo('contact')}>Free quote <ArrowRight size={15} /></button></div>
-      <button className="menu-btn" onClick={() => setOpen(!open)} aria-label="Toggle menu">{open ? <X /> : <Menu />}</button>
+      <div className="nav-actions"><a href="tel:0470234567"><Phone size={15} /> 0470 234 567</a><button className="btn btn-small" onClick={() => go('/contact')}>Free quote <ArrowRight size={15} /></button></div>
+      <button className="menu-btn" onClick={() => setOpen(!open)} aria-label="Toggle menu" aria-expanded={open} aria-controls="mobile-navigation">{open ? <X /> : <Menu />}</button>
     </nav>
-    <AnimatePresence>{open && <motion.div className="mobile-menu" initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }} exit={{ opacity:0, height:0 }}>
-      {nav.map(([id,label]) => <button key={id} onClick={() => { scrollTo(id); setOpen(false) }}>{label}<ArrowRight size={16}/></button>)}
+    <AnimatePresence>{open && <motion.div id="mobile-navigation" className="mobile-menu" initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }} exit={{ opacity:0, height:0 }}>
+      {nav.map(([path,label]) => <button key={path} onClick={() => go(path)}>{label}<ArrowRight size={16}/></button>)}
       <a className="btn" href="tel:0470234567"><Phone size={17}/> 0470 234 567</a>
     </motion.div>}</AnimatePresence>
   </header>
 }
 
 function Hero() {
+  const navigate = useNavigate()
   return <section id="home" className="hero section-track">
-    <div className="hero-bg"><img src="./assets/hero-painter.png" alt="Professional painter applying a deep red finish in a modern Melbourne home" /></div>
+    <div className="hero-bg"><img src="./assets/hero-painter.png" alt="Professional painter applying a deep red finish in a modern Melbourne home" loading="eager" decoding="async" fetchPriority="high" /></div>
     <div className="paint-ribbon ribbon-green"/><div className="paint-ribbon ribbon-gold"/>
     <div className="container hero-content">
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">
         <Eyebrow>Melbourne painters who care</Eyebrow>
         <h1>Made to feel<br/><em>beautiful.</em><br/>Made to last.</h1>
         <p>Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.</p>
-        <div className="hero-buttons"><button className="btn" onClick={() => scrollTo('contact')}>Get a free quote <ArrowRight size={18}/></button><button className="text-link" onClick={() => scrollTo('projects')}>See our work <span>↘</span></button></div>
+        <div className="hero-buttons"><button className="btn" onClick={() => navigate('/contact')}>Get a free quote <ArrowRight size={18}/></button><button className="text-link" onClick={() => scrollTo('projects')}>See our work <span>↘</span></button></div>
         <div className="hero-trust"><span><Check/> Fully insured</span><span><Check/> Free colour advice</span><span><Check/> Melbourne-wide</span></div>
       </motion.div>
     </div>
@@ -168,16 +174,24 @@ function Contact() {
 }
 
 function Footer() {
-  return <footer><div className="container footer-grid"><div><Logo dark/><p>Premium residential and commercial painting across Melbourne, with care in every coat.</p></div><div><h4>Explore</h4>{nav.slice(1).map(([id,label])=><button key={id} onClick={()=>scrollTo(id)}>{label}</button>)}</div><div><h4>Services</h4><span>Residential painting</span><span>Commercial painting</span><span>Roof restoration</span><span>Carpentry & repairs</span></div><div><h4>Get in touch</h4><a href="tel:0470234567">0470 234 567</a><a href="mailto:sppainting.remodeling@gmail.com">sppainting.remodeling@gmail.com</a><span>Melbourne, Victoria</span><a href="#" aria-label="Instagram"><Instagram size={19}/></a></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} Superior Plus Painting & Remodeling</span><span>Made with care in Melbourne.</span></div></footer>
+  const navigate = useNavigate()
+  const go = (path) => { navigate(path); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  return <footer><div className="container footer-grid"><div><Logo dark/><p>Premium residential and commercial painting across Melbourne, with care in every coat.</p></div><div><h4>Explore</h4>{nav.slice(1).map(([path,label])=><button key={path} onClick={()=>go(path)}>{label}</button>)}</div><div><h4>Services</h4><button onClick={()=>go('/services/residential-painting-melbourne')}>Residential painting</button><button onClick={()=>go('/services/commercial-painting-melbourne')}>Commercial painting</button><button onClick={()=>go('/services/roof-painting-melbourne')}>Roof painting</button><button onClick={()=>go('/services/plaster-repairs-melbourne')}>Plaster repairs</button></div><div><h4>Get in touch</h4><a href="tel:0470234567">0470 234 567</a><a href="mailto:sppainting.remodeling@gmail.com">sppainting.remodeling@gmail.com</a><span>Melbourne, Victoria</span><a href="#" aria-label="Instagram"><Instagram size={19}/></a></div></div><div className="container footer-bottom"><span>© {new Date().getFullYear()} Superior Plus Painting & Remodeling</span><span>Made with care in Melbourne.</span></div></footer>
 }
 
 export default function App() {
-  const [active,setActive]=useState('home')
   useEffect(()=>{
-    const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)setActive(e.target.id)}),{rootMargin:'-35% 0px -55%',threshold:0})
-    document.querySelectorAll('.section-track').forEach(s=>observer.observe(s))
+    const description='Premium residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and quality workmanship.'
+    const canonical='https://grantzz-zzz.github.io/paint-2/'
+    document.title='Superior Plus Painting | Melbourne Painters'
+    const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=description
+    const link=document.querySelector('link[rel="canonical"]')||document.head.appendChild(Object.assign(document.createElement('link'),{rel:'canonical'}));link.href=canonical
+    ;[['og:title','Superior Plus Painting | Melbourne Painters'],['og:description',description],['og:url',canonical]].forEach(([property,content])=>{let tag=document.querySelector(`meta[property="${property}"]`);if(!tag){tag=document.createElement('meta');tag.setAttribute('property',property);document.head.appendChild(tag)}tag.content=content})
+    let schema=document.getElementById('page-structured-data');if(!schema){schema=document.createElement('script');schema.id='page-structured-data';schema.type='application/ld+json';document.head.appendChild(schema)}schema.textContent=JSON.stringify({'@context':'https://schema.org','@type':'LocalBusiness',name:'Superior Plus Painting & Remodeling',url:canonical,telephone:'+61470234567',email:'sppainting.remodeling@gmail.com',areaServed:'Melbourne, Victoria'})
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
-    return()=>{observer.disconnect();ctx.revert()}
+    return()=>ctx.revert()
   },[])
-  return <><Navbar active={active}/><main><Hero/><Services/><Commercial/><Projects/><WhyUs/><Areas/><Testimonials/><Contact/></main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero/><Services/><Commercial/><Projects/><WhyUs/><Areas/><Testimonials/><Contact/></main><Footer/></>
 }
+
+export { Navbar, Footer, Reveal, Eyebrow, Divider }
