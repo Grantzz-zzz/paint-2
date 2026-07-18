@@ -80,8 +80,15 @@ try {
       await page.locator('h1').first().waitFor({ state: 'visible' })
       await page.waitForTimeout(120)
 
-      const result = await page.evaluate(() => {
+      const result = await page.evaluate(async () => {
         const images = [...document.images]
+        const sources = [...new Set(images.map(image => image.currentSrc || image.src))]
+        const brokenImages = (await Promise.all(sources.map(source => new Promise(resolve => {
+          const probe = new Image()
+          probe.onload = () => resolve(null)
+          probe.onerror = () => resolve(source)
+          probe.src = source
+        })))).filter(Boolean)
         const emptyButtons = [...document.querySelectorAll('button')].filter(button => !button.textContent.trim() && !button.getAttribute('aria-label'))
         let schemaValid = true
         try { JSON.parse(document.querySelector('#page-structured-data')?.textContent || '{}') } catch { schemaValid = false }
@@ -91,7 +98,7 @@ try {
           title: document.title,
           description: document.querySelector('meta[name="description"]')?.content || '',
           canonical: document.querySelector('link[rel="canonical"]')?.href || '',
-          brokenImages: images.filter(image => !image.complete || image.naturalWidth === 0).map(image => image.src),
+          brokenImages,
           emptyAlts: images.filter(image => !image.alt.trim()).map(image => image.src),
           emptyButtons: emptyButtons.length,
           overflow: document.documentElement.scrollWidth - window.innerWidth,
@@ -151,6 +158,15 @@ try {
   await page.locator('.related-card').first().click()
   await page.waitForTimeout(100)
   check(!page.url().endsWith('residential-painting-melbourne'), 'related service: navigation did not change route')
+
+  await page.goto(`${origin}#/services/fence-painting-melbourne`, { waitUntil: 'domcontentloaded' })
+  check(await page.locator('.client-media-card').count() === 8, 'project gallery: initial progressive set is incorrect')
+  await page.locator('.gallery-more').click()
+  check(await page.locator('.client-media-card').count() === 22, 'project gallery: full unique media set did not expand')
+  await page.locator('.client-media-card').last().click()
+  check(await page.locator('.media-lightbox').isVisible() && await page.locator('.media-lightbox video').count() === 1, 'project gallery: video lightbox did not open')
+  await page.locator('.lightbox-close').click()
+  check(!(await page.locator('.media-lightbox').count()), 'project gallery: lightbox did not close')
 
   await interactionContext.close()
 } finally {

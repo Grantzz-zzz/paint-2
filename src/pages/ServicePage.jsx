@@ -3,6 +3,8 @@ import { ArrowRight, Check, PaintRoller } from 'lucide-react'
 import { PageLayout, PageHero, TrustStrip, SectionIntro, TestimonialBand, AreasBand, ClosingCTA } from '../components/PageLayout'
 import { serviceList, servicePages } from '../data/siteData'
 import { Reveal, Divider } from '../App'
+import ProjectGallery from '../components/ProjectGallery'
+import { serviceMediaCategory } from '../data/projectMedia'
 
 export default function ServicePage() {
   const { slug } = useParams()
@@ -11,7 +13,7 @@ export default function ServicePage() {
   if (!page) return <Navigate to="/services" replace/>
   const related = page.related.map(id => serviceList.find(s => s.slug === id)).filter(Boolean)
   return <PageLayout title={`${page.title} Melbourne`} description={page.intro} pageType="Service" image={page.image}>
-    <PageHero {...page} imageAlt={`${page.title} service placeholder`}/>
+    <PageHero {...page} imageAlt={page.image.includes('/client/')?`${page.title} project completed by Superior Plus Painting`:`${page.title} service placeholder`}/>
     <TrustStrip/>
 
     <section className="inner-section scope-section"><div className="container">
@@ -23,6 +25,8 @@ export default function ServicePage() {
       <SectionIntro eyebrow="How it comes together" title="A considered process." accent="A lasting finish." text={page.why}/>
       <div className="service-process">{page.process.map((item,i)=><Reveal key={item} delay={i*.06}><article><b>{String(i+1).padStart(2,'0')}</b><span>{item}</span>{i<page.process.length-1&&<i/>}</article></Reveal>)}</div>
     </div></section>
+
+    <ProjectGallery category={serviceMediaCategory[slug]}/>
 
     <section className={`benefit-section benefit-${page.tone}`}><div className="container benefit-grid"><Reveal><PaintRoller/><h2>Why this work<br/><em>makes a difference.</em></h2></Reveal><div className="benefit-list">{page.benefits.map((item,i)=><Reveal key={item} delay={i*.06}><div><span>0{i+1}</span><h3>{item}</h3></div></Reveal>)}</div></div><Divider color="#fff" variant="drip"/></section>
 

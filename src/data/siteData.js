@@ -40,15 +40,15 @@ export const serviceList = [
 ]
 
 const stock = {
-  residential: './assets/stock/residential.webp',
-  commercial: './assets/stock/commercial.webp',
-  interior: './assets/stock/interior.webp',
-  exterior: './assets/stock/exterior.webp',
+  residential: './assets/client/projects/exterior/exterior-07.webp',
+  commercial: './assets/client/projects/commercial/commercial-02.webp',
+  interior: './assets/client/projects/interior/interior-04.webp',
+  exterior: './assets/client/projects/exterior/exterior-01.webp',
   roof: './assets/stock/roof.webp',
-  fence: './assets/stock/fence.webp',
-  deck: './assets/stock/deck.webp',
+  fence: './assets/client/projects/fence/fence-03.webp',
+  deck: './assets/client/projects/outdoor/outdoor-01.webp',
   wallpaper: './assets/stock/wallpaper.webp',
-  plaster: './assets/stock/plaster.webp',
+  plaster: './assets/client/projects/interior/interior-10.webp',
 }
 
 export const servicePages = {

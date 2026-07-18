@@ -4,13 +4,14 @@ import { ArrowRight, Check, ChevronDown, Hammer, Mail, PaintRoller, Palette, Pho
 import { PageLayout, PageHero, TrustStrip, SectionIntro, TestimonialBand, AreasBand, ClosingCTA, QualityGrid } from '../components/PageLayout'
 import { Reveal, Divider } from '../App'
 import { faqs, masterProcess, serviceList, suburbs } from '../data/siteData'
+import { brandArchive } from '../data/projectMedia'
 
 const images = {
-  about: './assets/stock/about.webp',
-  services: './assets/stock/services.webp',
-  process: './assets/stock/process.webp',
-  faq: './assets/stock/faq.webp',
-  contact: './assets/stock/contact.webp',
+  about: './assets/client/projects/fence/fence-03.webp',
+  services: './assets/client/projects/commercial/commercial-02.webp',
+  process: './assets/client/projects/commercial/commercial-06.webp',
+  faq: './assets/client/projects/interior/interior-04.webp',
+  contact: './assets/client/projects/exterior/exterior-07.webp',
 }
 
 export function ServicesPage() {
@@ -29,8 +30,9 @@ export function AboutPage() {
   return <PageLayout title="About Us" description="Meet Superior Plus Painting, Melbourne painting professionals committed to careful preparation, reliable service and quality workmanship." image={images.about} pageType="AboutPage">
     <PageHero eyebrow="Your trusted Melbourne painters" title="Care in every coat." accent="Pride in every detail." intro="Superior Plus Painting is a Melbourne-based team dedicated to high-quality residential and commercial painting with reliable service, honest communication and respect for every property." image={images.about} tone="green"/>
     <TrustStrip/>
-    <section className="inner-section"><div className="container editorial-grid"><Reveal><SectionIntro eyebrow="Our approach" title="Quality begins" accent="before the first coat."/><p>From small residential touch-ups to complete home repaints and large commercial projects, we approach every job with professionalism, honesty and pride. We inspect and prepare each surface, protect surrounding areas and use professional application techniques for a smooth, durable finish.</p><p>We understand that your property is one of your most valuable investments. That is why clear communication, reliable scheduling and a clean handover matter just as much as the paint itself.</p></Reveal><Reveal className="editorial-image" delay={.1}><img src={images.about} alt="Professional painter at work placeholder" loading="lazy" decoding="async"/><span>Stock image · team photography to come</span></Reveal></div></section>
-    <section className="inner-section cream"><div className="container"><SectionIntro eyebrow="Why Superior Plus" title="Standards you can see." accent="Service you can feel."/><QualityGrid items={['Experienced, professional painters','High-quality workmanship','Attention to every detail','Reliable communication','Clean and tidy sites','Competitive, transparent pricing','Fully insured','Free, no-obligation quotes']}/></div></section>
+    <section className="inner-section"><div className="container editorial-grid"><Reveal><SectionIntro eyebrow="Our approach" title="Quality begins" accent="before the first coat."/><p>From small residential touch-ups to complete home repaints and large commercial projects, we approach every job with professionalism, honesty and pride. We inspect and prepare each surface, protect surrounding areas and use professional application techniques for a smooth, durable finish.</p><p>We understand that your property is one of your most valuable investments. That is why clear communication, reliable scheduling and a clean handover matter just as much as the paint itself.</p></Reveal><Reveal className="editorial-image" delay={.1}><img src={images.about} alt="Superior Plus painter spray painting a residential fence" loading="lazy" decoding="async"/><span>Superior Plus project</span></Reveal></div></section>
+    <section className="inner-section cream"><div className="container brand-archive"><Reveal><img src={brandArchive} alt="Superior Plus Painting original promotional artwork" loading="lazy" decoding="async"/></Reveal><Reveal delay={.1}><SectionIntro eyebrow="Our local roots" title="Built through" accent="hands-on service."/><p>Superior Plus has grown through practical local promotion, direct client relationships and work that can be seen across Melbourne homes and businesses.</p><small>Original client-supplied promotional artwork retained as part of the company archive.</small></Reveal></div></section>
+    <section className="inner-section"><div className="container"><SectionIntro eyebrow="Why Superior Plus" title="Standards you can see." accent="Service you can feel."/><QualityGrid items={['Experienced, professional painters','High-quality workmanship','Attention to every detail','Reliable communication','Clean and tidy sites','Competitive, transparent pricing','Fully insured','Free, no-obligation quotes']}/></div></section>
     <TestimonialBand index={0}/><AreasBand/><ClosingCTA/>
   </PageLayout>
 }

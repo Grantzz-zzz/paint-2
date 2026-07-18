@@ -1,6 +1,8 @@
 # Stock Image Placeholder Register
 
-These images are temporary visual placeholders downloaded from Unsplash and stored locally as optimised WebP files. Replace them with genuine Superior Plus Painting project photography before final launch wherever possible.
+These images are temporary visual placeholders downloaded from Unsplash and stored locally as optimised WebP files. A client-media library was integrated on 18 July 2026; the stock files remain available only for subjects not represented in the supplied archive.
+
+Real client photography now replaces the Home project cards and the Residential, Commercial, Interior, Exterior, Fence, Deck, Plaster, About, Services, Process, FAQ and Contact hero imagery. Roof Painting and Wallpaper Removal still use subject-relevant stock placeholders. See `CLIENT_MEDIA.md` for the complete media audit and placement map.
 
 | Page/use | Local asset | Source image |
 |---|---|---|

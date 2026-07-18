@@ -66,6 +66,12 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` needs 
 
 ## Phase 6 — SEO and quality
 
+- [x] Audit 124 client-supplied photos and videos
+- [x] Remove 68 exact duplicate copies from the production library
+- [x] Optimise and categorize all 56 unique client assets
+- [x] Add progressive project galleries and click-to-play video lightboxes
+- [x] Replace relevant stock heroes and homepage project imagery
+
 - [x] Unique title and meta description on every page
 - [x] One H1 per page and logical heading order
 - [x] Breadcrumbs and contextual internal links

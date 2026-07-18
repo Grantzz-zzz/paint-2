@@ -4,7 +4,7 @@ Run date: 18 July 2026
 
 ## Result
 
-**PASS — 503 checks, 0 failures**
+**PASS — 507 checks, 0 failures**
 
 - 15 routes tested
 - 3 viewports per route: desktop (1440 × 1000), tablet (768 × 1024), and mobile (390 × 844)
@@ -27,6 +27,7 @@ The suite also exercised:
 
 - mobile menu navigation to Services;
 - mobile Services submenu visibility and service-page navigation;
+- progressive client-gallery expansion, video lightbox mounting and close behavior;
 - FAQ accordion interaction and `aria-expanded` state;
 - contact-form validation and success state;
 - related-service navigation.

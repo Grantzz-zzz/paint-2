@@ -41,9 +41,9 @@ const trust = [
 ]
 
 const projects = [
-  { title: 'Warm modern interior', type: 'Interior · Glen Waverley', image: './assets/hero-painter.png', pos: 'left center', color: '#f3c51d' },
-  { title: 'Statement wall finish', type: 'Residential · Chadstone', image: './assets/hero-painter.png', pos: 'right center', color: '#8f2824' },
-  { title: 'Craft, colour, care', type: 'Detail · Mount Waverley', image: './assets/hero-painter.png', pos: '72% center', color: '#1f5140' },
+  { title: 'Warm modern interior', type: 'Interior project · Melbourne', image: './assets/client/projects/interior/interior-04.webp', pos: 'center', color: '#f3c51d' },
+  { title: 'Exterior transformation', type: 'Residential project · Melbourne', image: './assets/client/projects/exterior/exterior-07.webp', pos: 'center', color: '#8f2824' },
+  { title: 'Commercial precision', type: 'Commercial project · Melbourne', image: './assets/client/projects/commercial/commercial-02.webp', pos: 'center', color: '#1f5140' },
 ]
 
 const testimonials = [

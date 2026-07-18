@@ -56,6 +56,7 @@ function Breadcrumbs({currentTitle}){
 }
 
 export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon', imageAlt }) {
+  const clientProject=image?.includes('/client/')
   return <section className={`page-hero page-hero-${tone}`}>
     <div className="page-hero-paint paint-one"/><div className="page-hero-paint paint-two"/>
     <div className="container page-hero-grid">
@@ -67,7 +68,7 @@ export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon'
       </div>
       <div className="page-hero-visual">
         <div className="page-image-frame"/><img src={image} alt={imageAlt || title} loading="eager" decoding="async" fetchPriority="high" />
-        <span className="image-placeholder-note">Stock image · replace with project photography</span>
+        <span className="image-placeholder-note">{clientProject?'Superior Plus project':'Stock image · replace with project photography'}</span>
       </div>
     </div>
     <Divider color="#fff" variant="wave"/>
