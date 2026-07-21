@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "layout": { "contentSize": "1180px", "wideSize": "1360px" },
+    "color": {
+      "custom": false,
+      "palette": [
+        { "slug": "maroon", "name": "Maroon", "color": "#8f2824" },
+        { "slug": "gold", "name": "Gold", "color": "#f3c51d" },
+        { "slug": "green", "name": "Green", "color": "#1f5140" },
+        { "slug": "cream", "name": "Cream", "color": "#fbf6ec" },
+        { "slug": "terracotta", "name": "Terracotta", "color": "#c9623d" },
+        { "slug": "teal", "name": "Teal", "color": "#3d7771" },
+        { "slug": "ink", "name": "Ink", "color": "#18211e" }
+      ]
+    },
+    "typography": {
+      "fluid": true,
+      "fontFamilies": [
+        { "slug": "body", "name": "DM Sans", "fontFamily": "'DM Sans', sans-serif" },
+        { "slug": "heading", "name": "Manrope", "fontFamily": "'Manrope', sans-serif" },
+        { "slug": "accent", "name": "Georgia", "fontFamily": "Georgia, serif" }
+      ]
+    },
+    "spacing": { "units": ["px", "rem", "%", "vw"] }
+  },
+  "styles": {
+    "color": { "background": "#ffffff", "text": "#18211e" },
+    "typography": { "fontFamily": "var(--wp--preset--font-family--body)" },
+    "elements": {
+      "heading": { "typography": { "fontFamily": "var(--wp--preset--font-family--heading)" } },
+      "link": { "color": { "text": "#8f2824" } }
+    }
+  }
+}

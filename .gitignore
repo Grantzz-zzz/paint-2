@@ -1,5 +1,6 @@
 node_modules/
 dist/
+wordpress-theme/dist/
 .vite/
 .chrome-*/
 .edge-*/
@@ -7,4 +8,3 @@ site-preview*.png
 data-test.png
 *.log
 .DS_Store
-
