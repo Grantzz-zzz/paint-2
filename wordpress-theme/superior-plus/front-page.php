@@ -5,6 +5,18 @@
  * @package SuperiorPlus
  */
 get_header();
+$home_id        = (int) get_option( 'page_on_front' );
+$elementor_data = $home_id ? get_post_meta( $home_id, '_elementor_data', true ) : '';
+if ( $home_id && ! empty( $elementor_data ) ) {
+	while ( have_posts() ) {
+		the_post();
+		echo '<main id="main-content" class="spp-elementor-page">';
+		the_content();
+		echo '</main>';
+	}
+	get_footer();
+	return;
+}
 $services = get_posts( array( 'post_type' => 'spp_service', 'numberposts' => 8, 'orderby' => 'menu_order', 'order' => 'ASC' ) );
 ?>
 <main id="main-content">

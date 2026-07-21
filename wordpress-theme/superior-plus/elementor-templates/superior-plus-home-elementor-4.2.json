@@ -1,0 +1,2066 @@
+{
+  "content": [
+    {
+      "id": "0000000d",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-el-section spp-el-hero"
+      },
+      "elements": [
+        {
+          "id": "00000001",
+          "elType": "widget",
+          "widgetType": "image",
+          "settings": {
+            "_css_classes": "spp-el-hero-image",
+            "image": {
+              "url": "https://grantzz-zzz.github.io/paint-2/assets/hero-painter.png",
+              "id": "",
+              "alt": "Professional painter applying a deep red finish in a modern Melbourne home",
+              "source": "library"
+            },
+            "image_size": "full"
+          },
+          "elements": []
+        },
+        {
+          "id": "0000000a",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-el-shell spp-el-hero-shell"
+          },
+          "elements": [
+            {
+              "id": "00000009",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-hero-copy"
+              },
+              "elements": [
+                {
+                  "id": "00000002",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-eyebrow",
+                    "title": "Melbourne painters who care",
+                    "header_size": "div"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000003",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-display",
+                    "title": "Made to feel<br><em>beautiful.</em><br>Made to last.",
+                    "header_size": "h1"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000004",
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "_css_classes": "spp-el-hero-lead",
+                    "editor": "<p>Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.</p>"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000007",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-actions"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000005",
+                      "elType": "widget",
+                      "widgetType": "button",
+                      "settings": {
+                        "_css_classes": "spp-el-primary",
+                        "text": "Get a free quote →",
+                        "link": {
+                          "url": "/contact/",
+                          "is_external": "",
+                          "nofollow": "",
+                          "custom_attributes": ""
+                        },
+                        "size": "md"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000006",
+                      "elType": "widget",
+                      "widgetType": "button",
+                      "settings": {
+                        "_css_classes": "spp-el-secondary",
+                        "text": "See our work ↘",
+                        "link": {
+                          "url": "#projects",
+                          "is_external": "",
+                          "nofollow": "",
+                          "custom_attributes": ""
+                        },
+                        "size": "md"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000008",
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "_css_classes": "spp-el-trustline",
+                    "editor": "<p>✓ Fully insured&nbsp;&nbsp;&nbsp; ✓ Free colour advice&nbsp;&nbsp;&nbsp; ✓ Melbourne-wide</p>"
+                  },
+                  "elements": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "0000000c",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-el-stamp"
+          },
+          "elements": [
+            {
+              "id": "0000000b",
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "_css_classes": "",
+                "editor": "<small>Quality finish</small><strong>100%</strong><small>Every detail</small>"
+              },
+              "elements": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "0000003d",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-el-section spp-el-services"
+      },
+      "elements": [
+        {
+          "id": "0000003c",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-el-shell"
+          },
+          "elements": [
+            {
+              "id": "00000012",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-section-heading"
+              },
+              "elements": [
+                {
+                  "id": "00000010",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-heading-copy"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000000e",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-eyebrow",
+                        "title": "What we paint",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000000f",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Every surface deserves<br><em>the right finish.</em>",
+                        "header_size": "h2"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000011",
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "_css_classes": "spp-el-lead",
+                    "editor": "<p>From one carefully refreshed room to a complete commercial transformation, our experienced team brings the same care to every job.</p>"
+                  },
+                  "elements": []
+                }
+              ]
+            },
+            {
+              "id": "0000003b",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-service-grid"
+              },
+              "elements": [
+                {
+                  "id": "00000017",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-service-card tone-maroon"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000013",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-number",
+                        "title": "01",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000014",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-title",
+                        "title": "Residential painting",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000015",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-card-copy",
+                        "editor": "<p>Thoughtful interior and exterior finishes that make home feel new again.</p>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000016",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-arrow",
+                        "title": "↗",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0000001c",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-service-card tone-green"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000018",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-number",
+                        "title": "02",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000019",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-title",
+                        "title": "Commercial painting",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000001a",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-card-copy",
+                        "editor": "<p>Flexible, low-disruption painting for offices, retail, strata and more.</p>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000001b",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-arrow",
+                        "title": "↗",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000021",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-service-card tone-gold"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000001d",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-number",
+                        "title": "03",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000001e",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-title",
+                        "title": "Interior & exterior",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000001f",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-card-copy",
+                        "editor": "<p>Detailed preparation and durable finishes, inside and out.</p>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000020",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-arrow",
+                        "title": "↗",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000026",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-service-card tone-teal"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000022",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-number",
+                        "title": "04",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000023",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-title",
+                        "title": "Roof restoration",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000024",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-card-copy",
+                        "editor": "<p>Clean, repair, seal and coat for stronger weather protection.</p>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000025",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-arrow",
+                        "title": "↗",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0000002b",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-service-card tone-terracotta"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000027",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-number",
+                        "title": "05",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000028",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-title",
+                        "title": "Decks & fences",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000029",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-card-copy",
+                        "editor": "<p>Stains and coatings designed to stand up to Melbourne weather.</p>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000002a",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-arrow",
+                        "title": "↗",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000030",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-service-card tone-navy"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000002c",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-number",
+                        "title": "06",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000002d",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-title",
+                        "title": "Colour consultation",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000002e",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-card-copy",
+                        "editor": "<p>Clear, confident colour choices that work with your architecture.</p>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000002f",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-arrow",
+                        "title": "↗",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000035",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-service-card tone-green"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000031",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-number",
+                        "title": "07",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000032",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-title",
+                        "title": "Spray painting",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000033",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-card-copy",
+                        "editor": "<p>Smooth, modern finishes for cabinetry, doors and detailed surfaces.</p>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000034",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-arrow",
+                        "title": "↗",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0000003a",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-service-card tone-maroon"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000036",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-number",
+                        "title": "08",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000037",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-title",
+                        "title": "Carpentry & repairs",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000038",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-card-copy",
+                        "editor": "<p>Plaster, weatherboard and light timber repairs before we paint.</p>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000039",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-card-arrow",
+                        "title": "↗",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "00000059",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-el-section spp-el-commercial"
+      },
+      "elements": [
+        {
+          "id": "00000058",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-el-shell"
+          },
+          "elements": [
+            {
+              "id": "00000044",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-commercial-top"
+              },
+              "elements": [
+                {
+                  "id": "00000040",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": ""
+                  },
+                  "elements": [
+                    {
+                      "id": "0000003e",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-eyebrow",
+                        "title": "Commercial specialists",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000003f",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "We keep your business<br><em>looking its best.</em>",
+                        "header_size": "h2"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000043",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": ""
+                  },
+                  "elements": [
+                    {
+                      "id": "00000041",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-lead",
+                        "editor": "<p>Professional finishes, clear communication and scheduling built around your operation—from a single office to multi-site projects.</p>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000042",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "spp-el-tags",
+                        "editor": "<p><span>Offices</span><span>Retail</span><span>Warehouses</span><span>Medical</span><span>Education</span><span>Hospitality</span><span>Strata</span></p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "00000057",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-process"
+              },
+              "elements": [
+                {
+                  "id": "00000047",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-process-label"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000045",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Our process",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000046",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Simple, transparent, stress-free.</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0000004a",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-process-step"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000048",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "01",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000049",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Inspect & quote",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0000004d",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-process-step"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000004b",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "02",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000004c",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Plan & schedule",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000050",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-process-step"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000004e",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "03",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000004f",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Prep & prime",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000053",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-process-step"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000051",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "04",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000052",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Paint & perfect",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000056",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-process-step"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000054",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "05",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000055",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Final walkthrough",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "0000006d",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-el-section spp-el-projects",
+        "html_tag": "section",
+        "css_id": "projects"
+      },
+      "elements": [
+        {
+          "id": "0000006c",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-el-shell"
+          },
+          "elements": [
+            {
+              "id": "0000005e",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-section-heading"
+              },
+              "elements": [
+                {
+                  "id": "0000005c",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-heading-copy"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000005a",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-eyebrow",
+                        "title": "Selected work",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000005b",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Colour changes<br><em>everything.</em>",
+                        "header_size": "h2"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0000005d",
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "_css_classes": "spp-el-lead",
+                    "editor": "<p>Explore the care behind every edge, every surface and every final coat. Hover a project to reveal the colour beneath.</p>"
+                  },
+                  "elements": []
+                }
+              ]
+            },
+            {
+              "id": "0000006b",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-project-grid"
+              },
+              "elements": [
+                {
+                  "id": "00000062",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-project spp-el-project-1"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000005f",
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "_css_classes": "",
+                        "image": {
+                          "url": "https://grantzz-zzz.github.io/paint-2/assets/client/projects/interior/interior-04.webp",
+                          "id": "",
+                          "alt": "Warm modern interior",
+                          "source": "library"
+                        },
+                        "image_size": "full"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000060",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Warm modern interior",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000061",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Interior project · Melbourne</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000066",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-project spp-el-project-2"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000063",
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "_css_classes": "",
+                        "image": {
+                          "url": "https://grantzz-zzz.github.io/paint-2/assets/client/projects/exterior/exterior-07.webp",
+                          "id": "",
+                          "alt": "Exterior transformation",
+                          "source": "library"
+                        },
+                        "image_size": "full"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000064",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Exterior transformation",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000065",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Residential project · Melbourne</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0000006a",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-project spp-el-project-3"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000067",
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "_css_classes": "",
+                        "image": {
+                          "url": "https://grantzz-zzz.github.io/paint-2/assets/client/projects/commercial/commercial-02.webp",
+                          "id": "",
+                          "alt": "Commercial precision",
+                          "source": "library"
+                        },
+                        "image_size": "full"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000068",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Commercial precision",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000069",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Commercial project · Melbourne</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "00000085",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-el-section spp-el-why"
+      },
+      "elements": [
+        {
+          "id": "00000084",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-el-shell spp-el-why-grid"
+          },
+          "elements": [
+            {
+              "id": "00000072",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-why-copy"
+              },
+              "elements": [
+                {
+                  "id": "0000006e",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-eyebrow",
+                    "title": "The Superior difference",
+                    "header_size": "div"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000006f",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "",
+                    "title": "Good painting starts<br><em>before the first coat.</em>",
+                    "header_size": "h2"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000070",
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "_css_classes": "spp-el-lead",
+                    "editor": "<p>We listen, prepare properly and communicate clearly. It’s how we deliver polished, durable work—without turning your home or workplace upside down.</p>"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000071",
+                  "elType": "widget",
+                  "widgetType": "button",
+                  "settings": {
+                    "_css_classes": "spp-el-secondary",
+                    "text": "Talk to our team ↗",
+                    "link": {
+                      "url": "tel:0470234567",
+                      "is_external": "",
+                      "nofollow": "",
+                      "custom_attributes": ""
+                    },
+                    "size": "md"
+                  },
+                  "elements": []
+                }
+              ]
+            },
+            {
+              "id": "00000083",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-trust-grid"
+              },
+              "elements": [
+                {
+                  "id": "00000076",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-trust-card"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000073",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-check",
+                        "title": "✓",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000074",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Fully insured",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000075",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Your property and peace of mind are protected.</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0000007a",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-trust-card"
+                  },
+                  "elements": [
+                    {
+                      "id": "00000077",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-check",
+                        "title": "✓",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000078",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Premium materials",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000079",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Proven Australian paint systems for lasting results.</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "0000007e",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-trust-card"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000007b",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-check",
+                        "title": "✓",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000007c",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "On time, every time",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000007d",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Clear schedules, prompt arrivals and no loose ends.</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00000082",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-trust-card"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000007f",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-check",
+                        "title": "✓",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000080",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Respectfully clean",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00000081",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Careful protection, tidy sites and a spotless handover.</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "00000098",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-el-section spp-el-areas"
+      },
+      "elements": [
+        {
+          "id": "00000097",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-el-shell spp-el-areas-grid"
+          },
+          "elements": [
+            {
+              "id": "00000089",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": ""
+              },
+              "elements": [
+                {
+                  "id": "00000086",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-eyebrow",
+                    "title": "Melbourne-wide",
+                    "header_size": "div"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000087",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "",
+                    "title": "Your local painting team,<br><em>wherever you are.</em>",
+                    "header_size": "h2"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000088",
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "_css_classes": "spp-el-lead",
+                    "editor": "<p>Based in Melbourne and proudly servicing homes and businesses across the south-east and surrounding suburbs.</p>"
+                  },
+                  "elements": []
+                }
+              ]
+            },
+            {
+              "id": "00000096",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-suburbs"
+              },
+              "elements": [
+                {
+                  "id": "0000008a",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Chadstone",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000008b",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Mount Waverley",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000008c",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Glen Waverley",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000008d",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Oakleigh",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000008e",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Mulgrave",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000008f",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Clayton",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000090",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Dandenong",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000091",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Springvale",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000092",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Keysborough",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000093",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Berwick",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000094",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Narre Warren",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "00000095",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-chip",
+                    "title": "⌖ Endeavour Hills",
+                    "header_size": "span"
+                  },
+                  "elements": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "000000b1",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-el-section spp-el-testimonials"
+      },
+      "elements": [
+        {
+          "id": "000000b0",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-el-shell spp-el-testimonial-grid"
+          },
+          "elements": [
+            {
+              "id": "0000009f",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": ""
+              },
+              "elements": [
+                {
+                  "id": "00000099",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-eyebrow",
+                    "title": "Kind words",
+                    "header_size": "div"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000009a",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "",
+                    "title": "Loved by<br><em>Melbourne locals.</em>",
+                    "header_size": "h2"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000009e",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-slider-controls"
+                  },
+                  "elements": [
+                    {
+                      "id": "0000009b",
+                      "elType": "widget",
+                      "widgetType": "button",
+                      "settings": {
+                        "_css_classes": "spp-el-review-prev",
+                        "text": "←",
+                        "link": {
+                          "url": "#",
+                          "is_external": "",
+                          "nofollow": "",
+                          "custom_attributes": ""
+                        },
+                        "size": "md"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000009c",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-review-count",
+                        "title": "01 / 03",
+                        "header_size": "span"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000009d",
+                      "elType": "widget",
+                      "widgetType": "button",
+                      "settings": {
+                        "_css_classes": "spp-el-review-next",
+                        "text": "→",
+                        "link": {
+                          "url": "#",
+                          "is_external": "",
+                          "nofollow": "",
+                          "custom_attributes": ""
+                        },
+                        "size": "md"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "000000af",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-el-review-stage"
+              },
+              "elements": [
+                {
+                  "id": "000000a4",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-review"
+                  },
+                  "elements": [
+                    {
+                      "id": "000000a0",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-stars",
+                        "title": "★★★★★",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000000a1",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<blockquote>“I’m truly amazed by their quality of work and dedication. The painters were courteous, friendly and completed outstanding paintwork in a short time.”</blockquote>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000000a2",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "John",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000000a3",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Residential painting</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "000000a9",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-review is-hidden"
+                  },
+                  "elements": [
+                    {
+                      "id": "000000a5",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-stars",
+                        "title": "★★★★★",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000000a6",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<blockquote>“They painted the exterior of our house and did an amazing job. The team arrived on time every morning. We’re very happy and would definitely use them again.”</blockquote>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000000a7",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Jenny",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000000a8",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Exterior repaint</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "000000ae",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-el-review is-hidden"
+                  },
+                  "elements": [
+                    {
+                      "id": "000000aa",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-el-stars",
+                        "title": "★★★★★",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000000ab",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<blockquote>“Afshin and his team transformed my office with incredible paintwork. The space looks as good as new.”</blockquote>"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000000ac",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "",
+                        "title": "Philip",
+                        "header_size": "h3"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000000ad",
+                      "elType": "widget",
+                      "widgetType": "text-editor",
+                      "settings": {
+                        "_css_classes": "",
+                        "editor": "<p>Commercial painting</p>"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "000000b9",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-el-section spp-el-contact",
+        "html_tag": "section",
+        "css_id": "contact"
+      },
+      "elements": [
+        {
+          "id": "000000b8",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-el-shell spp-el-contact-grid"
+          },
+          "elements": [
+            {
+              "id": "000000b6",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": ""
+              },
+              "elements": [
+                {
+                  "id": "000000b2",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-el-eyebrow",
+                    "title": "Let’s talk colour",
+                    "header_size": "div"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "000000b3",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "",
+                    "title": "Ready for a<br><em>fresh start?</em>",
+                    "header_size": "h2"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "000000b4",
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "_css_classes": "spp-el-lead",
+                    "editor": "<p>Tell us what you’re planning. We’ll arrange a free, no-obligation quote and help you choose the right way forward.</p>"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "000000b5",
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "_css_classes": "spp-el-contact-links",
+                    "editor": "<p><a href=\"tel:0470234567\">Call us&nbsp; <strong>0470 234 567</strong></a><br><a href=\"mailto:sppainting.remodeling@gmail.com\">Email us&nbsp; <strong>sppainting.remodeling@gmail.com</strong></a></p>"
+                  },
+                  "elements": []
+                }
+              ]
+            },
+            {
+              "id": "000000b7",
+              "elType": "widget",
+              "widgetType": "shortcode",
+              "settings": {
+                "_css_classes": "spp-el-form",
+                "shortcode": "[spp_quote_form]"
+              },
+              "elements": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "page_settings": {
+    "hide_title": "yes",
+    "page_layout": "default"
+  },
+  "version": "0.4",
+  "title": "Superior Plus — React Homepage",
+  "type": "page"
+}

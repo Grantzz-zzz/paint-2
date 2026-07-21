@@ -148,6 +148,13 @@ function spp_quote_form_preview( $class = 'quote-form' ) {
 	<?php
 }
 
+function spp_quote_form_shortcode() {
+	ob_start();
+	spp_quote_form_preview();
+	return ob_get_clean();
+}
+add_shortcode( 'spp_quote_form', 'spp_quote_form_shortcode' );
+
 function spp_project_gallery( $category ) {
 	$counts = array( 'commercial' => 8, 'interior' => 10, 'exterior' => 9, 'fence' => 21, 'outdoor' => 2 );
 	if ( empty( $counts[ $category ] ) ) {

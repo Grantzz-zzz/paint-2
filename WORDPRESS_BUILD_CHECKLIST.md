@@ -26,7 +26,9 @@
 - [x] Every default service hero asset exists
 - [x] Required WordPress theme files exist in the ZIP
 - [x] Theme package contains no MP4 payload
-- [x] Build WordPress-safe `superior-plus-1.0.2.zip` at approximately 15 MB
+- [x] Build WordPress-safe `superior-plus-1.1.0.zip` at approximately 15 MB
+- [x] Bundle the editable Elementor 4.2.0 homepage template
+- [x] Validate the one-click Elementor homepage installer in clean WordPress
 - [x] Validate portable forward-slash ZIP entry paths
 
 ## WordPress administrator / teammate
@@ -35,7 +37,7 @@
 - [ ] Take a full files-and-database backup
 - [ ] Create or request a staging environment
 - [ ] Upload and activate the theme on staging
-- [ ] Run Appearance → Superior Plus Setup deliberately
+- [ ] Run Appearance Ã¢â€ â€™ Superior Plus Setup deliberately
 - [ ] Review generated pages, services and navigation
 - [ ] Confirm phone, email, location and social URL
 - [ ] Select and configure the form plugin

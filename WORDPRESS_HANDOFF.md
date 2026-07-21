@@ -17,13 +17,14 @@ The custom theme lives at `wordpress-theme/superior-plus/`. It is separate from 
 
 1. Do not test first on the live site when staging is available.
 2. Back up files and the database.
-3. Upload `wordpress-theme/dist/superior-plus-1.0.2.zip` through Appearance → Themes → Add New → Upload Theme.
+3. Upload `wordpress-theme/dist/superior-plus-1.1.0.zip` through Appearance Ã¢â€ â€™ Themes Ã¢â€ â€™ Add New Ã¢â€ â€™ Upload Theme.
 4. Activate the theme. Activation alone does not change the homepage or generate content.
-5. Open Appearance → Superior Plus Setup.
+5. Open Appearance Ã¢â€ â€™ Superior Plus Setup.
 6. Click Create starter content only after confirming the backup/staging environment.
-7. Review Appearance → Menus and Appearance → Customize.
-8. Edit Services and Projects through their dedicated admin menus.
-9. Add the chosen form plugin shortcode in the Customizer.
+7. With Elementor 4.2.0 active, click Install or replace Elementor homepage.
+8. Review Appearance Ã¢â€ â€™ Menus and Appearance Ã¢â€ â€™ Customize.
+9. Edit Services and Projects through their dedicated admin menus.
+10. Add the chosen form plugin shortcode in the Customizer.
 
 The setup importer creates only missing items and never overwrites an existing Page or Service with the same slug. It does set the generated Home page as the static homepage when deliberately run.
 

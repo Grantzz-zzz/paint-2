@@ -146,6 +146,9 @@ function spp_render_setup_page() {
 		<?php if ( isset( $_GET['spp-imported'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
 			<div class="notice notice-success"><p><?php esc_html_e( 'Starter pages, services and navigation are ready. Existing content was preserved.', 'superior-plus' ); ?></p></div>
 		<?php endif; ?>
+		<?php if ( isset( $_GET['spp-elementor-imported'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+			<div class="notice notice-success"><p><?php esc_html_e( 'The editable Elementor homepage was installed successfully.', 'superior-plus' ); ?></p></div>
+		<?php endif; ?>
 		<p><?php esc_html_e( 'Use this once on a staging site or after taking a backup. It creates only missing content, but it also sets the new Home page as the site homepage.', 'superior-plus' ); ?></p>
 		<ul>
 			<li><?php esc_html_e( 'Creates six core pages and nine editable service entries.', 'superior-plus' ); ?></li>
@@ -157,6 +160,18 @@ function spp_render_setup_page() {
 			<?php wp_nonce_field( 'spp_install_content' ); ?>
 			<?php submit_button( __( 'Create starter content', 'superior-plus' ), 'primary large' ); ?>
 		</form>
+		<hr>
+		<h2><?php esc_html_e( 'Editable Elementor homepage', 'superior-plus' ); ?></h2>
+		<p><?php esc_html_e( 'This installs the React-matched homepage as native Elementor containers and widgets. It replaces only the Home page layout; your services, menu, header and footer remain intact.', 'superior-plus' ); ?></p>
+		<?php if ( did_action( 'elementor/loaded' ) ) : ?>
+			<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
+				<input type="hidden" name="action" value="spp_install_elementor_home">
+				<?php wp_nonce_field( 'spp_install_elementor_home' ); ?>
+				<?php submit_button( __( 'Install or replace Elementor homepage', 'superior-plus' ), 'secondary large' ); ?>
+			</form>
+		<?php else : ?>
+			<div class="notice notice-warning inline"><p><?php esc_html_e( 'Activate Elementor before installing the editable homepage.', 'superior-plus' ); ?></p></div>
+		<?php endif; ?>
 	</div>
 	<?php
 }
@@ -171,3 +186,45 @@ function spp_handle_content_install() {
 	exit;
 }
 add_action( 'admin_post_spp_install_content', 'spp_handle_content_install' );
+
+function spp_handle_elementor_home_install() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'You do not have permission to install the Elementor homepage.', 'superior-plus' ) );
+	}
+	check_admin_referer( 'spp_install_elementor_home' );
+	if ( ! did_action( 'elementor/loaded' ) ) {
+		wp_die( esc_html__( 'Elementor must be active before importing this homepage.', 'superior-plus' ) );
+	}
+
+	$template_path = SPP_PATH . '/elementor-templates/superior-plus-home-elementor-4.2.json';
+	$template      = json_decode( file_get_contents( $template_path ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+	if ( empty( $template['content'] ) || ! is_array( $template['content'] ) ) {
+		wp_die( esc_html__( 'The bundled Elementor homepage template is invalid.', 'superior-plus' ) );
+	}
+
+	$home = get_page_by_path( 'home', OBJECT, 'page' );
+	if ( ! $home ) {
+		$home_id = wp_insert_post( array( 'post_type' => 'page', 'post_status' => 'publish', 'post_title' => 'Home', 'post_name' => 'home' ) );
+	} else {
+		$home_id = $home->ID;
+	}
+	if ( is_wp_error( $home_id ) || ! $home_id ) {
+		wp_die( esc_html__( 'WordPress could not create or find the Home page.', 'superior-plus' ) );
+	}
+
+	update_post_meta( $home_id, '_elementor_edit_mode', 'builder' );
+	update_post_meta( $home_id, '_elementor_template_type', 'wp-page' );
+	update_post_meta( $home_id, '_elementor_version', ELEMENTOR_VERSION );
+	update_post_meta( $home_id, '_elementor_data', wp_slash( wp_json_encode( $template['content'] ) ) );
+	update_post_meta( $home_id, '_elementor_page_settings', $template['page_settings'] ?? array( 'hide_title' => 'yes' ) );
+	wp_update_post( array( 'ID' => $home_id, 'post_content' => '' ) );
+	update_option( 'show_on_front', 'page' );
+	update_option( 'page_on_front', $home_id );
+	if ( isset( \Elementor\Plugin::$instance->files_manager ) ) {
+		\Elementor\Plugin::$instance->files_manager->clear_cache();
+	}
+
+	wp_safe_redirect( admin_url( 'themes.php?page=spp-setup&spp-elementor-imported=1' ) );
+	exit;
+}
+add_action( 'admin_post_spp_install_elementor_home', 'spp_handle_elementor_home_install' );
