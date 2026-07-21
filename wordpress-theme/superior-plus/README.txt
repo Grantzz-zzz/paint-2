@@ -1,7 +1,7 @@
 === Superior Plus Painting ===
 Requires at least: 6.4
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.0.2
 
 Custom WordPress theme matching the approved Superior Plus Painting React frontend.
 
@@ -9,7 +9,7 @@ Custom WordPress theme matching the approved Superior Plus Painting React fronte
 
 1. Back up the WordPress site and use staging whenever possible.
 2. Open Appearance > Themes > Add New > Upload Theme.
-3. Upload superior-plus-1.0.0.zip and activate the theme.
+3. Upload superior-plus-1.0.2.zip and activate the theme.
 4. Open Appearance > Superior Plus Setup.
 5. Review the warning and click Create starter content only when ready.
 6. Open Appearance > Customize > Superior Plus business details to confirm contact information.
@@ -32,4 +32,3 @@ The theme ZIP includes optimized client photos and excludes large MP4 files to k
 == Updates ==
 
 Rebuild the ZIP with scripts/package-wordpress-theme.ps1. Increase the Version value in style.css before distributing an update.
-

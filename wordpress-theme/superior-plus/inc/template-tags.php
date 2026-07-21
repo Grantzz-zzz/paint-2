@@ -130,6 +130,24 @@ function spp_testimonial_band() {
 	<?php
 }
 
+function spp_quote_form_preview( $class = 'quote-form' ) {
+	$shortcode = get_theme_mod( 'spp_form_shortcode', '' );
+	if ( $shortcode ) {
+		echo '<div class="' . esc_attr( $class ) . '">' . do_shortcode( $shortcode ) . '</div>';
+		return;
+	}
+	?>
+	<form class="<?php echo esc_attr( $class ); ?>" onsubmit="return false">
+		<div class="form-title"><span><?php esc_html_e( 'Tell us about your project', 'superior-plus' ); ?></span><small><?php esc_html_e( 'Free · No obligation', 'superior-plus' ); ?></small></div>
+		<div class="form-row"><label><?php esc_html_e( 'Your name', 'superior-plus' ); ?><input required></label><label><?php esc_html_e( 'Phone number', 'superior-plus' ); ?><input type="tel" required></label></div>
+		<label><?php esc_html_e( 'Email address', 'superior-plus' ); ?><input type="email" required></label>
+		<label><?php esc_html_e( 'What can we help with?', 'superior-plus' ); ?><textarea rows="4"></textarea></label>
+		<button class="btn btn-wide"><?php esc_html_e( 'Request my free quote', 'superior-plus' ); ?><?php echo spp_icon( 'arrow' ); ?></button>
+		<p class="form-note"><?php esc_html_e( 'Connect a form shortcode in the Customizer before launch.', 'superior-plus' ); ?></p>
+	</form>
+	<?php
+}
+
 function spp_project_gallery( $category ) {
 	$counts = array( 'commercial' => 8, 'interior' => 10, 'exterior' => 9, 'fence' => 21, 'outdoor' => 2 );
 	if ( empty( $counts[ $category ] ) ) {

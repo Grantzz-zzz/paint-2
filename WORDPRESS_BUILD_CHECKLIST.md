@@ -26,7 +26,8 @@
 - [x] Every default service hero asset exists
 - [x] Required WordPress theme files exist in the ZIP
 - [x] Theme package contains no MP4 payload
-- [x] Build `superior-plus-1.0.0.zip` at approximately 15 MB
+- [x] Build WordPress-safe `superior-plus-1.0.2.zip` at approximately 15 MB
+- [x] Validate portable forward-slash ZIP entry paths
 
 ## WordPress administrator / teammate
 
@@ -43,4 +44,3 @@
 - [ ] Replace placeholder reviews with verified testimonials
 - [ ] Complete desktop, tablet and mobile WordPress QA
 - [ ] Approve and deploy from staging to production
-

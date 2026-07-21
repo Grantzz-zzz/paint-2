@@ -17,7 +17,7 @@ The custom theme lives at `wordpress-theme/superior-plus/`. It is separate from 
 
 1. Do not test first on the live site when staging is available.
 2. Back up files and the database.
-3. Upload `wordpress-theme/dist/superior-plus-1.0.0.zip` through Appearance → Themes → Add New → Upload Theme.
+3. Upload `wordpress-theme/dist/superior-plus-1.0.2.zip` through Appearance → Themes → Add New → Upload Theme.
 4. Activate the theme. Activation alone does not change the homepage or generate content.
 5. Open Appearance → Superior Plus Setup.
 6. Click Create starter content only after confirming the backup/staging environment.
@@ -45,4 +45,3 @@ Run from the repository root:
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/package-wordpress-theme.ps1
 ```
-
