@@ -9,9 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+function spp_ensure_content_types_registered() {
+	if ( ! post_type_exists( 'spp_service' ) && function_exists( 'spp_register_service_type' ) ) {
+		spp_register_service_type();
+	}
+	if ( ! post_type_exists( 'spp_project' ) && function_exists( 'spp_register_project_type' ) ) {
+		spp_register_project_type();
+	}
+}
+
 function spp_install_theme_content() {
-	spp_register_service_type();
-	spp_register_project_type();
+	spp_ensure_content_types_registered();
 	foreach ( array( 'commercial', 'interior', 'exterior', 'fence', 'outdoor' ) as $project_category ) {
 		if ( ! term_exists( $project_category, 'spp_project_category' ) ) {
 			wp_insert_term( ucfirst( $project_category ), 'spp_project_category', array( 'slug' => $project_category ) );
@@ -122,8 +130,7 @@ function spp_add_page_menu_item( $menu_id, $page_id ) {
 }
 
 function spp_activation_flush_rewrites() {
-	spp_register_service_type();
-	spp_register_project_type();
+	spp_ensure_content_types_registered();
 	flush_rewrite_rules();
 }
 add_action( 'after_switch_theme', 'spp_activation_flush_rewrites' );

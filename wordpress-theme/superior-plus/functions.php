@@ -15,8 +15,12 @@ define( 'SPP_URI', get_template_directory_uri() );
 
 require_once SPP_PATH . '/inc/default-content.php';
 require_once SPP_PATH . '/inc/template-tags.php';
-require_once SPP_PATH . '/inc/service-post-type.php';
-require_once SPP_PATH . '/inc/project-post-type.php';
+// The companion plugin owns editable content whenever it is active. These
+// legacy registrations remain only as a safe fallback for older installations.
+if ( ! defined( 'SPP_CONTENT_VERSION' ) ) {
+	require_once SPP_PATH . '/inc/service-post-type.php';
+	require_once SPP_PATH . '/inc/project-post-type.php';
+}
 require_once SPP_PATH . '/inc/customizer.php';
 require_once SPP_PATH . '/inc/installer.php';
 

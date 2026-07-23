@@ -80,24 +80,28 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 
 ## Phase 2 — WordPress editing areas
 
-- [ ] Global site settings: business name, phone, email, location and social links
-- [ ] Header navigation labels and destinations
-- [ ] Footer columns, contact details and copyright text
-- [ ] Homepage hero copy, buttons, trust points and hero image
-- [ ] Homepage service cards
-- [ ] Homepage commercial section and process summary
-- [ ] Homepage selected projects
-- [ ] Homepage trust cards and service areas
-- [ ] Homepage testimonials
-- [ ] Homepage quote section
-- [ ] About page content and imagery
-- [ ] Services directory content
-- [ ] Master painting process
-- [ ] FAQ collection
-- [ ] Contact page content
-- [ ] Service pages
-- [ ] Project galleries and video references
-- [ ] SEO title, description, canonical data and social-sharing image per page
+- [x] Global site settings: business name, phone, email, location and social links
+- [x] Header navigation labels and destinations
+- [x] Footer columns, contact details and copyright text
+- [x] Homepage hero copy, buttons, trust points and hero image
+- [x] Homepage service cards
+- [x] Homepage commercial section and process summary
+- [x] Homepage selected projects
+- [x] Homepage trust cards and service areas
+- [x] Homepage testimonials
+- [x] Homepage quote section
+- [x] About page content and imagery
+- [x] Services directory content
+- [x] Master painting process
+- [x] FAQ collection
+- [x] Contact page content
+- [x] Service pages
+- [x] Project galleries and video references
+- [x] SEO title, description, canonical data and social-sharing image per page
+- [x] Build and validate the standalone `Superior Plus Content` plugin
+- [x] Confirm plugin and theme activate together in an isolated WordPress runtime
+- [x] Confirm anonymous export is denied and unknown routes return 404
+- [x] Package a WordPress-safe plugin ZIP for local/staging use
 
 ## Phase 3 — Controlled page creation
 
@@ -214,4 +218,4 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 
 ## Current focus
 
-`Phase 2 — WordPress editing areas and companion-plugin implementation.` Phase 1 is complete: the locked theme/plugin boundary, content records, editable fields, page templates, gallery model, validation, permissions, fallback rules, import safety and REST contract are recorded under `cms/`.
+`Phase 3 — Controlled page creation.` Phase 2 is complete locally: the standalone companion plugin, editing screens, Media Library controls, capability checks, versioned REST endpoints, theme compatibility guards and installable ZIP have been validated without changing staging or production.

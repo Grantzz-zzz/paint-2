@@ -108,7 +108,12 @@
             "email": { "type": "string", "format": "email" },
             "location": { "$ref": "#/$defs/nonEmptyText" },
             "instagram_url": { "type": "string" },
-            "logo": { "$ref": "#/$defs/media" }
+            "logo": {
+              "anyOf": [
+                { "$ref": "#/$defs/media" },
+                { "type": "null" }
+              ]
+            }
           }
         },
         "navigation": {
@@ -162,7 +167,12 @@
         "title": { "$ref": "#/$defs/nonEmptyText" },
         "accent": { "$ref": "#/$defs/nonEmptyText" },
         "intro": { "$ref": "#/$defs/nonEmptyText" },
-        "image": { "$ref": "#/$defs/media" },
+        "image": {
+          "anyOf": [
+            { "$ref": "#/$defs/media" },
+            { "type": "null" }
+          ]
+        },
         "primary_cta": { "$ref": "#/$defs/link" },
         "secondary_cta": { "$ref": "#/$defs/link" }
       }
