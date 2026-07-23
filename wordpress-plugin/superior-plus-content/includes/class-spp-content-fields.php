@@ -116,6 +116,7 @@ class SPP_Content_Fields {
 				'spp_featured_media_id' => array( 'label' => 'Featured project image', 'type' => 'media', 'mime' => 'image' ),
 				'spp_object_position'  => array( 'label' => 'Image crop position (example: 50% 50%)', 'type' => 'position' ),
 				'spp_gallery_items'    => array( 'label' => 'Project gallery', 'type' => 'gallery', 'max_items' => 100 ),
+				'spp_related_page_ids' => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
 			);
 		}
 
@@ -212,6 +213,7 @@ class SPP_Content_Fields {
 				$fields += array(
 					'spp_content_sections'   => array( 'label' => 'Content sections — Heading | Body', 'type' => 'pairs', 'max_items' => 20 ),
 					'spp_secondary_image_id' => array( 'label' => 'Secondary image', 'type' => 'media', 'mime' => 'image' ),
+					'spp_related_page_ids'  => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
 				);
 				break;
 		}
@@ -427,6 +429,11 @@ class SPP_Content_Fields {
 			'standard'           => 'Standard content page',
 			'landing'            => 'Landing page',
 		);
+		if ( get_post_meta( $post->ID, '_spp_managed_content', true ) ) {
+			echo '<input type="hidden" name="' . esc_attr( $key ) . '" value="' . esc_attr( $current ) . '"><code>' . esc_html( isset( $options[ $current ] ) ? $options[ $current ] : $current ) . '</code>';
+			echo '<p class="description">' . esc_html__( 'This template was selected at creation and is locked to protect the page design.', 'superior-plus-content' ) . '</p>';
+			return;
+		}
 		if ( ! current_user_can( 'manage_spp_system' ) ) {
 			echo '<input type="hidden" name="' . esc_attr( $key ) . '" value="' . esc_attr( $current ) . '"><code>' . esc_html( $options[ $current ] ) . '</code>';
 			return;
@@ -479,6 +486,12 @@ class SPP_Content_Fields {
 		$definitions = $this->definitions_for_post( $post );
 		foreach ( $definitions as $key => $definition ) {
 			if ( 'system_email' === $definition['type'] && ! current_user_can( 'manage_spp_system' ) ) {
+				continue;
+			}
+			if ( 'template' === $definition['type'] && get_post_meta( $post_id, '_spp_managed_content', true ) ) {
+				continue;
+			}
+			if ( 'template' === $definition['type'] && ! current_user_can( 'manage_spp_system' ) ) {
 				continue;
 			}
 			if ( 'checkbox' === $definition['type'] ) {

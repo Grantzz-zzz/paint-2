@@ -1,16 +1,17 @@
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowRight, Check, PaintRoller } from 'lucide-react'
 import { PageLayout, PageHero, TrustStrip, SectionIntro, TestimonialBand, AreasBand, ClosingCTA } from '../components/PageLayout'
 import { serviceList, servicePages } from '../data/siteData'
 import { Reveal, Divider } from '../App'
 import ProjectGallery from '../components/ProjectGallery'
 import { serviceMediaCategory } from '../data/projectMedia'
+import NotFoundPage from './NotFoundPage'
 
 export default function ServicePage() {
   const { slug } = useParams()
   const page = servicePages[slug]
   const navigate = useNavigate()
-  if (!page) return <Navigate to="/services" replace/>
+  if (!page) return <NotFoundPage/>
   const related = page.related.map(id => serviceList.find(s => s.slug === id)).filter(Boolean)
   return <PageLayout title={`${page.title} Melbourne`} description={page.intro} pageType="Service" image={page.image}>
     <PageHero {...page} imageAlt={page.image.includes('/client/')?`${page.title} project completed by Superior Plus Painting`:`${page.title} service placeholder`}/>

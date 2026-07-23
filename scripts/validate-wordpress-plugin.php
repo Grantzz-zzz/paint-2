@@ -17,6 +17,7 @@ $required = array(
 	'includes/class-spp-content-types.php',
 	'includes/class-spp-content-fields.php',
 	'includes/class-spp-content-rest.php',
+	'includes/class-spp-content-workflow.php',
 );
 
 $missing = array_values(
@@ -48,6 +49,7 @@ $checks = array(
 		'/services',
 		"'projects', 'faqs', 'testimonials'",
 		'/export',
+		'/preview/',
 	),
 	'protections'   => array(
 		'manage_spp_content',
@@ -57,6 +59,9 @@ $checks = array(
 		'esc_url_raw',
 		'sanitize_attachment',
 		'_spp_client_modified_at',
+		'_spp_managed_content',
+		'_spp_design_variant',
+		'check_admin_referer',
 	),
 	'media'         => array(
 		'wp_enqueue_media',
@@ -87,12 +92,12 @@ $result = array(
 	'failed_checks'        => $failed_checks,
 	'theme_compatibility'  => $theme_compatible,
 	'content_type_count'   => count( $checks['content_types'] ),
-	'public_route_count'   => 7,
-	'protected_route_count' => 1,
+	'public_route_count'   => 8,
+	'protected_route_count' => 2,
 );
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || '0.1.0' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || '0.2.0' !== $result['plugin_version'] ) {
 	exit( 1 );
 }

@@ -115,6 +115,22 @@ class SPP_Content_REST {
 				},
 			)
 		);
+		register_rest_route(
+			'spp/v1',
+			'/preview/(?P<id>\d+)',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'preview' ),
+				'permission_callback' => function ( $request ) {
+					return current_user_can( 'edit_post', absint( $request['id'] ) );
+				},
+				'args'                => array(
+					'id' => array(
+						'sanitize_callback' => 'absint',
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -210,6 +226,26 @@ class SPP_Content_REST {
 				)
 			);
 		}
+		if ( 0 === strpos( $path, 'projects/' ) ) {
+			$slug = substr( $path, strlen( 'projects/' ) );
+			$post = get_page_by_path( $slug, OBJECT, 'spp_project' );
+			if ( ! $post || 'publish' !== $post->post_status ) {
+				return new WP_Error( 'spp_route_not_found', __( 'Route not found.', 'superior-plus-content' ), array( 'status' => 404 ) );
+			}
+			$project = $this->project_data( $post );
+			return $this->response(
+				array(
+					'id'           => (int) $post->ID,
+					'path'         => '/projects/' . $post->post_name,
+					'template_key' => 'project',
+					'title'        => get_the_title( $post ),
+					'seo'          => $this->seo( $post ),
+					'hero'         => $this->hero( $post ),
+					'content'      => $project,
+					'closing_cta'  => $this->cta( $post ),
+				)
+			);
+		}
 
 		$page = null;
 		if ( '' === $path ) {
@@ -278,23 +314,55 @@ class SPP_Content_REST {
 	public function projects() {
 		$items = array_map(
 			function ( $post ) {
-				$featured_id = absint( get_post_meta( $post->ID, 'spp_featured_media_id', true ) );
-				if ( ! $featured_id ) {
-					$featured_id = get_post_thumbnail_id( $post );
-				}
-				return array(
-					'id'              => (int) $post->ID,
-					'slug'            => $post->post_name,
-					'title'           => get_the_title( $post ),
-					'project_type'    => get_post_meta( $post->ID, 'spp_project_type', true ),
-					'featured_media'  => $this->media( $featured_id ),
-					'object_position' => get_post_meta( $post->ID, 'spp_object_position', true ) ?: '50% 50%',
-					'gallery'         => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
-				);
+				return $this->project_data( $post );
 			},
 			$this->published_posts( 'spp_project' )
 		);
 		return $this->response( $items );
+	}
+
+	/**
+	 * Authenticated draft/published preview payload.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function preview( $request ) {
+		$post = get_post( absint( $request['id'] ) );
+		if ( ! $post || ! in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project' ), true ) ) {
+			return new WP_Error( 'spp_preview_not_found', __( 'Preview not found.', 'superior-plus-content' ), array( 'status' => 404 ) );
+		}
+		if ( 'spp_service' === $post->post_type ) {
+			$content  = $this->service_data( $post, true );
+			$template = 'service';
+			$path     = '/services/' . $post->post_name;
+		} elseif ( 'spp_project' === $post->post_type ) {
+			$content  = $this->project_data( $post );
+			$template = 'project';
+			$path     = '/projects/' . $post->post_name;
+		} else {
+			$meta     = $this->fields->get_public_meta( $post );
+			$content  = array(
+				'body'   => apply_filters( 'the_content', $post->post_content ),
+				'fields' => $this->resolve_media_meta( $meta ),
+			);
+			$template = ! empty( $meta['template_key'] ) ? $meta['template_key'] : $this->fields->default_template_for_slug( $post->post_name );
+			$path     = '/' . trim( get_page_uri( $post ), '/' );
+		}
+		return $this->response(
+			array(
+				'id'           => (int) $post->ID,
+				'status'       => $post->post_status,
+				'is_preview'   => true,
+				'path'         => $path,
+				'template_key' => $template,
+				'title'        => get_the_title( $post ),
+				'seo'          => $this->seo( $post ),
+				'hero'         => $this->hero( $post ),
+				'content'      => $content,
+				'closing_cta'  => $this->cta( $post ),
+			)
+		);
 	}
 
 	/**
@@ -426,6 +494,29 @@ class SPP_Content_REST {
 	}
 
 	/**
+	 * Build one project payload.
+	 *
+	 * @param WP_Post $post Project.
+	 * @return array
+	 */
+	private function project_data( $post ) {
+		$featured_id = absint( get_post_meta( $post->ID, 'spp_featured_media_id', true ) );
+		if ( ! $featured_id ) {
+			$featured_id = get_post_thumbnail_id( $post );
+		}
+		return array(
+			'id'               => (int) $post->ID,
+			'slug'             => $post->post_name,
+			'title'            => get_the_title( $post ),
+			'project_type'     => get_post_meta( $post->ID, 'spp_project_type', true ),
+			'featured_media'   => $this->media( $featured_id ),
+			'object_position'  => get_post_meta( $post->ID, 'spp_object_position', true ) ?: '50% 50%',
+			'gallery'          => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
+			'related_page_ids' => array_map( 'absint', (array) get_post_meta( $post->ID, 'spp_related_page_ids', true ) ),
+		);
+	}
+
+	/**
 	 * Hero presenter.
 	 *
 	 * @param WP_Post $post Post.
@@ -433,6 +524,9 @@ class SPP_Content_REST {
 	 */
 	private function hero( $post ) {
 		$image_id = absint( get_post_meta( $post->ID, 'spp_hero_image_id', true ) );
+		if ( ! $image_id && 'spp_project' === $post->post_type ) {
+			$image_id = absint( get_post_meta( $post->ID, 'spp_featured_media_id', true ) );
+		}
 		if ( ! $image_id ) {
 			$image_id = get_post_thumbnail_id( $post );
 		}

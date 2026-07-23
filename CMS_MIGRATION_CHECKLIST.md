@@ -105,18 +105,21 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 
 ## Phase 3 — Controlled page creation
 
-- [ ] Add a locked Standard Content Page template
-- [ ] Add a locked Service Page template
-- [ ] Add a locked Project/Gallery Page template
-- [ ] Add an optional locked Landing Page template
-- [ ] Let administrators choose a template when creating a page
-- [ ] Show only the fields supported by the selected template
-- [ ] Generate the slug and public route from WordPress
-- [ ] Automatically include published services in the Services dropdown and directory
-- [ ] Automatically include related-page links where configured
-- [ ] Prevent unsupported layout or style values
-- [ ] Provide draft, preview, publish and unpublish workflows
-- [ ] Display a helpful 404 page for invalid or unpublished routes
+- [x] Add a locked Standard Content Page template
+- [x] Add a locked Service Page template
+- [x] Add a locked Project/Gallery Page template
+- [x] Add an optional locked Landing Page template
+- [x] Let administrators choose a template when creating a page
+- [x] Show only the fields supported by the selected template
+- [x] Generate the slug and public route from WordPress
+- [x] Automatically include published services in the Services dropdown and directory
+- [x] Automatically include related-page links where configured
+- [x] Prevent unsupported layout or style values
+- [x] Provide draft, structured preview, publish and unpublish workflows
+- [x] Display a helpful 404 page for invalid or unpublished routes
+
+The secure structured draft preview is available in WordPress now. Exact visual
+preview through the React design is completed as part of the Phase 4 data adapter.
 
 ## Phase 4 — React data integration
 
@@ -218,4 +221,8 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 
 ## Current focus
 
-`Phase 3 — Controlled page creation.` Phase 2 is complete locally: the standalone companion plugin, editing screens, Media Library controls, capability checks, versioned REST endpoints, theme compatibility guards and installable ZIP have been validated without changing staging or production.
+`Phase 4 — React data integration.` Phase 3 is complete locally: administrators
+can create controlled drafts from four locked templates, edit only supported
+fields, preview structured content securely, publish complete entries, unpublish
+them through WordPress, and rely on helpful 404 handling for unavailable routes.
+Nothing has been changed on staging or production.

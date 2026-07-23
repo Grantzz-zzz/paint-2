@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { HashRouter, Route, Routes } from 'react-router-dom'
 
 const HomePage=lazy(()=>import('./App'))
 const ServicePage=lazy(()=>import('./pages/ServicePage'))
@@ -8,6 +8,7 @@ const ContactPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.Co
 const FAQsPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.FAQsPage})))
 const ProcessPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.ProcessPage})))
 const ServicesPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.ServicesPage})))
+const NotFoundPage=lazy(()=>import('./pages/NotFoundPage'))
 
 export default function RouterApp() {
   return <HashRouter>
@@ -20,7 +21,7 @@ export default function RouterApp() {
       <Route path="/our-process" element={<ProcessPage/>}/>
       <Route path="/faqs" element={<FAQsPage/>}/>
       <Route path="/contact" element={<ContactPage/>}/>
-      <Route path="*" element={<Navigate to="/" replace/>}/>
+      <Route path="*" element={<NotFoundPage/>}/>
     </Routes></Suspense>
   </HashRouter>
 }

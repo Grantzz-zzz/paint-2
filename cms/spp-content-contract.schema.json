@@ -265,6 +265,10 @@
         "gallery": {
           "type": "array",
           "items": { "$ref": "#/$defs/galleryItem" }
+        },
+        "related_page_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" }
         }
       }
     },
