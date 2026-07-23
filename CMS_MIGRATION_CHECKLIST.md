@@ -64,16 +64,19 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 
 ## Phase 1 — Locked content architecture
 
-- [ ] Create a separate `Superior Plus Content` companion plugin
-- [ ] Keep design components, CSS and animation code inside the React theme
-- [ ] Keep client-managed data inside WordPress so theme updates cannot delete it
-- [ ] Register only the fields required by the approved React components
-- [ ] Expose sanitized content through a versioned WordPress REST API
-- [ ] Add WordPress capability and nonce protection for administration
-- [ ] Add data validation for URLs, phone numbers, email addresses and media IDs
-- [ ] Store image references as Media Library attachment IDs
-- [ ] Preserve existing content when the plugin or theme is updated
-- [ ] Add an export/import format for backup and migration
+- [x] Define a separate `Superior Plus Content` companion-plugin boundary
+- [x] Keep design components, CSS and animation code inside the React theme
+- [x] Keep client-managed data inside WordPress so theme updates cannot delete it
+- [x] Map only the fields required by the approved React components
+- [x] Define a sanitized, versioned WordPress REST contract
+- [x] Define WordPress capabilities and nonce protection for administration
+- [x] Define validation for URLs, phone numbers, email addresses and media IDs
+- [x] Store image and video references as Media Library attachment IDs
+- [x] Define update rules that preserve existing and client-modified content
+- [x] Define a portable, idempotent export/import format
+- [x] Define locked templates for current and client-created pages
+- [x] Define unlimited ordered galleries with add, remove, replace and reorder controls
+- [x] Save the human-readable architecture and machine-readable schema under `cms/`
 
 ## Phase 2 — WordPress editing areas
 
@@ -211,4 +214,4 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 
 ## Current focus
 
-`Phase 1 — Locked content architecture.` Phase 0 is complete: all 15 routes, 45 responsive screenshots, content structure, interactions, source hashes and asset hashes are recorded under `baseline/`.
+`Phase 2 — WordPress editing areas and companion-plugin implementation.` Phase 1 is complete: the locked theme/plugin boundary, content records, editable fields, page templates, gallery model, validation, permissions, fallback rules, import safety and REST contract are recorded under `cms/`.

@@ -1,0 +1,330 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sppaintingremodeling.com.au/schemas/spp-content-contract-1.0.0.json",
+  "title": "Superior Plus Content API Contract",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "data"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "data": {
+      "oneOf": [
+        { "$ref": "#/$defs/bootstrap" },
+        { "$ref": "#/$defs/route" },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "$ref": "#/$defs/serviceSummary" },
+              { "$ref": "#/$defs/project" },
+              { "$ref": "#/$defs/faq" },
+              { "$ref": "#/$defs/testimonial" }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "id": { "type": "integer", "minimum": 1 },
+    "nonEmptyText": { "type": "string", "minLength": 1 },
+    "link": {
+      "type": "object",
+      "required": ["label", "url"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "$ref": "#/$defs/nonEmptyText" },
+        "url": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
+    "media": {
+      "type": "object",
+      "required": ["attachment_id", "url", "alt", "width", "height"],
+      "additionalProperties": false,
+      "properties": {
+        "attachment_id": { "$ref": "#/$defs/id" },
+        "url": { "type": "string", "format": "uri" },
+        "alt": { "type": "string" },
+        "caption": { "type": "string" },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "srcset": { "type": "string" },
+        "sizes": { "type": "string" }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "required": ["title", "description", "canonical_url"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "description": { "$ref": "#/$defs/nonEmptyText" },
+        "canonical_url": { "type": "string", "format": "uri" },
+        "social_image": {
+          "anyOf": [
+            { "$ref": "#/$defs/media" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "navigationItem": {
+      "type": "object",
+      "required": ["id", "label", "url", "children"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": ["integer", "string"] },
+        "label": { "$ref": "#/$defs/nonEmptyText" },
+        "url": { "$ref": "#/$defs/nonEmptyText" },
+        "children": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "url"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": ["integer", "string"] },
+              "label": { "$ref": "#/$defs/nonEmptyText" },
+              "url": { "$ref": "#/$defs/nonEmptyText" }
+            }
+          }
+        }
+      }
+    },
+    "bootstrap": {
+      "type": "object",
+      "required": ["business", "navigation", "footer", "trust_items", "service_areas"],
+      "additionalProperties": false,
+      "properties": {
+        "business": {
+          "type": "object",
+          "required": ["name", "phone_display", "phone_href", "email", "location", "logo"],
+          "additionalProperties": false,
+          "properties": {
+            "name": { "$ref": "#/$defs/nonEmptyText" },
+            "phone_display": { "$ref": "#/$defs/nonEmptyText" },
+            "phone_href": { "type": "string", "pattern": "^tel:" },
+            "email": { "type": "string", "format": "email" },
+            "location": { "$ref": "#/$defs/nonEmptyText" },
+            "instagram_url": { "type": "string" },
+            "logo": { "$ref": "#/$defs/media" }
+          }
+        },
+        "navigation": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/navigationItem" }
+        },
+        "footer": {
+          "type": "object",
+          "required": ["intro", "columns", "copyright", "closing_line"],
+          "additionalProperties": false,
+          "properties": {
+            "intro": { "type": "string" },
+            "columns": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["heading", "links"],
+                "additionalProperties": false,
+                "properties": {
+                  "heading": { "$ref": "#/$defs/nonEmptyText" },
+                  "links": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/link" }
+                  }
+                }
+              }
+            },
+            "copyright": { "type": "string" },
+            "closing_line": { "type": "string" }
+          }
+        },
+        "trust_items": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/nonEmptyText" }
+        },
+        "service_areas": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyText" }
+        },
+        "default_cta": { "$ref": "#/$defs/cta" }
+      }
+    },
+    "hero": {
+      "type": "object",
+      "required": ["eyebrow", "title", "accent", "intro", "image"],
+      "additionalProperties": false,
+      "properties": {
+        "eyebrow": { "$ref": "#/$defs/nonEmptyText" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "accent": { "$ref": "#/$defs/nonEmptyText" },
+        "intro": { "$ref": "#/$defs/nonEmptyText" },
+        "image": { "$ref": "#/$defs/media" },
+        "primary_cta": { "$ref": "#/$defs/link" },
+        "secondary_cta": { "$ref": "#/$defs/link" }
+      }
+    },
+    "cta": {
+      "type": "object",
+      "required": ["title", "text", "link"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "text": { "type": "string" },
+        "link": { "$ref": "#/$defs/link" }
+      }
+    },
+    "orderedText": {
+      "type": "object",
+      "required": ["id", "text", "order"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "text": { "$ref": "#/$defs/nonEmptyText" },
+        "order": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "galleryItem": {
+      "type": "object",
+      "required": ["id", "type", "media", "alt", "object_position", "is_placeholder", "order"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["image", "video"] },
+        "media": { "$ref": "#/$defs/media" },
+        "poster": {
+          "anyOf": [
+            { "$ref": "#/$defs/media" },
+            { "type": "null" }
+          ]
+        },
+        "alt": { "$ref": "#/$defs/nonEmptyText" },
+        "caption": { "type": "string" },
+        "object_position": {
+          "type": "string",
+          "pattern": "^(100|[0-9]{1,2})% (100|[0-9]{1,2})%$"
+        },
+        "is_placeholder": { "type": "boolean" },
+        "order": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "serviceSummary": {
+      "type": "object",
+      "required": ["id", "slug", "title", "short", "url"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "slug": { "$ref": "#/$defs/nonEmptyText" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "short": { "$ref": "#/$defs/nonEmptyText" },
+        "url": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
+    "service": {
+      "type": "object",
+      "required": ["id", "slug", "title", "short", "url", "hero", "scope_title", "scope", "process", "why", "benefits", "related", "gallery"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "slug": { "$ref": "#/$defs/nonEmptyText" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "short": { "$ref": "#/$defs/nonEmptyText" },
+        "url": { "$ref": "#/$defs/nonEmptyText" },
+        "hero": { "$ref": "#/$defs/hero" },
+        "scope_title": { "$ref": "#/$defs/nonEmptyText" },
+        "scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/orderedText" }
+        },
+        "process": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/orderedText" }
+        },
+        "why": { "$ref": "#/$defs/nonEmptyText" },
+        "benefits": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/orderedText" }
+        },
+        "related": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/serviceSummary" }
+        },
+        "gallery": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/galleryItem" }
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "required": ["id", "slug", "title", "project_type", "featured_media", "gallery"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "slug": { "$ref": "#/$defs/nonEmptyText" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "project_type": { "type": "string" },
+        "featured_media": { "$ref": "#/$defs/media" },
+        "object_position": { "type": "string" },
+        "gallery": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/galleryItem" }
+        }
+      }
+    },
+    "faq": {
+      "type": "object",
+      "required": ["id", "question", "answer"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "question": { "$ref": "#/$defs/nonEmptyText" },
+        "answer": { "$ref": "#/$defs/nonEmptyText" }
+      }
+    },
+    "testimonial": {
+      "type": "object",
+      "required": ["id", "quote", "label", "rating", "is_placeholder"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "quote": { "$ref": "#/$defs/nonEmptyText" },
+        "name": { "type": "string" },
+        "label": { "type": "string" },
+        "project": { "type": "string" },
+        "rating": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "is_placeholder": { "type": "boolean" }
+      }
+    },
+    "route": {
+      "type": "object",
+      "required": ["id", "path", "template_key", "title", "seo", "hero", "content"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "path": { "type": "string", "pattern": "^/" },
+        "template_key": {
+          "enum": ["home", "about", "services_directory", "process", "faqs", "contact", "standard", "landing", "service", "project"]
+        },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "seo": { "$ref": "#/$defs/seo" },
+        "hero": { "$ref": "#/$defs/hero" },
+        "content": {
+          "anyOf": [
+            { "$ref": "#/$defs/service" },
+            { "$ref": "#/$defs/project" },
+            {
+              "type": "object",
+              "description": "Template-specific, versioned content selected by template_key.",
+              "additionalProperties": true
+            }
+          ]
+        },
+        "closing_cta": { "$ref": "#/$defs/cta" }
+      }
+    }
+  }
+}
