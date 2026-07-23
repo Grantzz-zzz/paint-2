@@ -18,6 +18,7 @@ $required = array(
 	'includes/class-spp-content-fields.php',
 	'includes/class-spp-content-rest.php',
 	'includes/class-spp-content-workflow.php',
+	'includes/class-spp-content-routing.php',
 );
 
 $missing = array_values(
@@ -62,6 +63,12 @@ $checks = array(
 		'_spp_managed_content',
 		'_spp_design_variant',
 		'check_admin_referer',
+		'spp_react_route',
+		'spp_sitemap',
+		'robots_txt',
+		'spp_content_routes_version',
+		'after_switch_theme',
+		'maybe_refresh_rewrites',
 	),
 	'media'         => array(
 		'wp_enqueue_media',
@@ -98,6 +105,6 @@ $result = array(
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || '0.3.0' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || '0.4.0' !== $result['plugin_version'] ) {
 	exit( 1 );
 }

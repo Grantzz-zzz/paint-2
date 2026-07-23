@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowRight, Check, MapPin, Phone, ShieldCheck, Sparkles, Star } from 'lucide-react'
 import { Navbar, Footer, Reveal, Eyebrow, Divider } from '../App'
 import { suburbs, testimonials } from '../data/siteData'
-import { asset, siteUrl } from '../utils/assets'
+import { asset, publicRouteUrl, siteUrl } from '../utils/assets'
 import { collectionFallbacks, mediaUrl, useCollection, useSiteContent } from '../content/ContentProvider'
 
 function upsertMeta(selector, attributes) {
@@ -26,7 +26,7 @@ function breadcrumbItems(pathname,currentTitle){
 export function PageLayout({ children, title, description, pageType = 'WebPage', image = asset('stock/residential.webp'), schemaData = {} }) {
   const location = useLocation()
   const {business}=useSiteContent()
-  const canonical = `${siteUrl}#${location.pathname}`
+  const canonical = publicRouteUrl(location.pathname)
   const schemaKey = JSON.stringify(schemaData)
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -45,7 +45,7 @@ export function PageLayout({ children, title, description, pageType = 'WebPage',
     script.textContent=JSON.stringify({'@context':'https://schema.org','@graph':[
       {'@type':'LocalBusiness','@id':`${siteUrl}#business`,name:business.name,url:siteUrl,telephone:business.phone_href.replace('tel:',''),email:business.email,areaServed:business.location,image:mediaUrl(business.logo,asset('logo.jpeg'))},
       {'@type':pageType,name:title,description,url:canonical,provider:{'@id':`${siteUrl}#business`},...JSON.parse(schemaKey)},
-      {'@type':'BreadcrumbList','itemListElement':breadcrumbItems(location.pathname,title).map((item,index)=>({'@type':'ListItem',position:index+1,name:item.label,item:`${siteUrl}#${item.path}`}))}
+      {'@type':'BreadcrumbList','itemListElement':breadcrumbItems(location.pathname,title).map((item,index)=>({'@type':'ListItem',position:index+1,name:item.label,item:publicRouteUrl(item.path)}))}
     ]})
   }, [location.pathname, title, description, canonical, image, pageType, schemaKey, business])
   return <><Navbar/><main id="main-content" tabIndex="-1" className="inner-main"><Breadcrumbs currentTitle={title}/>{children}</main><Footer/></>

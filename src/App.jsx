@@ -9,7 +9,7 @@ import {
   Palette, Phone, ShieldCheck, Sparkles, SprayCan, Star, Trees, Warehouse, X
 } from 'lucide-react'
 import { serviceList } from './data/siteData'
-import { asset, siteUrl } from './utils/assets'
+import { asset, publicRouteUrl, siteUrl } from './utils/assets'
 import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useRouteContent, useSiteContent } from './content/ContentProvider'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -246,7 +246,7 @@ export default function App() {
   }:null
   useEffect(()=>{
     const description=seo?.description||'Premium residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and quality workmanship.'
-    const canonical=seo?.canonical_url||siteUrl
+    const canonical=publicRouteUrl('/')
     const title=seo?.title||'Superior Plus Painting | Melbourne Painters'
     document.title=title
     const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=description

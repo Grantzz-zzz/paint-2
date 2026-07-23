@@ -50,7 +50,7 @@ try {
   const routeResults = []
 
   for (const [route, expectedH1] of routes) {
-    await desktop.goto(`${base}/#${route}`, { waitUntil: 'networkidle' })
+    await desktop.goto(`${base}${route}`, { waitUntil: 'networkidle' })
     await desktop.locator('#root h1').first().waitFor()
     const h1 = (await desktop.locator('#root h1').first().innerText()).replace(/\s+/g, ' ').trim()
     routeResults.push({
@@ -64,7 +64,7 @@ try {
     })
   }
 
-  await desktop.goto(`${base}/#/`, { waitUntil: 'networkidle' })
+  await desktop.goto(`${base}/`, { waitUntil: 'networkidle' })
   await desktop.waitForFunction(() => [...document.images].every(image => image.complete), null, { timeout: 30000 })
   const home = {
     serviceCards: await desktop.locator('.services-grid .service-card').count(),
@@ -87,9 +87,18 @@ try {
     h1: (await direct.locator('#root h1').first().innerText()).replace(/\s+/g, ' ').trim(),
   }
 
+  const legacy = await browser.newPage({ viewport: { width: 1280, height: 800 } })
+  watch(legacy)
+  await legacy.goto(`${base}/#/about`, { waitUntil: 'networkidle' })
+  await legacy.locator('#root h1').first().waitFor()
+  const legacyRoute = {
+    url: legacy.url(),
+    h1: (await legacy.locator('#root h1').first().innerText()).replace(/\s+/g, ' ').trim(),
+  }
+
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } })
   watch(mobile)
-  await mobile.goto(`${base}/#/`, { waitUntil: 'networkidle' })
+  await mobile.goto(`${base}/`, { waitUntil: 'networkidle' })
   await mobile.locator('.menu-btn').click()
   const mobileResult = {
     expanded: await mobile.locator('.menu-btn').getAttribute('aria-expanded'),
@@ -101,7 +110,7 @@ try {
   await revealWholePage(mobile)
   await mobile.screenshot({ path: 'wordpress-theme/dist/spp-react-wordpress-mobile.png', fullPage: true })
 
-  const report = { routeResults, home, directRoute, mobile: mobileResult, pageErrors, failedResources }
+  const report = { routeResults, home, directRoute, legacyRoute, mobile: mobileResult, pageErrors, failedResources }
   console.log(JSON.stringify(report, null, 2))
 
   const failedRoutes = routeResults.filter(result =>
@@ -112,8 +121,11 @@ try {
     home.serviceCards !== 8 ||
     home.brokenImages.length ||
     home.phpHeaders ||
-    !directRoute.url.includes('/#/about') ||
+    !directRoute.url.match(/\/about\/?$/) ||
     !directRoute.h1.toLowerCase().includes('care in every coat') ||
+    !legacyRoute.url.match(/\/about\/?$/) ||
+    legacyRoute.url.includes('#/') ||
+    !legacyRoute.h1.toLowerCase().includes('care in every coat') ||
     mobileResult.expanded !== 'true' ||
     !mobileResult.menuVisible ||
     mobileResult.serviceLinks !== 9 ||

@@ -39,12 +39,12 @@ try {
     }
   },base)
 
-  await page.goto(`${base}/#/`,{waitUntil:'networkidle'})
+  await page.goto(`${base}/`,{waitUntil:'networkidle'})
   await page.locator('#root .nav-shell').waitFor()
-  await page.goto(`${base}/#/services/residential-painting-melbourne`,{waitUntil:'networkidle'})
+  await page.goto(`${base}/services/residential-painting-melbourne`,{waitUntil:'networkidle'})
   await page.locator('h1').first().waitFor()
   const publicServiceTitle=(await page.locator('h1').first().innerText()).replace(/\s+/g,' ').trim()
-  await page.goto(`${base}/?spp_preview=${api.residential.id}#/services/residential-painting-melbourne`,{waitUntil:'networkidle'})
+  await page.goto(`${base}/services/residential-painting-melbourne?spp_preview=${api.residential.id}`,{waitUntil:'networkidle'})
   await page.locator('h1').first().waitFor()
   const result={
     apiStatus:api.status,

@@ -22,3 +22,13 @@ export const siteUrl = (() => {
     : 'https://grantzz-zzz.github.io/paint-2/')
   return configured.endsWith('/') ? configured : `${configured}/`
 })()
+
+export const usesCleanRoutes = Boolean(window.__SPP_CONTENT_API__)
+
+export function publicRouteUrl(path = '/') {
+  const normalized=`/${String(path).replace(/^\/+|\/+$/g,'')}`
+  const route=normalized==='/'?'/':normalized
+  return usesCleanRoutes
+    ? new URL(route.replace(/^\//,''),siteUrl).href
+    : `${siteUrl}#${route}`
+}

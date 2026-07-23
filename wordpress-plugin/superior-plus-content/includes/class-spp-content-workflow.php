@@ -314,7 +314,7 @@ class SPP_Content_Workflow {
 	 * @return string
 	 */
 	private function react_preview_link( $post ) {
-		return add_query_arg( 'spp_preview', (int) $post->ID, home_url( '/' ) ) . '#' . $this->public_path( $post );
+		return add_query_arg( 'spp_preview', (int) $post->ID, home_url( $this->public_path( $post ) ) );
 	}
 
 	/**

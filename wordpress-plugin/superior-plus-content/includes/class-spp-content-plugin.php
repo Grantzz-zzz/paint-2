@@ -51,6 +51,7 @@ final class SPP_Content_Plugin {
 		$this->fields = new SPP_Content_Fields( $this->types );
 		new SPP_Content_REST( $this->types, $this->fields );
 		new SPP_Content_Workflow( $this->types, $this->fields );
+		new SPP_Content_Routing();
 
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ), 5 );
@@ -133,9 +134,16 @@ final class SPP_Content_Plugin {
 	public static function activate() {
 		$types = new SPP_Content_Types( false );
 		$types->register();
+		$routing = new SPP_Content_Routing( false );
+		$routing->register_rewrites();
 		self::add_capabilities();
 		$types->ensure_site_config();
 		update_option( 'spp_content_db_version', SPP_CONTENT_VERSION, false );
+		if ( 'superior-plus' === get_stylesheet() ) {
+			update_option( 'spp_content_routes_version', SPP_CONTENT_VERSION, false );
+		} else {
+			delete_option( 'spp_content_routes_version' );
+		}
 		flush_rewrite_rules();
 	}
 

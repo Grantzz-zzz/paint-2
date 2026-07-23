@@ -138,14 +138,14 @@ non-cached preview through the exact React design.
 
 ## Phase 5 — Clean URLs and WordPress routing
 
-- [ ] Replace public hash routes with clean WordPress paths
-- [ ] Serve the React shell for every approved route
-- [ ] Support browser refresh and direct navigation on every route
-- [ ] Keep redirects from legacy hash URLs
-- [ ] Register WordPress rewrite rules for dynamic service and custom pages
-- [ ] Generate canonical URLs using the production domain
-- [ ] Generate an XML sitemap containing every published page
-- [ ] Confirm breadcrumbs and internal links use clean URLs
+- [x] Replace public hash routes with clean WordPress paths
+- [x] Serve the React shell for every approved route
+- [x] Support browser refresh and direct navigation on every route
+- [x] Keep redirects from legacy hash URLs
+- [x] Register WordPress rewrite rules for dynamic service and custom pages
+- [x] Generate canonical URLs using the production domain
+- [x] Generate an XML sitemap containing every published page
+- [x] Confirm breadcrumbs and internal links use clean URLs
 
 ## Phase 6 — Existing content migration
 
@@ -221,8 +221,8 @@ non-cached preview through the exact React design.
 
 ## Current focus
 
-`Phase 5 — Clean URLs and WordPress routing.` Phase 4 is complete locally: the
-typed React adapter loads and caches WordPress content, keeps the complete local
-site as its resilient fallback, connects every current page and collection, and
-supports authenticated exact-design previews. Nothing has been changed on staging
-or production.
+`Phase 6 — Existing content migration.` Phase 5 is complete locally: WordPress
+uses clean public paths, serves the React shell on approved and dynamic routes,
+preserves legacy hash links, emits production-domain canonicals and provides an
+XML sitemap. Rewrite rules refresh safely after plugin updates and theme
+activation. Nothing has been changed on staging or production.
