@@ -28,11 +28,11 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 - [x] Confirm the React production build can run inside WordPress
 - [x] Confirm the WordPress version contains one React header and one React footer
 - [x] Confirm desktop and mobile screenshots of the current WordPress React build
-- [ ] Save a machine-readable baseline of every current text string
-- [ ] Save a machine-readable baseline of every current image and video assignment
-- [ ] Record every button, menu item, internal link, telephone link and email link
-- [ ] Record every animation, accordion, slider, gallery and form interaction
-- [ ] Generate baseline screenshots for every route at desktop, tablet and mobile widths
+- [x] Save a machine-readable baseline of every current text string
+- [x] Save a machine-readable baseline of every current image and video assignment
+- [x] Record every button, menu item, internal link, telephone link and email link
+- [x] Record every animation, accordion, slider, gallery and form interaction
+- [x] Generate baseline screenshots for every route at desktop, tablet and mobile widths
 
 ### Required route inventory — 15 pages
 
@@ -59,7 +59,7 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 - [x] Confirm one PNG hero image
 - [x] Confirm five MP4 project videos
 - [x] Add 12 clearly identified generated WebP showcase placeholders
-- [ ] Record alt text, crop position and page usage for every displayed asset
+- [x] Record alt text, crop position and page usage for every displayed asset
 - [ ] Preserve all current local files during CMS integration
 
 ## Phase 1 — Locked content architecture
@@ -211,4 +211,4 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 
 ## Current focus
 
-`Phase 0 — Baseline and preservation.` No frontend or WordPress content behaviour will be changed until the complete current-site manifest and screenshot baseline are recorded.
+`Phase 1 — Locked content architecture.` Phase 0 is complete: all 15 routes, 45 responsive screenshots, content structure, interactions, source hashes and asset hashes are recorded under `baseline/`.
