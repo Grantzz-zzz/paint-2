@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 let sequence = 0
 const id = () => (++sequence).toString(16).padStart(8, '0')
-const imageBase = 'https://grantzz-zzz.github.io/paint-2/assets/'
+const imageBase = '{{SPP_THEME_URI}}/assets/images/'
 
 function container(css, elements = [], settings = {}) {
   return { id: id(), elType: 'container', isInner: false, settings: { content_width: 'full', css_classes: css, ...settings }, elements }
@@ -62,7 +62,7 @@ const content = [
         eyebrow('Melbourne painters who care'),
         heading('Made to feel<br><em>beautiful.</em><br>Made to last.', 'spp-el-display', 'h1'),
         text('<p>Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.</p>', 'spp-el-hero-lead'),
-        container('spp-el-actions', [button('Get a free quote →', '/contact/', 'spp-el-primary'), button('See our work ↘', '#projects', 'spp-el-secondary')]),
+        container('spp-el-actions', [button('Get a free quote →', '{{SPP_HOME_URL}}/contact/', 'spp-el-primary'), button('See our work ↘', '#projects', 'spp-el-secondary')]),
         text('<p>✓ Fully insured&nbsp;&nbsp;&nbsp; ✓ Free colour advice&nbsp;&nbsp;&nbsp; ✓ Melbourne-wide</p>', 'spp-el-trustline'),
       ]),
     ]),
@@ -95,7 +95,7 @@ const content = [
   container('spp-el-section spp-el-projects', [container('spp-el-shell', [
     sectionHeading('Selected work', 'Colour changes<br><em>everything.</em>', 'Explore the care behind every edge, every surface and every final coat. Hover a project to reveal the colour beneath.'),
     container('spp-el-project-grid', projects.map(([title, type, src], index) => container(`spp-el-project spp-el-project-${index + 1}`, [
-      image(`${imageBase}client/${src}`, title),
+      image(`${imageBase}${src}`, title),
       heading(title, '', 'h3'),
       text(`<p>${type}</p>`),
     ]))),
@@ -118,7 +118,7 @@ const content = [
 
   container('spp-el-section spp-el-contact', [container('spp-el-shell spp-el-contact-grid', [
     container('', [eyebrow('Let’s talk colour'), heading('Ready for a<br><em>fresh start?</em>'), text('<p>Tell us what you’re planning. We’ll arrange a free, no-obligation quote and help you choose the right way forward.</p>', 'spp-el-lead'), text('<p><a href="tel:0470234567">Call us&nbsp; <strong>0470 234 567</strong></a><br><a href="mailto:sppainting.remodeling@gmail.com">Email us&nbsp; <strong>sppainting.remodeling@gmail.com</strong></a></p>', 'spp-el-contact-links')]),
-    widget('shortcode', { shortcode: '[spp_quote_form]' }, 'spp-el-form'),
+    widget('metform', { mf_form_id: '{{SPP_METFORM_ID}}***Superior Plus Quote Form' }, 'spp-el-form'),
   ])], { html_tag: 'section', css_id: 'contact' }),
 ]
 

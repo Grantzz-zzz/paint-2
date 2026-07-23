@@ -1,0 +1,58 @@
+{
+  "_App-D-49flss.js": {
+    "file": "assets/App-D-49flss.js",
+    "name": "App",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "_projectMedia-Dmsfz25m.js": {
+    "file": "assets/projectMedia-Dmsfz25m.js",
+    "name": "projectMedia",
+    "imports": [
+      "index.html",
+      "_App-D-49flss.js"
+    ]
+  },
+  "index.html": {
+    "file": "assets/index-DSyrTVxG.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "_App-D-49flss.js",
+      "src/pages/ServicePage.jsx",
+      "src/pages/ContentPages.jsx",
+      "src/pages/ContentPages.jsx",
+      "src/pages/ContentPages.jsx",
+      "src/pages/ContentPages.jsx",
+      "src/pages/ContentPages.jsx"
+    ],
+    "css": [
+      "assets/index-DuoHChhj.css"
+    ]
+  },
+  "src/pages/ContentPages.jsx": {
+    "file": "assets/ContentPages-ByVxnpZu.js",
+    "name": "ContentPages",
+    "src": "src/pages/ContentPages.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_projectMedia-Dmsfz25m.js",
+      "_App-D-49flss.js"
+    ]
+  },
+  "src/pages/ServicePage.jsx": {
+    "file": "assets/ServicePage-BMFkzqGa.js",
+    "name": "ServicePage",
+    "src": "src/pages/ServicePage.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_projectMedia-Dmsfz25m.js",
+      "_App-D-49flss.js"
+    ]
+  }
+}

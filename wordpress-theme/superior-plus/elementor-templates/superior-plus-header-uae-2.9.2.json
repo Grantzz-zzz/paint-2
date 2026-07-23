@@ -1,0 +1,127 @@
+{
+  "version": "0.4",
+  "title": "Superior Plus Global Header",
+  "type": "container",
+  "page_settings": {},
+  "content": [
+    {
+      "id": "00001391",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-uae-header"
+      },
+      "elements": [
+        {
+          "id": "00001390",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-uae-header-inner"
+          },
+          "elements": [
+            {
+              "id": "0000138b",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-uae-brand"
+              },
+              "elements": [
+                {
+                  "id": "00001389",
+                  "elType": "widget",
+                  "widgetType": "image",
+                  "settings": {
+                    "_css_classes": "spp-uae-logo",
+                    "image": {
+                      "url": "{{SPP_THEME_URI}}/assets/images/logo.jpeg",
+                      "id": "",
+                      "alt": "Superior Plus Painting and Remodeling",
+                      "source": "library"
+                    },
+                    "image_size": "full",
+                    "link_to": "custom",
+                    "link": {
+                      "url": "{{SPP_HOME_URL}}/"
+                    }
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000138a",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-uae-brand-copy",
+                    "title": "<a href=\"{{SPP_HOME_URL}}/\">Superior Plus Painting<small>Painting &amp; Remodeling</small></a>",
+                    "header_size": "div"
+                  },
+                  "elements": []
+                }
+              ]
+            },
+            {
+              "id": "0000138c",
+              "elType": "widget",
+              "widgetType": "uael-nav-menu",
+              "settings": {
+                "_css_classes": "spp-uae-nav",
+                "menu": "superior-plus-primary",
+                "layout": "horizontal",
+                "navmenu_align": "center",
+                "dropdown": "tablet",
+                "full_width_dropdown": "yes",
+                "submenu_icon": "arrow",
+                "submenu_animation": "slide_up",
+                "menu_last_item": "none",
+                "link_redirect": "child",
+                "resp_align": "right"
+              },
+              "elements": []
+            },
+            {
+              "id": "0000138f",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-uae-actions"
+              },
+              "elements": [
+                {
+                  "id": "0000138d",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-uae-phone",
+                    "title": "<a href=\"tel:0470234567\">0470 234 567</a>",
+                    "header_size": "div"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000138e",
+                  "elType": "widget",
+                  "widgetType": "button",
+                  "settings": {
+                    "_css_classes": "spp-uae-quote",
+                    "text": "Free quote →",
+                    "link": {
+                      "url": "{{SPP_HOME_URL}}/contact/"
+                    },
+                    "size": "sm"
+                  },
+                  "elements": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

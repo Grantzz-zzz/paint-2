@@ -1,0 +1,205 @@
+{
+  "version": "0.4",
+  "title": "Superior Plus Quote Form",
+  "type": "container",
+  "page_settings": {},
+  "content": [
+    {
+      "id": "000013be",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-mf-form"
+      },
+      "elements": [
+        {
+          "id": "000013b3",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-mf-title"
+          },
+          "elements": [
+            {
+              "id": "000013b1",
+              "elType": "widget",
+              "widgetType": "heading",
+              "settings": {
+                "_css_classes": "",
+                "title": "Free quote request",
+                "header_size": "h3"
+              },
+              "elements": []
+            },
+            {
+              "id": "000013b2",
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "_css_classes": "",
+                "editor": "<p>Usually replies within 2 hours</p>"
+              },
+              "elements": []
+            }
+          ]
+        },
+        {
+          "id": "000013b6",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-mf-row"
+          },
+          "elements": [
+            {
+              "id": "000013b4",
+              "elType": "widget",
+              "widgetType": "mf-text",
+              "settings": {
+                "_css_classes": "spp-mf-field",
+                "mf_input_label_status": "yes",
+                "mf_input_label": "Name",
+                "mf_input_name": "name",
+                "mf_input_placeholder": "Your name",
+                "mf_input_required": "yes"
+              },
+              "elements": []
+            },
+            {
+              "id": "000013b5",
+              "elType": "widget",
+              "widgetType": "mf-telephone",
+              "settings": {
+                "_css_classes": "spp-mf-field",
+                "mf_input_label_status": "yes",
+                "mf_input_label": "Phone",
+                "mf_input_name": "phone",
+                "mf_input_placeholder": "04xx xxx xxx",
+                "mf_input_required": "yes"
+              },
+              "elements": []
+            }
+          ]
+        },
+        {
+          "id": "000013b9",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-mf-row"
+          },
+          "elements": [
+            {
+              "id": "000013b7",
+              "elType": "widget",
+              "widgetType": "mf-email",
+              "settings": {
+                "_css_classes": "spp-mf-field",
+                "mf_input_label_status": "yes",
+                "mf_input_label": "Email",
+                "mf_input_name": "email",
+                "mf_input_placeholder": "you@email.com",
+                "mf_input_required": "yes"
+              },
+              "elements": []
+            },
+            {
+              "id": "000013b8",
+              "elType": "widget",
+              "widgetType": "mf-text",
+              "settings": {
+                "_css_classes": "spp-mf-field",
+                "mf_input_label_status": "yes",
+                "mf_input_label": "Suburb",
+                "mf_input_name": "suburb",
+                "mf_input_placeholder": "Your suburb",
+                "mf_input_required": "yes"
+              },
+              "elements": []
+            }
+          ]
+        },
+        {
+          "id": "000013ba",
+          "elType": "widget",
+          "widgetType": "mf-select",
+          "settings": {
+            "_css_classes": "spp-mf-field",
+            "mf_input_label_status": "yes",
+            "mf_input_label": "Service",
+            "mf_input_name": "service",
+            "mf_input_placeholder": "Choose a service",
+            "mf_input_required": "yes",
+            "mf_input_list": [
+              {
+                "mf_input_option_text": "Residential painting",
+                "mf_input_option_value": "residential"
+              },
+              {
+                "mf_input_option_text": "Commercial painting",
+                "mf_input_option_value": "commercial"
+              },
+              {
+                "mf_input_option_text": "Interior or exterior painting",
+                "mf_input_option_value": "interior-exterior"
+              },
+              {
+                "mf_input_option_text": "Roof, deck or fence painting",
+                "mf_input_option_value": "outdoor"
+              },
+              {
+                "mf_input_option_text": "Repairs or other work",
+                "mf_input_option_value": "other"
+              }
+            ]
+          },
+          "elements": []
+        },
+        {
+          "id": "000013bb",
+          "elType": "widget",
+          "widgetType": "mf-textarea",
+          "settings": {
+            "_css_classes": "spp-mf-field",
+            "mf_input_label_status": "yes",
+            "mf_input_label": "Tell us about your project",
+            "mf_input_name": "project",
+            "mf_input_placeholder": "What would you like painted?",
+            "mf_input_required": "yes",
+            "mf_textarea_field_height": {
+              "unit": "px",
+              "size": 120
+            }
+          },
+          "elements": []
+        },
+        {
+          "id": "000013bc",
+          "elType": "widget",
+          "widgetType": "mf-button",
+          "settings": {
+            "_css_classes": "spp-mf-submit",
+            "mf_btn_text": "Request my free quote →",
+            "mf_btn_align": "justify",
+            "mf_btn_icon_align": "right"
+          },
+          "elements": []
+        },
+        {
+          "id": "000013bd",
+          "elType": "widget",
+          "widgetType": "text-editor",
+          "settings": {
+            "_css_classes": "spp-mf-note",
+            "editor": "<p>✓ No obligation. Your details stay private.</p>"
+          },
+          "elements": []
+        }
+      ]
+    }
+  ]
+}

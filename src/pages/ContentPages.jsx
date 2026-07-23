@@ -5,13 +5,14 @@ import { PageLayout, PageHero, TrustStrip, SectionIntro, TestimonialBand, AreasB
 import { Reveal, Divider } from '../App'
 import { faqs, masterProcess, serviceList, suburbs } from '../data/siteData'
 import { brandArchive } from '../data/projectMedia'
+import { asset } from '../utils/assets'
 
 const images = {
-  about: './assets/client/projects/fence/fence-03.webp',
-  services: './assets/client/projects/commercial/commercial-02.webp',
-  process: './assets/client/projects/commercial/commercial-06.webp',
-  faq: './assets/client/projects/interior/interior-04.webp',
-  contact: './assets/client/projects/exterior/exterior-07.webp',
+  about: asset('client/projects/fence/fence-03.webp'),
+  services: asset('client/projects/commercial/commercial-02.webp'),
+  process: asset('client/projects/commercial/commercial-06.webp'),
+  faq: asset('client/projects/interior/interior-04.webp'),
+  contact: asset('client/projects/exterior/exterior-07.webp'),
 }
 
 export function ServicesPage() {

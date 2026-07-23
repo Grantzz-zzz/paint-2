@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowRight, Check, MapPin, Phone, ShieldCheck, Sparkles, Star } from 'lucide-react'
 import { Navbar, Footer, Reveal, Eyebrow, Divider } from '../App'
 import { suburbs, testimonials } from '../data/siteData'
-
-const siteUrl = 'https://grantzz-zzz.github.io/paint-2/'
+import { asset, siteUrl } from '../utils/assets'
 
 function upsertMeta(selector, attributes) {
   let element = document.head.querySelector(selector)
@@ -23,7 +22,7 @@ function breadcrumbItems(pathname,currentTitle){
   return items
 }
 
-export function PageLayout({ children, title, description, pageType = 'WebPage', image = './assets/stock/residential.webp', schemaData = {} }) {
+export function PageLayout({ children, title, description, pageType = 'WebPage', image = asset('stock/residential.webp'), schemaData = {} }) {
   const location = useLocation()
   const canonical = `${siteUrl}#${location.pathname}`
   const schemaKey = JSON.stringify(schemaData)
@@ -42,7 +41,7 @@ export function PageLayout({ children, title, description, pageType = 'WebPage',
     let script=document.getElementById('page-structured-data')
     if(!script){script=document.createElement('script');script.id='page-structured-data';script.type='application/ld+json';document.head.appendChild(script)}
     script.textContent=JSON.stringify({'@context':'https://schema.org','@graph':[
-      {'@type':'LocalBusiness','@id':`${siteUrl}#business`,name:'Superior Plus Painting & Remodeling',url:siteUrl,telephone:'+61470234567',email:'sppainting.remodeling@gmail.com',areaServed:'Melbourne, Victoria',image:new URL('./assets/logo.jpeg',siteUrl).href},
+      {'@type':'LocalBusiness','@id':`${siteUrl}#business`,name:'Superior Plus Painting & Remodeling',url:siteUrl,telephone:'+61470234567',email:'sppainting.remodeling@gmail.com',areaServed:'Melbourne, Victoria',image:asset('logo.jpeg')},
       {'@type':pageType,name:title,description,url:canonical,provider:{'@id':`${siteUrl}#business`},...JSON.parse(schemaKey)},
       {'@type':'BreadcrumbList','itemListElement':breadcrumbItems(location.pathname,title).map((item,index)=>({'@type':'ListItem',position:index+1,name:item.label,item:`${siteUrl}#${item.path}`}))}
     ]})

@@ -1,9 +1,11 @@
-const root = './assets/client/projects'
+import { asset, remoteProjectVideo } from '../utils/assets'
+
+const root = 'client/projects'
 
 function photos(category,count,subject) {
   return Array.from({length:count},(_,index)=>({
     type:'image',
-    src:`${root}/${category}/${category}-${String(index+1).padStart(2,'0')}.webp`,
+    src:asset(`${root}/${category}/${category}-${String(index+1).padStart(2,'0')}.webp`),
     alt:`${subject} project by Superior Plus Painting`,
   }))
 }
@@ -11,7 +13,7 @@ function photos(category,count,subject) {
 function videos(category,count,subject) {
   return Array.from({length:count},(_,index)=>{
     const stem=`${root}/${category}/${category}-video-${String(index+1).padStart(2,'0')}`
-    return {type:'video',src:`${stem}.mp4`,poster:`${stem}-poster.webp`,alt:`${subject} project video by Superior Plus Painting`}
+    return {type:'video',src:remoteProjectVideo(`${stem}.mp4`),poster:asset(`${stem}-poster.webp`),alt:`${subject} project video by Superior Plus Painting`}
   })
 }
 
@@ -43,7 +45,7 @@ export const projectMedia = {
   },
 }
 
-export const brandArchive = `${root}/brand/brand-01.webp`
+export const brandArchive = asset(`${root}/brand/brand-01.webp`)
 
 export const serviceMediaCategory = {
   'commercial-painting-melbourne':'commercial',

@@ -1,47 +1,36 @@
-# Superior Plus WordPress Theme Handoff
+# Superior Plus WordPress React Theme Handoff
 
-The custom theme lives at `wordpress-theme/superior-plus/`. It is separate from the React/Vite reference site.
+Version 2.0 embeds the compiled React frontend inside the WordPress theme. WordPress serves the same components and CSS instead of rebuilding the design with Elementor widgets.
 
-## Included in the local theme
+## Included
 
-- Shared header, Services submenu and footer
-- Homepage and five core internal page templates
-- Reusable template for all nine Service entries
-- Editable Service fields in WordPress Admin
-- Editable Project content type backed by the Media Library
-- Client-photo galleries with progressive loading and lightbox viewing
-- Responsive styling, keyboard navigation and reduced-motion support
-- Business details and form shortcode settings in the Customizer
+- Exact homepage
+- About, Services, Our Process, FAQs and Contact pages
+- Nine complete service pages
+- Original header, Services dropdown, footer, images, animations and responsive layout
+- Direct WordPress URL redirects to matching React routes
+- Local image assets; large project videos remain hosted by the current GitHub Pages deployment
 
-## Safe installation sequence
+## Safe installation
 
-1. Do not test first on the live site when staging is available.
-2. Back up files and the database.
-3. Upload `wordpress-theme/dist/superior-plus-1.1.0.zip` through Appearance Ã¢â€ â€™ Themes Ã¢â€ â€™ Add New Ã¢â€ â€™ Upload Theme.
-4. Activate the theme. Activation alone does not change the homepage or generate content.
-5. Open Appearance Ã¢â€ â€™ Superior Plus Setup.
-6. Click Create starter content only after confirming the backup/staging environment.
-7. With Elementor 4.2.0 active, click Install or replace Elementor homepage.
-8. Review Appearance Ã¢â€ â€™ Menus and Appearance Ã¢â€ â€™ Customize.
-9. Edit Services and Projects through their dedicated admin menus.
-10. Add the chosen form plugin shortcode in the Customizer.
+1. Confirm you are in the staging dashboard.
+2. Create a current files-and-database backup.
+3. Upload `wordpress-theme/dist/superior-plus-2.0.0.zip` through Appearance → Themes → Add New → Upload Theme.
+4. Approve replacing the existing Superior Plus theme when WordPress asks.
+5. Activate the theme on staging.
+6. Clear WordPress, host and CDN caches.
+7. Test the homepage, menu, dropdown, contact form appearance and all service pages.
+8. Push to live only after client approval.
 
-The setup importer creates only missing items and never overwrites an existing Page or Service with the same slug. It does set the generated Home page as the static homepage when deliberately run.
+Existing Elementor pages, UAE templates and MetForm entries remain stored in WordPress. Version 2.0 does not print their frontend assets because they conflict with the compiled React application.
 
-## Updating galleries
+## Editing
 
-The bundled project photos appear as the initial galleries. To replace a gallery with Media Library content:
+The public design is code-controlled to preserve pixel accuracy. Edit the React source locally, run `npm run build`, copy the non-video build files into `wordpress-theme/superior-plus/react-dist/`, increase the theme version and rebuild the ZIP.
 
-1. Add Project entries in WordPress.
-2. Upload and select a Featured Image for each Project.
-3. Assign the Project category: Commercial, Interior, Exterior, Fence or Outdoor.
-4. Once a category contains Project entries with featured images, that service gallery automatically uses those editable projects instead of bundled fallback photos.
-
-Upload approved videos separately through the Media Library. The large MP4 files are not included in the theme ZIP so dashboard installation remains reliable.
+The quote form currently demonstrates the approved interaction but does not send mail. Connect it to a WordPress REST endpoint or external form service before production launch.
 
 ## Rebuild package
-
-Run from the repository root:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/package-wordpress-theme.ps1

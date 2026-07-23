@@ -40,15 +40,15 @@ export const serviceList = [
 ]
 
 const stock = {
-  residential: './assets/client/projects/exterior/exterior-07.webp',
-  commercial: './assets/client/projects/commercial/commercial-02.webp',
-  interior: './assets/client/projects/interior/interior-04.webp',
-  exterior: './assets/client/projects/exterior/exterior-01.webp',
-  roof: './assets/stock/roof.webp',
-  fence: './assets/client/projects/fence/fence-03.webp',
-  deck: './assets/client/projects/outdoor/outdoor-01.webp',
-  wallpaper: './assets/stock/wallpaper.webp',
-  plaster: './assets/client/projects/interior/interior-10.webp',
+  residential: asset('client/projects/exterior/exterior-07.webp'),
+  commercial: asset('client/projects/commercial/commercial-02.webp'),
+  interior: asset('client/projects/interior/interior-04.webp'),
+  exterior: asset('client/projects/exterior/exterior-01.webp'),
+  roof: asset('stock/roof.webp'),
+  fence: asset('client/projects/fence/fence-03.webp'),
+  deck: asset('client/projects/outdoor/outdoor-01.webp'),
+  wallpaper: asset('stock/wallpaper.webp'),
+  plaster: asset('client/projects/interior/interior-10.webp'),
 }
 
 export const servicePages = {
@@ -156,3 +156,4 @@ export const faqs = [
   ['Do you clean up after the project?', 'Absolutely. We remove masking and coverings, leave the property tidy and complete a final inspection before handover.'],
   ['How do I book my project?', 'Contact us to arrange a free consultation. Once you approve the written quotation, we schedule the project for a suitable time.'],
 ]
+import { asset } from '../utils/assets'

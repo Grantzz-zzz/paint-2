@@ -1,35 +1,31 @@
 === Superior Plus Painting ===
 Requires at least: 6.4
 Requires PHP: 8.0
-Stable tag: 1.1.0
+Stable tag: 2.0.0
 
-Custom WordPress theme matching the approved Superior Plus Painting React frontend.
+Exact WordPress delivery of the approved Superior Plus Painting React frontend.
 
 == Installation ==
 
-1. Back up the WordPress site and use staging whenever possible.
+1. Back up the WordPress site and use staging.
 2. Open Appearance > Themes > Add New > Upload Theme.
-3. Upload superior-plus-1.1.0.zip and activate the theme.
-4. Open Appearance > Superior Plus Setup.
-5. Review the warning and click Create starter content only when ready.
-6. With Elementor 4.2.0 active, click Install or replace Elementor homepage.
-7. Open Appearance > Customize > Superior Plus business details to confirm contact information.
-8. Review Pages, Services, Projects and Appearance > Menus.
+3. Upload superior-plus-2.0.0.zip and activate it on staging only.
+4. Clear WordPress, hosting and CDN caches.
+5. Test the main menu, Services dropdown and all pages.
+6. Push staging to live only after client approval.
 
-Activation alone does not create pages or change the homepage. Starter content is imported only through the explicit setup screen.
+== Exact React frontend ==
 
-== Editable content ==
+Version 2.0 renders the compiled React site directly. It includes the homepage, five core pages and nine service pages, with the same design, imagery, responsive behaviour and animations as the approved React reference.
 
-Services use a dedicated Service content type with fields for hero copy, scope, process, benefits, colour and gallery category.
+Elementor, UAE and MetForm content is not deleted, but those plugins do not render inside the public React shell. This prevents plugin styling or JavaScript from changing the approved frontend.
 
-Projects use a dedicated Project content type and the WordPress Media Library. Give each project a featured image and assign a project category matching the relevant service gallery.
-
-The contact template accepts a shortcode under Appearance > Customize > Superior Plus business details. It works with form plugins that provide shortcodes.
+Content changes currently require editing the React source and rebuilding the theme. The quote form preserves the approved visual interaction but must be connected to an email/form endpoint before production launch.
 
 == Bundled media ==
 
-The theme ZIP includes optimized client photos and excludes large MP4 files to keep dashboard upload reliable. Upload approved videos separately through Media > Add New and place them inside Project content as needed.
+The ZIP includes optimized client and stock images. Large project MP4 files are delivered from the existing GitHub Pages site so the dashboard upload remains reliable.
 
 == Updates ==
 
-Rebuild the ZIP with scripts/package-wordpress-theme.ps1. Increase the Version value in style.css before distributing an update.
+Rebuild the ZIP with scripts/package-wordpress-theme.ps1. Increase the Version value in style.css before distributing a later update.

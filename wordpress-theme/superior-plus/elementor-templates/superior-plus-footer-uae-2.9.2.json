@@ -1,0 +1,355 @@
+{
+  "version": "0.4",
+  "title": "Superior Plus Global Footer",
+  "type": "container",
+  "page_settings": {},
+  "content": [
+    {
+      "id": "000013b0",
+      "elType": "container",
+      "isInner": false,
+      "settings": {
+        "content_width": "full",
+        "css_classes": "spp-uae-footer"
+      },
+      "elements": [
+        {
+          "id": "000013ac",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-uae-footer-grid"
+          },
+          "elements": [
+            {
+              "id": "00001396",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-uae-footer-brand"
+              },
+              "elements": [
+                {
+                  "id": "00001394",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": "spp-uae-brand"
+                  },
+                  "elements": [
+                    {
+                      "id": "00001392",
+                      "elType": "widget",
+                      "widgetType": "image",
+                      "settings": {
+                        "_css_classes": "spp-uae-logo",
+                        "image": {
+                          "url": "{{SPP_THEME_URI}}/assets/images/logo.jpeg",
+                          "id": "",
+                          "alt": "Superior Plus Painting and Remodeling",
+                          "source": "library"
+                        },
+                        "image_size": "full",
+                        "link_to": "custom",
+                        "link": {
+                          "url": "{{SPP_HOME_URL}}/"
+                        }
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00001393",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-brand-copy",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/\">Superior Plus Painting<small>Painting &amp; Remodeling</small></a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    }
+                  ]
+                },
+                {
+                  "id": "00001395",
+                  "elType": "widget",
+                  "widgetType": "text-editor",
+                  "settings": {
+                    "_css_classes": "",
+                    "editor": "<p>Premium residential and commercial painting across Melbourne, with care in every coat.</p>"
+                  },
+                  "elements": []
+                }
+              ]
+            },
+            {
+              "id": "0000139e",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-uae-footer-column"
+              },
+              "elements": [
+                {
+                  "id": "00001397",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-uae-footer-title",
+                    "title": "Explore",
+                    "header_size": "h4"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "0000139d",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": ""
+                  },
+                  "elements": [
+                    {
+                      "id": "00001398",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/about/\">About</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "00001399",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/services/\">Services</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000139a",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/our-process/\">Our Process</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000139b",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/faqs/\">FAQs</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "0000139c",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/contact/\">Contact</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "000013a5",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-uae-footer-column"
+              },
+              "elements": [
+                {
+                  "id": "0000139f",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-uae-footer-title",
+                    "title": "Services",
+                    "header_size": "h4"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "000013a4",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": ""
+                  },
+                  "elements": [
+                    {
+                      "id": "000013a0",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/services/residential-painting-melbourne/\">Residential painting</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000013a1",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/services/commercial-painting-melbourne/\">Commercial painting</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000013a2",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/services/roof-painting-melbourne/\">Roof painting</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000013a3",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"{{SPP_HOME_URL}}/services/plaster-repairs-melbourne/\">Plaster repairs</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "000013ab",
+              "elType": "container",
+              "isInner": false,
+              "settings": {
+                "content_width": "full",
+                "css_classes": "spp-uae-footer-column"
+              },
+              "elements": [
+                {
+                  "id": "000013a6",
+                  "elType": "widget",
+                  "widgetType": "heading",
+                  "settings": {
+                    "_css_classes": "spp-uae-footer-title",
+                    "title": "Get in touch",
+                    "header_size": "h4"
+                  },
+                  "elements": []
+                },
+                {
+                  "id": "000013aa",
+                  "elType": "container",
+                  "isInner": false,
+                  "settings": {
+                    "content_width": "full",
+                    "css_classes": ""
+                  },
+                  "elements": [
+                    {
+                      "id": "000013a7",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"tel:0470234567\">0470 234 567</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000013a8",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"mailto:sppainting.remodeling@gmail.com\">sppainting.remodeling@gmail.com</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    },
+                    {
+                      "id": "000013a9",
+                      "elType": "widget",
+                      "widgetType": "heading",
+                      "settings": {
+                        "_css_classes": "spp-uae-footer-link",
+                        "title": "<a href=\"#\">Melbourne, Victoria</a>",
+                        "header_size": "div"
+                      },
+                      "elements": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "000013af",
+          "elType": "container",
+          "isInner": false,
+          "settings": {
+            "content_width": "full",
+            "css_classes": "spp-uae-footer-bottom"
+          },
+          "elements": [
+            {
+              "id": "000013ad",
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "_css_classes": "",
+                "editor": "<p>© {{CURRENT_YEAR}} Superior Plus Painting &amp; Remodeling</p>"
+              },
+              "elements": []
+            },
+            {
+              "id": "000013ae",
+              "elType": "widget",
+              "widgetType": "text-editor",
+              "settings": {
+                "_css_classes": "",
+                "editor": "<p>Made with care in Melbourne.</p>"
+              },
+              "elements": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -16,7 +16,7 @@
           "settings": {
             "_css_classes": "spp-el-hero-image",
             "image": {
-              "url": "https://grantzz-zzz.github.io/paint-2/assets/hero-painter.png",
+              "url": "{{SPP_THEME_URI}}/assets/images/hero-painter.png",
               "id": "",
               "alt": "Professional painter applying a deep red finish in a modern Melbourne home",
               "source": "library"
@@ -92,7 +92,7 @@
                         "_css_classes": "spp-el-primary",
                         "text": "Get a free quote →",
                         "link": {
-                          "url": "/contact/",
+                          "url": "{{SPP_HOME_URL}}/contact/",
                           "is_external": "",
                           "nofollow": "",
                           "custom_attributes": ""
@@ -1080,7 +1080,7 @@
                       "settings": {
                         "_css_classes": "",
                         "image": {
-                          "url": "https://grantzz-zzz.github.io/paint-2/assets/client/projects/interior/interior-04.webp",
+                          "url": "{{SPP_THEME_URI}}/assets/images/projects/interior/interior-04.webp",
                           "id": "",
                           "alt": "Warm modern interior",
                           "source": "library"
@@ -1128,7 +1128,7 @@
                       "settings": {
                         "_css_classes": "",
                         "image": {
-                          "url": "https://grantzz-zzz.github.io/paint-2/assets/client/projects/exterior/exterior-07.webp",
+                          "url": "{{SPP_THEME_URI}}/assets/images/projects/exterior/exterior-07.webp",
                           "id": "",
                           "alt": "Exterior transformation",
                           "source": "library"
@@ -1176,7 +1176,7 @@
                       "settings": {
                         "_css_classes": "",
                         "image": {
-                          "url": "https://grantzz-zzz.github.io/paint-2/assets/client/projects/commercial/commercial-02.webp",
+                          "url": "{{SPP_THEME_URI}}/assets/images/projects/commercial/commercial-02.webp",
                           "id": "",
                           "alt": "Commercial precision",
                           "source": "library"
@@ -2044,10 +2044,10 @@
             {
               "id": "000000b7",
               "elType": "widget",
-              "widgetType": "shortcode",
+              "widgetType": "metform",
               "settings": {
                 "_css_classes": "spp-el-form",
-                "shortcode": "[spp_quote_form]"
+                "mf_form_id": "{{SPP_METFORM_ID}}***Superior Plus Quote Form"
               },
               "elements": []
             }

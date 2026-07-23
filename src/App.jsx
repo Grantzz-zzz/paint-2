@@ -9,6 +9,7 @@ import {
   Palette, Phone, ShieldCheck, Sparkles, SprayCan, Star, Trees, Warehouse, X
 } from 'lucide-react'
 import { serviceList } from './data/siteData'
+import { asset, siteUrl } from './utils/assets'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -41,9 +42,9 @@ const trust = [
 ]
 
 const projects = [
-  { title: 'Warm modern interior', type: 'Interior project · Melbourne', image: './assets/client/projects/interior/interior-04.webp', pos: 'center', color: '#f3c51d' },
-  { title: 'Exterior transformation', type: 'Residential project · Melbourne', image: './assets/client/projects/exterior/exterior-07.webp', pos: 'center', color: '#8f2824' },
-  { title: 'Commercial precision', type: 'Commercial project · Melbourne', image: './assets/client/projects/commercial/commercial-02.webp', pos: 'center', color: '#1f5140' },
+  { title: 'Warm modern interior', type: 'Interior project · Melbourne', image: asset('client/projects/interior/interior-04.webp'), pos: 'center', color: '#f3c51d' },
+  { title: 'Exterior transformation', type: 'Residential project · Melbourne', image: asset('client/projects/exterior/exterior-07.webp'), pos: 'center', color: '#8f2824' },
+  { title: 'Commercial precision', type: 'Commercial project · Melbourne', image: asset('client/projects/commercial/commercial-02.webp'), pos: 'center', color: '#1f5140' },
 ]
 
 const testimonials = [
@@ -77,7 +78,7 @@ function Divider({ color = '#fff', variant = 'wave' }) {
 
 function Logo({ dark = false }) {
   const navigate = useNavigate()
-  return <button onClick={() => navigate('/')} className="logo-wrap" aria-label="Go to home page"><img src="./assets/logo.jpeg" alt="Superior Plus Painting & Remodeling" /><span className={dark ? 'text-white' : 'text-ink'}><b>Superior Plus</b><small>Painting & Remodeling</small></span></button>
+  return <button onClick={() => navigate('/')} className="logo-wrap" aria-label="Go to home page"><img src={asset('logo.jpeg')} alt="Superior Plus Painting & Remodeling" /><span className={dark ? 'text-white' : 'text-ink'}><b>Superior Plus</b><small>Painting & Remodeling</small></span></button>
 }
 
 function Navbar() {
@@ -122,7 +123,7 @@ function Navbar() {
 function Hero() {
   const navigate = useNavigate()
   return <section id="home" className="hero section-track">
-    <div className="hero-bg"><img src="./assets/hero-painter.png" alt="Professional painter applying a deep red finish in a modern Melbourne home" loading="eager" decoding="async" fetchPriority="high" /></div>
+    <div className="hero-bg"><img src={asset('hero-painter.png')} alt="Professional painter applying a deep red finish in a modern Melbourne home" loading="eager" decoding="async" fetchPriority="high" /></div>
     <div className="paint-ribbon ribbon-green"/><div className="paint-ribbon ribbon-gold"/>
     <div className="container hero-content">
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">
@@ -201,7 +202,7 @@ function Footer() {
 export default function App() {
   useEffect(()=>{
     const description='Premium residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and quality workmanship.'
-    const canonical='https://grantzz-zzz.github.io/paint-2/'
+    const canonical=siteUrl
     document.title='Superior Plus Painting | Melbourne Painters'
     const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=description
     const link=document.querySelector('link[rel="canonical"]')||document.head.appendChild(Object.assign(document.createElement('link'),{rel:'canonical'}));link.href=canonical
