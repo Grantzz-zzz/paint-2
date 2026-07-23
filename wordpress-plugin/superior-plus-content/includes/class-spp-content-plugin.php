@@ -52,6 +52,7 @@ final class SPP_Content_Plugin {
 		new SPP_Content_REST( $this->types, $this->fields );
 		new SPP_Content_Workflow( $this->types, $this->fields );
 		new SPP_Content_Routing();
+		new SPP_Content_Migration( $this->types );
 
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ), 5 );

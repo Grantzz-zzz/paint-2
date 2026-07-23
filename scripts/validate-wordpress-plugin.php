@@ -19,6 +19,7 @@ $required = array(
 	'includes/class-spp-content-rest.php',
 	'includes/class-spp-content-workflow.php',
 	'includes/class-spp-content-routing.php',
+	'includes/class-spp-content-migration.php',
 );
 
 $missing = array_values(
@@ -69,6 +70,11 @@ $checks = array(
 		'spp_content_routes_version',
 		'after_switch_theme',
 		'maybe_refresh_rewrites',
+		'spp_migrate_approved_site',
+		'_spp_source_key',
+		'_spp_source_hash',
+		'_spp_source_asset',
+		'spp_content_migration_report',
 	),
 	'media'         => array(
 		'wp_enqueue_media',
@@ -105,6 +111,6 @@ $result = array(
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || '0.4.0' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || '0.5.0' !== $result['plugin_version'] ) {
 	exit( 1 );
 }

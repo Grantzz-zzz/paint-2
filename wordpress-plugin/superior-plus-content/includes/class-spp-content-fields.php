@@ -269,7 +269,7 @@ class SPP_Content_Fields {
 	 * @param WP_Post $post Current post.
 	 */
 	public function render_faq_guidance( $post ) {
-		unset( $post );
+		wp_nonce_field( 'spp_content_save_' . $post->ID, 'spp_content_nonce' );
 		echo '<p>' . esc_html__( 'Use the title for the question and the editor for the answer. Menu Order controls its position.', 'superior-plus-content' ) . '</p>';
 	}
 

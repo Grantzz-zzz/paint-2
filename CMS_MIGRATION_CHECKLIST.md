@@ -149,19 +149,19 @@ non-cached preview through the exact React design.
 
 ## Phase 6 — Existing content migration
 
-- [ ] Create an importer for the complete current React dataset
-- [ ] Import all global business information
-- [ ] Import all homepage content
-- [ ] Import all five non-service internal pages
-- [ ] Import all nine service pages
-- [ ] Import all process steps
-- [ ] Import all FAQs
-- [ ] Import all testimonials
-- [ ] Import all service areas
-- [ ] Import all projects and media assignments
-- [ ] Match every imported item against the baseline manifest
-- [ ] Make the importer idempotent so rerunning it does not duplicate content
-- [ ] Never overwrite later client edits during theme/plugin updates
+- [x] Create an importer for the complete current React dataset
+- [x] Import all global business information
+- [x] Import all homepage content
+- [x] Import all five non-service internal pages
+- [x] Import all nine service pages
+- [x] Import all process steps
+- [x] Import all FAQs
+- [x] Import all testimonials
+- [x] Import all service areas
+- [x] Import all projects and media assignments
+- [x] Match every imported item against the baseline manifest
+- [x] Make the importer idempotent so rerunning it does not duplicate content
+- [x] Never overwrite later client edits during theme/plugin updates
 
 ## Phase 7 — Forms and operational features
 
@@ -221,8 +221,9 @@ non-cached preview through the exact React design.
 
 ## Current focus
 
-`Phase 6 — Existing content migration.` Phase 5 is complete locally: WordPress
-uses clean public paths, serves the React shell on approved and dynamic routes,
-preserves legacy hash links, emits production-domain canonicals and provides an
-XML sitemap. Rewrite rules refresh safely after plugin updates and theme
-activation. Nothing has been changed on staging or production.
+`Phase 7 — Forms and operational features.` Phase 6 is complete locally: the
+approved React dataset has an idempotent WordPress importer for all core pages,
+services, FAQs, testimonials, projects, gallery images, remote project videos and
+global settings. Stable source keys prevent duplicates, source hashes support
+auditing, and records marked as client-edited are protected from later importer
+runs. Nothing has been changed on staging or production.
