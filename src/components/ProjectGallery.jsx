@@ -20,7 +20,7 @@ export default function ProjectGallery({category}) {
     <SectionIntro eyebrow={gallery.eyebrow} title={gallery.title} accent={gallery.accent} text={gallery.intro}/>
     <div className="client-gallery-grid">{gallery.items.slice(0,visible).map((item,index)=><Reveal key={item.src} delay={(index%4)*.035}><button className={`client-media-card ${index===0?'featured':''}`} onClick={()=>setSelected(item)} aria-label={`Open ${item.alt}`}>
       <img src={item.type==='video'?item.poster:item.src} alt={item.alt} loading="lazy" decoding="async"/>
-      <span className="client-media-badge">{item.type==='video'?<><Play/>Video</>:<><Images/>Project photo</>}</span>
+      <span className="client-media-badge">{item.type==='video'?<><Play/>Video</>:<><Images/>{item.placeholder?'Showcase image':'Project photo'}</>}</span>
       <i><Plus/></i>
     </button></Reveal>)}</div>
     {visible<gallery.items.length&&<button className="gallery-more" onClick={()=>setVisible(gallery.items.length)}>View all {gallery.items.length} project items <Plus/></button>}

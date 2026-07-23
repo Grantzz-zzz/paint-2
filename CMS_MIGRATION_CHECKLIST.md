@@ -20,6 +20,9 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 
 ## Phase 0 — Baseline and preservation
 
+- [x] Fill the four service pages without galleries using generated showcase placeholders
+- [x] Add three placeholders each for Residential, Roof, Wallpaper Removal and Plaster Repairs
+- [x] Connect a showcase gallery to all nine existing service pages
 - [x] Confirm the GitHub Pages reference is reachable
 - [x] Confirm the local React source folder
 - [x] Confirm the React production build can run inside WordPress
@@ -55,6 +58,7 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 - [x] Confirm one JPEG logo
 - [x] Confirm one PNG hero image
 - [x] Confirm five MP4 project videos
+- [x] Add 12 clearly identified generated WebP showcase placeholders
 - [ ] Record alt text, crop position and page usage for every displayed asset
 - [ ] Preserve all current local files during CMS integration
 

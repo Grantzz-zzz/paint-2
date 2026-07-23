@@ -1,6 +1,7 @@
 import { asset, remoteProjectVideo } from '../utils/assets'
 
 const root = 'client/projects'
+const generatedRoot = 'generated'
 
 function photos(category,count,subject) {
   return Array.from({length:count},(_,index)=>({
@@ -17,7 +18,21 @@ function videos(category,count,subject) {
   })
 }
 
+function generatedPhotos(category,count,subject) {
+  return Array.from({length:count},(_,index)=>({
+    type:'image',
+    src:asset(`${generatedRoot}/${category}/${category}-${String(index+1).padStart(2,'0')}.webp`),
+    alt:`${subject} showcase placeholder`,
+    placeholder:true,
+  }))
+}
+
 export const projectMedia = {
+  residential: {
+    eyebrow:'Residential showcase', title:'Homes refreshed.', accent:'Inside and out.',
+    intro:'Representative residential painting imagery in the Superior Plus visual style. These placeholders can be replaced or expanded with approved client projects in WordPress.',
+    items:generatedPhotos('residential',3,'Residential painting'),
+  },
   commercial: {
     eyebrow:'Commercial portfolio', title:'Real work.', accent:'Real working spaces.',
     intro:'Completed commercial interiors, warehouses, floor coatings and active job sites from the Superior Plus project archive.',
@@ -43,14 +58,33 @@ export const projectMedia = {
     intro:'Preparation and coating work for pergolas, covered outdoor areas and suitable exterior timber.',
     items:[...photos('outdoor',2,'Outdoor timber painting'),...videos('outdoor',1,'Outdoor timber painting')],
   },
+  roof: {
+    eyebrow:'Roof showcase', title:'Protection restored.', accent:'Street appeal renewed.',
+    intro:'Representative roof preparation, coating and completed-finish imagery. These placeholders can be replaced or expanded with approved client projects in WordPress.',
+    items:generatedPhotos('roof',3,'Roof painting'),
+  },
+  wallpaper: {
+    eyebrow:'Wallpaper showcase', title:'Old layers removed.', accent:'A clean start.',
+    intro:'Representative wallpaper removal and paint-ready preparation imagery. These placeholders can be replaced or expanded with approved client projects in WordPress.',
+    items:generatedPhotos('wallpaper',3,'Wallpaper removal'),
+  },
+  plaster: {
+    eyebrow:'Plaster showcase', title:'Damage repaired.', accent:'Surfaces made smooth.',
+    intro:'Representative wall and ceiling repair imagery. These placeholders can be replaced or expanded with approved client projects in WordPress.',
+    items:generatedPhotos('plaster',3,'Plaster repairs'),
+  },
 }
 
 export const brandArchive = asset(`${root}/brand/brand-01.webp`)
 
 export const serviceMediaCategory = {
+  'residential-painting-melbourne':'residential',
   'commercial-painting-melbourne':'commercial',
   'interior-painting-melbourne':'interior',
   'exterior-painting-melbourne':'exterior',
   'fence-painting-melbourne':'fence',
   'deck-painting-staining-melbourne':'outdoor',
+  'roof-painting-melbourne':'roof',
+  'wallpaper-removal-melbourne':'wallpaper',
+  'plaster-repairs-melbourne':'plaster',
 }
