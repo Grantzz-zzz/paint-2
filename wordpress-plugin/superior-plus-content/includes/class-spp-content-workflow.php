@@ -257,7 +257,8 @@ class SPP_Content_Workflow {
 			$template = 'spp_service' === $post->post_type ? 'service' : ( 'spp_project' === $post->post_type ? 'project' : $this->fields->default_template_for_slug( $post->post_name ) );
 		}
 		$missing = $this->missing_required_fields( $post );
-		$preview = wp_nonce_url( admin_url( 'admin.php?page=spp-content-preview&post=' . $post->ID ), 'spp_preview_content_' . $post->ID );
+		$preview = $this->react_preview_link( $post );
+		$structured_preview = wp_nonce_url( admin_url( 'admin.php?page=spp-content-preview&post=' . $post->ID ), 'spp_preview_content_' . $post->ID );
 		echo '<p><strong>' . esc_html__( 'Locked template:', 'superior-plus-content' ) . '</strong><br><code>' . esc_html( $template ) . '</code></p>';
 		echo '<p><strong>' . esc_html__( 'Public route:', 'superior-plus-content' ) . '</strong><br><code>' . esc_html( $this->public_path( $post ) ) . '</code></p>';
 		if ( get_post_meta( $post->ID, '_spp_managed_content', true ) ) {
@@ -268,8 +269,8 @@ class SPP_Content_Workflow {
 		} else {
 			echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Required content is ready.', 'superior-plus-content' ) . '</p></div>';
 		}
-		echo '<p><a class="button" target="_blank" rel="noopener" href="' . esc_url( $preview ) . '">' . esc_html__( 'Preview saved content', 'superior-plus-content' ) . '</a></p>';
-		echo '<p class="description">' . esc_html__( 'The exact React design preview becomes available when the React data adapter is connected. This preview verifies the saved content structure and media.', 'superior-plus-content' ) . '</p>';
+		echo '<p><a class="button button-primary" target="_blank" rel="noopener" href="' . esc_url( $preview ) . '">' . esc_html__( 'Preview exact React design', 'superior-plus-content' ) . '</a></p>';
+		echo '<p><a target="_blank" rel="noopener" href="' . esc_url( $structured_preview ) . '">' . esc_html__( 'Inspect saved field structure', 'superior-plus-content' ) . '</a></p>';
 	}
 
 	/**
@@ -302,7 +303,18 @@ class SPP_Content_Workflow {
 		if ( ! in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project' ), true ) ) {
 			return $link;
 		}
-		return wp_nonce_url( admin_url( 'admin.php?page=spp-content-preview&post=' . $post->ID ), 'spp_preview_content_' . $post->ID );
+		return $this->react_preview_link( $post );
+	}
+
+	/**
+	 * Build an authenticated React preview URL. The REST nonce is injected by
+	 * the theme for the currently logged-in user and is never placed in the URL.
+	 *
+	 * @param WP_Post $post Record.
+	 * @return string
+	 */
+	private function react_preview_link( $post ) {
+		return add_query_arg( 'spp_preview', (int) $post->ID, home_url( '/' ) ) . '#' . $this->public_path( $post );
 	}
 
 	/**

@@ -21,7 +21,7 @@ $spp_styles   = isset( $spp_entry['css'] ) ? $spp_entry['css'] : array();
 	<?php foreach ( $spp_styles as $spp_stylesheet ) : ?>
 		<link rel="stylesheet" href="<?php echo esc_url( SPP_URI . '/react-dist/' . ltrim( $spp_stylesheet, '/' ) ); ?>?ver=<?php echo esc_attr( SPP_VERSION ); ?>">
 	<?php endforeach; ?>
-	<script>window.__SPP_SITE_URL__=<?php echo wp_json_encode( trailingslashit( home_url( '/' ) ) ); ?>;</script>
+	<script>window.__SPP_SITE_URL__=<?php echo wp_json_encode( trailingslashit( home_url( '/' ) ) ); ?>;window.__SPP_CONTENT_API__=<?php echo wp_json_encode( untrailingslashit( rest_url( 'spp/v1' ) ) ); ?>;window.__SPP_REST_NONCE__=<?php echo wp_json_encode( wp_create_nonce( 'wp_rest' ) ); ?>;</script>
 </head>
 <body <?php body_class( 'spp-react-frontend' ); ?>>
 <?php if ( '/' !== $spp_route ) : ?>

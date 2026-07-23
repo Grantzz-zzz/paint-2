@@ -233,6 +233,16 @@
         "url": { "$ref": "#/$defs/nonEmptyText" }
       }
     },
+    "relatedPage": {
+      "type": "object",
+      "required": ["id", "title", "path"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "title": { "$ref": "#/$defs/nonEmptyText" },
+        "path": { "type": "string", "pattern": "^/" }
+      }
+    },
     "service": {
       "type": "object",
       "required": ["id", "slug", "title", "short", "url", "hero", "scope_title", "scope", "process", "why", "benefits", "related", "gallery"],
@@ -269,6 +279,10 @@
         "related_page_ids": {
           "type": "array",
           "items": { "$ref": "#/$defs/id" }
+        },
+        "related_pages": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/relatedPage" }
         }
       }
     },
@@ -286,6 +300,14 @@
         "gallery": {
           "type": "array",
           "items": { "$ref": "#/$defs/galleryItem" }
+        },
+        "related_page_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" }
+        },
+        "related_pages": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/relatedPage" }
         }
       }
     },

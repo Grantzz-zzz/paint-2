@@ -4,6 +4,7 @@ import { ArrowRight, Check, MapPin, Phone, ShieldCheck, Sparkles, Star } from 'l
 import { Navbar, Footer, Reveal, Eyebrow, Divider } from '../App'
 import { suburbs, testimonials } from '../data/siteData'
 import { asset, siteUrl } from '../utils/assets'
+import { collectionFallbacks, mediaUrl, useCollection, useSiteContent } from '../content/ContentProvider'
 
 function upsertMeta(selector, attributes) {
   let element = document.head.querySelector(selector)
@@ -24,6 +25,7 @@ function breadcrumbItems(pathname,currentTitle){
 
 export function PageLayout({ children, title, description, pageType = 'WebPage', image = asset('stock/residential.webp'), schemaData = {} }) {
   const location = useLocation()
+  const {business}=useSiteContent()
   const canonical = `${siteUrl}#${location.pathname}`
   const schemaKey = JSON.stringify(schemaData)
   useEffect(() => {
@@ -41,11 +43,11 @@ export function PageLayout({ children, title, description, pageType = 'WebPage',
     let script=document.getElementById('page-structured-data')
     if(!script){script=document.createElement('script');script.id='page-structured-data';script.type='application/ld+json';document.head.appendChild(script)}
     script.textContent=JSON.stringify({'@context':'https://schema.org','@graph':[
-      {'@type':'LocalBusiness','@id':`${siteUrl}#business`,name:'Superior Plus Painting & Remodeling',url:siteUrl,telephone:'+61470234567',email:'sppainting.remodeling@gmail.com',areaServed:'Melbourne, Victoria',image:asset('logo.jpeg')},
+      {'@type':'LocalBusiness','@id':`${siteUrl}#business`,name:business.name,url:siteUrl,telephone:business.phone_href.replace('tel:',''),email:business.email,areaServed:business.location,image:mediaUrl(business.logo,asset('logo.jpeg'))},
       {'@type':pageType,name:title,description,url:canonical,provider:{'@id':`${siteUrl}#business`},...JSON.parse(schemaKey)},
       {'@type':'BreadcrumbList','itemListElement':breadcrumbItems(location.pathname,title).map((item,index)=>({'@type':'ListItem',position:index+1,name:item.label,item:`${siteUrl}#${item.path}`}))}
     ]})
-  }, [location.pathname, title, description, canonical, image, pageType, schemaKey])
+  }, [location.pathname, title, description, canonical, image, pageType, schemaKey, business])
   return <><Navbar/><main id="main-content" tabIndex="-1" className="inner-main"><Breadcrumbs currentTitle={title}/>{children}</main><Footer/></>
 }
 
@@ -55,6 +57,7 @@ function Breadcrumbs({currentTitle}){
 }
 
 export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon', imageAlt }) {
+  const {business}=useSiteContent()
   const clientProject=image?.includes('/client/')
   return <section className={`page-hero page-hero-${tone}`}>
     <div className="page-hero-paint paint-one"/><div className="page-hero-paint paint-two"/>
@@ -63,7 +66,7 @@ export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon'
         <Eyebrow>{eyebrow}</Eyebrow>
         <h1>{title}<br/><em>{accent}</em></h1>
         <p>{intro}</p>
-        <div className="page-hero-actions"><QuoteButton/><a href="tel:0470234567" className="text-link"><Phone size={17}/> 0470 234 567</a></div>
+        <div className="page-hero-actions"><QuoteButton/><a href={business.phone_href} className="text-link"><Phone size={17}/> {business.phone_display}</a></div>
       </div>
       <div className="page-hero-visual">
         <div className="page-image-frame"/><img src={image} alt={imageAlt || title} loading="eager" decoding="async" fetchPriority="high" />
@@ -80,7 +83,7 @@ function QuoteButton({ label = 'Get a free quote' }) {
 }
 
 export function TrustStrip() {
-  const items = ['Fully insured', 'Free written quotes', 'Careful preparation', 'Clean, tidy sites']
+  const {trust_items:items}=useSiteContent()
   return <section className="trust-strip"><div className="container">{items.map(item=><span key={item}><Check/>{item}</span>)}</div></section>
 }
 
@@ -89,16 +92,23 @@ export function SectionIntro({ eyebrow, title, accent, text, light = false }) {
 }
 
 export function TestimonialBand({ index = 0 }) {
-  const item = testimonials[index % testimonials.length]
-  return <section className="testimonial-band"><div className="container testimonial-band-grid"><Reveal><Eyebrow light>Client feedback</Eyebrow><h2>Work people feel<br/><em>good about.</em></h2><p className="placeholder-disclosure">Placeholder testimonial — replace with a verified client review before launch.</p></Reveal><Reveal className="testimonial-band-card" delay={.1}><div>{[1,2,3,4,5].map(n=><Star key={n} fill="currentColor"/>)}</div><blockquote>“{item.quote}”</blockquote><b>{item.label}</b></Reveal></div><Divider color="#fff" variant="slash"/></section>
+  const {data:items}=useCollection('testimonials',collectionFallbacks.testimonials)
+  const item = items[index % items.length]
+  return <section className="testimonial-band"><div className="container testimonial-band-grid"><Reveal><Eyebrow light>Client feedback</Eyebrow><h2>Work people feel<br/><em>good about.</em></h2>{item.is_placeholder&&<p className="placeholder-disclosure">Placeholder testimonial — replace with a verified client review before launch.</p>}</Reveal><Reveal className="testimonial-band-card" delay={.1}><div>{Array.from({length:item.rating||5},(_,n)=><Star key={n} fill="currentColor"/>)}</div><blockquote>“{item.quote}”</blockquote><b>{item.label||item.name}</b></Reveal></div><Divider color="#fff" variant="slash"/></section>
 }
 
 export function AreasBand() {
-  return <section className="inner-areas"><div className="container"><SectionIntro eyebrow="Melbourne-wide" title="Local service," accent="carefully delivered." text="We work across Melbourne’s south-east and surrounding suburbs."/><div className="inner-suburbs">{suburbs.map(s=><span key={s}><MapPin size={13}/>{s}</span>)}</div></div></section>
+  const {service_areas:areas}=useSiteContent()
+  const items=areas?.length?areas:suburbs
+  return <section className="inner-areas"><div className="container"><SectionIntro eyebrow="Melbourne-wide" title="Local service," accent="carefully delivered." text="We work across Melbourne’s south-east and surrounding suburbs."/><div className="inner-suburbs">{items.map(s=><span key={s}><MapPin size={13}/>{s}</span>)}</div></div></section>
 }
 
-export function ClosingCTA({ title = 'Ready for a fresh start?', text = 'Tell us about your property and we’ll arrange a free, no-obligation quotation.' }) {
-  return <section className="closing-cta"><div className="closing-splash"/><div className="container closing-cta-grid"><Reveal><Eyebrow light>Let’s talk colour</Eyebrow><h2>{title}</h2><p>{text}</p></Reveal><Reveal className="closing-actions" delay={.1}><QuoteButton label="Request my free quote"/><a href="tel:0470234567"><Phone/>0470 234 567</a></Reveal></div></section>
+export function ClosingCTA({ title, text, label, url }) {
+  const {business,default_cta:defaults}=useSiteContent()
+  const navigate=useNavigate()
+  const destination=url||defaults.link.url||'/contact'
+  const action=()=>destination.startsWith('/')?navigate(destination):window.location.assign(destination)
+  return <section className="closing-cta"><div className="closing-splash"/><div className="container closing-cta-grid"><Reveal><Eyebrow light>Let’s talk colour</Eyebrow><h2>{title||defaults.title}</h2><p>{text||defaults.text}</p></Reveal><Reveal className="closing-actions" delay={.1}><button className="btn" onClick={action}>{label||defaults.link.label}<ArrowRight size={17}/></button><a href={business.phone_href}><Phone/>{business.phone_display}</a></Reveal></div></section>
 }
 
 export function QualityGrid({ items }) {

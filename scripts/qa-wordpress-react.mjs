@@ -65,6 +65,7 @@ try {
   }
 
   await desktop.goto(`${base}/#/`, { waitUntil: 'networkidle' })
+  await desktop.waitForFunction(() => [...document.images].every(image => image.complete), null, { timeout: 30000 })
   const home = {
     serviceCards: await desktop.locator('.services-grid .service-card').count(),
     images: await desktop.locator('#root img').count(),

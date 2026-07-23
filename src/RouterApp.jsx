@@ -9,6 +9,8 @@ const FAQsPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.FAQsP
 const ProcessPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.ProcessPage})))
 const ServicesPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.ServicesPage})))
 const NotFoundPage=lazy(()=>import('./pages/NotFoundPage'))
+const DynamicContentPage=lazy(()=>import('./pages/DynamicPages').then(m=>({default:m.DynamicContentPage})))
+const ProjectPage=lazy(()=>import('./pages/DynamicPages').then(m=>({default:m.ProjectPage})))
 
 export default function RouterApp() {
   return <HashRouter>
@@ -21,6 +23,8 @@ export default function RouterApp() {
       <Route path="/our-process" element={<ProcessPage/>}/>
       <Route path="/faqs" element={<FAQsPage/>}/>
       <Route path="/contact" element={<ContactPage/>}/>
+      <Route path="/projects/:slug" element={<ProjectPage/>}/>
+      <Route path="/:slug" element={<DynamicContentPage/>}/>
       <Route path="*" element={<NotFoundPage/>}/>
     </Routes></Suspense>
   </HashRouter>

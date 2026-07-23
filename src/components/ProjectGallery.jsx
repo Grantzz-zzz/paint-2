@@ -4,8 +4,19 @@ import { Reveal } from '../App'
 import { SectionIntro } from './PageLayout'
 import { projectMedia } from '../data/projectMedia'
 
-export default function ProjectGallery({category}) {
-  const gallery=projectMedia[category]
+export default function ProjectGallery({category,items}) {
+  const fallbackGallery=projectMedia[category]
+  const cmsItems=Array.isArray(items)?items.map(item=>({
+    type:item.type||'image',
+    src:item.media?.url,
+    poster:item.poster?.url,
+    alt:item.alt||item.media?.alt||'Superior Plus Painting project',
+    placeholder:item.is_placeholder,
+    objectPosition:item.object_position,
+  })).filter(item=>item.src):[]
+  const gallery=fallbackGallery?{...fallbackGallery,items:cmsItems.length?cmsItems:fallbackGallery.items}:cmsItems.length?{
+    eyebrow:'Project gallery',title:'Recent work.',accent:'Finished with care.',intro:'Selected Superior Plus Painting project media.',items:cmsItems,
+  }:null
   const [visible,setVisible]=useState(8)
   const [selected,setSelected]=useState(null)
   useEffect(()=>{

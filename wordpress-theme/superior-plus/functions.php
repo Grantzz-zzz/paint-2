@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPP_VERSION', '2.0.0' );
+define( 'SPP_VERSION', '2.1.0' );
 define( 'SPP_PATH', get_template_directory() );
 define( 'SPP_URI', get_template_directory_uri() );
 
@@ -70,7 +70,7 @@ function spp_enqueue_assets() {
 	wp_enqueue_script( 'spp-react-app', SPP_URI . '/react-dist/' . ltrim( $entry['file'], '/' ), array(), SPP_VERSION, true );
 	wp_add_inline_script(
 		'spp-react-app',
-		'window.__SPP_SITE_URL__=' . wp_json_encode( trailingslashit( home_url( '/' ) ) ) . ';',
+		'window.__SPP_SITE_URL__=' . wp_json_encode( trailingslashit( home_url( '/' ) ) ) . ';window.__SPP_CONTENT_API__=' . wp_json_encode( untrailingslashit( rest_url( 'spp/v1' ) ) ) . ';window.__SPP_REST_NONCE__=' . wp_json_encode( wp_create_nonce( 'wp_rest' ) ) . ';',
 		'before'
 	);
 }

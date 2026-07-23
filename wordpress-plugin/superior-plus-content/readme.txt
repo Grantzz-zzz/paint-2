@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 0.2.0
+Stable tag: 0.3.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -34,6 +34,10 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 5. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 0.3.0 =
+* Added the Phase 4 React data adapter contract, resolved related-page links and frontend-safe project relationships.
+* Kept all public responses versioned, cached and compatible with the complete local React fallback.
 
 = 0.2.0 =
 

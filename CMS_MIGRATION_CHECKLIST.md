@@ -118,23 +118,23 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 - [x] Provide draft, structured preview, publish and unpublish workflows
 - [x] Display a helpful 404 page for invalid or unpublished routes
 
-The secure structured draft preview is available in WordPress now. Exact visual
-preview through the React design is completed as part of the Phase 4 data adapter.
+WordPress provides both a secure structured field inspection and an authenticated,
+non-cached preview through the exact React design.
 
 ## Phase 4 — React data integration
 
-- [ ] Create a typed content adapter between WordPress JSON and React components
-- [ ] Keep the current hardcoded data as a complete fallback dataset
-- [ ] Load global content once and cache it
-- [ ] Load route-specific content only when needed
-- [ ] Add loading, empty and API-error states without changing the approved layout
-- [ ] Replace homepage hardcoded copy with WordPress-backed values
-- [ ] Replace homepage hardcoded images with WordPress-backed values
-- [ ] Connect About, Services, Process, FAQs and Contact
-- [ ] Connect all nine existing service pages
-- [ ] Connect galleries, testimonials, projects and service areas
-- [ ] Confirm no existing section disappears when an optional field is empty
-- [ ] Preserve current animations after live data is inserted
+- [x] Create a typed content adapter between WordPress JSON and React components
+- [x] Keep the current hardcoded data as a complete fallback dataset
+- [x] Load global content once and cache it
+- [x] Load route-specific content only when needed
+- [x] Add loading, empty and API-error states without changing the approved layout
+- [x] Replace homepage hardcoded copy with WordPress-backed values
+- [x] Replace homepage hardcoded images with WordPress-backed values
+- [x] Connect About, Services, Process, FAQs and Contact
+- [x] Connect all nine existing service pages
+- [x] Connect galleries, testimonials, projects and service areas
+- [x] Confirm no existing section disappears when an optional field is empty
+- [x] Preserve current animations after live data is inserted
 
 ## Phase 5 — Clean URLs and WordPress routing
 
@@ -221,8 +221,8 @@ preview through the React design is completed as part of the Phase 4 data adapte
 
 ## Current focus
 
-`Phase 4 — React data integration.` Phase 3 is complete locally: administrators
-can create controlled drafts from four locked templates, edit only supported
-fields, preview structured content securely, publish complete entries, unpublish
-them through WordPress, and rely on helpful 404 handling for unavailable routes.
-Nothing has been changed on staging or production.
+`Phase 5 — Clean URLs and WordPress routing.` Phase 4 is complete locally: the
+typed React adapter loads and caches WordPress content, keeps the complete local
+site as its resilient fallback, connects every current page and collection, and
+supports authenticated exact-design previews. Nothing has been changed on staging
+or production.

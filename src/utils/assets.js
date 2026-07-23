@@ -17,6 +17,8 @@ export const remoteProjectVideo = path =>
   `https://grantzz-zzz.github.io/paint-2/assets/${String(path).replace(/^\/+/, '')}`
 
 export const siteUrl = (() => {
-  const configured = window.__SPP_SITE_URL__ || `${window.location.origin}${window.location.pathname}`
+  const configured = window.__SPP_SITE_URL__ || (import.meta.env.DEV
+    ? `${window.location.origin}${window.location.pathname}`
+    : 'https://grantzz-zzz.github.io/paint-2/')
   return configured.endsWith('/') ? configured : `${configured}/`
 })()

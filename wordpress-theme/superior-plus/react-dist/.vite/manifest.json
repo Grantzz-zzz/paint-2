@@ -1,79 +1,106 @@
 {
-  "_App-AipKOKZ0.js": {
-    "file": "assets/App-AipKOKZ0.js",
+  "_App-B_stEx0G.js": {
+    "file": "assets/App-B_stEx0G.js",
     "name": "App",
     "isDynamicEntry": true,
     "imports": [
       "index.html"
     ]
   },
-  "_PageLayout-BQL2aiL3.js": {
-    "file": "assets/PageLayout-BQL2aiL3.js",
+  "_PageLayout-iRv1zs_0.js": {
+    "file": "assets/PageLayout-iRv1zs_0.js",
     "name": "PageLayout",
     "imports": [
       "index.html",
-      "_App-AipKOKZ0.js"
+      "_App-B_stEx0G.js"
     ]
   },
-  "_projectMedia-BLhWTH4a.js": {
-    "file": "assets/projectMedia-BLhWTH4a.js",
+  "_ProjectGallery-ByY6zwGh.js": {
+    "file": "assets/ProjectGallery-ByY6zwGh.js",
+    "name": "ProjectGallery",
+    "imports": [
+      "index.html",
+      "_App-B_stEx0G.js",
+      "_PageLayout-iRv1zs_0.js",
+      "_projectMedia-38o2f0M7.js"
+    ]
+  },
+  "_projectMedia-38o2f0M7.js": {
+    "file": "assets/projectMedia-38o2f0M7.js",
     "name": "projectMedia",
     "imports": [
-      "_App-AipKOKZ0.js"
+      "index.html"
     ]
   },
   "index.html": {
-    "file": "assets/index-DoRmrIJ5.js",
+    "file": "assets/index-CVoLluy5.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_App-AipKOKZ0.js",
+      "_App-B_stEx0G.js",
       "src/pages/ServicePage.jsx",
       "src/pages/ContentPages.jsx",
       "src/pages/ContentPages.jsx",
       "src/pages/ContentPages.jsx",
       "src/pages/ContentPages.jsx",
       "src/pages/ContentPages.jsx",
-      "src/pages/NotFoundPage.jsx"
+      "src/pages/NotFoundPage.jsx",
+      "src/pages/DynamicPages.jsx",
+      "src/pages/DynamicPages.jsx"
     ],
     "css": [
-      "assets/index-4wEqVqxN.css"
+      "assets/index-DHldWnf-.css"
     ]
   },
   "src/pages/ContentPages.jsx": {
-    "file": "assets/ContentPages-DHoCxaJx.js",
+    "file": "assets/ContentPages-DOJeld7b.js",
     "name": "ContentPages",
     "src": "src/pages/ContentPages.jsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_PageLayout-BQL2aiL3.js",
-      "_App-AipKOKZ0.js",
-      "_projectMedia-BLhWTH4a.js"
+      "_PageLayout-iRv1zs_0.js",
+      "_App-B_stEx0G.js",
+      "_projectMedia-38o2f0M7.js"
+    ]
+  },
+  "src/pages/DynamicPages.jsx": {
+    "file": "assets/DynamicPages-DkuMOhpa.js",
+    "name": "DynamicPages",
+    "src": "src/pages/DynamicPages.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html",
+      "_PageLayout-iRv1zs_0.js",
+      "_ProjectGallery-ByY6zwGh.js",
+      "_App-B_stEx0G.js",
+      "src/pages/NotFoundPage.jsx",
+      "_projectMedia-38o2f0M7.js"
     ]
   },
   "src/pages/NotFoundPage.jsx": {
-    "file": "assets/NotFoundPage-BDb6wnML.js",
+    "file": "assets/NotFoundPage-E22lasvT.js",
     "name": "NotFoundPage",
     "src": "src/pages/NotFoundPage.jsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_PageLayout-BQL2aiL3.js",
-      "_App-AipKOKZ0.js"
+      "_PageLayout-iRv1zs_0.js",
+      "_App-B_stEx0G.js"
     ]
   },
   "src/pages/ServicePage.jsx": {
-    "file": "assets/ServicePage-D-mGMQju.js",
+    "file": "assets/ServicePage-XUEuOdSv.js",
     "name": "ServicePage",
     "src": "src/pages/ServicePage.jsx",
     "isDynamicEntry": true,
     "imports": [
       "index.html",
-      "_PageLayout-BQL2aiL3.js",
-      "_App-AipKOKZ0.js",
-      "_projectMedia-BLhWTH4a.js",
+      "_PageLayout-iRv1zs_0.js",
+      "_App-B_stEx0G.js",
+      "_ProjectGallery-ByY6zwGh.js",
+      "_projectMedia-38o2f0M7.js",
       "src/pages/NotFoundPage.jsx"
     ]
   }

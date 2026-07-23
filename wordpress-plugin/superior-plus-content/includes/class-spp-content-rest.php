@@ -513,6 +513,7 @@ class SPP_Content_REST {
 			'object_position'  => get_post_meta( $post->ID, 'spp_object_position', true ) ?: '50% 50%',
 			'gallery'          => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
 			'related_page_ids' => array_map( 'absint', (array) get_post_meta( $post->ID, 'spp_related_page_ids', true ) ),
+			'related_pages'    => $this->related_pages( get_post_meta( $post->ID, 'spp_related_page_ids', true ) ),
 		);
 	}
 
@@ -651,7 +652,32 @@ class SPP_Content_REST {
 				unset( $meta[ $key ] );
 			}
 		}
+		if ( isset( $meta['related_page_ids'] ) ) {
+			$meta['related_pages'] = $this->related_pages( $meta['related_page_ids'] );
+		}
 		return $meta;
+	}
+
+	/**
+	 * Resolve published related pages into frontend-safe links.
+	 *
+	 * @param mixed $ids Stored page IDs.
+	 * @return array
+	 */
+	private function related_pages( $ids ) {
+		$items = array();
+		foreach ( array_map( 'absint', is_array( $ids ) ? $ids : array() ) as $page_id ) {
+			$page = get_post( $page_id );
+			if ( ! $page || 'page' !== $page->post_type || 'publish' !== $page->post_status ) {
+				continue;
+			}
+			$items[] = array(
+				'id'    => (int) $page->ID,
+				'title' => get_the_title( $page ),
+				'path'  => '/' . trim( get_page_uri( $page ), '/' ),
+			);
+		}
+		return $items;
 	}
 
 	/**
