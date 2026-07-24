@@ -25,7 +25,7 @@ function breadcrumbItems(pathname,currentTitle){
   return items
 }
 
-export function PageLayout({ children, title, description, pageType = 'WebPage', image = asset('stock/residential.webp'), schemaData = {} }) {
+export function PageLayout({ children, title, description, pageType = 'WebPage', image = asset('client/projects/residential/residential-01.webp'), schemaData = {} }) {
   const location = useLocation()
   const {business}=useSiteContent()
   const canonical = publicRouteUrl(location.pathname)

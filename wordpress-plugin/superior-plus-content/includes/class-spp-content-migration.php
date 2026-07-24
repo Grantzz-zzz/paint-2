@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '1.1.0';
+	const VERSION = '1.2.0';
 
 	private $types;
 	private $report = array();
@@ -294,11 +294,11 @@ class SPP_Content_Migration {
 			'commercial-painting-melbourne'     => 'client/projects/commercial/commercial-02.webp',
 			'interior-painting-melbourne'       => 'client/projects/interior/interior-04.webp',
 			'exterior-painting-melbourne'       => 'client/projects/exterior/exterior-01.webp',
-			'roof-painting-melbourne'           => 'stock/roof.webp',
+			'roof-painting-melbourne'           => 'client/projects/roof/roof-01.webp',
 			'fence-painting-melbourne'          => 'client/projects/fence/fence-03.webp',
 			'deck-painting-staining-melbourne'  => 'client/projects/outdoor/outdoor-01.webp',
-			'wallpaper-removal-melbourne'       => 'stock/wallpaper.webp',
-			'plaster-repairs-melbourne'         => 'client/projects/interior/interior-10.webp',
+			'wallpaper-removal-melbourne'       => 'client/projects/wallpaper/wallpaper-09.webp',
+			'plaster-repairs-melbourne'         => 'client/projects/plaster/plaster-11.webp',
 		);
 		$ids = array();
 		foreach ( spp_default_services() as $slug => $service ) {
@@ -502,26 +502,19 @@ class SPP_Content_Migration {
 	}
 
 	private function category_gallery( $category ) {
-		$placeholder_subjects = array(
-			'residential' => 'Residential painting',
-			'roof'        => 'Roof painting',
-			'wallpaper'   => 'Wallpaper removal',
-			'plaster'     => 'Plaster repairs',
-		);
 		$subjects = array(
+			'residential' => 'Residential painting',
 			'commercial' => 'Commercial painting',
 			'interior'   => 'Interior painting',
 			'exterior'   => 'Exterior painting',
 			'fence'      => 'Fence painting',
 			'outdoor'    => 'Outdoor timber painting',
+			'roof'       => 'Residential exterior and roofline',
+			'wallpaper'  => 'Interior wall preparation',
+			'plaster'    => 'Plaster and surface repair',
 		);
-		$is_placeholder = isset( $placeholder_subjects[ $category ] );
-		$subject = $is_placeholder
-			? $placeholder_subjects[ $category ]
-			: ( isset( $subjects[ $category ] ) ? $subjects[ $category ] : ucfirst( $category ) . ' painting' );
-		$roots = $is_placeholder
-			? array( 'generated/' . $category )
-			: array( 'client/projects/' . $category );
+		$subject = isset( $subjects[ $category ] ) ? $subjects[ $category ] : ucfirst( $category ) . ' painting';
+		$roots = array( 'client/projects/' . $category );
 		$items = array();
 		foreach ( $roots as $relative_dir ) {
 			$directory = trailingslashit( get_stylesheet_directory() ) . 'react-dist/assets/' . $relative_dir;
@@ -530,9 +523,7 @@ class SPP_Content_Migration {
 					continue;
 				}
 				$relative = $relative_dir . '/' . basename( $file );
-				$alt = $is_placeholder
-					? $subject . ' showcase placeholder'
-					: $subject . ' project by Superior Plus Painting';
+				$alt = $subject . ' project by Superior Plus Painting';
 				$id = $this->import_asset( $relative, $alt );
 				if ( $id ) {
 					$items[] = array(
@@ -540,7 +531,7 @@ class SPP_Content_Migration {
 						'type' => 'image',
 						'alt' => $alt,
 						'object_position' => '50% 50%',
-						'is_placeholder' => $is_placeholder,
+						'is_placeholder' => false,
 					);
 				}
 			}
@@ -581,7 +572,7 @@ class SPP_Content_Migration {
 		return array(
 			'home' => array(
 				'title' => 'Home', 'template' => 'home', 'excerpt' => 'Premium residential and commercial painting across Melbourne.',
-				'hero_asset' => 'hero-painter.png',
+				'hero_asset' => 'client/projects/fence/fence-03.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Melbourne painters who care', 'spp_hero_title' => 'Made to feel', 'spp_accent' => 'beautiful.',
 					'spp_hero_intro' => 'Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.',
@@ -644,7 +635,7 @@ class SPP_Content_Migration {
 			),
 			'our-process' => array(
 				'title' => 'Our Process', 'template' => 'process', 'excerpt' => 'A six-step process from consultation to clean handover.',
-				'hero_asset' => 'client/projects/commercial/commercial-06.webp',
+				'hero_asset' => 'client/projects/wallpaper/wallpaper-01.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'A proven path to a better finish', 'spp_hero_title' => 'Our painting process', 'spp_accent' => 'planned down to the detail.',
 					'spp_hero_intro' => 'Outstanding painting starts with careful planning, detailed preparation and clear communication. Our six-step process keeps every residential and commercial project organised from quote to handover.',

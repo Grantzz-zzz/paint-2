@@ -175,7 +175,7 @@ try {
   await page.goto(`${origin}#/services/fence-painting-melbourne`, { waitUntil: 'domcontentloaded' })
   check(await page.locator('.client-media-card').count() === 8, 'project gallery: initial progressive set is incorrect')
   await page.locator('.gallery-more').click()
-  check(await page.locator('.client-media-card').count() === 22, 'project gallery: full unique media set did not expand')
+  check(await page.locator('.client-media-card').count() === 29, 'project gallery: full unique media set did not expand')
   await page.locator('.client-media-card').last().click()
   check(await page.locator('.media-lightbox').isVisible() && await page.locator('.media-lightbox video').count() === 1, 'project gallery: video lightbox did not open')
   await page.locator('.lightbox-close').click()

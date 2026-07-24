@@ -25,11 +25,11 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 | Get in Touch Form | Contact quote form | `[x]` | Test delivery, privacy consent and spam handling on WordPress staging. |
 | Interior Painting Melbourne | Interior service page | `[x]` | Real client interior media is used. |
 | Our Painting Process | Our Process and service-process sections | `[x]` | Confirm any response-time or scheduling promise before publication. |
-| Plaster Repairs Melbourne | Plaster Repairs service page | `[x]` | Replace generated showcase media when real repairs are supplied. |
-| Residential Painting Melbourne | Residential service page | `[x]` | Replace generated showcase media when more home projects are supplied. |
-| Roof Painting Melbourne | Roof Painting service page | `[~]` | Confirm licences, safety procedures, tile replacement and exact repair scope. |
+| Plaster Repairs Melbourne | Plaster Repairs service page | `[x]` | Real supplied repair and preparation media is used; verify final job captions. |
+| Residential Painting Melbourne | Residential service page | `[x]` | Real supplied residential interiors and exteriors are used. |
+| Roof Painting Melbourne | Roof Painting service page | `[~]` | Real roofline/exterior context is used; obtain dedicated roof-coating media and confirm licences, safety procedures, tile replacement and exact repair scope. |
 | Testimonials & Reviews | Home, About and service testimonial bands | `[~]` | PDF quotes are placeholders. Replace them with verified reviews and permitted customer names before launch. |
-| Wallpaper Removal Melbourne | Wallpaper Removal service page | `[x]` | Replace generated showcase media when real projects are supplied. |
+| Wallpaper Removal Melbourne | Wallpaper Removal service page | `[x]` | Real wall-preparation context is used; obtain a dedicated wallpaper-removal sequence when available. |
 
 ## B. Client’s 12 website requirements
 
@@ -117,8 +117,8 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 
 - [x] Real interior, exterior, commercial, fence and outdoor media
 - [x] Real client videos with poster images
-- [~] Generated showcase images are clearly temporary
-- [ ] Replace remaining stock/generated residential, roof, wallpaper and plaster media
+- [x] Replace public stock/generated imagery with the deduplicated client archive
+- [~] Roof and wallpaper pages use real contextual project photos; obtain service-specific sequences
 - [ ] Add verified job, suburb and service captions
 
 ### 9. Google Analytics and Search Console
@@ -180,7 +180,7 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 - [x] Create an exact client-content replacement inventory
 - [ ] Obtain verified reviews
 - [ ] Obtain licence, insurance and warranty details
-- [ ] Replace remaining generated/stock images
+- [x] Replace remaining generated/stock images
 - [ ] Label genuine before/after pairs
 - [ ] Confirm the public business location and service boundaries
 
@@ -195,7 +195,7 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 ### Batch 4 — WordPress staging release
 
 - [ ] Finish staging navigation, refresh and scroll bug fixes
-- [ ] Package the verified theme and plugin separately
+- [x] Package the verified theme and plugin separately
 - [ ] Back up staging
 - [ ] Install/update on staging
 - [ ] Resave permalinks and clear every cache layer

@@ -11,7 +11,7 @@ if ( 'builder' === get_post_meta( get_the_ID(), '_elementor_edit_mode', true ) )
 ?>
 <main id="main-content" class="inner-main">
 	<?php spp_breadcrumbs(); ?>
-	<?php spp_page_hero( array( 'eyebrow' => 'Superior Plus Painting', 'title' => get_the_title(), 'accent' => 'made with care.', 'intro' => get_the_excerpt(), 'image' => 'stock/residential.webp' ) ); ?>
+	<?php spp_page_hero( array( 'eyebrow' => 'Superior Plus Painting', 'title' => get_the_title(), 'accent' => 'made with care.', 'intro' => get_the_excerpt(), 'image' => 'projects/exterior/exterior-07.webp' ) ); ?>
 	<section class="page-content"><div class="container entry-content"><?php the_content(); wp_link_pages(); ?></div></section>
 	<?php spp_closing_cta(); ?>
 </main>

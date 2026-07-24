@@ -89,7 +89,7 @@ function spp_section_intro( $eyebrow, $title, $accent, $text = '', $light = fals
 function spp_page_hero( $args ) {
 	$args = wp_parse_args(
 		$args,
-		array( 'eyebrow' => '', 'title' => get_the_title(), 'accent' => '', 'intro' => '', 'tone' => 'maroon', 'image' => 'stock/residential.webp', 'image_url' => '', 'alt' => '' )
+		array( 'eyebrow' => '', 'title' => get_the_title(), 'accent' => '', 'intro' => '', 'tone' => 'maroon', 'image' => 'projects/exterior/exterior-07.webp', 'image_url' => '', 'alt' => '' )
 	);
 	$image_url = $args['image_url'] ?: spp_asset( $args['image'] );
 	?>

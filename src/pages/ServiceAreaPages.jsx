@@ -8,9 +8,9 @@ import { asset } from '../utils/assets'
 import NotFoundPage from './NotFoundPage'
 
 const regionImages = {
-  'Monash & nearby eastern suburbs': asset('client/projects/exterior/exterior-07.webp'),
-  'Greater Dandenong': asset('client/projects/commercial/commercial-02.webp'),
-  'Casey & the outer south-east': asset('client/projects/exterior/exterior-01.webp'),
+  'Monash & nearby eastern suburbs': asset('client/projects/residential/residential-01.webp'),
+  'Greater Dandenong': asset('client/projects/commercial/commercial-12.webp'),
+  'Casey & the outer south-east': asset('client/projects/roof/roof-07.webp'),
 }
 
 function AreaCard({area,index}) {
@@ -20,7 +20,7 @@ function AreaCard({area,index}) {
 
 export function ServiceAreasPage() {
   const navigate=useNavigate()
-  const image=asset('client/projects/exterior/exterior-07.webp')
+  const image=asset('client/projects/residential/residential-01.webp')
   return <PageLayout title="Service Areas — Melbourne’s Eastern Suburbs" description="Explore Superior Plus Painting services across Chadstone, Mount Waverley, Glen Waverley, Oakleigh, Greater Dandenong, Casey and surrounding suburbs." image={image} pageType="CollectionPage" schemaData={{mainEntity:serviceAreas.map(area=>({'@type':'Place',name:area.name,url:`/service-areas/${area.slug}`}))}}>
     <PageHero eyebrow="Melbourne service areas" title="Painters across Melbourne’s" accent="eastern & south-eastern suburbs." intro="Superior Plus Painting provides residential, commercial and specialist painting services across the suburbs named in our client service-area information. Choose your suburb for relevant services, property types and a direct quote path." image={image} imageAlt="Superior Plus Painting exterior project in Melbourne" tone="green"/>
     <TrustStrip/>
@@ -39,7 +39,7 @@ export function ServiceAreaPage() {
   if(!area) return <NotFoundPage/>
   const services=area.serviceSlugs.map(serviceSlug=>serviceList.find(service=>service.slug===serviceSlug)).filter(Boolean)
   const neighbours=area.neighbours.map(neighbourSlug=>serviceAreaBySlug[neighbourSlug]).filter(Boolean)
-  const image=regionImages[area.region]||asset('client/projects/exterior/exterior-07.webp')
+  const image=regionImages[area.region]||asset('client/projects/residential/residential-01.webp')
   const pageTitle=`Painters in ${area.name}`
   const description=`Professional residential and commercial painters in ${area.name}, Melbourne. Explore interior, exterior and related painting services from Superior Plus Painting.`
   return <PageLayout title={pageTitle} description={description} image={image} pageType="Service" schemaData={{serviceType:'Painting services',areaServed:{'@type':'Place',name:area.name},availableChannel:{'@type':'ServiceChannel',serviceUrl:`/contact`}}}>

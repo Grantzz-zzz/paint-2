@@ -21,7 +21,7 @@ $services = get_posts( array( 'post_type' => 'spp_service', 'numberposts' => 8, 
 ?>
 <main id="main-content">
 	<section class="wp-home-hero">
-		<div class="hero-bg"><img src="<?php echo esc_url( spp_asset( 'hero-painter.png' ) ); ?>" alt="<?php esc_attr_e( 'Professional painter applying a deep red finish', 'superior-plus' ); ?>" fetchpriority="high"></div>
+		<div class="hero-bg"><img src="<?php echo esc_url( spp_asset( 'projects/fence/fence-03.webp' ) ); ?>" alt="<?php esc_attr_e( 'Superior Plus painter spray painting a residential fence', 'superior-plus' ); ?>" fetchpriority="high"></div>
 		<div class="paint-ribbon ribbon-green"></div><div class="paint-ribbon ribbon-gold"></div>
 		<div class="container hero-content"><div class="hero-copy reveal"><?php spp_eyebrow( 'Melbourne painters who care' ); ?><h1>Made to feel<br><em>beautiful.</em><br>Made to last.</h1><p>Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.</p><div class="hero-buttons"><a class="btn" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Get a free quote<?php echo spp_icon( 'arrow' ); ?></a><a class="text-link" href="#projects">See our work <span>↘</span></a></div><div class="hero-trust"><span><?php echo spp_icon( 'check' ); ?>Fully insured</span><span><?php echo spp_icon( 'check' ); ?>Free colour advice</span><span><?php echo spp_icon( 'check' ); ?>Melbourne-wide</span></div></div></div>
 		<div class="hero-stamp"><span>Quality finish</span><b>100%</b><small>Every detail</small></div>

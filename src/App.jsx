@@ -44,9 +44,9 @@ const trust = [
 ]
 
 const projects = [
-  { title: 'Warm modern interior', type: 'Interior project · Melbourne', image: asset('client/projects/interior/interior-04.webp'), pos: 'center', color: '#f3c51d' },
-  { title: 'Exterior transformation', type: 'Residential project · Melbourne', image: asset('client/projects/exterior/exterior-07.webp'), pos: 'center', color: '#8f2824' },
-  { title: 'Commercial precision', type: 'Commercial project · Melbourne', image: asset('client/projects/commercial/commercial-02.webp'), pos: 'center', color: '#1f5140' },
+  { title: 'Warm modern interior', type: 'Residential project · Melbourne', image: asset('client/projects/residential/residential-07.webp'), pos: 'center', color: '#f3c51d' },
+  { title: 'Exterior transformation', type: 'Residential project · Melbourne', image: asset('client/projects/residential/residential-01.webp'), pos: 'center', color: '#8f2824' },
+  { title: 'Commercial precision', type: 'Commercial project · Melbourne', image: asset('client/projects/commercial/commercial-12.webp'), pos: 'center', color: '#1f5140' },
 ]
 
 const testimonials = [
@@ -146,14 +146,13 @@ function Navbar() {
 
 function Hero({hero,fields}) {
   const navigate = useNavigate()
-  const usesResponsiveFallback=!hero?.image
-  const image=mediaUrl(hero?.image,asset('hero-painter.webp'))
+  const image=mediaUrl(hero?.image,asset('client/projects/fence/fence-03.webp'))
   const trustPoints=textItems(fields?.home_trust_points,['Fully insured','Free colour advice','Melbourne-wide'])
   const title=hero?.title||'Professional painters'
   const accent=hero?.accent||'in Melbourne’s'
   const closing=fields?.home_hero_closing||'Eastern Suburbs.'
   return <section id="home" className="hero section-track">
-    <div className="hero-bg"><img src={image} srcSet={usesResponsiveFallback?`${asset('hero-painter-768.webp')} 768w, ${asset('hero-painter-1280.webp')} 1280w, ${asset('hero-painter.webp')} 1716w`:undefined} sizes={usesResponsiveFallback?'100vw':undefined} alt={hero?.image?.alt||'Professional painter applying a deep red finish in a modern Melbourne home'} loading="eager" decoding="async" fetchPriority="high" /></div>
+    <div className="hero-bg"><img src={image} alt={hero?.image?.alt||'Superior Plus painter spray painting a residential fence'} loading="eager" decoding="async" fetchPriority="high" /></div>
     <div className="paint-ribbon ribbon-green"/><div className="paint-ribbon ribbon-gold"/>
     <div className="container hero-content">
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">

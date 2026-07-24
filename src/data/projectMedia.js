@@ -1,7 +1,6 @@
 import { asset, remoteProjectVideo } from '../utils/assets'
 
 const root = 'client/projects'
-const generatedRoot = 'generated'
 
 function photos(category,count,subject) {
   return Array.from({length:count},(_,index)=>({
@@ -18,64 +17,56 @@ function videos(category,count,subject) {
   })
 }
 
-function generatedPhotos(category,count,subject) {
-  return Array.from({length:count},(_,index)=>({
-    type:'image',
-    src:asset(`${generatedRoot}/${category}/${category}-${String(index+1).padStart(2,'0')}.webp`),
-    alt:`${subject} showcase placeholder`,
-    placeholder:true,
-  }))
-}
-
 export const projectMedia = {
   residential: {
-    eyebrow:'Residential showcase', title:'Homes refreshed.', accent:'Inside and out.',
-    intro:'Representative residential painting imagery in the Superior Plus visual style. These placeholders can be replaced or expanded with approved client projects in WordPress.',
-    items:generatedPhotos('residential',3,'Residential painting'),
+    eyebrow:'Residential portfolio', title:'Homes refreshed.', accent:'Inside and out.',
+    intro:'Real residential projects from the supplied Superior Plus archive, including completed rooms, exterior transformations and preparation in progress.',
+    items:photos('residential',11,'Residential painting'),
   },
   commercial: {
     eyebrow:'Commercial portfolio', title:'Real work.', accent:'Real working spaces.',
-    intro:'Completed commercial interiors, warehouses, floor coatings and active job sites from the Superior Plus project archive.',
-    items:photos('commercial',8,'Commercial painting'),
+    intro:'Completed commercial interiors, warehouses, floor coatings, hospitality spaces and active job sites from the Superior Plus project archive.',
+    items:photos('commercial',20,'Commercial painting'),
   },
   interior: {
     eyebrow:'Interior portfolio', title:'Fresh rooms.', accent:'Careful finishes.',
     intro:'A selection of completed rooms, preparation work and interior transformations delivered by the Superior Plus team.',
-    items:photos('interior',10,'Interior painting'),
+    items:photos('interior',11,'Interior painting'),
   },
   exterior: {
     eyebrow:'Exterior portfolio', title:'Street appeal.', accent:'Built back beautifully.',
-    intro:'Exterior repaints, before-and-after transformations and detailed residential finishes from recent projects.',
-    items:[...photos('exterior',9,'Exterior painting'),...videos('exterior',3,'Exterior painting')],
+    intro:'Exterior repaints, detailed preparation, weatherboards, windows, eaves and residential transformations from supplied projects.',
+    items:[...photos('exterior',22,'Exterior painting'),...videos('exterior',3,'Exterior painting')],
   },
   fence: {
     eyebrow:'Fence portfolio', title:'Boundaries transformed.', accent:'From prep to finish.',
     intro:'The complete fence-painting archive, including preparation, spraying, detail work and finished boundaries.',
-    items:[...photos('fence',21,'Fence painting'),...videos('fence',1,'Fence painting')],
+    items:[...photos('fence',28,'Fence painting'),...videos('fence',1,'Fence painting')],
   },
   outdoor: {
     eyebrow:'Outdoor portfolio', title:'Outdoor structures.', accent:'Protected with care.',
-    intro:'Preparation and coating work for pergolas, covered outdoor areas and suitable exterior timber.',
-    items:[...photos('outdoor',2,'Outdoor timber painting'),...videos('outdoor',1,'Outdoor timber painting')],
+    intro:'Preparation and coating work for pergolas, covered outdoor areas, porches and suitable exterior timber.',
+    items:[...photos('outdoor',3,'Outdoor timber painting'),...videos('outdoor',1,'Outdoor timber painting')],
   },
   roof: {
-    eyebrow:'Roof showcase', title:'Protection restored.', accent:'Street appeal renewed.',
-    intro:'Representative roof preparation, coating and completed-finish imagery. These placeholders can be replaced or expanded with approved client projects in WordPress.',
-    items:generatedPhotos('roof',3,'Roof painting'),
+    eyebrow:'Roofline portfolio', title:'Protection considered.', accent:'From the top down.',
+    intro:'Real residential exterior projects showing rooflines, elevated details and whole-home context. Dedicated roof-coating sequences can be added when the client supplies them.',
+    items:photos('roof',7,'Residential exterior and roofline'),
   },
   wallpaper: {
-    eyebrow:'Wallpaper showcase', title:'Old layers removed.', accent:'A clean start.',
-    intro:'Representative wallpaper removal and paint-ready preparation imagery. These placeholders can be replaced or expanded with approved client projects in WordPress.',
-    items:generatedPhotos('wallpaper',3,'Wallpaper removal'),
+    eyebrow:'Wall preparation portfolio', title:'Old surfaces prepared.', accent:'A clean start.',
+    intro:'Real interior preparation, repair and repainting work from the supplied archive. Dedicated wallpaper-removal sequences can be added when available.',
+    items:photos('wallpaper',16,'Interior wall preparation'),
   },
   plaster: {
-    eyebrow:'Plaster showcase', title:'Damage repaired.', accent:'Surfaces made smooth.',
-    intro:'Representative wall and ceiling repair imagery. These placeholders can be replaced or expanded with approved client projects in WordPress.',
-    items:generatedPhotos('plaster',3,'Plaster repairs'),
+    eyebrow:'Plaster repair portfolio', title:'Damage repaired.', accent:'Surfaces made smooth.',
+    intro:'Real wall, ceiling, cornice and cabinetry preparation from the supplied Superior Plus project archive.',
+    items:photos('plaster',15,'Plaster and surface repair'),
   },
 }
 
 export const brandArchive = asset(`${root}/brand/brand-01.webp`)
+export const brandTeamArchive = asset(`${root}/brand/brand-02.webp`)
 
 export const serviceMediaCategory = {
   'residential-painting-melbourne':'residential',

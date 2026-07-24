@@ -20,7 +20,7 @@ export function DynamicContentPage() {
   if(status==='loading')return <LoadingPage/>
   if(!route||!['standard','landing'].includes(route.template_key))return <NotFoundPage/>
   const fields=route.content?.fields||{}
-  const hero={...route.hero,image:mediaUrl(route.hero?.image,asset('stock/residential.webp')),tone:'green'}
+  const hero={...route.hero,image:mediaUrl(route.hero?.image,asset('client/projects/residential/residential-01.webp')),tone:'green'}
   const sections=pairItems(fields.content_sections,route.content?.body?[['Our story',route.content.body]]:[])
   const cta=route.closing_cta
   return <PageLayout title={route.seo?.title||route.title} description={route.seo?.description||hero.intro} image={mediaUrl(route.seo?.social_image,hero.image)}>
@@ -39,7 +39,7 @@ export function ProjectPage() {
   if(status==='loading')return <LoadingPage/>
   if(!route||route.template_key!=='project')return <NotFoundPage/>
   const project=route.content||{}
-  const hero={...route.hero,image:mediaUrl(route.hero?.image,mediaUrl(project.featured_media,asset('stock/residential.webp'))),tone:'terracotta'}
+  const hero={...route.hero,image:mediaUrl(route.hero?.image,mediaUrl(project.featured_media,asset('client/projects/residential/residential-01.webp'))),tone:'terracotta'}
   const cta=route.closing_cta
   return <PageLayout title={route.seo?.title||route.title} description={route.seo?.description||hero.intro||project.project_type} image={mediaUrl(route.seo?.social_image,hero.image)}>
     <PageHero {...hero}/>

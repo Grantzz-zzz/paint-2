@@ -56,7 +56,7 @@ const sectionHeading = (label, title, copy) => container('spp-el-section-heading
 
 const content = [
   container('spp-el-section spp-el-hero', [
-    image(`${imageBase}hero-painter.png`, 'Professional painter applying a deep red finish in a modern Melbourne home', 'spp-el-hero-image'),
+    image(`${imageBase}projects/fence/fence-03.webp`, 'Superior Plus painter spray painting a residential fence', 'spp-el-hero-image'),
     container('spp-el-shell spp-el-hero-shell', [
       container('spp-el-hero-copy', [
         eyebrow('Melbourne painters who care'),

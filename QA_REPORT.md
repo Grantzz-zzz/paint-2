@@ -6,6 +6,13 @@ Run date: 24 July 2026
 
 **PASS — WordPress parity: 747 checks, 0 failures**
 
+**Current client-media release: PASS — React QA: 1,134 checks, 0 failures**
+
+- The 24 July 2026 media expansion completed all 15 routes at desktop, tablet and mobile sizes in the WordPress bundle-parity sweep.
+- The corrected focused parity/interaction rerun passed 61 checks with 0 failures.
+- Theme, plugin, migration, CMS contract and route-normalisation validators all pass.
+- The packaged theme contains no stock, generated-placeholder or legacy hero-painter assets.
+
 - All 15 approved routes tested against a disposable real WordPress runtime.
 - Three viewports per route: desktop (1440 × 1000), tablet (820 × 1000), and mobile (390 × 844).
 - All 15 desktop pixel comparisons remained within the strict 5% perceptual-difference threshold.
@@ -20,7 +27,7 @@ runtime errors and basic keyboard semantics. The suite also verified:
 
 - the Services overview plus all nine service dropdown links;
 - FAQ accordion state;
-- progressive gallery expansion from 8 to 22 items;
+- progressive gallery expansion from 8 to the complete category archive (29 items on the largest fence gallery);
 - lightbox open and Escape-to-close behaviour;
 - the first-focus skip link;
 - reduced-motion behaviour;

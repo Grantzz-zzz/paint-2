@@ -135,6 +135,6 @@ $result = array(
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || ! $uninstall_preserves_content || '0.8.1' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || ! $uninstall_preserves_content || '0.9.0' !== $result['plugin_version'] ) {
 	exit( 1 );
 }

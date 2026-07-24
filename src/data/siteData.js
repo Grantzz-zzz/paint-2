@@ -44,11 +44,11 @@ const stock = {
   commercial: asset('client/projects/commercial/commercial-02.webp'),
   interior: asset('client/projects/interior/interior-04.webp'),
   exterior: asset('client/projects/exterior/exterior-01.webp'),
-  roof: asset('stock/roof.webp'),
+  roof: asset('client/projects/roof/roof-01.webp'),
   fence: asset('client/projects/fence/fence-03.webp'),
   deck: asset('client/projects/outdoor/outdoor-01.webp'),
-  wallpaper: asset('stock/wallpaper.webp'),
-  plaster: asset('client/projects/interior/interior-10.webp'),
+  wallpaper: asset('client/projects/wallpaper/wallpaper-09.webp'),
+  plaster: asset('client/projects/plaster/plaster-11.webp'),
 }
 
 export const servicePages = {

@@ -16,7 +16,7 @@
           "settings": {
             "_css_classes": "spp-el-hero-image",
             "image": {
-              "url": "{{SPP_THEME_URI}}/assets/images/hero-painter.png",
+              "url": "{{SPP_THEME_URI}}/assets/images/projects/fence/fence-03.webp",
               "id": "",
               "alt": "Professional painter applying a deep red finish in a modern Melbourne home",
               "source": "library"

@@ -4,16 +4,16 @@ import { ArrowRight, Check, ChevronDown, ExternalLink, Hammer, Mail, MapPin, Pai
 import { PageLayout, PageHero, TrustStrip, SectionIntro, TestimonialBand, AreasBand, ClosingCTA, QualityGrid } from '../components/PageLayout'
 import { Reveal, Divider } from '../App'
 import { faqs, masterProcess, serviceList, suburbs } from '../data/siteData'
-import { brandArchive } from '../data/projectMedia'
+import { brandTeamArchive } from '../data/projectMedia'
 import { asset } from '../utils/assets'
 import { collectionFallbacks, mediaUrl, mergeContent, pairItems, textItems, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from '../content/ContentProvider'
 
 const images = {
   about: asset('client/projects/fence/fence-03.webp'),
   services: asset('client/projects/commercial/commercial-02.webp'),
-  process: asset('client/projects/commercial/commercial-06.webp'),
+  process: asset('client/projects/wallpaper/wallpaper-01.webp'),
   faq: asset('client/projects/interior/interior-04.webp'),
-  contact: asset('client/projects/exterior/exterior-07.webp'),
+  contact: asset('client/projects/residential/residential-01.webp'),
 }
 
 function usePageContent(path,fallbackHero) {
@@ -64,13 +64,12 @@ export function AboutPage() {
   const approach=fields.about_approach_copy?fields.about_approach_copy.split(/\n\s*\n/).filter(Boolean):fallbackApproach
   const standards=textItems(fields.about_standards,['Experienced, professional painters','High-quality workmanship','Attention to every detail','Reliable communication','Clean and tidy sites','Competitive, transparent pricing','Fully insured','Free, no-obligation quotes'])
   const editorialImage=mediaUrl(fields.about_editorial_image,images.about)
-  const archiveImage=mediaUrl(fields.about_archive_image,brandArchive)
   return <PageLayout title={seo?.title||'About Us'} description={seo?.description||'Meet Superior Plus Painting, Melbourne painting professionals committed to careful preparation, reliable service and quality workmanship.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="AboutPage">
     <PageHero {...hero}/>
     <TrustStrip/>
     <section className="inner-section"><div className="container editorial-grid"><Reveal><SectionIntro eyebrow="Our approach" title={fields.about_approach_title||'Quality begins'} accent="before the first coat."/>{approach.map(paragraph=><p key={paragraph}>{paragraph}</p>)}</Reveal><Reveal className="editorial-image" delay={.1}><img src={editorialImage} alt={fields.about_editorial_image?.alt||'Superior Plus painter spray painting a residential fence'} loading="lazy" decoding="async"/><span>Superior Plus project</span></Reveal></div></section>
-    <section className="inner-section cream"><div className="container brand-archive"><Reveal><img src={archiveImage} alt={fields.about_archive_image?.alt||'Superior Plus Painting original promotional artwork'} loading="lazy" decoding="async"/></Reveal><Reveal delay={.1}><SectionIntro eyebrow="Our local roots" title="Built through" accent="hands-on service."/><p>{fields.about_roots_copy||'Superior Plus has grown through practical local promotion, direct client relationships and work that can be seen across Melbourne homes and businesses.'}</p><small>Original client-supplied promotional artwork retained as part of the company archive.</small></Reveal></div></section>
-    <section className="inner-section"><div className="container"><SectionIntro eyebrow="Why Superior Plus" title="Standards you can see." accent="Service you can feel."/><QualityGrid items={standards}/></div></section>
+    <section className="inner-section cream about-roots"><div className="container brand-archive"><Reveal className="brand-archive-media"><img src={brandTeamArchive} alt="Superior Plus Painting branded work vehicle ready for a Melbourne project" loading="lazy" decoding="async"/><div className="brand-archive-stamp"><span>Melbourne painters</span><strong>Local work.<br/>Visible care.</strong><i>Residential · Commercial</i></div></Reveal><Reveal className="brand-archive-copy" delay={.1}><SectionIntro eyebrow="Our local roots" title="Built through" accent="hands-on service."/><p>{fields.about_roots_copy||'Superior Plus has grown through practical local promotion, direct client relationships and work that can be seen across Melbourne homes and businesses.'}</p><small>A real Superior Plus work vehicle, equipped for painting projects across Melbourne.</small></Reveal></div></section>
+    <section className="inner-section about-standards"><div className="container"><SectionIntro eyebrow="Why Superior Plus" title="Standards you can see." accent="Service you can feel."/><QualityGrid items={standards}/></div></section>
     <TestimonialBand index={0}/><AreasBand/><ClosingCTA title={cta?.title} text={cta?.text} label={cta?.link?.label} url={cta?.link?.url}/>
   </PageLayout>
 }

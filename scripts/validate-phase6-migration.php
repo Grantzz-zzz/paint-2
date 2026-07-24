@@ -21,9 +21,7 @@ foreach ( array_merge( $required_pages, $required_categories, $protections ) as 
 
 $asset_categories = array();
 foreach ( $required_categories as $category ) {
-	$relative = in_array( $category, array( 'residential', 'roof', 'wallpaper', 'plaster' ), true )
-		? '/generated/' . $category
-		: '/client/projects/' . $category;
+	$relative = '/client/projects/' . $category;
 	$files = glob( $theme . $relative . '/*.webp' );
 	$asset_categories[ $category ] = count( $files ?: array() );
 	if ( empty( $files ) ) {

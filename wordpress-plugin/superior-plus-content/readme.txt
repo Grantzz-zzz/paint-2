@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 0.8.1
+Stable tag: 0.9.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -38,6 +38,11 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 0.9.0 =
+* Replaced stock and generated showcase imports with optimized client project photography.
+* Expanded residential, commercial, interior, exterior, fence, outdoor, roofline, wall-preparation and plaster galleries without duplicate media files.
+* Updated service hero imports and project records to use the real client archive.
 
 = 0.8.1 =
 * Split repeatable update/recovery QA from the destructive uninstall rehearsal so Phase 9 can be rerun safely.

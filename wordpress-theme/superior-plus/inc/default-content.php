@@ -49,7 +49,7 @@ function spp_default_services() {
 			'benefits' => array( 'Weather and UV protection', 'Longer material life', 'Reduced maintenance', 'Stronger street appeal and value' ),
 		),
 		'roof-painting-melbourne' => array(
-			'title' => 'Roof Painting', 'eyebrow' => 'Restore the view from the street', 'accent' => 'protection from the top down.', 'tone' => 'maroon', 'image' => 'stock/roof.webp',
+			'title' => 'Roof Painting', 'eyebrow' => 'Restore the view from the street', 'accent' => 'protection from the top down.', 'tone' => 'maroon', 'image' => 'projects/exterior/exterior-07.webp',
 			'intro' => 'Our roof painting services help Melbourne homeowners protect, restore and update the appearance of suitable roofing. Careful cleaning and preparation support strong adhesion and a durable, high-quality finish.',
 			'scope_title' => 'Roof painting and preparation',
 			'scope' => array( 'Concrete tile roofs', 'Metal roof painting', 'Suitable Colorbond repainting', 'Pressure washing', 'Suitable minor repairs before painting', 'Roof priming and sealing', 'Protective roof coatings', 'Roof restoration painting' ),
@@ -76,7 +76,7 @@ function spp_default_services() {
 			'benefits' => array( 'Moisture and UV protection', 'Enhanced natural grain', 'Improved outdoor presentation', 'Longer timber life' ),
 		),
 		'wallpaper-removal-melbourne' => array(
-			'title' => 'Wallpaper Removal', 'eyebrow' => 'A clean start for your walls', 'accent' => 'ready for what comes next.', 'tone' => 'teal', 'image' => 'stock/wallpaper.webp',
+			'title' => 'Wallpaper Removal', 'eyebrow' => 'A clean start for your walls', 'accent' => 'ready for what comes next.', 'tone' => 'teal', 'image' => 'projects/interior/interior-03.webp',
 			'intro' => 'Professional wallpaper removal protects the plaster underneath and creates the smooth foundation required for a quality repaint. We remove old coverings, adhesive residue and minor surface damage with care.',
 			'scope_title' => 'Wallpaper removal and preparation',
 			'scope' => array( 'Wallpaper stripping', 'Vinyl wallpaper removal', 'Feature-wall removal', 'Adhesive and glue removal', 'Steam removal where appropriate', 'Surface cleaning', 'Minor plaster repairs', 'Sanding and priming before paint' ),
@@ -125,4 +125,3 @@ function spp_default_faqs() {
 function spp_suburbs() {
 	return array( 'Chadstone', 'Mount Waverley', 'Glen Waverley', 'Oakleigh', 'Mulgrave', 'Clayton', 'Burwood', 'Ashwood', 'Dandenong', 'Noble Park', 'Springvale', 'Keysborough', 'Berwick', 'Narre Warren', 'Endeavour Hills' );
 }
-
