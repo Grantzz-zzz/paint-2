@@ -33,6 +33,13 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 
 ## B. Client’s 12 website requirements
 
+### Global brand presentation
+
+- [x] Display the complete supplied logo without cropping
+- [x] Keep the logo proportional on desktop and mobile
+- [x] Prevent duplicate typed branding beside the full wordmark
+- [ ] Confirm whether the client can supply a transparent SVG or PNG logo for sharper display
+
 ### 1. Mobile-friendly design
 
 - [x] Responsive desktop, tablet and phone layouts
@@ -163,6 +170,7 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 
 ### Batch 2 — Content proof and photography
 
+- [x] Create an exact client-content replacement inventory
 - [ ] Obtain verified reviews
 - [ ] Obtain licence, insurance and warranty details
 - [ ] Replace remaining generated/stock images

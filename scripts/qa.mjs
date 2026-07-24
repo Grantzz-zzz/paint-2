@@ -102,6 +102,7 @@ try {
           emptyAlts: images.filter(image => !image.alt.trim()).map(image => image.src),
           emptyButtons: emptyButtons.length,
           overflow: document.documentElement.scrollWidth - window.innerWidth,
+          logoFit: getComputedStyle(document.querySelector('.logo-wrap img')).objectFit,
           schemaValid,
         }
       })
@@ -117,6 +118,7 @@ try {
       check(result.emptyAlts.length === 0, `${label}: images missing alt text`)
       check(result.emptyButtons === 0, `${label}: unnamed buttons detected`)
       check(result.overflow <= 1, `${label}: horizontal overflow of ${result.overflow}px`)
+      check(result.logoFit === 'contain', `${label}: logo is cropped because object-fit is “${result.logoFit}”`)
       check(runtimeErrors.length === 0, `${label}: runtime errors: ${runtimeErrors.join(' | ')}`)
     }
     await context.close()

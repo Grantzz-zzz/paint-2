@@ -77,10 +77,10 @@ function Divider({ color = '#fff', variant = 'wave' }) {
   return <svg className="section-divider" viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true"><path className="divider-path" fill={color} d={paths[variant]} /></svg>
 }
 
-function Logo({ dark = false }) {
+function Logo() {
   const navigate = useNavigate()
   const {business}=useSiteContent()
-  return <button onClick={() => navigate('/')} className="logo-wrap" aria-label="Go to home page"><img src={mediaUrl(business.logo,asset('logo.jpeg'))} alt={business.logo?.alt||business.name} /><span className={dark ? 'text-white' : 'text-ink'}><b>Superior Plus</b><small>Painting & Remodeling</small></span></button>
+  return <button onClick={() => navigate('/')} className="logo-wrap" aria-label="Go to home page"><img src={mediaUrl(business.logo,asset('logo.jpeg'))} alt={business.logo?.alt||business.name} /></button>
 }
 
 function Navbar() {
