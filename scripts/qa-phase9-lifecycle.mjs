@@ -8,9 +8,11 @@ const base = (process.env.SPP_PHASE9_WP_URL || 'http://127.0.0.1:9492').replace(
 const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 const outputRoot = join(root, 'wordpress-plugin', 'dist', 'phase9')
 const backupPath = join(outputRoot, 'content-backup.json')
-const pluginZip = join(root, 'wordpress-plugin', 'dist', 'superior-plus-content-0.8.0.zip')
+const pluginZip = join(root, 'wordpress-plugin', 'dist', 'superior-plus-content-0.8.1.zip')
 const themeZip = join(root, 'wordpress-theme', 'dist', 'superior-plus-2.4.0.zip')
-const focus = process.env.SPP_PHASE9_FOCUS || ''
+const focus = process.env.SPP_PHASE9_FOCUS || (process.argv.includes('--uninstall') ? 'uninstall' : 'core')
+const wpUser = process.env.SPP_WP_USER || ''
+const wpPassword = process.env.SPP_WP_PASSWORD || ''
 
 await mkdir(outputRoot, { recursive: true })
 const browser = await chromium.launch({ executablePath: edge, headless: true })
@@ -47,12 +49,24 @@ async function exportPackage() {
   check(response.status === 200, 'Authenticated export endpoint responds', `status ${response.status}`)
   const packageData = response.body?.data
   check(packageData?.format === 'spp-content-export', 'Export format is valid')
-  check(Array.isArray(packageData.records) && packageData.records.length === 39, 'Export contains all 39 managed records', `records ${packageData?.records?.length}`)
+  check(Array.isArray(packageData.records) && packageData.records.length >= 39, 'Export contains the 39 baseline records and any client-created content', `records ${packageData?.records?.length}`)
   return packageData
 }
 
 async function openAdmin(path) {
   await page.goto(`${base}${path}`, { waitUntil: 'domcontentloaded', timeout: 120000 })
+  if (!(await page.locator('#wpadminbar').count()) && await page.locator('#loginform').count()) {
+    if (!wpUser || !wpPassword) {
+      throw new Error('WordPress login is required. Set SPP_WP_USER and SPP_WP_PASSWORD, or log in through the disposable runtime before testing.')
+    }
+    await page.locator('#user_login').fill(wpUser)
+    await page.locator('#user_pass').fill(wpPassword)
+    await Promise.all([
+      page.waitForLoadState('domcontentloaded'),
+      page.locator('#wp-submit').click(),
+    ])
+    await page.goto(`${base}${path}`, { waitUntil: 'domcontentloaded', timeout: 120000 })
+  }
   await page.locator('#wpadminbar').waitFor({ timeout: 30000 })
 }
 
@@ -80,6 +94,81 @@ async function mutateResidentialTitle() {
     return { status: response.status, body: await response.json() }
   })
   check(result.status === 200, 'Authenticated client edit succeeds', `status ${result.status}`)
+}
+
+async function verifyControlledPageLifecycle() {
+  const title = `Phase 9 Standard Page ${Date.now()}`
+  const slug = title.toLowerCase().replace(/\s+/g, '-')
+
+  await openAdmin('/wp-admin/admin.php?page=spp-content-create&template=standard')
+  await page.locator('#spp-new-title').fill(title)
+  await Promise.all([
+    page.waitForURL(/post\.php\?post=\d+&action=edit/, { timeout: 60000 }),
+    page.getByRole('button', { name: 'Create draft and start editing' }).click(),
+  ])
+
+  const postId = Number(new URL(page.url()).searchParams.get('post'))
+  check(Number.isInteger(postId) && postId > 0, 'Controlled workflow creates a Standard Page draft')
+
+  const mediaId = await page.evaluate(async () => {
+    const response = await fetch('/wp-json/wp/v2/media?per_page=1', { cache: 'no-store' })
+    const media = await response.json()
+    return media?.[0]?.id || 0
+  })
+  check(mediaId > 0, 'A Media Library image is available for the page lifecycle test')
+
+  await page.locator('#spp_eyebrow').fill('Phase 9 verification')
+  await page.locator('#spp_accent').fill('Safely published.')
+  await page.locator('#spp_hero_intro').fill('This temporary page verifies the complete controlled publishing workflow.')
+  await page.locator('#spp_hero_image_id').evaluate((element, id) => { element.value = String(id) }, mediaId)
+  await page.locator('#spp_content_sections').fill('Lifecycle test | This content is editable while the approved React layout remains locked.')
+  await Promise.all([
+    page.waitForLoadState('domcontentloaded'),
+    page.locator('#publish').click(),
+  ])
+
+  const published = await page.evaluate(async route => {
+    const response = await fetch(`/wp-json/spp/v1/routes/${route}`, { cache: 'no-store' })
+    return { status: response.status, body: await response.json() }
+  }, slug)
+  check(published.status === 200, 'Published Standard Page receives a public REST route', `status ${published.status}`)
+  check(published.body?.data?.template_key === 'standard', 'Published route keeps the locked Standard template')
+
+  await page.goto(`${base}/${slug}`, { waitUntil: 'domcontentloaded', timeout: 120000 })
+  await page.locator('h1').first().waitFor()
+  check((await page.locator('h1').first().innerText()).includes(title), 'Published Standard Page renders through the React design')
+
+  await openAdmin(`/wp-admin/post.php?post=${postId}&action=edit`)
+  const revisedIntro = 'Phase 9 confirms client text edits survive without changing the locked design.'
+  await page.locator('#spp_hero_intro').fill(revisedIntro)
+  await Promise.all([
+    page.waitForLoadState('domcontentloaded'),
+    page.locator('#publish').click(),
+  ])
+  const edited = await page.evaluate(async route => {
+    const response = await fetch(`/wp-json/spp/v1/routes/${route}`, { cache: 'no-store' })
+    return { status: response.status, body: await response.json() }
+  }, slug)
+  check(edited.status === 200 && edited.body?.data?.hero?.intro === revisedIntro, 'Published page text can be edited safely')
+
+  await page.locator('#post_status').selectOption('draft')
+  await Promise.all([
+    page.waitForLoadState('domcontentloaded'),
+    page.locator('#publish').click(),
+  ])
+  const unpublishedStatus = await page.evaluate(async route => fetch(`/wp-json/spp/v1/routes/${route}`, { cache: 'no-store' }).then(response => response.status), slug)
+  check(unpublishedStatus === 404, 'Unpublished Standard Page is removed from the public route', `status ${unpublishedStatus}`)
+
+  const removed = await page.evaluate(async id => {
+    const nonce = await fetch('/wp-admin/admin-ajax.php?action=rest-nonce', { credentials: 'same-origin', cache: 'no-store' }).then(response => response.text())
+    const response = await fetch(`/wp-json/wp/v2/pages/${id}?force=true`, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+      headers: { 'X-WP-Nonce': nonce },
+    })
+    return response.status
+  }, postId)
+  check(removed === 200, 'Temporary lifecycle page is cleaned up', `status ${removed}`)
 }
 
 async function restoreBackup() {
@@ -184,8 +273,8 @@ async function uninstallAndVerifyContent() {
       pages: await get('/wp-json/wp/v2/pages?per_page=100'),
     }
   })
-  check(preserved.services.status === 200 && preserved.services.total === 9, 'Nine service records remain after uninstall')
-  check(preserved.projects.status === 200 && preserved.projects.total === 9, 'Nine project records remain after uninstall')
+  check(preserved.services.status === 200 && preserved.services.total >= 9, 'All baseline and client-created service records remain after uninstall')
+  check(preserved.projects.status === 200 && preserved.projects.total >= 9, 'All baseline and client-created project records remain after uninstall')
   const managedSlugs = new Set(['home', 'about', 'services', 'our-process', 'faqs', 'contact'])
   check(
     preserved.pages.status === 200 && preserved.pages.body.filter(item => managedSlugs.has(item.slug)).length === 6,
@@ -200,6 +289,10 @@ try {
   const baselineFingerprint = fingerprint(baseline)
 
   if ('uninstall' !== focus) {
+    await verifyControlledPageLifecycle()
+    await openAdmin('/wp-admin/admin.php?page=spp-content')
+    check(fingerprint(await exportPackage()) === baselineFingerprint, 'Page lifecycle cleanup restores the baseline content graph')
+
     const downloaded = await downloadBackup()
     check(fingerprint(downloaded) === baselineFingerprint, 'Downloaded JSON equals the authenticated export')
     check(downloaded.records.every(record => record.checksum), 'Every exported record has a checksum')
@@ -226,11 +319,14 @@ try {
     check(fingerprint(await exportPackage()) === baselineFingerprint, 'Content survives theme switching')
   }
 
-  await uninstallAndVerifyContent()
+  if ('uninstall' === focus) {
+    await uninstallAndVerifyContent()
+  }
 
   const report = {
     generatedAt: new Date().toISOString(),
     target: base,
+    suite: focus,
     baselineFingerprint,
     checks: checks.length,
     failures: checks.filter(item => !item.passed),

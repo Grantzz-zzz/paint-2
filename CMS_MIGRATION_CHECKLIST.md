@@ -201,6 +201,8 @@ non-cached preview through the exact React design.
 - [x] Confirm switching themes does not delete content
 - [x] Confirm uninstall does not remove content without explicit approval
 - [x] Test plugin export and re-import
+- [x] Separate repeatable update/recovery QA from destructive uninstall QA
+- [x] Add automated coverage for creating, publishing, editing and unpublishing a locked Standard Page
 - [!] Test the hosting provider's full staging backup restoration before production
 - [x] Document the rollback procedure
 
@@ -221,10 +223,12 @@ non-cached preview through the exact React design.
 
 ## Current focus
 
-`Phase 10 - staging and client handoff.` Phase 9 now includes guarded,
-checksum-validated JSON backup/recovery and verified preservation through theme
-replacement, plugin replacement, theme switching and plugin uninstall. The
-hosting provider's full files-and-database restore must still be rehearsed on
-staging because that workflow is host-specific. Rene must also confirm the
-production quote recipient and final privacy wording. Nothing has been changed
-on staging or production.
+`Phase 9 staging verification gate.` Phase 9 now has separate repeatable and
+destructive test suites, guarded checksum-validated JSON backup/recovery,
+package-replacement checks, theme-switch checks, uninstall-preservation checks,
+and a complete temporary Standard Page lifecycle test. Run the core suite on
+staging and the uninstall suite only on a fresh disposable runtime. The hosting
+provider's full files-and-database restore must still be rehearsed on staging
+because that workflow is host-specific. Rene must also confirm the production
+quote recipient and final privacy wording. Nothing has been changed on staging
+or production.
