@@ -37,8 +37,11 @@ remain protected.
 ## Known launch dependencies
 
 Rene must still confirm the production quote-recipient email address and final
-privacy/consent wording. Phase 9 update/recovery testing and the final staging
-handoff have not yet been completed.
+privacy/consent wording. Local Phase 9 tests confirmed that content survives
+theme replacement, plugin replacement, theme switching and plugin uninstall.
+The checksum-validated JSON export/re-import restored an intentional client edit.
+The hosting provider's full files-and-database restore must still be rehearsed
+on staging before production, and the final staging handoff is not complete.
 
 Run the core checks again with:
 

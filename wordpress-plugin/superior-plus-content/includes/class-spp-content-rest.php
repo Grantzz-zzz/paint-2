@@ -417,6 +417,15 @@ class SPP_Content_REST {
 	 * @return WP_REST_Response
 	 */
 	public function export() {
+		return $this->response( $this->export_package() );
+	}
+
+	/**
+	 * Build the administrator recovery package without an HTTP dependency.
+	 *
+	 * @return array
+	 */
+	public function export_package() {
 		$records = array();
 		foreach ( array( 'spp_site_config', 'page', 'spp_service', 'spp_project', 'spp_testimonial', 'spp_faq' ) as $post_type ) {
 			$posts = get_posts(
@@ -431,7 +440,11 @@ class SPP_Content_REST {
 				if ( 'page' === $post_type && ! get_post_meta( $post->ID, 'spp_template_key', true ) && ! in_array( $post->post_name, array( 'home', 'about', 'services', 'our-process', 'faqs', 'contact' ), true ) ) {
 					continue;
 				}
-				$records[] = array(
+				$meta = array();
+				foreach ( array_keys( $this->fields->definitions_for_post( $post ) ) as $key ) {
+					$meta[ $key ] = get_post_meta( $post->ID, $key, true );
+				}
+				$record = array(
 					'source_key' => get_post_meta( $post->ID, '_spp_source_key', true ) ?: $post_type . ':' . $post->post_name,
 					'post_type'  => $post_type,
 					'status'     => $post->post_status,
@@ -441,15 +454,25 @@ class SPP_Content_REST {
 					'excerpt'    => $post->post_excerpt,
 					'menu_order' => (int) $post->menu_order,
 					'fields'     => $this->fields->get_public_meta( $post ),
+					'meta'       => $meta,
+					'control'    => array(
+						'_spp_client_modified_at' => get_post_meta( $post->ID, '_spp_client_modified_at', true ),
+						'_spp_managed_content'    => get_post_meta( $post->ID, '_spp_managed_content', true ),
+						'_spp_source_hash'        => get_post_meta( $post->ID, '_spp_source_hash', true ),
+						'_spp_design_variant'     => get_post_meta( $post->ID, '_spp_design_variant', true ),
+					),
 				);
+				$record['checksum'] = hash( 'sha256', wp_json_encode( $record ) );
+				$records[] = $record;
 			}
 		}
-		return $this->response(
-			array(
-				'format'      => 'spp-content-export',
-				'exported_at' => gmdate( 'c' ),
-				'records'     => $records,
-			)
+		return array(
+			'format'         => 'spp-content-export',
+			'schema_version' => SPP_CONTENT_SCHEMA_VERSION,
+			'plugin_version' => SPP_CONTENT_VERSION,
+			'site_url'       => home_url( '/' ),
+			'exported_at'    => gmdate( 'c' ),
+			'records'        => $records,
 		);
 	}
 

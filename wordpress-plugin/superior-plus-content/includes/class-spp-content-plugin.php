@@ -49,11 +49,12 @@ final class SPP_Content_Plugin {
 	private function __construct() {
 		$this->types  = new SPP_Content_Types();
 		$this->fields = new SPP_Content_Fields( $this->types );
-		new SPP_Content_REST( $this->types, $this->fields );
+		$rest = new SPP_Content_REST( $this->types, $this->fields );
 		new SPP_Content_Workflow( $this->types, $this->fields );
 		new SPP_Content_Routing();
 		new SPP_Content_Migration( $this->types );
 		new SPP_Content_Enquiries( $this->types );
+		new SPP_Content_Recovery( $this->fields, $rest );
 
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ), 5 );

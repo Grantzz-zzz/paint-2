@@ -21,6 +21,7 @@ $required = array(
 	'includes/class-spp-content-routing.php',
 	'includes/class-spp-content-migration.php',
 	'includes/class-spp-content-enquiries.php',
+	'includes/class-spp-content-recovery.php',
 );
 
 $missing = array_values(
@@ -88,6 +89,10 @@ $checks = array(
 		'spp_quote_recipient',
 		'spp_quote_last_success',
 		'spp_quote_last_failure',
+		'spp_export_content_backup',
+		'spp_import_content_backup',
+		'confirm_restore',
+		'hash_equals',
 	),
 	'media'         => array(
 		'wp_enqueue_media',
@@ -108,8 +113,13 @@ foreach ( $checks as $group => $needles ) {
 
 $theme_functions = file_get_contents( $theme . '/functions.php' );
 $installer       = file_get_contents( $theme . '/inc/installer.php' );
+$uninstall       = file_get_contents( $plugin . '/uninstall.php' );
 $theme_compatible = false !== strpos( $theme_functions, "defined( 'SPP_CONTENT_VERSION' )" )
 	&& false !== strpos( $installer, 'spp_ensure_content_types_registered' );
+$uninstall_preserves_content = false === strpos( $uninstall, 'wp_delete_post' )
+	&& false === strpos( $uninstall, 'wp_delete_attachment' )
+	&& false === strpos( $uninstall, 'delete_post_meta' )
+	&& false === strpos( $uninstall, 'delete_option' );
 
 $result = array(
 	'plugin_version'       => preg_match( '/Version:\s*([0-9.]+)/', file_get_contents( $plugin . '/superior-plus-content.php' ), $matches ) ? $matches[1] : null,
@@ -117,6 +127,7 @@ $result = array(
 	'missing_files'        => $missing,
 	'failed_checks'        => $failed_checks,
 	'theme_compatibility'  => $theme_compatible,
+	'uninstall_preserves_content' => $uninstall_preserves_content,
 	'content_type_count'   => count( $checks['content_types'] ),
 	'public_route_count'   => 8,
 	'protected_route_count' => 2,
@@ -124,6 +135,6 @@ $result = array(
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || '0.7.0' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || ! $uninstall_preserves_content || '0.8.0' !== $result['plugin_version'] ) {
 	exit( 1 );
 }

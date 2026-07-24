@@ -196,13 +196,13 @@ non-cached preview through the exact React design.
 
 ## Phase 9 — Update and recovery safety
 
-- [ ] Confirm WordPress content survives a theme update
-- [ ] Confirm WordPress content survives a plugin update
-- [ ] Confirm switching themes does not delete content
-- [ ] Confirm uninstall does not remove content without explicit approval
-- [ ] Test plugin export and re-import
-- [ ] Test full staging backup restoration
-- [ ] Document the rollback procedure
+- [x] Confirm WordPress content survives a theme update
+- [x] Confirm WordPress content survives a plugin update
+- [x] Confirm switching themes does not delete content
+- [x] Confirm uninstall does not remove content without explicit approval
+- [x] Test plugin export and re-import
+- [!] Test the hosting provider's full staging backup restoration before production
+- [x] Document the rollback procedure
 
 ## Phase 10 — Staging and client handoff
 
@@ -221,8 +221,10 @@ non-cached preview through the exact React design.
 
 ## Current focus
 
-`Phase 9 - update and recovery safety.` Phase 8 passed against a disposable real
-WordPress runtime: 15 routes at 1440px, 820px and 390px, 747 assertions, zero
-failures and 15/15 pixel comparisons within the strict threshold. Rene still
-needs to confirm the production quote recipient and final privacy wording before
-launch. Nothing has been changed on staging or production.
+`Phase 10 - staging and client handoff.` Phase 9 now includes guarded,
+checksum-validated JSON backup/recovery and verified preservation through theme
+replacement, plugin replacement, theme switching and plugin uninstall. The
+hosting provider's full files-and-database restore must still be rehearsed on
+staging because that workflow is host-specific. Rene must also confirm the
+production quote recipient and final privacy wording. Nothing has been changed
+on staging or production.
