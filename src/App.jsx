@@ -9,6 +9,7 @@ import {
   Palette, Phone, ShieldCheck, Sparkles, SprayCan, Star, Trees, Warehouse, X
 } from 'lucide-react'
 import { serviceList } from './data/siteData'
+import { serviceAreaBySlug, serviceAreaRegions } from './data/serviceAreas'
 import { asset, publicRouteUrl, siteUrl } from './utils/assets'
 import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
 
@@ -86,38 +87,56 @@ function Logo() {
 function Navbar() {
   const [open, setOpen] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
+  const [areasOpen, setAreasOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const {business,navigation,services:cmsServices}=useSiteContent()
   const navItems=(navigation?.length?navigation:nav.map(([url,label],index)=>({id:index,label,url,children:[]}))).map(item=>({...item,path:toAppPath(item.url)}))
   const displayedServices=cmsServices?.length?cmsServices:serviceList
-  const go = (path) => { navigate(path); setOpen(false); setServicesOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  const go = (path) => { navigate(path); setOpen(false); setServicesOpen(false); setAreasOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }
   const toggleMobileMenu = () => {
     const nextOpen = !open
     setOpen(nextOpen)
     setServicesOpen(nextOpen)
+    setAreasOpen(false)
   }
   return <header className="nav-shell">
     <nav className="nav-inner">
       <Logo />
       <div className="nav-links">
-        {navItems.map(item => item.path === '/services' ? <div className="nav-dropdown" key={item.id} onMouseEnter={()=>setServicesOpen(true)} onMouseLeave={()=>setServicesOpen(false)}>
-          <button className={`nav-main-link ${location.pathname.startsWith('/services') ? 'active' : ''}`} onClick={() => go(item.path)}>{item.label}</button>
-          <button className="dropdown-trigger" onClick={()=>setServicesOpen(value=>!value)} aria-label="Show service pages" aria-expanded={servicesOpen} aria-controls="desktop-services-menu"><ChevronDown size={14}/></button>
-          <AnimatePresence>{servicesOpen&&<motion.div id="desktop-services-menu" className="services-dropdown" role="navigation" aria-label="Service pages" initial={{opacity:0,y:-8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-6}} transition={{duration:.16}}>
-            <button className="services-overview" onClick={()=>go('/services')}><span><b>All services</b><small>View the complete service directory</small></span><ArrowRight size={17}/></button>
-            <div className="services-dropdown-grid">{displayedServices.map(service=><button key={service.slug} className={location.pathname.endsWith(service.slug)?'current':''} onClick={()=>go(service.url||`/services/${service.slug}`)}><b>{service.title}</b><ArrowRight size={14}/></button>)}</div>
-          </motion.div>}</AnimatePresence>
-        </div> : <button key={item.id} className={`nav-main-link ${location.pathname === item.path ? 'active' : ''}`} onClick={() => go(item.path)}>{item.label}</button>)}
+        {navItems.map(item => {
+          if(item.path==='/services') return <div className="nav-dropdown" key={item.id} onMouseEnter={()=>{setServicesOpen(true);setAreasOpen(false)}} onMouseLeave={()=>setServicesOpen(false)}>
+            <button className={`nav-main-link ${location.pathname.startsWith('/services') ? 'active' : ''}`} onClick={() => go(item.path)}>{item.label}</button>
+            <button className="dropdown-trigger" onClick={()=>{setServicesOpen(value=>!value);setAreasOpen(false)}} aria-label="Show service pages" aria-expanded={servicesOpen} aria-controls="desktop-services-menu"><ChevronDown size={14}/></button>
+            <AnimatePresence>{servicesOpen&&<motion.div id="desktop-services-menu" className="services-dropdown" role="navigation" aria-label="Service pages" initial={{opacity:0,y:-8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-6}} transition={{duration:.16}}>
+              <button className="services-overview" onClick={()=>go('/services')}><span><b>All services</b><small>View the complete service directory</small></span><ArrowRight size={17}/></button>
+              <div className="services-dropdown-grid">{displayedServices.map(service=><button key={service.slug} className={location.pathname.endsWith(service.slug)?'current':''} onClick={()=>go(service.url||`/services/${service.slug}`)}><b>{service.title}</b><ArrowRight size={14}/></button>)}</div>
+            </motion.div>}</AnimatePresence>
+          </div>
+          if(item.path==='/service-areas') return <div className="nav-dropdown nav-areas-dropdown" key={item.id} onMouseEnter={()=>{setAreasOpen(true);setServicesOpen(false)}} onMouseLeave={()=>setAreasOpen(false)}>
+            <button className={`nav-main-link ${location.pathname.startsWith('/service-areas')?'active':''}`} onClick={()=>go(item.path)}>{item.label}</button>
+            <button className="dropdown-trigger" onClick={()=>{setAreasOpen(value=>!value);setServicesOpen(false)}} aria-label="Show service areas" aria-expanded={areasOpen} aria-controls="desktop-areas-menu"><ChevronDown size={14}/></button>
+            <AnimatePresence>{areasOpen&&<motion.div id="desktop-areas-menu" className="areas-dropdown" role="navigation" aria-label="Service areas" initial={{opacity:0,y:-8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-6}} transition={{duration:.16}}>
+              <button className="areas-overview" onClick={()=>go('/service-areas')}><span><b>All service areas</b><small>Explore Melbourne’s eastern and south-eastern suburbs</small></span><ArrowRight size={17}/></button>
+              <div className="areas-dropdown-regions">{serviceAreaRegions.map(region=><section key={region.id}><h3>{region.title}</h3><div>{region.suburbs.map(slug=>{const area=serviceAreaBySlug[slug];return <button key={slug} className={location.pathname.endsWith(slug)?'current':''} onClick={()=>go(area.path)}><MapPin size={13}/><b>{area.name}</b></button>})}</div></section>)}</div>
+            </motion.div>}</AnimatePresence>
+          </div>
+          return <button key={item.id} className={`nav-main-link ${location.pathname === item.path ? 'active' : ''}`} onClick={() => go(item.path)}>{item.label}</button>
+        })}
       </div>
       <div className="nav-actions"><a href={business.phone_href}><Phone size={15} /> {business.phone_display}</a><button className="btn btn-small" onClick={() => go('/contact')}>Free quote <ArrowRight size={15} /></button></div>
       <button className="menu-btn" onClick={toggleMobileMenu} aria-label="Toggle menu" aria-expanded={open} aria-controls="mobile-navigation">{open ? <X /> : <Menu />}</button>
     </nav>
     <AnimatePresence>{open && <motion.div id="mobile-navigation" className="mobile-menu" initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }} exit={{ opacity:0, height:0 }}>
       {navItems.map(item => item.path === '/services' ? <div className={`mobile-services ${servicesOpen?'open':''}`} key={item.id}>
-        <div className="mobile-services-head"><button onClick={()=>go(item.path)}>{item.label}</button><button onClick={()=>setServicesOpen(value=>!value)} aria-label="Toggle service pages" aria-expanded={servicesOpen} aria-controls="mobile-services-menu"><ChevronDown size={18}/></button></div>
+        <div className="mobile-services-head"><button onClick={()=>go(item.path)}>{item.label}</button><button onClick={()=>{setServicesOpen(value=>!value);setAreasOpen(false)}} aria-label="Toggle service pages" aria-expanded={servicesOpen} aria-controls="mobile-services-menu"><ChevronDown size={18}/></button></div>
         <AnimatePresence>{servicesOpen&&<motion.div id="mobile-services-menu" className="mobile-services-pages" initial={{height:0,opacity:0}} animate={{height:'auto',opacity:1}} exit={{height:0,opacity:0}}>
           {displayedServices.map(service=><button key={service.slug} className={location.pathname.endsWith(service.slug)?'current':''} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}<ArrowRight size={14}/></button>)}
+        </motion.div>}</AnimatePresence>
+      </div> : item.path==='/service-areas' ? <div className={`mobile-services mobile-areas ${areasOpen?'open':''}`} key={item.id}>
+        <div className="mobile-services-head mobile-areas-head"><button onClick={()=>go(item.path)}>{item.label}</button><button onClick={()=>{setAreasOpen(value=>!value);setServicesOpen(false)}} aria-label="Toggle service areas" aria-expanded={areasOpen} aria-controls="mobile-areas-menu"><ChevronDown size={18}/></button></div>
+        <AnimatePresence>{areasOpen&&<motion.div id="mobile-areas-menu" className="mobile-areas-pages" initial={{height:0,opacity:0}} animate={{height:'auto',opacity:1}} exit={{height:0,opacity:0}}>
+          {serviceAreaRegions.map(region=><section key={region.id}><strong>{region.title}</strong><div>{region.suburbs.map(slug=>{const area=serviceAreaBySlug[slug];return <button key={slug} className={location.pathname.endsWith(slug)?'current':''} onClick={()=>go(area.path)}>{area.name}<ArrowRight size={13}/></button>})}</div></section>)}
         </motion.div>}</AnimatePresence>
       </div> : <button key={item.id} onClick={() => go(item.path)}>{item.label}<ArrowRight size={16}/></button>)}
       <a className="btn" href={business.phone_href}><Phone size={17}/> {business.phone_display}</a>

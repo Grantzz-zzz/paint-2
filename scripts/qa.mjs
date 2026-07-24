@@ -142,6 +142,14 @@ try {
   await page.waitForURL(/#\/services$/)
   check(page.url().endsWith('#/services'), 'mobile menu: Services navigation failed')
 
+  await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
+  await page.locator('.menu-btn').click()
+  await page.locator('.mobile-areas-head button[aria-controls="mobile-areas-menu"]').click()
+  check(await page.locator('#mobile-areas-menu button').count() === 15, 'mobile areas menu: all 15 suburb pages are not visible')
+  await page.locator('#mobile-areas-menu button', { hasText: 'Chadstone' }).click()
+  await page.waitForURL(/#\/service-areas\/chadstone$/)
+  check(page.url().endsWith('#/service-areas/chadstone'), 'mobile areas menu: suburb navigation failed')
+
   await page.goto(`${origin}#/faqs`, { waitUntil: 'domcontentloaded' })
   const secondFaq = page.locator('.faq-item').nth(1)
   await secondFaq.locator('button').click()

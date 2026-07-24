@@ -77,6 +77,7 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 - [x] Build a Service Areas hub using every suburb named in the PDFs
 - [x] Create 15 useful suburb landing pages with distinct property/service context
 - [x] Connect suburb pages to relevant services and neighbouring areas
+- [x] Add dedicated desktop and mobile Service Areas dropdown navigation
 - [~] Confirm the 15 listed suburbs match the client’s current service boundaries
 - [ ] Publish the location pages as editable WordPress pages
 - [ ] Confirm every production location URL appears in the WordPress sitemap
