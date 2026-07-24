@@ -167,12 +167,12 @@ non-cached preview through the exact React design.
 
 - [!] Confirm the recipient email address for quote requests
 - [!] Confirm required consent/privacy wording
-- [ ] Connect the React quote form to a secure WordPress REST endpoint
-- [ ] Add server-side validation and spam protection
-- [ ] Send the client notification email
-- [ ] Show the existing React success state only after confirmed submission
-- [ ] Log or safely retain enquiries if required by the client
-- [ ] Test failure, retry and confirmation behaviour
+- [x] Connect the React quote form to a secure WordPress REST endpoint
+- [x] Add server-side validation and spam protection
+- [x] Send the client notification email
+- [x] Show the existing React success state only after confirmed submission
+- [x] Retain non-personal delivery diagnostics; do not store enquiry details unless the client requests it
+- [x] Test failure, retry and confirmation behaviour
 
 ## Phase 8 — Automated parity QA
 
@@ -221,9 +221,9 @@ non-cached preview through the exact React design.
 
 ## Current focus
 
-`Phase 7 — Forms and operational features.` Phase 6 is complete locally: the
-approved React dataset has an idempotent WordPress importer for all core pages,
-services, FAQs, testimonials, projects, gallery images, remote project videos and
-global settings. Stable source keys prevent duplicates, source hashes support
-auditing, and records marked as client-edited are protected from later importer
-runs. Nothing has been changed on staging or production.
+`Phase 7 - staging configuration.` The secure quote endpoint, both React forms,
+server-side validation, layered spam controls, email delivery, delivery-only
+success state, retry handling and non-personal diagnostics are implemented and
+tested locally. Before production, Rene must confirm the recipient email address
+and final consent/privacy wording. Nothing has been changed on staging or
+production.

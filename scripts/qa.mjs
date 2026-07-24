@@ -145,11 +145,11 @@ try {
 
   await page.goto(`${origin}#/contact`, { waitUntil: 'domcontentloaded' })
   const form = page.locator('.full-quote-form')
-  await form.locator('input').nth(0).fill('QA Test')
-  await form.locator('input').nth(1).fill('0400000000')
-  await form.locator('input').nth(2).fill('qa@example.com')
-  await form.locator('input').nth(3).fill('Chadstone')
-  await form.locator('select').nth(0).selectOption({ label: 'Residential Painting' })
+  await form.locator('[name="name"]').fill('QA Test')
+  await form.locator('[name="phone"]').fill('0400000000')
+  await form.locator('[name="email"]').fill('qa@example.com')
+  await form.locator('[name="suburb"]').fill('Chadstone')
+  await form.locator('[name="service"]').selectOption({ label: 'Residential Painting' })
   await form.locator('textarea').fill('Automated quote form interaction test.')
   await form.locator('button[type="submit"], button.btn-wide').click()
   check(await form.locator('.form-success').isVisible(), 'contact form: success state did not appear')
@@ -167,6 +167,64 @@ try {
   check(await page.locator('.media-lightbox').isVisible() && await page.locator('.media-lightbox video').count() === 1, 'project gallery: video lightbox did not open')
   await page.locator('.lightbox-close').click()
   check(!(await page.locator('.media-lightbox').count()), 'project gallery: lightbox did not close')
+
+  const apiPage = await interactionContext.newPage()
+  await apiPage.addInitScript(() => {
+    window.__SPP_CONTENT_API__ = `${window.location.origin}/wp-json/spp/v1`
+    window.__SPP_FORM_NONCE__ = 'qa-form-nonce'
+  })
+  let quoteAttempts = 0
+  await apiPage.route('**/wp-json/spp/v1/**', async route => {
+    const url = new URL(route.request().url())
+    const endpoint = url.pathname.split('/spp/v1')[1]
+    if (endpoint === '/bootstrap') {
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          schema_version: '1.0.0',
+          data: { quote_form: { enabled: true, privacy_text: '' } },
+        }),
+      })
+    }
+    if (endpoint === '/services') {
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ schema_version: '1.0.0', data: [] }),
+      })
+    }
+    if (endpoint === '/quote') {
+      quoteAttempts += 1
+      return route.fulfill({
+        status: quoteAttempts === 1 ? 502 : 200,
+        contentType: 'application/json',
+        body: JSON.stringify(
+          quoteAttempts === 1
+            ? { code: 'spp_quote_delivery_failed', message: 'Temporary delivery failure.' }
+            : { schema_version: '1.0.0', data: { delivered: true, message: 'Delivered.' } },
+        ),
+      })
+    }
+    return route.fulfill({ status: 404, body: '{}' })
+  })
+  await apiPage.goto(`${origin}#/contact`, { waitUntil: 'domcontentloaded' })
+  await apiPage.locator('[data-content-state="ready"]').waitFor()
+  const apiForm = apiPage.locator('.full-quote-form')
+  await apiForm.locator('[name="name"]').fill('Delivery QA')
+  await apiForm.locator('[name="phone"]').fill('0400000000')
+  await apiForm.locator('[name="email"]').fill('delivery@example.com')
+  await apiForm.locator('[name="suburb"]').fill('Melbourne')
+  await apiForm.locator('[name="service"]').selectOption({ label: 'Residential Painting' })
+  await apiForm.locator('[name="details"]').fill('Failure and retry delivery confirmation test.')
+  await apiForm.locator('button.btn-wide').click()
+  await apiForm.locator('.form-error').waitFor()
+  check(await apiForm.locator('.form-error').innerText() === 'Temporary delivery failure.', 'contact form: delivery failure was not shown')
+  check(!(await apiForm.locator('.form-success').count()), 'contact form: success appeared before delivery confirmation')
+  await apiForm.locator('button.btn-wide').click()
+  await apiForm.locator('.form-success').waitFor()
+  check(quoteAttempts === 2, 'contact form: failed submission was not retryable')
+  check(await apiForm.locator('.form-success').isVisible(), 'contact form: confirmed retry did not show success')
 
   await interactionContext.close()
 } finally {

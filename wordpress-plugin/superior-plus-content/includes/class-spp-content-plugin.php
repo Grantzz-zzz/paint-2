@@ -53,6 +53,7 @@ final class SPP_Content_Plugin {
 		new SPP_Content_Workflow( $this->types, $this->fields );
 		new SPP_Content_Routing();
 		new SPP_Content_Migration( $this->types );
+		new SPP_Content_Enquiries( $this->types );
 
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ), 5 );
@@ -89,6 +90,9 @@ final class SPP_Content_Plugin {
 			wp_die( esc_html__( 'You do not have permission to manage this content.', 'superior-plus-content' ) );
 		}
 		$config_id = $this->types->get_site_config_id();
+		$recipient = $config_id ? sanitize_email( get_post_meta( $config_id, 'spp_quote_recipient', true ) ) : '';
+		$last_success = get_option( 'spp_quote_last_success', '' );
+		$last_failure = get_option( 'spp_quote_last_failure', array() );
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Superior Plus Content', 'superior-plus-content' ); ?></h1>
@@ -104,6 +108,17 @@ final class SPP_Content_Plugin {
 					<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=page' ) ); ?>"><?php esc_html_e( 'Pages', 'superior-plus-content' ); ?></a>
 					<a class="button" href="<?php echo esc_url( admin_url( 'nav-menus.php' ) ); ?>"><?php esc_html_e( 'Header and footer menus', 'superior-plus-content' ); ?></a>
 				</p>
+			</div>
+			<div class="card">
+				<h2><?php esc_html_e( 'Quote form delivery', 'superior-plus-content' ); ?></h2>
+				<?php if ( is_email( $recipient ) ) : ?>
+					<p><span class="dashicons dashicons-yes-alt" style="color:#1f7a42"></span> <?php esc_html_e( 'Recipient configured:', 'superior-plus-content' ); ?> <code><?php echo esc_html( $recipient ); ?></code></p>
+				<?php else : ?>
+					<p><span class="dashicons dashicons-warning" style="color:#b32d2e"></span> <?php esc_html_e( 'The public forms remain disabled until an administrator enters the confirmed recipient email in Site Settings.', 'superior-plus-content' ); ?></p>
+				<?php endif; ?>
+				<?php if ( $last_success ) : ?><p><?php esc_html_e( 'Last confirmed delivery:', 'superior-plus-content' ); ?> <code><?php echo esc_html( $last_success ); ?></code></p><?php endif; ?>
+				<?php if ( ! empty( $last_failure['at'] ) ) : ?><p><?php esc_html_e( 'Last mail failure:', 'superior-plus-content' ); ?> <code><?php echo esc_html( $last_failure['at'] . ' (' . $last_failure['code'] . ')' ); ?></code></p><?php endif; ?>
+				<p><a class="button" href="<?php echo esc_url( get_edit_post_link( $config_id, 'url' ) ); ?>"><?php esc_html_e( 'Configure recipient and privacy text', 'superior-plus-content' ); ?></a></p>
 			</div>
 			<div class="card">
 				<h2><?php esc_html_e( 'Safety rules', 'superior-plus-content' ); ?></h2>

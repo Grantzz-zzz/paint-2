@@ -128,11 +128,10 @@ async function captureInteractions(page) {
 
   const form = page.locator('.quote-form')
   if (await form.count()) {
-    await form.locator('input[type="text"], input:not([type])').nth(0).fill('Baseline Test')
-    await form.locator('input[type="tel"]').fill('0400000000')
-    await form.locator('input[type="email"]').fill('baseline@example.com')
-    const textInputs = form.locator('input[type="text"], input:not([type])')
-    if (await textInputs.count() > 1) await textInputs.nth(1).fill('Melbourne')
+    await form.locator('[name="name"]').fill('Baseline Test')
+    await form.locator('[name="phone"]').fill('0400000000')
+    await form.locator('[name="email"]').fill('baseline@example.com')
+    await form.locator('[name="suburb"]').fill('Melbourne')
     await form.locator('textarea').fill('Baseline interaction capture')
     await form.locator('button[type="submit"]').click()
     snapshots.quoteFormSuccess = (await form.locator('.form-success').innerText()).replace(/\s+/g, ' ').trim()

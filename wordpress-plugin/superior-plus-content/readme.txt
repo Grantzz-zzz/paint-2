@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 0.5.0
+Stable tag: 0.6.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -22,6 +22,7 @@ It provides:
 * Idempotent approved-site importer with client-edit protection
 * Role capabilities for content editors
 * A read-only versioned REST API under /wp-json/spp/v1
+* Secure quote delivery with validation, spam controls and retry-safe feedback
 * Administrator-only JSON export
 
 Elementor and ACF are not required. Deactivation or uninstall does not delete content.
@@ -37,6 +38,10 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 0.6.0 =
+* Added secure quote-form REST delivery, server-side validation, same-origin and nonce checks, a honeypot, timing checks and rate limiting.
+* Added administrator-only delivery configuration and non-personal delivery diagnostics.
 
 = 0.5.0 =
 * Added an idempotent approved-site migration for all core pages, services, FAQs, testimonials, project galleries and Media Library assets.

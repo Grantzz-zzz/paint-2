@@ -194,6 +194,10 @@ class SPP_Content_REST {
 					'url'   => $get( 'spp_default_cta_url', '/contact' ),
 				),
 			),
+			'quote_form'    => array(
+				'enabled'      => is_email( $get( 'spp_quote_recipient', '' ) ),
+				'privacy_text' => $get( 'spp_privacy_text', '' ),
+			),
 		);
 		return $this->response( $data );
 	}

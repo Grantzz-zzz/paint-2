@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import {
   contact as fallbackContact,
   faqs as fallbackFaqs,
@@ -59,6 +59,10 @@ export const fallbackBootstrap = {
     title: 'Ready for a fresh start?',
     text: 'Tell us about your property and we’ll arrange a free, no-obligation quotation.',
     link: { label: 'Request my free quote', url: '/contact' },
+  },
+  quote_form: {
+    enabled: false,
+    privacy_text: '',
   },
 }
 
@@ -127,6 +131,28 @@ async function request(endpoint) {
   }).finally(() => inflight.delete(endpoint))
   inflight.set(endpoint, pending)
   return pending
+}
+
+async function submitEnquiry(payload) {
+  const base = configuredApiBase()
+  if (!base) return { delivered: true, prototype: true }
+  const response = await fetch(`${base}/quote`, {
+    method: 'POST',
+    credentials: 'same-origin',
+    cache: 'no-store',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-SPP-Form-Nonce': window.__SPP_FORM_NONCE__ || '',
+    },
+    body: JSON.stringify(payload),
+  })
+  const result = await response.json().catch(() => ({}))
+  if (!response.ok) throw new Error(result?.message || 'We could not send your enquiry. Please try again.')
+  if (result?.schema_version !== '1.0.0' || result?.data?.delivered !== true) {
+    throw new Error('The website could not confirm delivery. Please try again.')
+  }
+  return result.data
 }
 
 function hasContent(value) {
@@ -232,6 +258,55 @@ export function ContentProvider({ children }) {
 
 export function useSiteContent() {
   return useContext(ContentContext) || { ...fallbackBootstrap, services: fallbackServices, enabled: false, status: 'fallback' }
+}
+
+export function useEnquirySubmission() {
+  const site = useSiteContent()
+  const startedAt = useRef(Date.now())
+  const [status, setStatus] = useState('idle')
+  const [error, setError] = useState('')
+
+  const submit = useCallback(async event => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const values = Object.fromEntries(new FormData(form).entries())
+    setError('')
+    if (site.enabled && !site.quote_form?.enabled) {
+      setStatus('error')
+      setError('Email delivery is not configured yet. Please call or email us directly.')
+      return
+    }
+    setStatus('submitting')
+    try {
+      await submitEnquiry({
+        ...values,
+        consent: values.consent === 'yes',
+        started_at: startedAt.current,
+        page_path: window.location.pathname,
+      })
+      form.reset()
+      setStatus('sent')
+    } catch (submissionError) {
+      setStatus('error')
+      setError(submissionError.message || 'We could not send your enquiry. Please try again.')
+    }
+  }, [site.enabled, site.quote_form?.enabled])
+
+  const reset = useCallback(() => {
+    startedAt.current = Date.now()
+    setError('')
+    setStatus('idle')
+  }, [])
+
+  return {
+    submit,
+    reset,
+    status,
+    error,
+    pending: status === 'submitting',
+    sent: status === 'sent',
+    privacyText: site.quote_form?.privacy_text || '',
+  }
 }
 
 export function useCollection(name, fallback) {

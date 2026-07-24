@@ -20,6 +20,7 @@ $required = array(
 	'includes/class-spp-content-workflow.php',
 	'includes/class-spp-content-routing.php',
 	'includes/class-spp-content-migration.php',
+	'includes/class-spp-content-enquiries.php',
 );
 
 $missing = array_values(
@@ -52,6 +53,7 @@ $checks = array(
 		"'projects', 'faqs', 'testimonials'",
 		'/export',
 		'/preview/',
+		'/quote',
 	),
 	'protections'   => array(
 		'manage_spp_content',
@@ -75,6 +77,16 @@ $checks = array(
 		'_spp_source_hash',
 		'_spp_source_asset',
 		'spp_content_migration_report',
+		'spp_quote_form',
+		'wp_mail',
+		'get_transient',
+		'same_origin',
+		"'website'",
+		'started_at',
+		'rate_limited',
+		'spp_quote_recipient',
+		'spp_quote_last_success',
+		'spp_quote_last_failure',
 	),
 	'media'         => array(
 		'wp_enqueue_media',
@@ -111,6 +123,6 @@ $result = array(
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || '0.5.0' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || '0.6.0' !== $result['plugin_version'] ) {
 	exit( 1 );
 }
