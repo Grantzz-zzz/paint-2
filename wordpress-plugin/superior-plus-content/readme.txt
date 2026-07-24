@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 0.6.0
+Stable tag: 0.7.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -38,6 +38,11 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 0.7.0 =
+* Added automated 15-route parity testing across desktop, tablet and mobile against a real WordPress runtime.
+* Matched imported service hero images, gallery metadata, decoded titles and homepage selections to the approved React reference.
+* Added atomic migration locking and defensive REST deduplication.
 
 = 0.6.0 =
 * Added secure quote-form REST delivery, server-side validation, same-origin and nonce checks, a honeypot, timing checks and rate limiting.

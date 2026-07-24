@@ -18,7 +18,8 @@ function upsertMeta(selector, attributes) {
 
 function breadcrumbItems(pathname,currentTitle){
   const items=[{label:'Home',path:'/'}]
-  if(pathname.startsWith('/services/')) items.push({label:'Services',path:'/services'})
+  const normalizedPath=pathname.replace(/\/+$/,'')||'/'
+  if(/^\/services\/[^/]+/.test(normalizedPath)) items.push({label:'Services',path:'/services'})
   if(pathname!=='/') items.push({label:currentTitle,path:pathname})
   return items
 }

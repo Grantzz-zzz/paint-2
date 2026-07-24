@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '1.0.0';
+	const VERSION = '1.1.0';
 
 	private $types;
 	private $report = array();
@@ -62,7 +62,14 @@ class SPP_Content_Migration {
 			wp_die( esc_html__( 'You do not have permission to run the migration.', 'superior-plus-content' ) );
 		}
 		check_admin_referer( 'spp_migrate_approved_site' );
-		$this->run();
+		if ( ! add_option( 'spp_content_migration_lock', gmdate( 'c' ), '', false ) ) {
+			wp_die( esc_html__( 'An approved-site import is already running. Wait for it to finish before trying again.', 'superior-plus-content' ) );
+		}
+		try {
+			$this->run();
+		} finally {
+			delete_option( 'spp_content_migration_lock' );
+		}
 		wp_safe_redirect( admin_url( 'admin.php?page=spp-content-migration&migrated=1' ) );
 		exit;
 	}
@@ -139,7 +146,7 @@ class SPP_Content_Migration {
 			'spp_default_cta_text' => 'Tell us about your property and we’ll arrange a free, no-obligation quotation.',
 			'spp_default_cta_label' => 'Request my free quote',
 			'spp_default_cta_url' => '/contact',
-			'spp_privacy_text' => 'No obligation. Your details stay private.',
+			'spp_privacy_text' => '',
 		);
 		$this->write_meta( $config_id, 'site-config', $meta, true );
 	}
@@ -282,14 +289,27 @@ class SPP_Content_Migration {
 			'roof-painting-melbourne' => 'roof', 'wallpaper-removal-melbourne' => 'wallpaper',
 			'plaster-repairs-melbourne' => 'plaster',
 		);
+		$hero_assets = array(
+			'residential-painting-melbourne'    => 'client/projects/exterior/exterior-07.webp',
+			'commercial-painting-melbourne'     => 'client/projects/commercial/commercial-02.webp',
+			'interior-painting-melbourne'       => 'client/projects/interior/interior-04.webp',
+			'exterior-painting-melbourne'       => 'client/projects/exterior/exterior-01.webp',
+			'roof-painting-melbourne'           => 'stock/roof.webp',
+			'fence-painting-melbourne'          => 'client/projects/fence/fence-03.webp',
+			'deck-painting-staining-melbourne'  => 'client/projects/outdoor/outdoor-01.webp',
+			'wallpaper-removal-melbourne'       => 'stock/wallpaper.webp',
+			'plaster-repairs-melbourne'         => 'client/projects/interior/interior-10.webp',
+		);
 		$ids = array();
 		foreach ( spp_default_services() as $slug => $service ) {
+			$menu_order = count( $ids ) + 1;
 			$post = get_page_by_path( $slug, OBJECT, 'spp_service' );
 			$is_new = ! $post;
 			if ( $is_new ) {
 				$id = wp_insert_post( array(
 					'post_type' => 'spp_service', 'post_status' => 'publish', 'post_name' => $slug,
 					'post_title' => $service['title'], 'post_excerpt' => $service['intro'], 'post_content' => $service['intro'],
+					'menu_order' => $menu_order,
 				), true );
 				if ( is_wp_error( $id ) ) {
 					$this->report['errors'][] = 'service:' . $slug;
@@ -298,9 +318,14 @@ class SPP_Content_Migration {
 				$post = get_post( $id );
 				$this->report['created'][] = 'service:' . $slug;
 			}
+			if ( ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) && (int) $post->menu_order !== $menu_order ) {
+				wp_update_post( array( 'ID' => $post->ID, 'menu_order' => $menu_order ) );
+			}
 			$category = $category_map[ $slug ];
 			$gallery = $this->category_gallery( $category );
-			$hero = ! empty( $gallery[0]['attachment_id'] ) ? $gallery[0]['attachment_id'] : 0;
+			$hero = isset( $hero_assets[ $slug ] )
+				? $this->import_asset( $hero_assets[ $slug ], $service['title'] . ' hero' )
+				: 0;
 			$meta = array(
 				'spp_template_key' => 'service', 'spp_directory_excerpt' => $this->service_short( $slug ),
 				'spp_eyebrow' => $service['eyebrow'], 'spp_hero_title' => $service['title'], 'spp_accent' => $service['accent'],
@@ -308,8 +333,8 @@ class SPP_Content_Migration {
 				'spp_scope_title' => $service['scope_title'], 'spp_scope' => $service['scope'], 'spp_process' => $service['process'],
 				'spp_why' => $service['why'], 'spp_benefits' => $service['benefits'], 'spp_gallery_items' => $gallery,
 				'spp_seo_title' => $service['title'] . ' Melbourne', 'spp_seo_description' => $service['intro'],
-				'spp_closing_cta_title' => 'Ready to discuss your ' . strtolower( $service['title'] ) . ' project?',
-				'spp_closing_cta_text' => 'Arrange a free inspection and written quote with Superior Plus Painting.',
+				'spp_closing_cta_title' => 'Planning ' . strtolower( $service['title'] ) . '?',
+				'spp_closing_cta_text' => '',
 				'spp_closing_cta_label' => 'Request my free quote', 'spp_closing_cta_url' => '/contact',
 			);
 			$this->write_meta( $post->ID, 'service:' . $slug, $meta, $is_new );
@@ -323,17 +348,44 @@ class SPP_Content_Migration {
 
 	private function connect_relationships( $pages, $services, $faqs, $testimonials, $projects ) {
 		if ( isset( $pages['home'] ) ) {
-			$this->write_relationship( $pages['home'], 'spp_home_service_ids', array_values( $services ) );
-			$this->write_relationship( $pages['home'], 'spp_home_project_ids', array_values( array_intersect_key( $projects, array_flip( array( 'interior', 'exterior', 'commercial' ) ) ) ) );
-			$this->write_relationship( $pages['home'], 'spp_home_testimonial_ids', $testimonials );
+			$this->clear_managed_relationship( $pages['home'], 'spp_home_service_ids' );
+			$this->clear_managed_relationship( $pages['home'], 'spp_home_project_ids' );
+			$this->clear_managed_relationship( $pages['home'], 'spp_home_testimonial_ids' );
 		}
 		if ( isset( $pages['faqs'] ) ) {
 			$this->write_relationship( $pages['faqs'], 'spp_faq_ids', $faqs );
 		}
-		$service_values = array_values( $services );
-		foreach ( $services as $id ) {
-			$this->write_relationship( $id, 'spp_related_service_ids', array_values( array_filter( array_slice( $service_values, 0, 4 ), function ( $related ) use ( $id ) { return $related !== $id; } ) ) );
+		$related = array(
+			'residential-painting-melbourne' => array( 'interior-painting-melbourne', 'exterior-painting-melbourne', 'roof-painting-melbourne', 'plaster-repairs-melbourne' ),
+			'commercial-painting-melbourne' => array( 'interior-painting-melbourne', 'exterior-painting-melbourne', 'plaster-repairs-melbourne' ),
+			'interior-painting-melbourne' => array( 'residential-painting-melbourne', 'plaster-repairs-melbourne', 'wallpaper-removal-melbourne' ),
+			'exterior-painting-melbourne' => array( 'residential-painting-melbourne', 'roof-painting-melbourne', 'fence-painting-melbourne', 'deck-painting-staining-melbourne' ),
+			'roof-painting-melbourne' => array( 'exterior-painting-melbourne', 'residential-painting-melbourne' ),
+			'fence-painting-melbourne' => array( 'exterior-painting-melbourne', 'deck-painting-staining-melbourne', 'residential-painting-melbourne' ),
+			'deck-painting-staining-melbourne' => array( 'fence-painting-melbourne', 'exterior-painting-melbourne', 'residential-painting-melbourne' ),
+			'wallpaper-removal-melbourne' => array( 'interior-painting-melbourne', 'plaster-repairs-melbourne', 'residential-painting-melbourne' ),
+			'plaster-repairs-melbourne' => array( 'interior-painting-melbourne', 'wallpaper-removal-melbourne', 'residential-painting-melbourne' ),
+		);
+		foreach ( $services as $slug => $id ) {
+			$ids = array_values( array_filter( array_map( function ( $related_slug ) use ( $services ) {
+				return isset( $services[ $related_slug ] ) ? $services[ $related_slug ] : 0;
+			}, $related[ $slug ] ) ) );
+			$this->replace_managed_relationship( $id, 'spp_related_service_ids', $ids );
 		}
+	}
+
+	private function clear_managed_relationship( $post_id, $key ) {
+		if ( get_post_meta( $post_id, '_spp_client_modified_at', true ) ) {
+			return;
+		}
+		delete_post_meta( $post_id, $key );
+	}
+
+	private function replace_managed_relationship( $post_id, $key, $ids ) {
+		if ( get_post_meta( $post_id, '_spp_client_modified_at', true ) ) {
+			return;
+		}
+		update_post_meta( $post_id, $key, array_map( 'absint', $ids ) );
 	}
 
 	private function write_relationship( $post_id, $key, $ids ) {
@@ -450,7 +502,24 @@ class SPP_Content_Migration {
 	}
 
 	private function category_gallery( $category ) {
-		$roots = in_array( $category, array( 'residential', 'roof', 'wallpaper', 'plaster' ), true )
+		$placeholder_subjects = array(
+			'residential' => 'Residential painting',
+			'roof'        => 'Roof painting',
+			'wallpaper'   => 'Wallpaper removal',
+			'plaster'     => 'Plaster repairs',
+		);
+		$subjects = array(
+			'commercial' => 'Commercial painting',
+			'interior'   => 'Interior painting',
+			'exterior'   => 'Exterior painting',
+			'fence'      => 'Fence painting',
+			'outdoor'    => 'Outdoor timber painting',
+		);
+		$is_placeholder = isset( $placeholder_subjects[ $category ] );
+		$subject = $is_placeholder
+			? $placeholder_subjects[ $category ]
+			: ( isset( $subjects[ $category ] ) ? $subjects[ $category ] : ucfirst( $category ) . ' painting' );
+		$roots = $is_placeholder
 			? array( 'generated/' . $category )
 			: array( 'client/projects/' . $category );
 		$items = array();
@@ -461,15 +530,24 @@ class SPP_Content_Migration {
 					continue;
 				}
 				$relative = $relative_dir . '/' . basename( $file );
-				$id = $this->import_asset( $relative, ucfirst( $category ) . ' painting project by Superior Plus Painting' );
+				$alt = $is_placeholder
+					? $subject . ' showcase placeholder'
+					: $subject . ' project by Superior Plus Painting';
+				$id = $this->import_asset( $relative, $alt );
 				if ( $id ) {
-					$items[] = array( 'attachment_id' => $id, 'type' => 'image', 'alt' => ucfirst( $category ) . ' painting project by Superior Plus Painting', 'object_position' => '50% 50%' );
+					$items[] = array(
+						'attachment_id' => $id,
+						'type' => 'image',
+						'alt' => $alt,
+						'object_position' => '50% 50%',
+						'is_placeholder' => $is_placeholder,
+					);
 				}
 			}
 			foreach ( glob( $directory . '/*-video-*-poster.webp' ) ?: array() as $poster_file ) {
 				$poster_relative = $relative_dir . '/' . basename( $poster_file );
 				$video_relative = preg_replace( '/-poster\.webp$/', '.mp4', $poster_relative );
-				$alt = ucfirst( $category ) . ' painting project video by Superior Plus Painting';
+				$alt = $subject . ' project video by Superior Plus Painting';
 				$video_id = $this->import_remote_video( $video_relative, $alt );
 				$poster_id = $this->import_asset( $poster_relative, $alt . ' poster' );
 				if ( $video_id ) {
@@ -602,7 +680,7 @@ class SPP_Content_Migration {
 						array( 'title' => 'Email address', 'text' => 'you@email.com' ), array( 'title' => 'Suburb', 'text' => 'Your suburb' ),
 						array( 'title' => 'Property address', 'text' => 'Street address' ), array( 'title' => 'Project details', 'text' => 'What would you like painted or repaired?' ),
 					),
-					'spp_contact_form_note' => 'No obligation. Form delivery and privacy consent must be connected before launch.',
+					'spp_contact_form_note' => 'No obligation. Form delivery and privacy consent must be confirmed before launch.',
 					'spp_seo_title' => 'Get a Free Quote', 'spp_seo_description' => 'Contact Superior Plus Painting for a free residential, commercial or property-painting quote across Melbourne.',
 				),
 			),

@@ -1,48 +1,51 @@
 # Superior Plus Painting — QA Report
 
-Run date: 18 July 2026
+Run date: 24 July 2026
 
 ## Result
 
-**PASS — 507 checks, 0 failures**
+**PASS — WordPress parity: 747 checks, 0 failures**
 
-- 15 routes tested
-- 3 viewports per route: desktop (1440 × 1000), tablet (768 × 1024), and mobile (390 × 844)
-- Production build tested from the generated `dist` directory
-- Microsoft Edge used as the browser engine through Playwright
+- All 15 approved routes tested against a disposable real WordPress runtime.
+- Three viewports per route: desktop (1440 × 1000), tablet (820 × 1000), and mobile (390 × 844).
+- All 15 desktop pixel comparisons remained within the strict 5% perceptual-difference threshold.
+- The same packaged React bundle remains available as a local fallback when the content API is unavailable.
+- Microsoft Edge was used through Playwright.
 
 ## Automated coverage
 
-Each route was checked for:
+Every route was checked for the exact H1, heading order, section order, visible
+text, images, videos, links, buttons, React header/footer, responsive overflow,
+runtime errors and basic keyboard semantics. The suite also verified:
 
-- exactly one correct H1;
-- a unique page title and useful meta description;
-- canonical metadata and valid JSON-LD structured data;
-- successfully loaded images with non-empty alternative text;
-- named buttons and basic accessibility semantics;
-- no page-level JavaScript errors;
-- no unintended horizontal overflow.
+- the Services overview plus all nine service dropdown links;
+- FAQ accordion state;
+- progressive gallery expansion from 8 to 22 items;
+- lightbox open and Escape-to-close behaviour;
+- the first-focus skip link;
+- reduced-motion behaviour;
+- complete fallback rendering with the WordPress API deliberately disabled;
+- absence of Elementor/UAE public markup.
 
-The suite also exercised:
+## Import verification
 
-- mobile menu navigation to Services;
-- mobile Services submenu visibility and service-page navigation;
-- progressive client-gallery expansion, video lightbox mounting and close behavior;
-- FAQ accordion interaction and `aria-expanded` state;
-- contact-form validation and success state;
-- related-service navigation.
+The approved importer completed with exactly 6 pages, 9 services, 10 FAQs,
+4 testimonials and 9 projects. Repeated imports remained count-stable. An atomic
+migration lock prevents overlapping requests, and later client-modified records
+remain protected.
 
-## Live deployment smoke test
+## Known launch dependencies
 
-GitHub Pages workflow `29633841712` completed successfully for commit `ba6699c`. The deployed desktop homepage and mobile FAQ route both returned HTTP 200 with correct page metadata and headings, zero broken images, zero page errors, and no horizontal overflow.
+Rene must still confirm the production quote-recipient email address and final
+privacy/consent wording. Phase 9 update/recovery testing and the final staging
+handoff have not yet been completed.
 
-## Known release dependencies
-
-The visual form flow is tested, but real message delivery remains pending selection of an email/form backend. Privacy wording and client-confirmed business details also remain open in `BUILD_CHECKLIST.md`.
-
-Run the checks again with:
+Run the core checks again with:
 
 ```powershell
 npm run build
 npm run qa
+php scripts/validate-wordpress-theme.php
+php scripts/validate-wordpress-plugin.php
+node scripts/qa-phase8-bundle-parity.mjs
 ```

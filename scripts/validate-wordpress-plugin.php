@@ -77,6 +77,7 @@ $checks = array(
 		'_spp_source_hash',
 		'_spp_source_asset',
 		'spp_content_migration_report',
+		'spp_content_migration_lock',
 		'spp_quote_form',
 		'wp_mail',
 		'get_transient',
@@ -123,6 +124,6 @@ $result = array(
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || '0.6.0' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || '0.7.0' !== $result['plugin_version'] ) {
 	exit( 1 );
 }

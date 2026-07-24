@@ -176,7 +176,7 @@ function Commercial({fields}) {
 
 function Projects({fields,projectItems}) {
   const selectedIds=Array.isArray(fields?.home_project_ids)?fields.home_project_ids.map(String):[]
-  const selected=selectedIds.length?projectItems.filter(item=>selectedIds.includes(String(item.id))):projectItems
+  const selected=selectedIds.length?projectItems.filter(item=>selectedIds.includes(String(item.id))):[]
   const cards=selected.length?selected.slice(0,3).map((project,index)=>({
     title:project.title,
     type:project.project_type||'Superior Plus project · Melbourne',
@@ -211,7 +211,7 @@ function Areas({fields,serviceAreas}) {
 function Testimonials({fields,items}) {
   const [index,setIndex]=useState(0)
   const selectedIds=Array.isArray(fields?.home_testimonial_ids)?fields.home_testimonial_ids.map(String):[]
-  const displayed=selectedIds.length?items.filter(item=>selectedIds.includes(String(item.id))):items
+  const displayed=selectedIds.length?items.filter(item=>selectedIds.includes(String(item.id))):testimonials
   const safeItems=displayed.length?displayed:testimonials
   const item=safeItems[index%safeItems.length]
   return <section className="section testimonials"><div className="container testimonial-layout"><Reveal><Eyebrow>Kind words</Eyebrow><h2>Loved by<br/><em>Melbourne locals.</em></h2><div className="slider-controls"><button onClick={()=>setIndex((index-1+safeItems.length)%safeItems.length)} aria-label="Previous review"><ChevronLeft/></button><span>{String(index%safeItems.length+1).padStart(2,'0')} / {String(safeItems.length).padStart(2,'0')}</span><button onClick={()=>setIndex((index+1)%safeItems.length)} aria-label="Next review"><ChevronRight/></button></div></Reveal><div className="quote-card"><div className="stars">{Array.from({length:item.rating||5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><AnimatePresence mode="wait"><motion.div key={index} initial={{opacity:0,y:15}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-15}}><blockquote>“{item.quote}”</blockquote><div className="quote-by"><b>{item.name||item.label}</b><span>{item.project||item.label}</span></div></motion.div></AnimatePresence></div></div></section>

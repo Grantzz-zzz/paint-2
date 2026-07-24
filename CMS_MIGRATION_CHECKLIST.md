@@ -11,12 +11,12 @@ Legend: `[ ]` not started · `[-]` in progress · `[x]` complete · `[!]` client
 ## Non-negotiable acceptance rule
 
 - [x] The existing React site is the visual and content baseline
-- [ ] Every existing page, section, word, image, gallery and interaction remains present
-- [ ] Desktop, tablet and mobile layouts remain visually equivalent to the reference
-- [ ] WordPress controls content only; it does not control the approved visual design
-- [ ] The client cannot accidentally change fonts, colours, spacing, shapes, animations or responsive rules
-- [ ] Existing content always has a local fallback if the WordPress API is temporarily unavailable
-- [ ] No migration work is pushed to the client's live WordPress site before staging approval
+- [x] Every existing page, section, word, image, gallery and interaction remains present
+- [x] Desktop, tablet and mobile layouts remain visually equivalent to the reference
+- [x] WordPress controls content only; it does not control the approved visual design
+- [x] The client cannot accidentally change fonts, colours, spacing, shapes, animations or responsive rules
+- [x] Existing content always has a local fallback if the WordPress API is temporarily unavailable
+- [x] No migration work is pushed to the client's live WordPress site before staging approval
 
 ## Phase 0 — Baseline and preservation
 
@@ -176,23 +176,23 @@ non-cached preview through the exact React design.
 
 ## Phase 8 — Automated parity QA
 
-- [ ] Compare all 15 WordPress pages against the GitHub Pages baseline
-- [ ] Test desktop at 1440px
-- [ ] Test tablet at 820px
-- [ ] Test mobile at 390px
-- [ ] Verify one H1 per page
-- [ ] Verify exact section count and order per page
-- [ ] Verify text parity
-- [ ] Verify image and video parity
-- [ ] Verify menu and nine-item Services dropdown
-- [ ] Verify accordions, sliders, galleries and lightboxes
-- [ ] Verify all telephone, email, CTA and internal links
-- [ ] Verify keyboard navigation and focus states
-- [ ] Verify reduced-motion behaviour
-- [ ] Verify no horizontal overflow
-- [ ] Verify no broken local or API-loaded media
-- [ ] Verify no Elementor/UAE header, footer, CSS or JavaScript is rendered
-- [ ] Verify fallback content by deliberately disabling the API
+- [x] Compare all 15 WordPress pages against the GitHub Pages baseline
+- [x] Test desktop at 1440px
+- [x] Test tablet at 820px
+- [x] Test mobile at 390px
+- [x] Verify one H1 per page
+- [x] Verify exact section count and order per page
+- [x] Verify text parity
+- [x] Verify image and video parity
+- [x] Verify menu and nine-item Services dropdown
+- [x] Verify accordions, sliders, galleries and lightboxes
+- [x] Verify all telephone, email, CTA and internal links
+- [x] Verify keyboard navigation and focus states
+- [x] Verify reduced-motion behaviour
+- [x] Verify no horizontal overflow
+- [x] Verify no broken local or API-loaded media
+- [x] Verify no Elementor/UAE header, footer, CSS or JavaScript is rendered
+- [x] Verify fallback content by deliberately disabling the API
 
 ## Phase 9 — Update and recovery safety
 
@@ -221,9 +221,8 @@ non-cached preview through the exact React design.
 
 ## Current focus
 
-`Phase 7 - staging configuration.` The secure quote endpoint, both React forms,
-server-side validation, layered spam controls, email delivery, delivery-only
-success state, retry handling and non-personal diagnostics are implemented and
-tested locally. Before production, Rene must confirm the recipient email address
-and final consent/privacy wording. Nothing has been changed on staging or
-production.
+`Phase 9 - update and recovery safety.` Phase 8 passed against a disposable real
+WordPress runtime: 15 routes at 1440px, 820px and 390px, 747 assertions, zero
+failures and 15/15 pixel comparisons within the strict threshold. Rene still
+needs to confirm the production quote recipient and final privacy wording before
+launch. Nothing has been changed on staging or production.

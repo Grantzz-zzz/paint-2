@@ -222,7 +222,7 @@ class SPP_Content_REST {
 					'id'           => (int) $post->ID,
 					'path'         => '/services/' . $post->post_name,
 					'template_key' => 'service',
-					'title'        => get_the_title( $post ),
+					'title'        => $this->plain_title( $post ),
 					'seo'          => $this->seo( $post ),
 					'hero'         => $service['hero'],
 					'content'      => $service,
@@ -242,7 +242,7 @@ class SPP_Content_REST {
 					'id'           => (int) $post->ID,
 					'path'         => '/projects/' . $post->post_name,
 					'template_key' => 'project',
-					'title'        => get_the_title( $post ),
+					'title'        => $this->plain_title( $post ),
 					'seo'          => $this->seo( $post ),
 					'hero'         => $this->hero( $post ),
 					'content'      => $project,
@@ -269,7 +269,7 @@ class SPP_Content_REST {
 				'id'           => (int) $page->ID,
 				'path'         => '' === $path ? '/' : '/' . $path,
 				'template_key' => $template_key,
-				'title'        => get_the_title( $page ),
+				'title'        => $this->plain_title( $page ),
 				'seo'          => $this->seo( $page ),
 				'hero'         => $this->hero( $page ),
 				'content'      => array(
@@ -360,7 +360,7 @@ class SPP_Content_REST {
 				'is_preview'   => true,
 				'path'         => $path,
 				'template_key' => $template,
-				'title'        => get_the_title( $post ),
+				'title'        => $this->plain_title( $post ),
 				'seo'          => $this->seo( $post ),
 				'hero'         => $this->hero( $post ),
 				'content'      => $content,
@@ -379,7 +379,7 @@ class SPP_Content_REST {
 			function ( $post ) {
 				return array(
 					'id'       => (int) $post->ID,
-					'question' => get_the_title( $post ),
+					'question' => $this->plain_title( $post ),
 					'answer'   => wp_kses_post( $post->post_content ),
 				);
 			},
@@ -468,7 +468,7 @@ class SPP_Content_REST {
 		$data = array(
 			'id'    => (int) $post->ID,
 			'slug'  => $post->post_name,
-			'title' => get_the_title( $post ),
+			'title' => $this->plain_title( $post ),
 			'short' => wp_strip_all_tags( $short ),
 			'url'   => get_permalink( $post ),
 		);
@@ -511,7 +511,7 @@ class SPP_Content_REST {
 		return array(
 			'id'               => (int) $post->ID,
 			'slug'             => $post->post_name,
-			'title'            => get_the_title( $post ),
+			'title'            => $this->plain_title( $post ),
 			'project_type'     => get_post_meta( $post->ID, 'spp_project_type', true ),
 			'featured_media'   => $this->media( $featured_id ),
 			'object_position'  => get_post_meta( $post->ID, 'spp_object_position', true ) ?: '50% 50%',
@@ -537,7 +537,7 @@ class SPP_Content_REST {
 		}
 		return array(
 			'eyebrow' => get_post_meta( $post->ID, 'spp_eyebrow', true ),
-			'title'    => get_post_meta( $post->ID, 'spp_hero_title', true ) ?: get_the_title( $post ),
+			'title'    => get_post_meta( $post->ID, 'spp_hero_title', true ) ?: $this->plain_title( $post ),
 			'accent'   => get_post_meta( $post->ID, 'spp_accent', true ),
 			'intro'    => get_post_meta( $post->ID, 'spp_hero_intro', true ) ?: wp_strip_all_tags( $post->post_excerpt ?: $post->post_content ),
 			'image'    => $this->media( $image_id, get_post_meta( $post->ID, 'spp_hero_image_alt', true ) ),
@@ -553,7 +553,7 @@ class SPP_Content_REST {
 	private function seo( $post ) {
 		$social_id = absint( get_post_meta( $post->ID, 'spp_social_image_id', true ) );
 		return array(
-			'title'         => get_post_meta( $post->ID, 'spp_seo_title', true ) ?: get_the_title( $post ),
+			'title'         => get_post_meta( $post->ID, 'spp_seo_title', true ) ?: $this->plain_title( $post ),
 			'description'   => get_post_meta( $post->ID, 'spp_seo_description', true ) ?: wp_strip_all_tags( $post->post_excerpt ),
 			'canonical_url' => get_post_meta( $post->ID, 'spp_canonical_url', true ) ?: get_permalink( $post ),
 			'social_image'  => $this->media( $social_id ),
@@ -677,7 +677,7 @@ class SPP_Content_REST {
 			}
 			$items[] = array(
 				'id'    => (int) $page->ID,
-				'title' => get_the_title( $page ),
+				'title' => $this->plain_title( $page ),
 				'path'  => '/' . trim( get_page_uri( $page ), '/' ),
 			);
 		}
@@ -733,13 +733,35 @@ class SPP_Content_REST {
 	 * @return WP_Post[]
 	 */
 	private function published_posts( $post_type ) {
-		return get_posts(
+		$posts = get_posts(
 			array(
 				'post_type'      => $post_type,
 				'post_status'    => 'publish',
 				'posts_per_page' => -1,
 				'orderby'        => array( 'menu_order' => 'ASC', 'title' => 'ASC' ),
 			)
+		);
+		$unique = array();
+		foreach ( $posts as $post ) {
+			$key = $post->post_name ?: (string) $post->ID;
+			if ( ! isset( $unique[ $key ] ) ) {
+				$unique[ $key ] = $post;
+			}
+		}
+		return array_values( $unique );
+	}
+
+	/**
+	 * Return a display-safe, decoded post title for JSON consumers.
+	 *
+	 * @param WP_Post $post Post object.
+	 * @return string
+	 */
+	private function plain_title( $post ) {
+		return html_entity_decode(
+			wp_strip_all_tags( get_the_title( $post ) ),
+			ENT_QUOTES | ENT_HTML5,
+			'UTF-8'
 		);
 	}
 
@@ -754,6 +776,7 @@ class SPP_Content_REST {
 		$items     = $menu_id ? wp_get_nav_menu_items( $menu_id ) : array();
 		$result    = array();
 		$children  = array();
+		$seen      = array();
 		foreach ( (array) $items as $item ) {
 			if ( (int) $item->menu_item_parent ) {
 				$children[ (int) $item->menu_item_parent ][] = $item;
@@ -763,6 +786,11 @@ class SPP_Content_REST {
 			if ( (int) $item->menu_item_parent ) {
 				continue;
 			}
+			$normalized_url = untrailingslashit( $item->url );
+			if ( isset( $seen[ $normalized_url ] ) ) {
+				continue;
+			}
+			$seen[ $normalized_url ] = true;
 			$entry = array(
 				'id'       => (int) $item->ID,
 				'label'    => $item->title,
@@ -775,7 +803,7 @@ class SPP_Content_REST {
 			if ( false !== stripos( $item->title, 'service' ) || untrailingslashit( $item->url ) === untrailingslashit( home_url( '/services' ) ) ) {
 				$entry['children'] = array_map(
 					function ( $service ) {
-						return array( 'id' => (int) $service->ID, 'label' => get_the_title( $service ), 'url' => get_permalink( $service ) );
+						return array( 'id' => (int) $service->ID, 'label' => $this->plain_title( $service ), 'url' => get_permalink( $service ) );
 					},
 					$this->published_posts( 'spp_service' )
 				);
@@ -801,7 +829,7 @@ class SPP_Content_REST {
 		}
 		$services = array_map(
 			function ( $service ) {
-				return array( 'label' => get_the_title( $service ), 'url' => get_permalink( $service ) );
+				return array( 'label' => $this->plain_title( $service ), 'url' => get_permalink( $service ) );
 			},
 			$this->published_posts( 'spp_service' )
 		);
