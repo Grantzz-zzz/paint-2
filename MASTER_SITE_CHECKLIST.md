@@ -158,8 +158,8 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 - [x] Add a Contact service-area map without inventing a street address
 - [x] Build and run automated route/content QA
 - [x] Perform local desktop and mobile smoke tests
-- [ ] Commit and push the verified GitHub Pages update
-- [ ] Confirm the GitHub Pages deployment
+- [x] Commit and push the verified GitHub Pages update
+- [x] Confirm the GitHub Pages deployment
 
 ### Batch 2 — Content proof and photography
 
