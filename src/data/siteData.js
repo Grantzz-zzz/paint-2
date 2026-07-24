@@ -12,12 +12,12 @@ export const suburbs = [
 ]
 
 export const masterProcess = [
-  { title: 'Free consultation & quote', text: 'We inspect the site, understand your goals, discuss colours and finishes, and provide a detailed no-obligation quotation.' },
-  { title: 'Surface preparation', text: 'We clean, scrape, sand, fill, repair, seal and prime as required to create the right foundation.' },
-  { title: 'Protecting your property', text: 'Furniture, floors, windows, gardens and surrounding areas are carefully covered and masked.' },
-  { title: 'Professional painting', text: 'Premium coatings are applied with brushes, rollers or spray equipment using proven techniques.' },
+  { title: 'Free consultation & quote', text: 'We inspect the site, understand your goals, assess surface conditions, discuss colours and finishes, and provide a detailed no-obligation quotation with transparent pricing.' },
+  { title: 'Surface preparation', text: 'We clean or pressure wash, scrape, sand, fill cracks and holes, complete suitable minor plaster or timber repairs, seal gaps and prime bare areas as required.' },
+  { title: 'Protecting your property', text: 'Furniture, floors, windows, landscaping and surrounding areas are carefully protected with drop sheets, masking materials and suitable coverings.' },
+  { title: 'Professional painting', text: 'Premium coatings are applied with brushes, rollers or spray equipment where appropriate, with attention to even coverage, crisp lines and manufacturer drying guidance.' },
   { title: 'Quality inspection', text: 'Every surface is checked and any required touch-ups are completed before sign-off.' },
-  { title: 'Clean-up & handover', text: 'We remove coverings, clean the work area and complete a final walkthrough with you.' },
+  { title: 'Clean-up & handover', text: 'We remove coverings, clean the work area and complete a final walkthrough so you can review the finished result before handover.' },
 ]
 
 export const testimonials = [
@@ -64,12 +64,12 @@ export const servicePages = {
   },
   'commercial-painting-melbourne': {
     eyebrow: 'Commercial painting specialists', title: 'Commercial Painting', accent: 'planned around business.', tone: 'green', image: stock.commercial,
-    intro: 'We deliver reliable commercial painting across Melbourne for businesses, builders, property managers, body corporates and industrial facilities. Every project is carefully planned to reduce disruption while achieving a professional, durable result.',
+    intro: 'We deliver reliable commercial painting across Melbourne for businesses, builders, developers, property managers, body corporates and industrial facilities. From a small retail fit-out to an office building or industrial warehouse, every project is carefully planned to reduce disruption while achieving a professional, durable result.',
     scopeTitle: 'Spaces and industries we paint',
-    scope: ['Offices and workplaces', 'Retail shops and shopping centres', 'Warehouses and factories', 'Medical centres and clinics', 'Schools and childcare centres', 'Restaurants and cafés', 'Apartment complexes', 'Body corporate and strata', 'Interior and exterior commercial painting', 'Scheduled maintenance painting'],
+    scope: ['Offices and workplaces', 'Retail shops and shopping centres', 'Warehouses and factories', 'Medical centres and clinics', 'Schools and childcare centres', 'Aged care facilities', 'Restaurants and cafés', 'Apartment complexes', 'Body corporate and strata', 'Interior and exterior commercial painting', 'Scheduled maintenance painting'],
     process: ['Site inspection and detailed quote', 'Planning around business hours', 'Preparation, repairs and priming', 'Application of commercial coatings', 'Inspection, touch-ups and clean-up'],
     why: 'Our painters maintain organised work sites, communicate clearly and work efficiently to reduce downtime. We select durable paint systems suited to busy commercial environments and the demands of each surface.',
-    benefits: ['Flexible project scheduling', 'Minimal operational disruption', 'Consistent professional finish', 'Clear communication throughout'],
+    benefits: ['Flexible project scheduling', 'Minimal operational disruption', 'Safe, organised work sites', 'Durable commercial finishes', 'Clear communication throughout', 'Dependable project delivery'],
     related: ['interior-painting-melbourne', 'exterior-painting-melbourne', 'plaster-repairs-melbourne'],
   },
   'interior-painting-melbourne': {
@@ -89,7 +89,7 @@ export const servicePages = {
     scope: ['Weatherboards', 'Brick and rendered homes', 'Cladding', 'Fascia boards and eaves', 'Gutters and downpipes', 'Garage and front doors', 'Window frames and timber trims', 'Pergolas and outdoor structures', 'Full exterior house repaints'],
     process: ['Site inspection and quote', 'Pressure wash and clean', 'Scrape, sand and complete minor repairs', 'Prime bare surfaces', 'Apply premium exterior coatings', 'Inspect, touch up and clean'],
     why: 'Proper preparation is the foundation of a long-lasting exterior. We use proven techniques and quality materials, communicate clearly, work safely and leave every property clean and tidy.',
-    benefits: ['Weather and UV protection', 'Longer material life', 'Reduced maintenance', 'Stronger street appeal and value'],
+    benefits: ['Weather and UV protection', 'Longer material life', 'Reduced maintenance', 'Stronger street appeal and value', 'Suitable reflective coating options'],
     related: ['residential-painting-melbourne', 'roof-painting-melbourne', 'fence-painting-melbourne', 'deck-painting-staining-melbourne'],
   },
   'roof-painting-melbourne': {
@@ -119,12 +119,12 @@ export const servicePages = {
     scope: ['Timber deck painting', 'Deck staining and re-staining', 'Deck oiling', 'New timber finishes', 'Cleaning and pressure washing', 'Sanding and preparation', 'Suitable minor timber repairs', 'Pergola and outdoor timber coating'],
     process: ['Inspection and written quote', 'Clean dirt, mould and old coatings', 'Sand the timber surface', 'Complete suitable minor repairs', 'Apply stain, oil or paint', 'Inspect and clean the site'],
     why: 'Professional equipment, quality products and methodical preparation help create a durable result that suits the timber and Melbourne’s changing weather.',
-    benefits: ['Moisture and UV protection', 'Enhanced natural grain', 'Improved outdoor presentation', 'Longer timber life'],
+    benefits: ['Moisture and UV protection', 'Enhanced natural grain', 'Improved outdoor presentation', 'Longer timber life', 'Safer, better-kept entertaining areas', 'Improved property appeal and value'],
     related: ['fence-painting-melbourne', 'exterior-painting-melbourne', 'residential-painting-melbourne'],
   },
   'wallpaper-removal-melbourne': {
     eyebrow: 'A clean start for your walls', title: 'Wallpaper Removal', accent: 'ready for what comes next.', tone: 'teal', image: stock.wallpaper,
-    intro: 'Professional wallpaper removal protects the plaster underneath and creates the smooth foundation required for a quality repaint. We remove old coverings, adhesive residue and minor surface damage with care.',
+    intro: 'Professional wallpaper removal for homes, apartments, offices and commercial properties protects the plaster underneath and creates the smooth foundation required for a quality repaint. We remove old coverings, adhesive residue and minor surface damage with care.',
     scopeTitle: 'Wallpaper removal and preparation',
     scope: ['Wallpaper stripping', 'Vinyl wallpaper removal', 'Feature-wall removal', 'Adhesive and glue removal', 'Steam removal where appropriate', 'Surface cleaning', 'Minor plaster repairs', 'Sanding and priming before paint'],
     process: ['Inspect and quote', 'Protect floors and furniture', 'Use the suitable removal method', 'Remove adhesive and clean', 'Repair, sand and prepare', 'Prime ready for the next finish'],
@@ -134,7 +134,7 @@ export const servicePages = {
   },
   'plaster-repairs-melbourne': {
     eyebrow: 'Repair first. Finish beautifully.', title: 'Plaster Repairs', accent: 'smooth from every angle.', tone: 'cream', image: stock.plaster,
-    intro: 'Damaged plaster affects both the appearance and durability of a painted finish. We restore walls and ceilings across Melbourne so surfaces are smooth, strong and properly prepared for painting.',
+    intro: 'Damaged plaster affects both the appearance and durability of a painted finish. We restore walls and ceilings in homes, apartments, commercial buildings and investment properties across Melbourne so surfaces are smooth, strong and properly prepared for painting.',
     scopeTitle: 'Wall and ceiling repairs',
     scope: ['Wall and ceiling cracks', 'Hole patching', 'Water-damaged plaster', 'Cornice repairs', 'Minor plasterboard replacement', 'Joint setting and sanding', 'Pre-paint surface preparation', 'Renovation touch-ups'],
     process: ['Inspect and quote', 'Assess the repair method', 'Remove loose material', 'Patch, set and sand', 'Prime and prepare for paint', 'Complete a final inspection'],

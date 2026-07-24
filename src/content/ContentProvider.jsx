@@ -7,6 +7,7 @@ import {
   testimonials as fallbackTestimonials,
 } from '../data/siteData'
 import { asset } from '../utils/assets'
+import { toInternalAppPath } from '../utils/routes'
 
 /**
  * @typedef {{url:string, alt?:string, srcset?:string, sizes?:string}} SppMedia
@@ -198,14 +199,7 @@ export function pairItems(items, fallback = []) {
 }
 
 export function toAppPath(url, fallback = '/') {
-  if (!url) return fallback
-  if (String(url).startsWith('#')) return String(url).slice(1) || '/'
-  try {
-    const parsed = new URL(url, window.location.origin)
-    return parsed.origin === window.location.origin ? (parsed.pathname.replace(/\/+$/, '') || '/') : parsed.href
-  } catch {
-    return String(url).startsWith('/') ? (String(url).replace(/\/+$/, '') || '/') : fallback
-  }
+  return toInternalAppPath(url, fallback)
 }
 
 function normalizeServices(incoming) {

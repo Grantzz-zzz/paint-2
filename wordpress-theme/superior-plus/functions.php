@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPP_VERSION', '2.4.0' );
+define( 'SPP_VERSION', '2.4.2' );
 define( 'SPP_PATH', get_template_directory() );
 define( 'SPP_URI', get_template_directory_uri() );
 
@@ -23,6 +23,14 @@ if ( ! defined( 'SPP_CONTENT_VERSION' ) ) {
 }
 require_once SPP_PATH . '/inc/customizer.php';
 require_once SPP_PATH . '/inc/installer.php';
+
+function spp_router_basename() {
+	$base_path = untrailingslashit( (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH ) );
+	if ( false !== strpos( (string) get_option( 'permalink_structure' ), 'index.php' ) ) {
+		$base_path .= '/index.php';
+	}
+	return $base_path;
+}
 
 function spp_theme_setup() {
 	load_theme_textdomain( 'superior-plus', SPP_PATH . '/languages' );
@@ -70,7 +78,7 @@ function spp_enqueue_assets() {
 	wp_enqueue_script( 'spp-react-app', SPP_URI . '/react-dist/' . ltrim( $entry['file'], '/' ), array(), SPP_VERSION, true );
 	wp_add_inline_script(
 		'spp-react-app',
-		'window.__SPP_SITE_URL__=' . wp_json_encode( trailingslashit( home_url( '/' ) ) ) . ';window.__SPP_CONTENT_API__=' . wp_json_encode( untrailingslashit( rest_url( 'spp/v1' ) ) ) . ';window.__SPP_REST_NONCE__=' . wp_json_encode( wp_create_nonce( 'wp_rest' ) ) . ';',
+		'window.__SPP_SITE_URL__=' . wp_json_encode( trailingslashit( home_url( '/' ) ) ) . ';window.__SPP_ROUTER_BASE__=' . wp_json_encode( spp_router_basename() ) . ';window.__SPP_CONTENT_API__=' . wp_json_encode( untrailingslashit( rest_url( 'spp/v1' ) ) ) . ';window.__SPP_REST_NONCE__=' . wp_json_encode( wp_create_nonce( 'wp_rest' ) ) . ';',
 		'before'
 	);
 }

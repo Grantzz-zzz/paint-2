@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
+import { routerBasePath } from './utils/routes'
 
 const HomePage=lazy(()=>import('./App'))
 const ServicePage=lazy(()=>import('./pages/ServicePage'))
@@ -14,7 +15,12 @@ const ProjectPage=lazy(()=>import('./pages/DynamicPages').then(m=>({default:m.Pr
 export default function RouterApp() {
   const cleanRoutes=Boolean(window.__SPP_CONTENT_API__)
   const Router=cleanRoutes?BrowserRouter:HashRouter
-  const sitePath=cleanRoutes?new URL(window.__SPP_SITE_URL__||window.location.origin,window.location.origin).pathname.replace(/\/+$/,''):''
+  const sitePath=cleanRoutes?routerBasePath({
+    siteUrl:window.__SPP_SITE_URL__,
+    explicitBase:window.__SPP_ROUTER_BASE__,
+    pathname:window.location.pathname,
+    origin:window.location.origin,
+  }):''
   return <Router {...(cleanRoutes&&sitePath?{basename:sitePath}: {})}>
     <button className="skip-link" onClick={()=>document.getElementById('main-content')?.focus()}>Skip to main content</button>
     <Suspense fallback={<div className="route-loader" role="status"><span/>Loading page…</div>}><Routes>

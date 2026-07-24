@@ -1,3 +1,5 @@
+import { routerBasePath } from './routes'
+
 const moduleAssetBase = new URL('./', import.meta.url)
 
 export function asset(path) {
@@ -28,7 +30,12 @@ export const usesCleanRoutes = Boolean(window.__SPP_CONTENT_API__)
 export function publicRouteUrl(path = '/') {
   const normalized=`/${String(path).replace(/^\/+|\/+$/g,'')}`
   const route=normalized==='/'?'/':normalized
-  return usesCleanRoutes
-    ? new URL(route.replace(/^\//,''),siteUrl).href
-    : `${siteUrl}#${route}`
+  if(!usesCleanRoutes)return `${siteUrl}#${route}`
+  const base=routerBasePath({
+    siteUrl:window.__SPP_SITE_URL__,
+    explicitBase:window.__SPP_ROUTER_BASE__,
+    pathname:window.location.pathname,
+    origin:window.location.origin,
+  })
+  return `${window.location.origin}${base}${route==='/'?'':route}`
 }

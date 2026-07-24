@@ -129,14 +129,17 @@ function Hero({hero,fields}) {
   const navigate = useNavigate()
   const image=mediaUrl(hero?.image,asset('hero-painter.png'))
   const trustPoints=textItems(fields?.home_trust_points,['Fully insured','Free colour advice','Melbourne-wide'])
+  const title=hero?.title||'Professional painters'
+  const accent=hero?.accent||'in Melbourne’s'
+  const closing=fields?.home_hero_closing||'Eastern Suburbs.'
   return <section id="home" className="hero section-track">
     <div className="hero-bg"><img src={image} alt={hero?.image?.alt||'Professional painter applying a deep red finish in a modern Melbourne home'} loading="eager" decoding="async" fetchPriority="high" /></div>
     <div className="paint-ribbon ribbon-green"/><div className="paint-ribbon ribbon-gold"/>
     <div className="container hero-content">
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">
-        <Eyebrow>{hero?.eyebrow||'Melbourne painters who care'}</Eyebrow>
-        <h1>{hero?.title||'Made to feel'}<br/><em>{hero?.accent||'beautiful.'}</em><br/>Made to last.</h1>
-        <p>{hero?.intro||'Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.'}</p>
+        <Eyebrow>{hero?.eyebrow||'Melbourne’s eastern suburbs painting team'}</Eyebrow>
+        <h1 className="hero-title-seo">{title}<br/><em>{accent}</em><br/>{closing}</h1>
+        <p>{hero?.intro||'Professional residential and commercial painting across Melbourne’s eastern and south-eastern suburbs, delivered with careful preparation, honest advice and a finish made to last.'}</p>
         <div className="hero-buttons"><button className="btn" onClick={() => navigate('/contact')}>Get a free quote <ArrowRight size={18}/></button><button className="text-link" onClick={() => scrollTo('projects')}>See our work <span>↘</span></button></div>
         <div className="hero-trust">{trustPoints.map(item=><span key={item}><Check/> {item}</span>)}</div>
       </motion.div>
@@ -245,9 +248,9 @@ export default function App() {
     image:fields.hero_image||homeRoute.hero?.image,
   }:null
   useEffect(()=>{
-    const description=seo?.description||'Premium residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and quality workmanship.'
+    const description=seo?.description||'Professional residential and commercial painters across Melbourne’s eastern and south-eastern suburbs, delivering careful preparation and quality workmanship.'
     const canonical=publicRouteUrl('/')
-    const title=seo?.title||'Superior Plus Painting | Melbourne Painters'
+    const title=seo?.title||'Professional Painters in Melbourne’s Eastern Suburbs | Superior Plus Painting'
     document.title=title
     const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=description
     const link=document.querySelector('link[rel="canonical"]')||document.head.appendChild(Object.assign(document.createElement('link'),{rel:'canonical'}));link.href=canonical

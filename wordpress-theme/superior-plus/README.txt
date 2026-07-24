@@ -1,7 +1,7 @@
 === Superior Plus Painting ===
 Requires at least: 6.4
 Requires PHP: 8.0
-Stable tag: 2.4.0
+Stable tag: 2.4.2
 
 Exact WordPress delivery of the approved Superior Plus Painting React frontend.
 
@@ -9,7 +9,7 @@ Exact WordPress delivery of the approved Superior Plus Painting React frontend.
 
 1. Back up the WordPress site and use staging.
 2. Open Appearance > Themes > Add New > Upload Theme.
-3. Upload superior-plus-2.4.0.zip and activate it on staging only.
+3. Upload superior-plus-2.4.2.zip and activate it on staging only.
 4. Install and activate the separately packaged Superior Plus Content plugin.
 5. Clear WordPress, hosting and CDN caches.
 6. Test the main menu, Services dropdown and all pages.
@@ -27,6 +27,10 @@ images, galleries and page records without changing the React design. Version
 endpoint and only shows success after WordPress confirms email delivery.
 Version 2.4 includes the parity-verified React bundle used for the complete
 15-route WordPress comparison across desktop, tablet and mobile.
+Version 2.4.1 normalizes staging subdirectory links and supports WordPress
+`index.php` permalink structures without duplicated paths or false React 404s.
+Version 2.4.2 selects the normal staging basename on the homepage and the
+`index.php` basename only when the current WordPress URL actually uses it.
 
 == Bundled media ==
 

@@ -7,7 +7,7 @@ const pageErrors = []
 const failedResources = []
 
 const routes = [
-  ['/', 'Made to feel'],
+  ['/', 'Professional painters'],
   ['/about', 'Care in every coat'],
   ['/services', 'Painting & property services'],
   ['/our-process', 'Our Painting Process'],

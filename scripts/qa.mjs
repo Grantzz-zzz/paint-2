@@ -9,7 +9,7 @@ const origin = `http://127.0.0.1:${port}/`
 const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 
 const routes = [
-  ['/', 'Made to feel'],
+  ['/', 'Professional painters'],
   ['/about', 'Care in every coat'],
   ['/services', 'Painting & property services'],
   ['/services/residential-painting-melbourne', 'Residential Painting'],

@@ -8,6 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "qa": "node scripts/qa.mjs",
+    "qa:content": "node scripts/validate-pdf-content.mjs",
+    "qa:routes": "node scripts/validate-route-normalization.mjs",
     "qa:phase9": "node scripts/qa-phase9-lifecycle.mjs",
     "qa:phase9:uninstall": "node scripts/qa-phase9-lifecycle.mjs --uninstall",
     "media:process": "node scripts/process-client-media.mjs"

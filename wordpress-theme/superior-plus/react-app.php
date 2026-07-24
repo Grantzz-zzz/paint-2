@@ -23,7 +23,7 @@ $spp_canonical = spp_canonical_url_for_route( $spp_route );
 	<?php foreach ( $spp_styles as $spp_stylesheet ) : ?>
 		<link rel="stylesheet" href="<?php echo esc_url( SPP_URI . '/react-dist/' . ltrim( $spp_stylesheet, '/' ) ); ?>?ver=<?php echo esc_attr( SPP_VERSION ); ?>">
 	<?php endforeach; ?>
-	<script>window.__SPP_SITE_URL__=<?php echo wp_json_encode( trailingslashit( home_url( '/' ) ) ); ?>;window.__SPP_CONTENT_API__=<?php echo wp_json_encode( untrailingslashit( rest_url( 'spp/v1' ) ) ); ?>;window.__SPP_REST_NONCE__=<?php echo wp_json_encode( wp_create_nonce( 'wp_rest' ) ); ?>;window.__SPP_FORM_NONCE__=<?php echo wp_json_encode( wp_create_nonce( 'spp_quote_form' ) ); ?>;</script>
+	<script>window.__SPP_SITE_URL__=<?php echo wp_json_encode( trailingslashit( home_url( '/' ) ) ); ?>;window.__SPP_ROUTER_BASE__=<?php echo wp_json_encode( spp_router_basename() ); ?>;window.__SPP_CONTENT_API__=<?php echo wp_json_encode( untrailingslashit( rest_url( 'spp/v1' ) ) ); ?>;window.__SPP_REST_NONCE__=<?php echo wp_json_encode( wp_create_nonce( 'wp_rest' ) ); ?>;window.__SPP_FORM_NONCE__=<?php echo wp_json_encode( wp_create_nonce( 'spp_quote_form' ) ); ?>;</script>
 </head>
 <body <?php body_class( 'spp-react-frontend' ); ?>>
 <div id="root"></div>
