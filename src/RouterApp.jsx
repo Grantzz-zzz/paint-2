@@ -9,6 +9,8 @@ const ContactPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.Co
 const FAQsPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.FAQsPage})))
 const ProcessPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.ProcessPage})))
 const ServicesPage=lazy(()=>import('./pages/ContentPages').then(m=>({default:m.ServicesPage})))
+const ServiceAreasPage=lazy(()=>import('./pages/ServiceAreaPages').then(m=>({default:m.ServiceAreasPage})))
+const ServiceAreaPage=lazy(()=>import('./pages/ServiceAreaPages').then(m=>({default:m.ServiceAreaPage})))
 const DynamicContentPage=lazy(()=>import('./pages/DynamicPages').then(m=>({default:m.DynamicContentPage})))
 const ProjectPage=lazy(()=>import('./pages/DynamicPages').then(m=>({default:m.ProjectPage})))
 
@@ -28,6 +30,8 @@ export default function RouterApp() {
       <Route path="/about" element={<AboutPage/>}/>
       <Route path="/services" element={<ServicesPage/>}/>
       <Route path="/services/:slug" element={<ServicePage/>}/>
+      <Route path="/service-areas" element={<ServiceAreasPage/>}/>
+      <Route path="/service-areas/:slug" element={<ServiceAreaPage/>}/>
       <Route path="/our-process" element={<ProcessPage/>}/>
       <Route path="/faqs" element={<FAQsPage/>}/>
       <Route path="/contact" element={<ContactPage/>}/>

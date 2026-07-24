@@ -3,7 +3,9 @@ import { readFile } from 'node:fs/promises'
 const sourceFiles = [
   'src/App.jsx',
   'src/data/siteData.js',
+  'src/data/serviceAreas.js',
   'src/pages/ContentPages.jsx',
+  'src/pages/ServiceAreaPages.jsx',
 ]
 
 const source = (await Promise.all(sourceFiles.map(path => readFile(path, 'utf8'))))
@@ -12,6 +14,7 @@ const source = (await Promise.all(sourceFiles.map(path => readFile(path, 'utf8')
 
 const coverage = [
   ['Homepage requirement', ['professional painters', 'eastern suburbs', 'get a free quote']],
+  ['Local service-area requirement', ['service-areas', 'chadstone', 'mount waverley', 'glen waverley', 'dandenong', 'berwick']],
   ['About Superior Plus Painting', ['one of your most valuable investments', 'fully insured', 'free, no-obligation quotes']],
   ['Additional Services', ['caulking & gap sealing', 'tiling services', 'timber restoration', 'property maintenance']],
   ['Commercial Painting', ['aged care facilities', 'body corporate and strata', 'scheduled maintenance painting']],

@@ -53,7 +53,10 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 - [x] WebP project imagery
 - [x] Lazy-loaded gallery and page images
 - [x] Reduced-motion support
-- [ ] Run Lighthouse on Home, Services, one service page and Contact
+- [x] Run an initial mobile Lighthouse sample
+- [x] Convert the oversized homepage hero to responsive WebP files
+- [x] Replace the oversized display logo with a smaller complete WebP
+- [ ] Rerun Lighthouse on the deployed Home, Services, one service page and Contact
 - [ ] Record mobile Core Web Vitals
 - [ ] Optimise any image, font, video or API bottleneck found
 - [ ] Confirm production cache settings after deployment
@@ -71,9 +74,12 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 - [x] Nine dedicated service pages
 - [x] Melbourne eastern/south-eastern suburb coverage
 - [x] Internal links between related services
-- [ ] Agree on priority suburbs using real service coverage and search value
-- [ ] Create useful suburb landing pages without duplicating service copy
-- [ ] Add each approved suburb page to the sitemap and internal links
+- [x] Build a Service Areas hub using every suburb named in the PDFs
+- [x] Create 15 useful suburb landing pages with distinct property/service context
+- [x] Connect suburb pages to relevant services and neighbouring areas
+- [~] Confirm the 15 listed suburbs match the client’s current service boundaries
+- [ ] Publish the location pages as editable WordPress pages
+- [ ] Confirm every production location URL appears in the WordPress sitemap
 
 ### 5. Google-friendly structure
 
@@ -179,7 +185,8 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 
 ### Batch 3 — SEO, tracking and performance
 
-- [ ] Add approved suburb pages
+- [x] Add all PDF-listed suburb pages to the React/GitHub Pages site
+- [ ] Migrate the suburb pages into editable WordPress content
 - [ ] Finish server-rendered WordPress metadata
 - [ ] Connect GA4, Search Console and Google Business Profile
 - [ ] Complete Lighthouse/Core Web Vitals optimisation

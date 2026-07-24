@@ -20,6 +20,7 @@ function breadcrumbItems(pathname,currentTitle){
   const items=[{label:'Home',path:'/'}]
   const normalizedPath=pathname.replace(/\/+$/,'')||'/'
   if(/^\/services\/[^/]+/.test(normalizedPath)) items.push({label:'Services',path:'/services'})
+  if(/^\/service-areas\/[^/]+/.test(normalizedPath)) items.push({label:'Service Areas',path:'/service-areas'})
   if(pathname!=='/') items.push({label:currentTitle,path:pathname})
   return items
 }
@@ -44,7 +45,7 @@ export function PageLayout({ children, title, description, pageType = 'WebPage',
     let script=document.getElementById('page-structured-data')
     if(!script){script=document.createElement('script');script.id='page-structured-data';script.type='application/ld+json';document.head.appendChild(script)}
     script.textContent=JSON.stringify({'@context':'https://schema.org','@graph':[
-      {'@type':'LocalBusiness','@id':`${siteUrl}#business`,name:business.name,url:siteUrl,telephone:business.phone_href.replace('tel:',''),email:business.email,areaServed:business.location,image:mediaUrl(business.logo,asset('logo.jpeg'))},
+      {'@type':'LocalBusiness','@id':`${siteUrl}#business`,name:business.name,url:siteUrl,telephone:business.phone_href.replace('tel:',''),email:business.email,areaServed:business.location,image:mediaUrl(business.logo,asset('logo.webp'))},
       {'@type':pageType,name:title,description,url:canonical,provider:{'@id':`${siteUrl}#business`},...JSON.parse(schemaKey)},
       {'@type':'BreadcrumbList','itemListElement':breadcrumbItems(location.pathname,title).map((item,index)=>({'@type':'ListItem',position:index+1,name:item.label,item:publicRouteUrl(item.path)}))}
     ]})

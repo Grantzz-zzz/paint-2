@@ -30,6 +30,7 @@ const fallbackNavigation = [
       url: `/services/${service.slug}`,
     })),
   },
+  { id: 'areas', label: 'Areas', url: '/service-areas', children: [] },
   { id: 'about', label: 'About', url: '/about', children: [] },
   { id: 'process', label: 'Our Process', url: '/our-process', children: [] },
   { id: 'faqs', label: 'FAQs', url: '/faqs', children: [] },
@@ -45,7 +46,7 @@ export const fallbackBootstrap = {
     email: fallbackContact.email,
     location: fallbackContact.location,
     instagram_url: '',
-    logo: { url: asset('logo.jpeg'), alt: 'Superior Plus Painting & Remodeling' },
+    logo: { url: asset('logo.webp'), alt: 'Superior Plus Painting & Remodeling' },
   },
   navigation: fallbackNavigation,
   footer: {

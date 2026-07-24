@@ -2,6 +2,7 @@ import { createServer } from 'node:http'
 import { readFile, stat } from 'node:fs/promises'
 import { extname, join, normalize } from 'node:path'
 import { chromium } from 'playwright-core'
+import { serviceAreas } from '../src/data/serviceAreas.js'
 
 const root = join(process.cwd(), 'dist')
 const port = 4188
@@ -24,6 +25,8 @@ const routes = [
   ['/our-process', 'Our painting process'],
   ['/faqs', 'Frequently asked questions'],
   ['/contact', 'Get in touch'],
+  ['/service-areas', 'Painters across Melbourne'],
+  ...serviceAreas.map(area => [`/service-areas/${area.slug}`, `Painters in ${area.name}`]),
 ]
 
 const viewports = [

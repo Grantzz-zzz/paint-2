@@ -15,7 +15,7 @@ import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySub
 gsap.registerPlugin(ScrollTrigger)
 
 const nav = [
-  ['/', 'Home'], ['/services', 'Services'], ['/about', 'About'],
+  ['/', 'Home'], ['/services', 'Services'], ['/service-areas', 'Areas'], ['/about', 'About'],
   ['/our-process', 'Our Process'], ['/faqs', 'FAQs'], ['/contact', 'Contact']
 ]
 
@@ -80,7 +80,7 @@ function Divider({ color = '#fff', variant = 'wave' }) {
 function Logo() {
   const navigate = useNavigate()
   const {business}=useSiteContent()
-  return <button onClick={() => navigate('/')} className="logo-wrap" aria-label="Go to home page"><img src={mediaUrl(business.logo,asset('logo.jpeg'))} alt={business.logo?.alt||business.name} /></button>
+  return <button onClick={() => navigate('/')} className="logo-wrap" aria-label="Go to home page"><img src={mediaUrl(business.logo,asset('logo.webp'))} alt={business.logo?.alt||business.name} /></button>
 }
 
 function Navbar() {
@@ -127,13 +127,14 @@ function Navbar() {
 
 function Hero({hero,fields}) {
   const navigate = useNavigate()
-  const image=mediaUrl(hero?.image,asset('hero-painter.png'))
+  const usesResponsiveFallback=!hero?.image
+  const image=mediaUrl(hero?.image,asset('hero-painter.webp'))
   const trustPoints=textItems(fields?.home_trust_points,['Fully insured','Free colour advice','Melbourne-wide'])
   const title=hero?.title||'Professional painters'
   const accent=hero?.accent||'in Melbourne’s'
   const closing=fields?.home_hero_closing||'Eastern Suburbs.'
   return <section id="home" className="hero section-track">
-    <div className="hero-bg"><img src={image} alt={hero?.image?.alt||'Professional painter applying a deep red finish in a modern Melbourne home'} loading="eager" decoding="async" fetchPriority="high" /></div>
+    <div className="hero-bg"><img src={image} srcSet={usesResponsiveFallback?`${asset('hero-painter-768.webp')} 768w, ${asset('hero-painter-1280.webp')} 1280w, ${asset('hero-painter.webp')} 1716w`:undefined} sizes={usesResponsiveFallback?'100vw':undefined} alt={hero?.image?.alt||'Professional painter applying a deep red finish in a modern Melbourne home'} loading="eager" decoding="async" fetchPriority="high" /></div>
     <div className="paint-ribbon ribbon-green"/><div className="paint-ribbon ribbon-gold"/>
     <div className="container hero-content">
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">
@@ -208,7 +209,8 @@ function WhyUs({fields,business}) {
 }
 
 function Areas({fields,serviceAreas}) {
-  return <section className="areas"><div className="container areas-layout"><Reveal><Eyebrow light>Melbourne-wide</Eyebrow><h2>{fields?.home_areas_title||'Your local painting team,'}<br/><em>wherever you are.</em></h2><p>{fields?.home_areas_text||'Based in Melbourne and proudly servicing homes and businesses across the south-east and surrounding suburbs.'}</p></Reveal><Reveal className="suburb-cloud" delay={.15}>{serviceAreas.map((s,i)=><span className={`chip chip-${i%4}`} key={s}><MapPin size={13}/>{s}</span>)}</Reveal></div><Divider color="#fff" variant="slash" /></section>
+  const navigate=useNavigate()
+  return <section className="areas"><div className="container areas-layout"><Reveal><Eyebrow light>Melbourne-wide</Eyebrow><h2>{fields?.home_areas_title||'Your local painting team,'}<br/><em>wherever you are.</em></h2><p>{fields?.home_areas_text||'Based in Melbourne and proudly servicing homes and businesses across the east, south-east and surrounding suburbs.'}</p><button className="areas-link" onClick={()=>navigate('/service-areas')}>Explore all service areas <ArrowRight size={16}/></button></Reveal><Reveal className="suburb-cloud" delay={.15}>{serviceAreas.map((s,i)=><span className={`chip chip-${i%4}`} key={s}><MapPin size={13}/>{s}</span>)}</Reveal></div><Divider color="#fff" variant="slash" /></section>
 }
 
 function Testimonials({fields,items}) {
