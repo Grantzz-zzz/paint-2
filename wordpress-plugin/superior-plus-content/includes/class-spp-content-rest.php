@@ -164,7 +164,8 @@ class SPP_Content_REST {
 				'phone_href'    => 'tel:' . $get( 'spp_phone_normalized', '0470234567' ),
 				'email'         => $get( 'spp_email', 'sppainting.remodeling@gmail.com' ),
 				'location'      => $get( 'spp_location', 'Melbourne, Victoria' ),
-				'instagram_url' => $get( 'spp_instagram_url', '' ),
+				'facebook_url'  => $get( 'spp_facebook_url', 'https://www.facebook.com/people/Superior-Plus-Painting-Remodeling-Services/100075874374049/' ),
+				'instagram_url' => $get( 'spp_instagram_url', 'https://www.instagram.com/sppainting.remodeling' ),
 				'logo'          => $this->media( $logo_id ),
 			),
 			'navigation'    => $this->navigation(),
@@ -865,6 +866,9 @@ class SPP_Content_REST {
 			array( 'label' => $meta( 'spp_email', 'sppainting.remodeling@gmail.com' ), 'url' => 'mailto:' . $meta( 'spp_email', 'sppainting.remodeling@gmail.com' ) ),
 			array( 'label' => $meta( 'spp_location', 'Melbourne, Victoria' ), 'url' => 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode( $meta( 'spp_location', 'Melbourne, Victoria' ) ) ),
 		);
+		if ( $meta( 'spp_facebook_url' ) ) {
+			$contact_links[] = array( 'label' => 'Facebook', 'url' => $meta( 'spp_facebook_url' ) );
+		}
 		if ( $meta( 'spp_instagram_url' ) ) {
 			$contact_links[] = array( 'label' => 'Instagram', 'url' => $meta( 'spp_instagram_url' ) );
 		}

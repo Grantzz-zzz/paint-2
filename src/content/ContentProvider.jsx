@@ -13,7 +13,7 @@ import { toInternalAppPath } from '../utils/routes'
  * @typedef {{url:string, alt?:string, srcset?:string, sizes?:string}} SppMedia
  * @typedef {{label:string, url:string}} SppLink
  * @typedef {{id:number|string, label:string, url:string, children?:SppLink[]}} SppNavigationItem
- * @typedef {{name:string, phone_display:string, phone_href:string, email:string, location:string, instagram_url?:string, logo?:SppMedia|null}} SppBusiness
+ * @typedef {{name:string, phone_display:string, phone_href:string, email:string, location:string, facebook_url?:string, instagram_url?:string, logo?:SppMedia|null}} SppBusiness
  * @typedef {{business:SppBusiness, navigation:SppNavigationItem[], footer:{intro:string, columns:Array<{heading:string,links:SppLink[]}>, stats:Array<{value:string,label:string}>, copyright:string, closing_line:string}, trust_items:string[], service_areas:string[], default_cta:{title:string,text:string,link:SppLink}}} SppBootstrap
  * @typedef {{id?:number,slug:string,title:string,short:string,url?:string,tone?:string}} SppServiceSummary
  */
@@ -45,7 +45,8 @@ export const fallbackBootstrap = {
     phone_href: `tel:${fallbackContact.phone}`,
     email: fallbackContact.email,
     location: fallbackContact.location,
-    instagram_url: '',
+    facebook_url: 'https://www.facebook.com/people/Superior-Plus-Painting-Remodeling-Services/100075874374049/',
+    instagram_url: 'https://www.instagram.com/sppainting.remodeling',
     logo: { url: asset('logo.webp'), alt: 'Superior Plus Painting & Remodeling' },
   },
   navigation: fallbackNavigation,

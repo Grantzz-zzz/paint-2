@@ -309,6 +309,63 @@ function HomeLocation() {
   return <section className="contact-location home-location"><div className="container contact-location-grid"><Reveal className="home-location-copy"><div className="location-icon"><MapPin/></div><Eyebrow>Our Melbourne location</Eyebrow><h2>Local to Chadstone.<br/><em>Ready to come to you.</em></h2><address className="contact-street-address"><MapPin/>{mapAddress}</address><p>Superior Plus Painting services homes and businesses across Melbourne’s eastern and south-eastern suburbs from our Chadstone location.</p><a className="btn" href={mapUrl} target="_blank" rel="noreferrer">View address in Google Maps <ArrowRight size={17}/></a></Reveal><Reveal className="contact-map" delay={.1}><iframe src={mapEmbedUrl} title={`Superior Plus Painting at ${mapAddress}`} loading="lazy" referrerPolicy="no-referrer-when-downgrade"/></Reveal></div></section>
 }
 
+function FacebookMark() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.7 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5H17V3.6c-.7-.1-1.5-.2-2.3-.2-2.3 0-3.9 1.4-3.9 4.1v2.3H8.2V13h2.6v8h2.9Z"/></svg>
+}
+
+function CountUpValue({ value }) {
+  const elementRef = useRef(null)
+  const frameRef = useRef(0)
+  const hasAnimated = useRef(false)
+  const match = String(value).trim().match(/^([\d,]+)(.*)$/)
+  const target = match ? Number(match[1].replaceAll(',', '')) : 0
+  const suffix = match?.[2] || ''
+  const [display, setDisplay] = useState(0)
+
+  useEffect(() => {
+    if (!match || !Number.isFinite(target)) return
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      setDisplay(target)
+      return
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || hasAnimated.current) return
+      hasAnimated.current = true
+      observer.disconnect()
+      const startedAt = performance.now()
+      const duration = 1150
+      const tick = (now) => {
+        const progress = Math.min((now - startedAt) / duration, 1)
+        const eased = 1 - Math.pow(1 - progress, 4)
+        setDisplay(Math.round(target * eased))
+        if (progress < 1) frameRef.current = requestAnimationFrame(tick)
+      }
+      frameRef.current = requestAnimationFrame(tick)
+    }, { threshold: .1, rootMargin: '0px 0px -5% 0px' })
+
+    observer.observe(elementRef.current)
+    return () => {
+      observer.disconnect()
+      cancelAnimationFrame(frameRef.current)
+    }
+  }, [value, target])
+
+  if (!match) return value
+  return <strong ref={elementRef} aria-label={String(value)}><span aria-hidden="true">{display.toLocaleString()}{suffix}</span></strong>
+}
+
+function FooterTrustBadges() {
+  const image = asset('client/trust-platform-badges.png')
+  const badges = [
+    ['google', 'Google Rating 5.0, five stars'],
+    ['yellow', 'Yellow Pages'],
+    ['word-of-mouth', 'Word of Mouth'],
+  ]
+  return <div className="container footer-trust-platforms" aria-label="Business ratings and directory badges">{badges.map(([name,label])=><div className={`footer-trust-image ${name}`} key={name}><img src={image} alt={label} width="523" height="465" loading="lazy" decoding="async"/></div>)}</div>
+}
+
 function Footer() {
   const navigate = useNavigate()
   const {business,footer,navigation,services:cmsServices}=useSiteContent()
@@ -323,7 +380,7 @@ function Footer() {
   const fallbackStats=[{value:'670+',label:'Residential projects completed'},{value:'99%',label:'Projects completed'},{value:'500+',label:'Commercial projects completed'}]
   const stats=Array.isArray(footer.stats)&&footer.stats.length===3?footer.stats:fallbackStats
   const statIcons=[Home,Star,PaintRoller]
-  return <footer><div className="container footer-stats" aria-label="Superior Plus Painting project statistics">{stats.map((stat,index)=>{const Icon=statIcons[index];return <div key={`${stat.label}-${index}`}><Icon aria-hidden="true"/><strong>{stat.value}</strong><span>{stat.label}</span></div>})}</div><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/painting-guides')}>Painting Guides</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span>{business.instagram_url&&<a href={business.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={19}/></a>}</div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
+  return <footer><div className="container footer-stats" aria-label="Superior Plus Painting project statistics">{stats.map((stat,index)=>{const Icon=statIcons[index];return <div key={`${stat.label}-${index}`}><Icon aria-hidden="true"/><CountUpValue value={stat.value}/><span>{stat.label}</span></div>})}</div><FooterTrustBadges/><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/painting-guides')}>Painting Guides</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span><div className="footer-socials" aria-label="Follow Superior Plus Painting">{business.facebook_url&&<a className="footer-social-badge facebook" href={business.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Facebook"><FacebookMark/><b>Facebook</b></a>}{business.instagram_url&&<a className="footer-social-badge instagram" href={business.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Instagram"><Instagram aria-hidden="true"/><b>Instagram</b></a>}</div></div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
 }
 
 export default function App() {

@@ -132,6 +132,8 @@ class SPP_Content_Migration {
 			'spp_phone_normalized' => '0470234567',
 			'spp_email' => 'sppainting.remodeling@gmail.com',
 			'spp_location' => 'Melbourne, Victoria',
+			'spp_facebook_url' => 'https://www.facebook.com/people/Superior-Plus-Painting-Remodeling-Services/100075874374049/',
+			'spp_instagram_url' => 'https://www.instagram.com/sppainting.remodeling',
 			'spp_logo_id' => $logo_id,
 			'spp_logo_alt' => 'Superior Plus Painting & Remodeling',
 			'spp_footer_intro' => 'Premium residential and commercial painting across Melbourne, with care in every coat.',

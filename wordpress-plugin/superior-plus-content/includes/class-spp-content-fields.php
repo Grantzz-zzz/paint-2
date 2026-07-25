@@ -74,6 +74,7 @@ class SPP_Content_Fields {
 				'spp_phone_normalized'    => array( 'label' => 'Phone number for links', 'type' => 'phone', 'max' => 30 ),
 				'spp_email'               => array( 'label' => 'Email address', 'type' => 'email', 'max' => 254 ),
 				'spp_location'            => array( 'label' => 'Location', 'type' => 'text', 'max' => 180 ),
+				'spp_facebook_url'        => array( 'label' => 'Facebook URL', 'type' => 'url', 'max' => 500 ),
 				'spp_instagram_url'       => array( 'label' => 'Instagram URL', 'type' => 'url', 'max' => 500 ),
 				'spp_logo_id'             => array( 'label' => 'Site logo', 'type' => 'media', 'mime' => 'image' ),
 				'spp_logo_alt'            => array( 'label' => 'Logo accessible name', 'type' => 'text', 'max' => 180 ),
