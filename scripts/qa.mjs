@@ -117,6 +117,7 @@ try {
           emptyButtons: emptyButtons.length,
           overflow: document.documentElement.scrollWidth - window.innerWidth,
           logoFit: getComputedStyle(document.querySelector('.logo-wrap img')).objectFit,
+          footerServices: document.querySelectorAll('.footer-services button').length,
           minParagraphSize: Math.min(...readableParagraphs.map(paragraph => paragraph.size)),
           minParagraphWeight: Math.min(...readableParagraphs.map(paragraph => paragraph.weight)),
           schemaValid,
@@ -135,6 +136,7 @@ try {
       check(result.emptyButtons === 0, `${label}: unnamed buttons detected`)
       check(result.overflow <= 1, `${label}: horizontal overflow of ${result.overflow}px`)
       check(result.logoFit === 'contain', `${label}: logo is cropped because object-fit is “${result.logoFit}”`)
+      check(result.footerServices === 9, `${label}: footer lists ${result.footerServices} services instead of nine`)
       check(result.minParagraphSize >= 16, `${label}: paragraph text is too small at ${result.minParagraphSize}px`)
       check(result.minParagraphWeight >= 700, `${label}: paragraph text is not bold enough at weight ${result.minParagraphWeight}`)
       check(runtimeErrors.length === 0, `${label}: runtime errors: ${runtimeErrors.join(' | ')}`)
@@ -178,6 +180,14 @@ try {
   await homeServiceCard.locator('.home-service-read-more').click()
   await page.waitForURL(/#\/services\/residential-painting-melbourne$/)
   check(page.url().endsWith('#/services/residential-painting-melbourne'), 'homepage services: Read more did not open Residential Painting')
+
+  await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
+  await page.locator('footer').waitFor()
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+  await page.locator('.footer-services button', { hasText: 'Residential Painting' }).click()
+  await page.waitForURL(/#\/services\/residential-painting-melbourne$/)
+  await page.locator('h1').first().waitFor()
+  check(await page.evaluate(() => window.scrollY) <= 1, 'route navigation: new page retained the previous scroll position')
 
   await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
   await page.locator('.menu-btn').click()
@@ -238,6 +248,9 @@ try {
   check(processBackType >= 16, `Process: back-card description is too small (${processBackType}px)`)
 
   await page.goto(`${origin}#/contact`, { waitUntil: 'domcontentloaded' })
+  const contactMapQuery = await page.locator('.contact-map iframe').evaluate(element => new URL(element.src).searchParams.get('q'))
+  check(contactMapQuery === '20 Rae Street, Chadstone VIC 3148, Australia', `contact map: unexpected address “${contactMapQuery}”`)
+  check((await page.locator('.contact-street-address').textContent()).includes('20 Rae Street'), 'contact map: street address is not displayed beside the map')
   const form = page.locator('.full-quote-form')
   await form.locator('[name="name"]').fill('QA Test')
   await form.locator('[name="phone"]').fill('0400000000')

@@ -95,7 +95,7 @@ function Navbar() {
   const {business,navigation,services:cmsServices}=useSiteContent()
   const navItems=(navigation?.length?navigation:nav.map(([url,label],index)=>({id:index,label,url,children:[]}))).map(item=>({...item,path:toAppPath(item.url)}))
   const displayedServices=cmsServices?.length?cmsServices:serviceList
-  const go = (path) => { navigate(path); setOpen(false); setServicesOpen(false); setAreasOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  const go = (path) => { navigate(path); setOpen(false); setServicesOpen(false); setAreasOpen(false) }
   const toggleMobileMenu = () => {
     const nextOpen = !open
     setOpen(nextOpen)
@@ -218,7 +218,7 @@ function Services({fields,serviceItems}) {
                 <Icon/>
                 <strong>{service.title}</strong>
                 <p>{service.text}</p>
-                <button type="button" className="home-service-read-more" onClick={event=>{event.stopPropagation();navigate(destination);window.scrollTo({top:0,behavior:'smooth'})}}>Read more <ArrowRight size={16}/></button>
+                <button type="button" className="home-service-read-more" onClick={event=>{event.stopPropagation();navigate(destination)}}>Read more <ArrowRight size={16}/></button>
               </span>
             </span>
           </article>
@@ -296,10 +296,10 @@ function Contact({fields,business}) {
 function Footer() {
   const navigate = useNavigate()
   const {business,footer,navigation,services:cmsServices}=useSiteContent()
-  const go = (path) => { navigate(path); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  const go = (path) => navigate(path)
   const explore=(navigation?.length?navigation:nav.map(([url,label],id)=>({id,label,url}))).filter(item=>toAppPath(item.url)!=='/').slice(0,5)
   const hasGuides=explore.some(item=>toAppPath(item.url)==='/painting-guides')
-  return <footer><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/painting-guides')}>Painting Guides</button>}</div><div><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.slice(0,4).map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span>{business.instagram_url&&<a href={business.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={19}/></a>}</div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
+  return <footer><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/painting-guides')}>Painting Guides</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span>{business.instagram_url&&<a href={business.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={19}/></a>}</div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
 }
 
 export default function App() {

@@ -1,5 +1,5 @@
-import { lazy, Suspense } from 'react'
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
+import { lazy, Suspense, useLayoutEffect } from 'react'
+import { BrowserRouter, HashRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { routerBasePath } from './utils/routes'
 
 const HomePage=lazy(()=>import('./App'))
@@ -17,6 +17,18 @@ const PaintingGuidePage=lazy(()=>import('./pages/GuidePages').then(m=>({default:
 const DynamicContentPage=lazy(()=>import('./pages/DynamicPages').then(m=>({default:m.DynamicContentPage})))
 const ProjectPage=lazy(()=>import('./pages/DynamicPages').then(m=>({default:m.ProjectPage})))
 
+function RouteScrollReset() {
+  const location=useLocation()
+  useLayoutEffect(()=>{
+    const root=document.documentElement
+    const previous=root.style.scrollBehavior
+    root.style.scrollBehavior='auto'
+    window.scrollTo(0,0)
+    root.style.scrollBehavior=previous
+  },[location.pathname])
+  return null
+}
+
 export default function RouterApp() {
   const cleanRoutes=Boolean(window.__SPP_CONTENT_API__)
   const Router=cleanRoutes?BrowserRouter:HashRouter
@@ -27,6 +39,7 @@ export default function RouterApp() {
     origin:window.location.origin,
   }):''
   return <Router {...(cleanRoutes&&sitePath?{basename:sitePath}: {})}>
+    <RouteScrollReset/>
     <button className="skip-link" onClick={()=>document.getElementById('main-content')?.focus()}>Skip to main content</button>
     <Suspense fallback={<div className="route-loader" role="status"><span/>Loading page…</div>}><Routes>
       <Route path="/" element={<HomePage/>}/>
