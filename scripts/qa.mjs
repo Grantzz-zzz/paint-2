@@ -97,6 +97,13 @@ try {
           probe.src = source
         })))).filter(Boolean)
         const emptyButtons = [...document.querySelectorAll('button')].filter(button => !button.textContent.trim() && !button.getAttribute('aria-label'))
+        const readableParagraphs = [...document.querySelectorAll('main p:not(.form-note)')].filter(paragraph => {
+          const box = paragraph.getBoundingClientRect()
+          return box.width > 0 && box.height > 0
+        }).map(paragraph => {
+          const style = getComputedStyle(paragraph)
+          return { size: Number.parseFloat(style.fontSize), weight: Number.parseInt(style.fontWeight, 10) || 400 }
+        })
         let schemaValid = true
         try { JSON.parse(document.querySelector('#page-structured-data')?.textContent || '{}') } catch { schemaValid = false }
         return {
@@ -110,6 +117,8 @@ try {
           emptyButtons: emptyButtons.length,
           overflow: document.documentElement.scrollWidth - window.innerWidth,
           logoFit: getComputedStyle(document.querySelector('.logo-wrap img')).objectFit,
+          minParagraphSize: Math.min(...readableParagraphs.map(paragraph => paragraph.size)),
+          minParagraphWeight: Math.min(...readableParagraphs.map(paragraph => paragraph.weight)),
           schemaValid,
         }
       })
@@ -126,17 +135,57 @@ try {
       check(result.emptyButtons === 0, `${label}: unnamed buttons detected`)
       check(result.overflow <= 1, `${label}: horizontal overflow of ${result.overflow}px`)
       check(result.logoFit === 'contain', `${label}: logo is cropped because object-fit is “${result.logoFit}”`)
+      check(result.minParagraphSize >= 16, `${label}: paragraph text is too small at ${result.minParagraphSize}px`)
+      check(result.minParagraphWeight >= 700, `${label}: paragraph text is not bold enough at weight ${result.minParagraphWeight}`)
       check(runtimeErrors.length === 0, `${label}: runtime errors: ${runtimeErrors.join(' | ')}`)
     }
     await context.close()
   }
 
+  const desktopNavContext = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' })
+  const desktopNavPage = await desktopNavContext.newPage()
+  await desktopNavPage.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
+  await desktopNavPage.locator('.nav-main-link').first().waitFor()
+  const desktopNavType = await desktopNavPage.locator('.nav-main-link').first().evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize))
+  await desktopNavPage.locator('.nav-dropdown').first().hover()
+  await desktopNavPage.locator('.services-dropdown-grid button').first().waitFor()
+  const desktopDropdownType = await desktopNavPage.locator('.services-dropdown-grid button b').first().evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize))
+  check(desktopNavType >= 16, `desktop menu: primary navigation text is too small (${desktopNavType}px)`)
+  check(desktopDropdownType >= 14, `desktop menu: dropdown text is too small (${desktopDropdownType}px)`)
+  await desktopNavContext.close()
+
   const interactionContext = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' })
   const page = await interactionContext.newPage()
 
   await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
+  const homeServiceCard = page.locator('.home-service-flip').first()
+  await homeServiceCard.waitFor()
+  const homeServiceCount = await page.locator('.home-service-flip').count()
+  check(homeServiceCount === 9, `homepage services: expected nine image-led flip cards, found ${homeServiceCount}`)
+  const homeServiceType = await homeServiceCard.evaluate(element => {
+    const box = element.getBoundingClientRect()
+    const copy = getComputedStyle(element.querySelector('.home-service-back p'))
+    return { width: box.width, height: box.height, size: Number.parseFloat(copy.fontSize), weight: Number.parseInt(copy.fontWeight, 10), text: element.querySelector('.home-service-back p').textContent.trim() }
+  })
+  check(homeServiceType.width > homeServiceType.height * 1.35, `homepage services: card is not landscape (${homeServiceType.width}×${homeServiceType.height})`)
+  check(homeServiceType.size >= 16 && homeServiceType.weight >= 700, `homepage services: back description is not large and bold (${homeServiceType.size}px/${homeServiceType.weight})`)
+  check(homeServiceType.text === 'Complete home repaints, interior refreshes and exterior transformations.', 'homepage services: Residential description does not match its service-directory description')
+  await homeServiceCard.hover()
+  await page.waitForTimeout(50)
+  check(await homeServiceCard.getAttribute('aria-pressed') === 'true', 'homepage services: card did not flip on hover')
+  check(await homeServiceCard.evaluate(element => element.classList.contains('is-flipped')), 'homepage services: 3D flipped state is missing')
+  await homeServiceCard.focus()
+  await homeServiceCard.locator('.home-service-read-more').click()
+  await page.waitForURL(/#\/services\/residential-painting-melbourne$/)
+  check(page.url().endsWith('#/services/residential-painting-melbourne'), 'homepage services: Read more did not open Residential Painting')
+
+  await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
   await page.locator('.menu-btn').click()
   check(await page.locator('#mobile-navigation').isVisible(), 'mobile menu: navigation did not open')
+  const mobileNavType = await page.locator('#mobile-navigation>button').first().evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize))
+  const mobileDropdownType = await page.locator('#mobile-services-menu button').first().evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize))
+  check(mobileNavType >= 17, `mobile menu: primary navigation text is too small (${mobileNavType}px)`)
+  check(mobileDropdownType >= 16, `mobile menu: dropdown text is too small (${mobileDropdownType}px)`)
   check(await page.locator('#mobile-services-menu button').count() === 9, 'mobile menu: all nine service pages are not visible')
   await page.locator('#mobile-services-menu button', { hasText: 'Interior Painting' }).click()
   await page.waitForURL(/#\/services\/interior-painting-melbourne$/)

@@ -22,14 +22,15 @@ const nav = [
 ]
 
 const services = [
-  { icon: Home, title: 'Residential painting', text: 'Thoughtful interior and exterior finishes that make home feel new again.', tone: 'maroon', image: asset('client/projects/exterior/exterior-07.webp') },
-  { icon: Building2, title: 'Commercial painting', text: 'Flexible, low-disruption painting for offices, retail, strata and more.', tone: 'green', image: asset('client/projects/commercial/commercial-02.webp') },
-  { icon: PaintRoller, title: 'Interior & exterior', text: 'Detailed preparation and durable finishes, inside and out.', tone: 'gold', image: asset('client/projects/interior/interior-04.webp') },
-  { icon: Sparkles, title: 'Roof restoration', text: 'Clean, repair, seal and coat for stronger weather protection.', tone: 'teal', image: asset('client/projects/roof/roof-01.webp') },
-  { icon: Trees, title: 'Decks & fences', text: 'Stains and coatings designed to stand up to Melbourne weather.', tone: 'terracotta', image: asset('client/projects/fence/fence-03.webp') },
-  { icon: Palette, title: 'Colour consultation', text: 'Clear, confident colour choices that work with your architecture.', tone: 'navy', image: asset('client/projects/residential/residential-08.webp') },
-  { icon: SprayCan, title: 'Spray painting', text: 'Smooth, modern finishes for cabinetry, doors and detailed surfaces.', tone: 'green', image: asset('client/projects/fence/fence-10.webp') },
-  { icon: Hammer, title: 'Carpentry & repairs', text: 'Plaster, weatherboard and light timber repairs before we paint.', tone: 'maroon', image: asset('client/projects/plaster/plaster-11.webp') },
+  { slug: 'residential-painting-melbourne', icon: Home, title: 'Residential Painting', tone: 'maroon', image: asset('client/projects/exterior/exterior-07.webp') },
+  { slug: 'commercial-painting-melbourne', icon: Building2, title: 'Commercial Painting', tone: 'green', image: asset('client/projects/commercial/commercial-02.webp') },
+  { slug: 'interior-painting-melbourne', icon: PaintRoller, title: 'Interior Painting', tone: 'teal', image: asset('client/projects/interior/interior-04.webp') },
+  { slug: 'exterior-painting-melbourne', icon: SprayCan, title: 'Exterior Painting', tone: 'terracotta', image: asset('client/projects/exterior/exterior-01.webp') },
+  { slug: 'roof-painting-melbourne', icon: Sparkles, title: 'Roof Painting', tone: 'maroon', image: asset('client/projects/roof/roof-01.webp') },
+  { slug: 'fence-painting-melbourne', icon: Trees, title: 'Fence Painting', tone: 'terracotta', image: asset('client/projects/fence/fence-03.webp') },
+  { slug: 'deck-painting-staining-melbourne', icon: Palette, title: 'Deck Painting & Staining', tone: 'gold', image: asset('client/projects/outdoor/outdoor-01.webp') },
+  { slug: 'wallpaper-removal-melbourne', icon: Brush, title: 'Wallpaper Removal', tone: 'teal', image: asset('client/projects/wallpaper/wallpaper-09.webp') },
+  { slug: 'plaster-repairs-melbourne', icon: Hammer, title: 'Plaster Repairs', tone: 'cream', image: asset('client/projects/plaster/plaster-11.webp') },
 ]
 
 const process = [
@@ -170,19 +171,59 @@ function Hero({hero,fields}) {
 }
 
 function Services({fields,serviceItems}) {
+  const navigate=useNavigate()
+  const [flipped,setFlipped]=useState(null)
   const selectedIds=Array.isArray(fields?.home_service_ids)?fields.home_service_ids.map(String):[]
   const selected=selectedIds.length?serviceItems.filter(item=>selectedIds.includes(String(item.id))):[]
+  const fallbackCards=services.map(item=>({
+    ...item,
+    text:serviceList.find(service=>service.slug===item.slug)?.short||item.text,
+  }))
   const cards=selected.length?selected.map((item,index)=>({
     ...item,
     icon:services[index%services.length].icon,
     text:item.short,
     tone:item.tone||services[index%services.length].tone,
     image:mediaUrl(item.hero?.image||item.image,services[index%services.length].image),
-  })):services
+  })):fallbackCards
   return <section id="services" className="section section-track services-section">
     <div className="container">
       <Reveal className="section-heading"><div><Eyebrow>{fields?.home_services_eyebrow||'What we paint'}</Eyebrow><h2>{fields?.home_services_title||'Every surface deserves'}<br/><em>{fields?.home_services_accent||'the right finish.'}</em></h2></div><p>{fields?.home_services_intro||'From one carefully refreshed room to a complete commercial transformation, our experienced team brings the same care to every job.'}</p></Reveal>
-      <div className="services-grid">{cards.map((service, i) => { const Icon=service.icon; return <Reveal key={service.slug||service.title} delay={(i%4)*.06}><article className={`service-card tone-${service.tone}`}><div className="service-card-photo"><img src={service.image} alt={`${service.title} project by Superior Plus Painting`} loading="lazy" decoding="async"/></div><span className="service-num">{String(i+1).padStart(2,'0')}</span><Icon/><h3>{service.title}</h3><p>{service.text}</p><span className="card-arrow">↗</span></article></Reveal>})}</div>
+      <div className="services-grid home-service-flip-grid">{cards.map((service, i) => {
+        const Icon=service.icon
+        const cardKey=`${service.slug||service.title}-${i}`
+        const destination=toAppPath(service.url||`/services/${service.slug||'residential-painting-melbourne'}`)
+        const isFlipped=flipped===cardKey
+        const leaveCard=event=>{if(!event.currentTarget.contains(event.relatedTarget))setFlipped(null)}
+        return <Reveal key={cardKey} delay={(i%4)*.06}>
+          <article
+            className={`service-card home-service-flip tone-${service.tone} ${isFlipped?'is-flipped':''}`}
+            tabIndex="0"
+            aria-label={`${service.title}. Hover or press Enter to see details.`}
+            aria-pressed={isFlipped}
+            onMouseEnter={()=>setFlipped(cardKey)}
+            onMouseLeave={event=>{if(!event.currentTarget.contains(document.activeElement))setFlipped(null)}}
+            onFocus={()=>setFlipped(cardKey)}
+            onBlur={leaveCard}
+            onClick={event=>{if(!event.target.closest('.home-service-read-more'))setFlipped(isFlipped?null:cardKey)}}
+            onKeyDown={event=>{if(event.target===event.currentTarget&&(event.key==='Enter'||event.key===' ')){event.preventDefault();setFlipped(isFlipped?null:cardKey)}}}
+          >
+            <span className="home-service-flip-inner">
+              <span className="home-service-face home-service-front">
+                <img src={service.image} alt={`${service.title} project by Superior Plus Painting`} loading="lazy" decoding="async"/>
+                <span className="home-service-front-copy"><Icon/><strong>{service.title}</strong><small>Hover to discover</small></span>
+              </span>
+              <span className="home-service-face home-service-back">
+                <span className="home-service-number">{String(i+1).padStart(2,'0')}</span>
+                <Icon/>
+                <strong>{service.title}</strong>
+                <p>{service.text}</p>
+                <button type="button" className="home-service-read-more" onClick={event=>{event.stopPropagation();navigate(destination);window.scrollTo({top:0,behavior:'smooth'})}}>Read more <ArrowRight size={16}/></button>
+              </span>
+            </span>
+          </article>
+        </Reveal>
+      })}</div>
     </div>
     <Divider color="#1f5140" variant="slash" />
   </section>
