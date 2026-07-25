@@ -109,7 +109,7 @@ function Navbar() {
     setServicesOpen(nextOpen)
     setAreasOpen(false)
   }
-  return <header className="nav-shell">
+  return <><header className="nav-shell">
     <nav className="nav-inner">
       <Logo />
       <div className="nav-links">
@@ -150,7 +150,7 @@ function Navbar() {
       </div> : <button key={item.id} onClick={() => go(item.path)}>{item.label}<ArrowRight size={16}/></button>)}
       <a className="btn" href={business.phone_href}><Phone size={17}/> {business.phone_display}</a>
     </motion.div>}</AnimatePresence>
-  </header>
+  </header><aside className="floating-contact-actions" aria-label="Quick contact options"><a href={business.phone_href} aria-label={`Call ${business.name}`} title={`Call ${business.phone_display}`}><span><Phone/></span></a><a href={`mailto:${business.email}`} aria-label={`Email ${business.name}`} title={`Email ${business.email}`}><span><Mail/></span></a></aside></>
 }
 
 function Hero({hero,fields}) {
@@ -320,7 +320,10 @@ function Footer() {
     ...suppliedExplore.slice(1),
   ]
   const hasGuides=explore.some(item=>toAppPath(item.url)==='/painting-guides')
-  return <footer><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/painting-guides')}>Painting Guides</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span>{business.instagram_url&&<a href={business.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={19}/></a>}</div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
+  const fallbackStats=[{value:'670+',label:'Residential projects completed'},{value:'99%',label:'Projects completed'},{value:'500+',label:'Commercial projects completed'}]
+  const stats=Array.isArray(footer.stats)&&footer.stats.length===3?footer.stats:fallbackStats
+  const statIcons=[Home,Star,PaintRoller]
+  return <footer><div className="container footer-stats" aria-label="Superior Plus Painting project statistics">{stats.map((stat,index)=>{const Icon=statIcons[index];return <div key={`${stat.label}-${index}`}><Icon aria-hidden="true"/><strong>{stat.value}</strong><span>{stat.label}</span></div>})}</div><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/painting-guides')}>Painting Guides</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span>{business.instagram_url&&<a href={business.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={19}/></a>}</div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
 }
 
 export default function App() {

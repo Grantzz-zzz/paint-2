@@ -119,6 +119,15 @@ try {
           overflow: document.documentElement.scrollWidth - window.innerWidth,
           logoFit: getComputedStyle(document.querySelector('.logo-wrap img')).objectFit,
           footerServices: document.querySelectorAll('.footer-services button').length,
+          footerStats: [...document.querySelectorAll('.footer-stats>div')].map(item=>({
+            value:item.querySelector('strong')?.textContent.trim(),
+            label:item.querySelector('span')?.textContent.trim(),
+          })),
+          quickContacts: [...document.querySelectorAll('.floating-contact-actions>a')].map(item=>({
+            href:item.getAttribute('href'),
+            label:item.getAttribute('aria-label'),
+            visible:item.getBoundingClientRect().width>=56&&item.getBoundingClientRect().right<=window.innerWidth+1,
+          })),
           minParagraphSize: Math.min(...readableParagraphs.map(paragraph => paragraph.size)),
           minParagraphWeight: Math.min(...readableParagraphs.map(paragraph => paragraph.weight)),
           schemaValid,
@@ -138,6 +147,11 @@ try {
       check(result.overflow <= 1, `${label}: horizontal overflow of ${result.overflow}px`)
       check(result.logoFit === 'contain', `${label}: logo is cropped because object-fit is “${result.logoFit}”`)
       check(result.footerServices === 9, `${label}: footer lists ${result.footerServices} services instead of nine`)
+      check(result.footerStats.length===3, `${label}: footer statistics band is incomplete`)
+      check(result.footerStats.map(item=>item.value).join('|')==='670+|99%|500+', `${label}: footer statistics values changed unexpectedly (${JSON.stringify(result.footerStats)})`)
+      check(result.quickContacts.length===2&&result.quickContacts.every(item=>item.visible), `${label}: floating contact actions are missing or clipped`)
+      check(result.quickContacts[0]?.href?.startsWith('tel:')&&result.quickContacts[1]?.href?.startsWith('mailto:'), `${label}: floating contact destinations are incorrect (${JSON.stringify(result.quickContacts)})`)
+      check(result.quickContacts.every(item=>item.label), `${label}: floating contact action is missing an accessible label`)
       check(result.minParagraphSize >= 16, `${label}: paragraph text is too small at ${result.minParagraphSize}px`)
       check(result.minParagraphWeight >= 700, `${label}: paragraph text is not bold enough at weight ${result.minParagraphWeight}`)
       if(route==='/'){

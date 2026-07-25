@@ -14,7 +14,7 @@ import { toInternalAppPath } from '../utils/routes'
  * @typedef {{label:string, url:string}} SppLink
  * @typedef {{id:number|string, label:string, url:string, children?:SppLink[]}} SppNavigationItem
  * @typedef {{name:string, phone_display:string, phone_href:string, email:string, location:string, instagram_url?:string, logo?:SppMedia|null}} SppBusiness
- * @typedef {{business:SppBusiness, navigation:SppNavigationItem[], footer:{intro:string, columns:Array<{heading:string,links:SppLink[]}>, copyright:string, closing_line:string}, trust_items:string[], service_areas:string[], default_cta:{title:string,text:string,link:SppLink}}} SppBootstrap
+ * @typedef {{business:SppBusiness, navigation:SppNavigationItem[], footer:{intro:string, columns:Array<{heading:string,links:SppLink[]}>, stats:Array<{value:string,label:string}>, copyright:string, closing_line:string}, trust_items:string[], service_areas:string[], default_cta:{title:string,text:string,link:SppLink}}} SppBootstrap
  * @typedef {{id?:number,slug:string,title:string,short:string,url?:string,tone?:string}} SppServiceSummary
  */
 
@@ -52,6 +52,11 @@ export const fallbackBootstrap = {
   footer: {
     intro: 'Premium residential and commercial painting across Melbourne, with care in every coat.',
     columns: [],
+    stats: [
+      { value: '670+', label: 'Residential projects completed' },
+      { value: '99%', label: 'Projects completed' },
+      { value: '500+', label: 'Commercial projects completed' },
+    ],
     copyright: `© ${new Date().getFullYear()} Superior Plus Painting & Remodeling`,
     closing_line: 'Made with care in Melbourne.',
   },
