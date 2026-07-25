@@ -176,8 +176,17 @@ try {
   const processFlip = page.locator('.flip-feature').nth(1)
   await processFlip.waitFor()
   check(await page.locator('.flip-feature').count() === 6, 'Process: expected six image-led promise cards')
+  const processFrontType = await processFlip.evaluate(element => ({
+    title: Number.parseFloat(getComputedStyle(element.querySelector('.flip-feature-summary strong')).fontSize),
+    brief: Number.parseFloat(getComputedStyle(element.querySelector('.flip-feature-summary small')).fontSize),
+    titleColor: getComputedStyle(element.querySelector('.flip-feature-summary strong')).color,
+  }))
+  check(processFrontType.title >= 20 && processFrontType.brief >= 16, `Process: front-card typography is too small (${JSON.stringify(processFrontType)})`)
+  check(processFrontType.titleColor !== 'rgb(255, 255, 255)', 'Process: front-card title is not visible against the white card')
   await processFlip.click()
   check(await processFlip.getAttribute('aria-pressed') === 'true', 'Process: promise card did not expose its flipped state')
+  const processBackType = await processFlip.evaluate(element => Number.parseFloat(getComputedStyle(element.querySelector('.flip-feature-back p')).fontSize))
+  check(processBackType >= 16, `Process: back-card description is too small (${processBackType}px)`)
 
   await page.goto(`${origin}#/contact`, { waitUntil: 'domcontentloaded' })
   const form = page.locator('.full-quote-form')
