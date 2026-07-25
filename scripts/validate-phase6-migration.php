@@ -8,7 +8,7 @@ $migration = file_get_contents( $root . '/wordpress-plugin/superior-plus-content
 $baseline  = json_decode( file_get_contents( $root . '/baseline/site-baseline.json' ), true );
 $theme     = $root . '/wordpress-theme/superior-plus/react-dist/assets';
 
-$required_pages = array( "'home'", "'about'", "'services'", "'our-process'", "'faqs'", "'contact'" );
+$required_pages = array( "'home'", "'about'", "'services'", "'our-process'", "'faqs'", "'contact'", "'service-areas'", "'additional-services'", "'painting-guides'" );
 $required_categories = array( 'residential', 'commercial', 'interior', 'exterior', 'fence', 'outdoor', 'roof', 'wallpaper', 'plaster' );
 $protections = array( '_spp_client_modified_at', '_spp_source_key', '_spp_source_hash', '_spp_source_asset', 'metadata_exists', 'spp_content_migration_report' );
 $missing = array();
@@ -31,8 +31,8 @@ foreach ( $required_categories as $category ) {
 
 $result = array(
 	'baseline_routes'     => isset( $baseline['routeCount'] ) ? (int) $baseline['routeCount'] : 0,
-	'expected_routes'     => 15,
-	'page_records'        => 6,
+	'expected_routes'     => 21,
+	'page_records'        => 28,
 	'service_records'     => 9,
 	'faq_records'         => 10,
 	'testimonial_records' => 4,

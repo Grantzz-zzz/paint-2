@@ -1,12 +1,16 @@
 # Superior Plus WordPress React Theme Handoff
 
-Version 2.0 embeds the compiled React frontend inside the WordPress theme. WordPress serves the same components and CSS instead of rebuilding the design with Elementor widgets.
+Theme 2.6.0 embeds the compiled React frontend inside WordPress. The companion
+Superior Plus Content 1.0.0 plugin supplies editable approved content, local SEO
+pages, forms and recovery tools.
 
 ## Included
 
 - Exact homepage
-- About, Services, Our Process, FAQs and Contact pages
+- About, Services, Additional Services, Our Process, FAQs and Contact pages
 - Nine complete service pages
+- Service Areas hub plus 15 editable local-area pages
+- Painting Guides hub plus four approved guide articles
 - Original header, Services dropdown, footer, images, animations and responsive layout
 - Direct WordPress URL redirects to matching React routes
 - Local image assets; large project videos remain hosted by the current GitHub Pages deployment
@@ -15,12 +19,13 @@ Version 2.0 embeds the compiled React frontend inside the WordPress theme. WordP
 
 1. Confirm you are in the staging dashboard.
 2. Create a current files-and-database backup.
-3. Upload `wordpress-theme/dist/superior-plus-2.0.0.zip` through Appearance → Themes → Add New → Upload Theme.
-4. Approve replacing the existing Superior Plus theme when WordPress asks.
-5. Activate the theme on staging.
-6. Clear WordPress, host and CDN caches.
-7. Test the homepage, menu, dropdown, contact form appearance and all service pages.
-8. Push to live only after client approval.
+3. Upload `wordpress-plugin/dist/superior-plus-content-1.0.0.zip` through Plugins → Add New Plugin.
+4. Upload `wordpress-theme/dist/superior-plus-2.6.0.zip` through Appearance → Themes → Add New.
+5. Approve replacing the existing Superior Plus packages when WordPress asks.
+6. Activate both packages on staging and run the safe approved-content importer once.
+7. Resave permalinks and clear WordPress, host and CDN caches.
+8. Test the homepage, navigation, forms, services, areas and painting guides.
+9. Push to live only after client approval.
 
 Existing Elementor pages, UAE templates and MetForm entries remain stored in WordPress. Version 2.0 does not print their frontend assets because they conflict with the compiled React application.
 
@@ -28,7 +33,8 @@ Existing Elementor pages, UAE templates and MetForm entries remain stored in Wor
 
 The public design is code-controlled to preserve pixel accuracy. Edit the React source locally, run `npm run build`, copy the non-video build files into `wordpress-theme/superior-plus/react-dist/`, increase the theme version and rebuild the ZIP.
 
-The quote form currently demonstrates the approved interaction but does not send mail. Connect it to a WordPress REST endpoint or external form service before production launch.
+The quote form submits through the plugin REST endpoint. Configure and verify the
+production recipient email on staging before launch.
 
 ## Rebuild package
 

@@ -1,6 +1,14 @@
-import { routerBasePath } from './routes'
+import { routerBasePath } from './routes.js'
 
 const moduleAssetBase = new URL('./', import.meta.url)
+const browserWindow = typeof window === 'undefined'
+  ? {
+      location: { origin: 'http://localhost', pathname: '/' },
+      __SPP_SITE_URL__: '',
+      __SPP_CONTENT_API__: '',
+      __SPP_ROUTER_BASE__: '',
+    }
+  : window
 
 export function asset(path) {
   const cleanPath = String(path).replace(/^\.?\/?assets\//, '')
@@ -8,7 +16,7 @@ export function asset(path) {
   // Vite serves files from public/assets at /assets during local development.
   // Production bundles live beside the copied asset directory, including when
   // deployed below /paint-2/ or inside a WordPress theme.
-  if (import.meta.env.DEV) {
+  if (import.meta.env?.DEV) {
     return `/assets/${cleanPath}`
   }
 
@@ -19,23 +27,23 @@ export const remoteProjectVideo = path =>
   `https://grantzz-zzz.github.io/paint-2/assets/${String(path).replace(/^\/+/, '')}`
 
 export const siteUrl = (() => {
-  const configured = window.__SPP_SITE_URL__ || (import.meta.env.DEV
-    ? `${window.location.origin}${window.location.pathname}`
+  const configured = browserWindow.__SPP_SITE_URL__ || (import.meta.env?.DEV
+    ? `${browserWindow.location.origin}${browserWindow.location.pathname}`
     : 'https://grantzz-zzz.github.io/paint-2/')
   return configured.endsWith('/') ? configured : `${configured}/`
 })()
 
-export const usesCleanRoutes = Boolean(window.__SPP_CONTENT_API__)
+export const usesCleanRoutes = Boolean(browserWindow.__SPP_CONTENT_API__)
 
 export function publicRouteUrl(path = '/') {
   const normalized=`/${String(path).replace(/^\/+|\/+$/g,'')}`
   const route=normalized==='/'?'/':normalized
   if(!usesCleanRoutes)return `${siteUrl}#${route}`
   const base=routerBasePath({
-    siteUrl:window.__SPP_SITE_URL__,
-    explicitBase:window.__SPP_ROUTER_BASE__,
-    pathname:window.location.pathname,
-    origin:window.location.origin,
+    siteUrl:browserWindow.__SPP_SITE_URL__,
+    explicitBase:browserWindow.__SPP_ROUTER_BASE__,
+    pathname:browserWindow.location.pathname,
+    origin:browserWindow.location.origin,
   })
-  return `${window.location.origin}${base}${route==='/'?'':route}`
+  return `${browserWindow.location.origin}${base}${route==='/'?'':route}`
 }

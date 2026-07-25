@@ -79,7 +79,7 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 - [x] Connect suburb pages to relevant services and neighbouring areas
 - [x] Add dedicated desktop and mobile Service Areas dropdown navigation
 - [~] Confirm the 15 listed suburbs match the client’s current service boundaries
-- [ ] Publish the location pages as editable WordPress pages
+- [x] Add all 15 location pages to the safe WordPress importer as editable pages
 - [ ] Confirm every production location URL appears in the WordPress sitemap
 
 ### 5. Google-friendly structure
@@ -90,7 +90,7 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 - [x] Useful image alt text and placeholder disclosure
 - [x] LocalBusiness, Service, FAQ, HowTo and breadcrumb structured data
 - [x] XML sitemap and robots file
-- [ ] Render final per-page metadata server-side in WordPress
+- [x] Render final per-page metadata server-side in WordPress
 - [ ] Validate structured data and social previews on staging
 
 ### 6. Easy contact
@@ -158,7 +158,7 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 - [ ] Confirm consistent legal name, phone, service area and address
 - [ ] Connect the final site to the Google Business Profile
 - [ ] Add the production website and quote link to the profile
-- [ ] Create approved suburb pages
+- [x] Create approved suburb pages
 - [ ] Add verified local project and review signals
 
 ## C. Current implementation order
@@ -187,8 +187,8 @@ This is the working checklist for the React/GitHub Pages site first, followed by
 ### Batch 3 — SEO, tracking and performance
 
 - [x] Add all PDF-listed suburb pages to the React/GitHub Pages site
-- [ ] Migrate the suburb pages into editable WordPress content
-- [ ] Finish server-rendered WordPress metadata
+- [x] Migrate the suburb pages into editable WordPress content
+- [x] Finish server-rendered WordPress metadata
 - [ ] Connect GA4, Search Console and Google Business Profile
 - [ ] Complete Lighthouse/Core Web Vitals optimisation
 

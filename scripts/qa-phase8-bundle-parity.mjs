@@ -18,6 +18,7 @@ const routes = [
   ['home', '/'],
   ['about', '/about'],
   ['services', '/services'],
+  ['additional-services', '/additional-services'],
   ['our-process', '/our-process'],
   ['faqs', '/faqs'],
   ['contact', '/contact'],
@@ -30,6 +31,13 @@ const routes = [
   ['deck-painting-staining', '/services/deck-painting-staining-melbourne'],
   ['wallpaper-removal', '/services/wallpaper-removal-melbourne'],
   ['plaster-repairs', '/services/plaster-repairs-melbourne'],
+  ['service-areas', '/service-areas'],
+  ['area-chadstone', '/service-areas/chadstone'],
+  ['painting-guides', '/painting-guides'],
+  ['guide-repainting-cycles', '/painting-guides/how-often-repaint-house-melbourne'],
+  ['guide-interior-exterior', '/painting-guides/interior-vs-exterior-painting'],
+  ['guide-professional-services', '/painting-guides/professional-painting-services-melbourne'],
+  ['guide-choosing-contractor', '/painting-guides/experienced-painting-contractors-melbourne'],
 ]
 const requestedRoute = process.env.SPP_PHASE8_ROUTE || ''
 const activeRoutes = requestedRoute ? routes.filter(([, route]) => route === requestedRoute) : routes
@@ -174,6 +182,7 @@ async function inventory(page) {
       try {
         const parsed = new URL(value, location.href)
         if (parsed.hash.startsWith('#/')) return parsed.hash.slice(1).replace(/\/+$/, '') || '/'
+        if (parsed.hash) return parsed.hash
         if (parsed.hostname === 'grantzz-zzz.github.io') {
           return parsed.pathname.replace(/^\/paint-2/, '').replace(/\/+$/, '') || '/'
         }
@@ -382,6 +391,12 @@ try {
                 text: firstStringDifference(reference.text, target.text),
                 referenceButtons: reference.buttons,
                 targetButtons: target.buttons,
+              },
+          linkDiagnostics: comparable(target.links) === comparable(reference.links)
+            ? undefined
+            : {
+                reference: reference.links,
+                target: target.links,
               },
           visualHashParity,
           visualComparison,

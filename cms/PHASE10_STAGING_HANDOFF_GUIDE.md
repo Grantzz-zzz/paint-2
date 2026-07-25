@@ -7,13 +7,13 @@ WordPress site. It does not authorize changes to the live production site.
 
 | Package | Exact file | Upload screen | Purpose |
 | --- | --- | --- | --- |
-| Theme | `superior-plus-2.5.0.zip` | **Appearance → Themes → Add New → Upload Theme** | The complete React frontend, design, CSS, responsive rules, animations and optimized client photography |
-| Plugin | `superior-plus-content-0.9.0.zip` | **Plugins → Add New Plugin → Upload Plugin** | Editable content, Media Library fields, routes, real-photo migration, forms and recovery |
+| Theme | `superior-plus-2.6.0.zip` | **Appearance → Themes → Add New → Upload Theme** | The complete React frontend, design, CSS, responsive rules, animations and optimized client photography |
+| Plugin | `superior-plus-content-1.0.0.zip` | **Plugins → Add New Plugin → Upload Plugin** | Editable content, Media Library fields, routes, real-photo migration, local SEO pages, painting guides, forms and recovery |
 
 Local package links:
 
-- `C:\Users\Grant\Downloads\paint2\wordpress-theme\dist\superior-plus-2.5.0.zip`
-- `C:\Users\Grant\Downloads\paint2\wordpress-plugin\dist\superior-plus-content-0.9.0.zip`
+- `C:\Users\Grant\Downloads\paint2\wordpress-theme\dist\superior-plus-2.6.0.zip`
+- `C:\Users\Grant\Downloads\paint2\wordpress-plugin\dist\superior-plus-content-1.0.0.zip`
 
 Do not upload an older numbered ZIP. Do not upload the React repository ZIP,
 the source folder, `folder 1.zip`, or the plugin ZIP on the Themes screen.
@@ -78,14 +78,14 @@ After both packages are active, run the importer once as described in section 8.
 
 1. In staging WordPress, open **Plugins → Add New Plugin**.
 2. Click **Upload Plugin**.
-3. Choose `superior-plus-content-0.9.0.zip`.
+3. Choose `superior-plus-content-1.0.0.zip`.
 4. Click **Install Now**.
 5. If WordPress detects an existing version, click
    **Replace current with uploaded**.
 6. Wait for the success message.
 7. Open **Plugins → Installed Plugins**.
 8. Find **Superior Plus Content**.
-9. Confirm the version is **0.9.0**.
+9. Confirm the version is **1.0.0**.
 10. If WordPress says the plugin was updated but could not be reactivated,
     click **Activate** manually.
 
@@ -103,13 +103,13 @@ becomes inaccessible.
 1. Open **Appearance → Themes**.
 2. Click **Add New Theme**.
 3. Click **Upload Theme**.
-4. Choose `superior-plus-2.5.0.zip`.
+4. Choose `superior-plus-2.6.0.zip`.
 5. Click **Install Now**.
 6. If WordPress detects the existing theme, click
    **Replace current with uploaded**.
 7. Return to **Appearance → Themes**.
 8. Find **Superior Plus Painting**.
-9. Confirm the version is **2.5.0**.
+9. Confirm the version is **2.6.0**.
 10. Click **Activate** only on staging.
 
 Expected result:
@@ -148,7 +148,7 @@ Open **Superior Plus → Import approved site**.
 
 ### Existing staging installation
 
-For the 2.5.0/0.9.0 media-library update, run **Import or safely refresh
+For the 2.6.0/1.0.0 content, local-SEO and media-library update, run **Import or safely refresh
 approved content** once after installing both packages. This imports the new
 deduplicated project archive and refreshes records still owned by the approved
 dataset. The importer is idempotent and protects client-edited records.
@@ -162,7 +162,8 @@ For later package-only updates, rerunning is only necessary when:
 Expected baseline:
 
 - 1 Site Settings record;
-- 6 core pages;
+- 28 pages (6 core, 1 Service Areas hub, 15 local areas, 1 Additional Services
+  page, 1 Painting Guides hub and 4 guide articles);
 - 9 services;
 - 10 FAQs;
 - 4 testimonials;
@@ -196,7 +197,7 @@ Administrator-only items:
 Do not invent client information. Leave unconfirmed legal, insurance, warranty,
 opening-hours and privacy claims unpublished until Rene approves them.
 
-## 10. Check all 15 public routes
+## 10. Check all 37 public routes
 
 Open every route directly and refresh the browser:
 
@@ -215,6 +216,12 @@ Open every route directly and refresh the browser:
 13. `/services/deck-painting-staining-melbourne`
 14. `/services/wallpaper-removal-melbourne`
 15. `/services/plaster-repairs-melbourne`
+
+Then check:
+
+- `/additional-services`;
+- `/service-areas` and all 15 nested local-area routes;
+- `/painting-guides` and all four nested guide routes.
 
 For each page confirm:
 
@@ -366,13 +373,13 @@ production files-and-database backup exists.
 
 ### “The theme is missing the style.css stylesheet”
 
-The wrong ZIP was uploaded. Use exactly `superior-plus-2.5.0.zip` in
+The wrong ZIP was uploaded. Use exactly `superior-plus-2.6.0.zip` in
 **Appearance → Themes**.
 
 ### “Plugin updated but could not be reactivated”
 
 Open **Plugins → Installed Plugins**, find **Superior Plus Content**, and click
-**Activate**. Then confirm version 0.9.0.
+**Activate**. Then confirm version 1.0.0.
 
 ### “Destination folder already exists”
 
@@ -390,7 +397,7 @@ Open **Settings → Permalinks**, click **Save Changes**, clear caches and retry
 
 ### Styling looks like Elementor or two headers appear
 
-Confirm **Superior Plus Painting 2.5.0** is the active theme, clear every cache,
+Confirm **Superior Plus Painting 2.6.0** is the active theme, clear every cache,
 and inspect the page again in a private window.
 
 ### A video does not play

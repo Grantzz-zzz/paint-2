@@ -1,14 +1,24 @@
 # Superior Plus Painting — QA Report
 
-Run date: 24 July 2026
+Run date: 25 July 2026
 
 ## Result
 
 **PASS — WordPress parity: 747 checks, 0 failures**
 
-**Current client-media release: PASS — React QA: 1,134 checks, 0 failures**
+**Current content/SEO release: PASS — React QA: 1,356 checks, 0 failures**
 
-- The 24 July 2026 media expansion completed all 15 routes at desktop, tablet and mobile sizes in the WordPress bundle-parity sweep.
+- All 37 React routes passed at desktop, tablet and mobile sizes, including the
+  Additional Services page, Painting Guides hub, four approved guide articles,
+  Service Areas hub and 15 local-area pages.
+- Desktop and mobile visual review passed for the fuller homepage, Additional
+  Services page, Painting Guides hub and guide-article template.
+- The 25 July visual-content pass added real-project imagery to service and
+  area cards, a supplied training certificate, and accessible 3D flip-card
+  details on About and Our Process.
+- Six focused packaged-theme parity runs passed 366 checks with zero failures
+  across desktop, tablet and mobile.
+- The 24 July 2026 media expansion completed all 15 baseline routes at desktop, tablet and mobile sizes in the WordPress bundle-parity sweep.
 - The corrected focused parity/interaction rerun passed 61 checks with 0 failures.
 - Theme, plugin, migration, CMS contract and route-normalisation validators all pass.
 - The packaged theme contains no stock, generated-placeholder or legacy hero-painter assets.
@@ -36,7 +46,7 @@ runtime errors and basic keyboard semantics. The suite also verified:
 
 ## Import verification
 
-The approved importer completed with exactly 6 pages, 9 services, 10 FAQs,
+The approved importer validates exactly 28 pages, 9 services, 10 FAQs,
 4 testimonials and 9 projects. Repeated imports remained count-stable. An atomic
 migration lock prevents overlapping requests, and later client-modified records
 remain protected.

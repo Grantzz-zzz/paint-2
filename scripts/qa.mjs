@@ -3,6 +3,7 @@ import { readFile, stat } from 'node:fs/promises'
 import { extname, join, normalize } from 'node:path'
 import { chromium } from 'playwright-core'
 import { serviceAreas } from '../src/data/serviceAreas.js'
+import { paintingGuides } from '../src/data/paintingGuides.js'
 
 const root = join(process.cwd(), 'dist')
 const port = 4188
@@ -13,6 +14,7 @@ const routes = [
   ['/', 'Professional painters'],
   ['/about', 'Care in every coat'],
   ['/services', 'Painting & property services'],
+  ['/additional-services', 'Additional property services'],
   ['/services/residential-painting-melbourne', 'Residential Painting'],
   ['/services/commercial-painting-melbourne', 'Commercial Painting'],
   ['/services/interior-painting-melbourne', 'Interior Painting'],
@@ -27,6 +29,8 @@ const routes = [
   ['/contact', 'Get in touch'],
   ['/service-areas', 'Painters across Melbourne'],
   ...serviceAreas.map(area => [`/service-areas/${area.slug}`, `Painters in ${area.name}`]),
+  ['/painting-guides', 'Practical painting guides'],
+  ...paintingGuides.map(guide => [`/painting-guides/${guide.slug}`, guide.title]),
 ]
 
 const viewports = [
@@ -155,6 +159,23 @@ try {
   await secondFaq.locator('button').click()
   check(await secondFaq.locator('.faq-answer').isVisible(), 'FAQ: accordion did not open')
   check(await secondFaq.locator('button').getAttribute('aria-expanded') === 'true', 'FAQ: aria-expanded did not update')
+
+  await page.goto(`${origin}#/about`, { waitUntil: 'domcontentloaded' })
+  const aboutFlip = page.locator('.flip-feature').first()
+  await aboutFlip.waitFor()
+  check(await page.locator('.flip-feature').count() === 8, 'About: expected eight image-led standards cards')
+  await aboutFlip.click()
+  check(await aboutFlip.getAttribute('aria-pressed') === 'true', 'About: standards card did not expose its flipped state')
+  check(await aboutFlip.evaluate(element => element.classList.contains('is-flipped')), 'About: 3D standards card did not turn over')
+  await aboutFlip.click()
+  check(await aboutFlip.getAttribute('aria-pressed') === 'false', 'About: standards card did not turn back')
+
+  await page.goto(`${origin}#/our-process`, { waitUntil: 'domcontentloaded' })
+  const processFlip = page.locator('.flip-feature').nth(1)
+  await processFlip.waitFor()
+  check(await page.locator('.flip-feature').count() === 6, 'Process: expected six image-led promise cards')
+  await processFlip.click()
+  check(await processFlip.getAttribute('aria-pressed') === 'true', 'Process: promise card did not expose its flipped state')
 
   await page.goto(`${origin}#/contact`, { waitUntil: 'domcontentloaded' })
   const form = page.locator('.full-quote-form')

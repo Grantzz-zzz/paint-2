@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPP_VERSION', '2.5.0' );
+define( 'SPP_VERSION', '2.6.0' );
 define( 'SPP_PATH', get_template_directory() );
 define( 'SPP_URI', get_template_directory_uri() );
 
@@ -145,6 +145,74 @@ function spp_canonical_url_for_route( $route ) {
 	$route = '/' . trim( (string) $route, '/' );
 	return '/' === $route ? home_url( '/' ) : home_url( $route . '/' );
 }
+
+function spp_server_seo_data() {
+	$post_id = get_queried_object_id();
+	if ( ! $post_id || ! is_singular( array( 'page', 'spp_service', 'spp_project' ) ) ) {
+		return array();
+	}
+	$title = trim( (string) get_post_meta( $post_id, 'spp_seo_title', true ) );
+	$description = trim( (string) get_post_meta( $post_id, 'spp_seo_description', true ) );
+	if ( ! $description ) {
+		$description = wp_strip_all_tags( get_the_excerpt( $post_id ) );
+	}
+	$canonical = trim( (string) get_post_meta( $post_id, 'spp_canonical_url', true ) );
+	if ( ! $canonical ) {
+		$canonical = spp_canonical_url_for_route( spp_react_route_for_request() );
+	}
+	$image_id = absint( get_post_meta( $post_id, 'spp_social_image_id', true ) );
+	if ( ! $image_id ) {
+		$image_id = absint( get_post_meta( $post_id, 'spp_hero_image_id', true ) );
+	}
+	$page_uri = is_page( $post_id ) ? trim( get_page_uri( $post_id ), '/' ) : '';
+	$is_guide = $page_uri && 0 === strpos( $page_uri, 'painting-guides/' );
+	return array(
+		'title'       => $title ?: wp_strip_all_tags( get_the_title( $post_id ) ),
+		'description' => $description,
+		'canonical'   => $canonical,
+		'image'       => $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '',
+		'type'        => ( 'post' === get_post_type( $post_id ) || $is_guide ) ? 'article' : 'website',
+	);
+}
+
+function spp_server_document_title( $title ) {
+	$data = spp_server_seo_data();
+	return ! empty( $data['title'] ) ? $data['title'] : $title;
+}
+add_filter( 'pre_get_document_title', 'spp_server_document_title', 20 );
+
+function spp_replace_core_canonical() {
+	if ( ! defined( 'WPSEO_VERSION' ) && ! defined( 'RANK_MATH_VERSION' ) && spp_server_seo_data() ) {
+		remove_action( 'wp_head', 'rel_canonical' );
+	}
+}
+add_action( 'template_redirect', 'spp_replace_core_canonical' );
+
+function spp_server_meta_tags() {
+	if ( defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' ) ) {
+		return;
+	}
+	$data = spp_server_seo_data();
+	if ( ! $data ) {
+		return;
+	}
+	echo '<meta name="description" content="' . esc_attr( $data['description'] ) . '">' . "\n";
+	echo '<link rel="canonical" href="' . esc_url( $data['canonical'] ) . '">' . "\n";
+	echo '<meta property="og:type" content="' . esc_attr( $data['type'] ) . '">' . "\n";
+	echo '<meta property="og:title" content="' . esc_attr( $data['title'] ) . '">' . "\n";
+	echo '<meta property="og:description" content="' . esc_attr( $data['description'] ) . '">' . "\n";
+	echo '<meta property="og:url" content="' . esc_url( $data['canonical'] ) . '">' . "\n";
+	if ( $data['image'] ) {
+		echo '<meta property="og:image" content="' . esc_url( $data['image'] ) . '">' . "\n";
+	}
+	echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+	echo '<meta name="twitter:title" content="' . esc_attr( $data['title'] ) . '">' . "\n";
+	echo '<meta name="twitter:description" content="' . esc_attr( $data['description'] ) . '">' . "\n";
+	if ( $data['image'] ) {
+		echo '<meta name="twitter:image" content="' . esc_url( $data['image'] ) . '">' . "\n";
+	}
+}
+add_action( 'wp_head', 'spp_server_meta_tags', 2 );
 
 function spp_excerpt_length() {
 	return 28;

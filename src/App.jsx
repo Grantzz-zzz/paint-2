@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { serviceList } from './data/siteData'
 import { serviceAreaBySlug, serviceAreaRegions } from './data/serviceAreas'
+import { paintingGuides } from './data/paintingGuides'
 import { asset, publicRouteUrl, siteUrl } from './utils/assets'
 import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
 
@@ -21,14 +22,14 @@ const nav = [
 ]
 
 const services = [
-  { icon: Home, title: 'Residential painting', text: 'Thoughtful interior and exterior finishes that make home feel new again.', tone: 'maroon' },
-  { icon: Building2, title: 'Commercial painting', text: 'Flexible, low-disruption painting for offices, retail, strata and more.', tone: 'green' },
-  { icon: PaintRoller, title: 'Interior & exterior', text: 'Detailed preparation and durable finishes, inside and out.', tone: 'gold' },
-  { icon: Sparkles, title: 'Roof restoration', text: 'Clean, repair, seal and coat for stronger weather protection.', tone: 'teal' },
-  { icon: Trees, title: 'Decks & fences', text: 'Stains and coatings designed to stand up to Melbourne weather.', tone: 'terracotta' },
-  { icon: Palette, title: 'Colour consultation', text: 'Clear, confident colour choices that work with your architecture.', tone: 'navy' },
-  { icon: SprayCan, title: 'Spray painting', text: 'Smooth, modern finishes for cabinetry, doors and detailed surfaces.', tone: 'green' },
-  { icon: Hammer, title: 'Carpentry & repairs', text: 'Plaster, weatherboard and light timber repairs before we paint.', tone: 'maroon' },
+  { icon: Home, title: 'Residential painting', text: 'Thoughtful interior and exterior finishes that make home feel new again.', tone: 'maroon', image: asset('client/projects/exterior/exterior-07.webp') },
+  { icon: Building2, title: 'Commercial painting', text: 'Flexible, low-disruption painting for offices, retail, strata and more.', tone: 'green', image: asset('client/projects/commercial/commercial-02.webp') },
+  { icon: PaintRoller, title: 'Interior & exterior', text: 'Detailed preparation and durable finishes, inside and out.', tone: 'gold', image: asset('client/projects/interior/interior-04.webp') },
+  { icon: Sparkles, title: 'Roof restoration', text: 'Clean, repair, seal and coat for stronger weather protection.', tone: 'teal', image: asset('client/projects/roof/roof-01.webp') },
+  { icon: Trees, title: 'Decks & fences', text: 'Stains and coatings designed to stand up to Melbourne weather.', tone: 'terracotta', image: asset('client/projects/fence/fence-03.webp') },
+  { icon: Palette, title: 'Colour consultation', text: 'Clear, confident colour choices that work with your architecture.', tone: 'navy', image: asset('client/projects/residential/residential-08.webp') },
+  { icon: SprayCan, title: 'Spray painting', text: 'Smooth, modern finishes for cabinetry, doors and detailed surfaces.', tone: 'green', image: asset('client/projects/fence/fence-10.webp') },
+  { icon: Hammer, title: 'Carpentry & repairs', text: 'Plaster, weatherboard and light timber repairs before we paint.', tone: 'maroon', image: asset('client/projects/plaster/plaster-11.webp') },
 ]
 
 const process = [
@@ -176,11 +177,12 @@ function Services({fields,serviceItems}) {
     icon:services[index%services.length].icon,
     text:item.short,
     tone:item.tone||services[index%services.length].tone,
+    image:mediaUrl(item.hero?.image||item.image,services[index%services.length].image),
   })):services
   return <section id="services" className="section section-track services-section">
     <div className="container">
       <Reveal className="section-heading"><div><Eyebrow>{fields?.home_services_eyebrow||'What we paint'}</Eyebrow><h2>{fields?.home_services_title||'Every surface deserves'}<br/><em>{fields?.home_services_accent||'the right finish.'}</em></h2></div><p>{fields?.home_services_intro||'From one carefully refreshed room to a complete commercial transformation, our experienced team brings the same care to every job.'}</p></Reveal>
-      <div className="services-grid">{cards.map((service, i) => { const Icon=service.icon; return <Reveal key={service.slug||service.title} delay={(i%4)*.06}><article className={`service-card tone-${service.tone}`}><span className="service-num">{String(i+1).padStart(2,'0')}</span><Icon/><h3>{service.title}</h3><p>{service.text}</p><span className="card-arrow">↗</span></article></Reveal>})}</div>
+      <div className="services-grid">{cards.map((service, i) => { const Icon=service.icon; return <Reveal key={service.slug||service.title} delay={(i%4)*.06}><article className={`service-card tone-${service.tone}`}><div className="service-card-photo"><img src={service.image} alt={`${service.title} project by Superior Plus Painting`} loading="lazy" decoding="async"/></div><span className="service-num">{String(i+1).padStart(2,'0')}</span><Icon/><h3>{service.title}</h3><p>{service.text}</p><span className="card-arrow">↗</span></article></Reveal>})}</div>
     </div>
     <Divider color="#1f5140" variant="slash" />
   </section>
@@ -226,6 +228,11 @@ function WhyUs({fields,business}) {
   </section>
 }
 
+function GuidesPreview() {
+  const navigate=useNavigate()
+  return <section className="section home-guides"><div className="container"><Reveal className="section-heading"><div><Eyebrow>Painting knowledge</Eyebrow><h2>Plan with more<br/><em>confidence.</em></h2></div><p>Practical guidance about repainting cycles, preparation, coating systems and choosing the right professional team for your property.</p></Reveal><div className="home-guide-grid">{paintingGuides.slice(0,3).map((guide,index)=><Reveal key={guide.slug} delay={index*.07}><article><button onClick={()=>navigate(`/painting-guides/${guide.slug}`)}><img src={guide.image} alt={guide.imageAlt} loading="lazy" decoding="async"/><span><Clock3/>{guide.readTime}</span></button><small>{guide.eyebrow}</small><h3>{guide.title}</h3><p>{guide.excerpt}</p><button className="guide-link" onClick={()=>navigate(`/painting-guides/${guide.slug}`)}>Read guide <ArrowRight/></button></article></Reveal>)}</div><div className="section-action"><button className="btn" onClick={()=>navigate('/painting-guides')}>Explore all painting guides <ArrowRight/></button></div></div><Divider color="#fbf6ec" variant="wave"/></section>
+}
+
 function Areas({fields,serviceAreas}) {
   const navigate=useNavigate()
   return <section className="areas"><div className="container areas-layout"><Reveal><Eyebrow light>Melbourne-wide</Eyebrow><h2>{fields?.home_areas_title||'Your local painting team,'}<br/><em>wherever you are.</em></h2><p>{fields?.home_areas_text||'Based in Melbourne and proudly servicing homes and businesses across the east, south-east and surrounding suburbs.'}</p><button className="areas-link" onClick={()=>navigate('/service-areas')}>Explore all service areas <ArrowRight size={16}/></button></Reveal><Reveal className="suburb-cloud" delay={.15}>{serviceAreas.map((s,i)=><span className={`chip chip-${i%4}`} key={s}><MapPin size={13}/>{s}</span>)}</Reveal></div><Divider color="#fff" variant="slash" /></section>
@@ -250,7 +257,8 @@ function Footer() {
   const {business,footer,navigation,services:cmsServices}=useSiteContent()
   const go = (path) => { navigate(path); window.scrollTo({ top: 0, behavior: 'smooth' }) }
   const explore=(navigation?.length?navigation:nav.map(([url,label],id)=>({id,label,url}))).filter(item=>toAppPath(item.url)!=='/').slice(0,5)
-  return <footer><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}</div><div><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.slice(0,4).map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span>{business.instagram_url&&<a href={business.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={19}/></a>}</div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
+  const hasGuides=explore.some(item=>toAppPath(item.url)==='/painting-guides')
+  return <footer><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/painting-guides')}>Painting Guides</button>}</div><div><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.slice(0,4).map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span>{business.instagram_url&&<a href={business.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={19}/></a>}</div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
 }
 
 export default function App() {
@@ -279,7 +287,7 @@ export default function App() {
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
     return()=>ctx.revert()
   },[seo?.description,seo?.canonical_url,seo?.title,business])
-  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><Areas fields={fields} serviceAreas={serviceAreas?.length?serviceAreas:suburbs}/><Testimonials fields={fields} items={testimonialItems}/><Contact fields={fields} business={business}/></main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview/><Areas fields={fields} serviceAreas={serviceAreas?.length?serviceAreas:suburbs}/><Testimonials fields={fields} items={testimonialItems}/><Contact fields={fields} business={business}/></main><Footer/></>
 }
 
 export { Navbar, Footer, Reveal, Eyebrow, Divider }

@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '1.2.0';
+	const VERSION = '1.3.0';
 
 	private $types;
 	private $report = array();
@@ -92,7 +92,7 @@ class SPP_Content_Migration {
 			'reused'        => array(),
 			'protected'     => array(),
 			'errors'        => array(),
-			'expected'      => array( 'pages' => 6, 'services' => 9, 'faqs' => 10, 'testimonials' => 4, 'projects' => 9 ),
+			'expected'      => array( 'pages' => 28, 'services' => 9, 'faqs' => 10, 'testimonials' => 4, 'projects' => 9 ),
 		);
 
 		$config_id = $this->types->ensure_site_config();
@@ -158,9 +158,16 @@ class SPP_Content_Migration {
 			$post = get_page_by_path( $slug, OBJECT, 'page' );
 			$is_new = ! $post;
 			if ( $is_new ) {
+				$path_parts = explode( '/', trim( $slug, '/' ) );
+				$post_name  = array_pop( $path_parts );
+				$parent_id  = 0;
+				if ( $path_parts ) {
+					$parent = get_page_by_path( implode( '/', $path_parts ), OBJECT, 'page' );
+					$parent_id = $parent ? (int) $parent->ID : 0;
+				}
 				$id = wp_insert_post(
 					array(
-						'post_type' => 'page', 'post_status' => 'publish', 'post_name' => $slug,
+						'post_type' => 'page', 'post_status' => 'publish', 'post_name' => $post_name, 'post_parent' => $parent_id,
 						'post_title' => $data['title'], 'post_excerpt' => $data['excerpt'], 'post_content' => $data['excerpt'],
 					),
 					true
@@ -569,7 +576,7 @@ class SPP_Content_Migration {
 
 	private function page_dataset() {
 		$process = array_map( function ( $item ) { return array( 'title' => $item[0], 'text' => $item[1] ); }, spp_default_process() );
-		return array(
+		$pages = array(
 			'home' => array(
 				'title' => 'Home', 'template' => 'home', 'excerpt' => 'Premium residential and commercial painting across Melbourne.',
 				'hero_asset' => 'client/projects/fence/fence-03.webp',
@@ -676,5 +683,139 @@ class SPP_Content_Migration {
 				),
 			),
 		);
+		return $pages + $this->expanded_page_dataset();
+	}
+
+	private function expanded_page_dataset() {
+		$pages = array(
+			'service-areas' => array(
+				'title' => 'Service Areas', 'template' => 'standard', 'excerpt' => 'Professional painters across Melbourne’s eastern and south-eastern suburbs.',
+				'hero_asset' => 'client/projects/residential/residential-01.webp',
+				'meta' => array(
+					'spp_eyebrow' => 'Melbourne service areas', 'spp_hero_title' => 'Painters across Melbourne’s', 'spp_accent' => 'eastern & south-eastern suburbs.',
+					'spp_hero_intro' => 'Superior Plus Painting provides residential, commercial and specialist painting services across Melbourne’s east and south-east. Choose your suburb for relevant services, property types and a direct quote path.',
+					'spp_content_sections' => array(
+						array( 'title' => 'Local painting services', 'text' => 'Interior, exterior, residential, commercial and specialist preparation services are available across the listed areas, subject to project scope and availability.' ),
+					),
+					'spp_seo_title' => 'Painters Melbourne Eastern Suburbs | Service Areas',
+					'spp_seo_description' => 'Explore professional painting services across Chadstone, Mount Waverley, Glen Waverley, Oakleigh, Greater Dandenong, Casey and nearby suburbs.',
+				),
+			),
+			'additional-services' => array(
+				'title' => 'Additional Services', 'template' => 'standard', 'excerpt' => 'Preparation, repairs and complementary property improvement services across Melbourne.',
+				'hero_asset' => 'client/projects/plaster/plaster-11.webp',
+				'meta' => array(
+					'spp_eyebrow' => 'More than the final coat', 'spp_hero_title' => 'Additional property services', 'spp_accent' => 'coordinated with care.',
+					'spp_hero_intro' => 'Selected preparation, repair and improvement services can be coordinated alongside residential and commercial painting.',
+					'spp_content_sections' => array(
+						array( 'title' => 'Carpentry, caulking and tiling', 'text' => 'Suitable timber repairs, trims, gap sealing and tiling support can be discussed as part of a renovation or maintenance scope.' ),
+						array( 'title' => 'Timber and surface restoration', 'text' => 'Preparation can include pressure washing, sanding, scraping, filling, priming and suitable restoration for decks, fences, pergolas and weatherboards.' ),
+						array( 'title' => 'Property maintenance and coatings', 'text' => 'Ongoing maintenance, suitable cabinet painting, garage floor coatings and driveway coatings are assessed during the site inspection.' ),
+					),
+					'spp_seo_title' => 'Additional Property Improvement Services Melbourne',
+					'spp_seo_description' => 'Explore carpentry, caulking, tiling, timber restoration, surface preparation, maintenance and suitable coating services in Melbourne.',
+				),
+			),
+			'painting-guides' => array(
+				'title' => 'Painting Guides', 'template' => 'standard', 'excerpt' => 'Practical painting guidance for Melbourne property owners and managers.',
+				'hero_asset' => 'client/projects/residential/residential-01.webp',
+				'meta' => array(
+					'spp_eyebrow' => 'Advice from the preparation stage', 'spp_hero_title' => 'Practical painting guides', 'spp_accent' => 'for better project decisions.',
+					'spp_hero_intro' => 'Clear information about repainting cycles, preparation, product differences and choosing a professional painting team.',
+					'spp_content_sections' => array(
+						array( 'title' => 'Plan with confidence', 'text' => 'Use these guides to understand the work before requesting a property-specific inspection and written quote.' ),
+					),
+					'spp_seo_title' => 'Painting Guides for Melbourne Property Owners',
+					'spp_seo_description' => 'Practical guidance about repainting, preparation, interior and exterior paint systems, and choosing professional painters in Melbourne.',
+				),
+			),
+		);
+
+		$guides = array(
+			'how-often-repaint-house-melbourne' => array(
+				'title' => 'How Often Should You Repaint Your House in Melbourne?',
+				'excerpt' => 'A practical guide to interior and exterior repainting cycles, warning signs and preparation.',
+				'image' => 'client/projects/residential/residential-01.webp',
+				'sections' => array(
+					array( 'title' => 'How often should interiors be repainted?', 'text' => 'For most Australian homes, interior painting can last five to ten years. Living rooms and bedrooms commonly remain presentable for seven to ten years, while kitchens and bathrooms may need attention after five to seven years because of moisture and frequent cleaning.' ),
+					array( 'title' => 'How long does exterior paint last?', 'text' => 'Melbourne homes are exposed to sun, rain, wind and changing temperatures. Exterior coatings commonly need renewal within seven to ten years. Peeling, cracking, bubbling, fading, exposed timber and water staining are signs that an inspection is worthwhile.' ),
+					array( 'title' => 'Preparation determines the lifespan', 'text' => 'Surfaces should be cleaned, loose coatings removed, cracks and damage repaired, bare areas primed and the correct paint system applied at the recommended coverage.' ),
+				),
+			),
+			'interior-vs-exterior-painting' => array(
+				'title' => 'Interior vs Exterior Painting: What Is the Difference?',
+				'excerpt' => 'Understand the products, preparation and protection requirements behind interior and exterior painting.',
+				'image' => 'client/projects/interior/interior-07.webp',
+				'sections' => array(
+					array( 'title' => 'What interior painting involves', 'text' => 'Interior painting covers walls, ceilings, doors, trims, feature areas and suitable cabinetry. Products are selected for appearance, washability and the demands of each room.' ),
+					array( 'title' => 'What exterior painting involves', 'text' => 'Exterior painting protects weatherboards, render, brick, fascia, eaves, fences, decks and other suitable surfaces from UV, rain, moisture and temperature changes.' ),
+					array( 'title' => 'Why the correct system matters', 'text' => 'Interior and exterior paints are engineered for different conditions. Matching the preparation, primer and finish to the substrate and exposure supports a longer-lasting result.' ),
+				),
+			),
+			'professional-painting-services-melbourne' => array(
+				'title' => 'Professional Painting Services in Melbourne',
+				'excerpt' => 'What complete professional painting should include from preparation to final handover.',
+				'image' => 'client/projects/commercial/commercial-12.webp',
+				'sections' => array(
+					array( 'title' => 'More than applying paint', 'text' => 'A high-quality paint job requires experience, detailed preparation, appropriate products and a team that can manage the property respectfully.' ),
+					array( 'title' => 'Standards to expect', 'text' => 'Clear communication, organised work areas, dependable scheduling, property protection and a final quality inspection are all part of professional service.' ),
+					array( 'title' => 'A straightforward process', 'text' => 'The project should begin with a site assessment and written quote, continue through the required preparation and application, and finish with touch-ups, clean-up and handover.' ),
+				),
+			),
+			'experienced-painting-contractors-melbourne' => array(
+				'title' => 'How to Choose an Experienced Painting Contractor',
+				'excerpt' => 'Practical signs of an experienced contractor and questions worth asking before work begins.',
+				'image' => 'client/projects/fence/fence-03.webp',
+				'sections' => array(
+					array( 'title' => 'Experience shows in preparation', 'text' => 'An experienced contractor assesses cracks, damaged areas, timber condition, old coatings and bare surfaces before recommending repairs, primers and finish coats.' ),
+					array( 'title' => 'Professional team standards', 'text' => 'Quality control, safe and clean work practices, reliable communication and respect for the property are important signs of a well-run project.' ),
+					array( 'title' => 'What to confirm before accepting', 'text' => 'Confirm the written scope, products, preparation, proposed schedule, insurance and how the final inspection and handover will be managed.' ),
+				),
+			),
+		);
+		foreach ( $guides as $slug => $guide ) {
+			$pages[ 'painting-guides/' . $slug ] = array(
+				'title' => $guide['title'], 'template' => 'standard', 'excerpt' => $guide['excerpt'], 'hero_asset' => $guide['image'],
+				'meta' => array(
+					'spp_eyebrow' => 'Superior Plus painting guide', 'spp_hero_title' => $guide['title'], 'spp_accent' => 'A practical Melbourne guide.',
+					'spp_hero_intro' => $guide['excerpt'], 'spp_content_sections' => $guide['sections'],
+					'spp_seo_title' => $guide['title'] . ' | Superior Plus Painting',
+					'spp_seo_description' => $guide['excerpt'],
+				),
+			);
+		}
+
+		$areas = array(
+			'chadstone' => array( 'Chadstone', 'Monash & nearby eastern suburbs', 'Chadstone includes established homes, units, rentals and busy commercial properties. We tailor preparation, access and scheduling to the way each property is used.' ),
+			'mount-waverley' => array( 'Mount Waverley', 'Monash & nearby eastern suburbs', 'Mount Waverley projects range from individual room updates to full interior and exterior repaints, with careful protection for occupied homes and renovation work.' ),
+			'glen-waverley' => array( 'Glen Waverley', 'Monash & nearby eastern suburbs', 'Glen Waverley homes, townhouses, investment properties and workplaces benefit from clear project planning and consistent interior, exterior and outdoor finishes.' ),
+			'oakleigh' => array( 'Oakleigh', 'Monash & nearby eastern suburbs', 'Oakleigh residential and commercial properties have varied access, preparation and coating requirements, so the existing surface is assessed before the work is planned.' ),
+			'mulgrave' => array( 'Mulgrave', 'Monash & nearby eastern suburbs', 'Mulgrave projects can involve family homes, townhouses, workplaces and managed sites where access and operating requirements shape the schedule.' ),
+			'clayton' => array( 'Clayton', 'Monash & nearby eastern suburbs', 'Clayton includes homes, apartments, rentals, offices and clinics. Protection, access and drying time are planned around residents, tenants and business operations.' ),
+			'burwood' => array( 'Burwood', 'Monash & nearby eastern suburbs', 'Burwood projects often involve established homes and renovation work where old coatings, plaster repairs and preparation make a visible difference.' ),
+			'ashwood' => array( 'Ashwood', 'Monash & nearby eastern suburbs', 'Ashwood owners and managers can coordinate wallpaper removal, minor plaster repairs, interior painting, exterior updates and suitable fence work through one team.' ),
+			'dandenong' => array( 'Dandenong', 'Greater Dandenong', 'Dandenong projects range from homes and apartments to shops, offices, warehouses and managed sites, with scheduling planned to reduce disruption.' ),
+			'noble-park' => array( 'Noble Park', 'Greater Dandenong', 'Noble Park painting can combine suitable repairs, interior and exterior finishes, commercial work and fence updates into a clearly staged scope.' ),
+			'springvale' => array( 'Springvale', 'Greater Dandenong', 'Springvale homes, rentals, shops and workplaces benefit from careful staging, tidy work areas and preparation planned around day-to-day use.' ),
+			'keysborough' => array( 'Keysborough', 'Greater Dandenong', 'Keysborough includes established homes, newer properties, warehouses and workplaces. The coating system is matched to each surface rather than using one approach everywhere.' ),
+			'berwick' => array( 'Berwick', 'Casey & the outer south-east', 'Berwick homeowners and property managers can coordinate complete interior and exterior painting with suitable roof, fence and deck coatings.' ),
+			'narre-warren' => array( 'Narre Warren', 'Casey & the outer south-east', 'Narre Warren enquiries include homes, townhouses, rentals and commercial spaces supported by a written scope, preparation details and proposed schedule.' ),
+			'endeavour-hills' => array( 'Endeavour Hills', 'Casey & the outer south-east', 'Endeavour Hills projects often involve established homes where worn coatings, minor defects and detailed preparation need to be addressed before repainting.' ),
+		);
+		foreach ( $areas as $slug => $area ) {
+			$pages[ 'service-areas/' . $slug ] = array(
+				'title' => 'Painters in ' . $area[0], 'template' => 'standard',
+				'excerpt' => 'Professional residential and commercial painting services in ' . $area[0] . ', Melbourne.',
+				'hero_asset' => 'client/projects/residential/residential-01.webp',
+				'meta' => array(
+					'spp_eyebrow' => $area[1] . ' service area', 'spp_hero_title' => 'Painters in ' . $area[0], 'spp_accent' => 'careful work, clearly planned.',
+					'spp_hero_intro' => 'Professional painting for homes, rentals, workplaces and managed properties in ' . $area[0] . ', with detailed preparation and a clean handover.',
+					'spp_content_sections' => array( array( 'title' => 'Painting in ' . $area[0], 'text' => $area[2] ) ),
+					'spp_seo_title' => 'Painters ' . $area[0] . ' | Superior Plus Painting',
+					'spp_seo_description' => 'Professional residential, commercial, interior and exterior painters in ' . $area[0] . ', Melbourne. Request a free written quote.',
+				),
+			);
+		}
+		return $pages;
 	}
 }
