@@ -16,6 +16,7 @@ const PaintingGuidesPage=lazy(()=>import('./pages/GuidePages').then(m=>({default
 const PaintingGuidePage=lazy(()=>import('./pages/GuidePages').then(m=>({default:m.PaintingGuidePage})))
 const DynamicContentPage=lazy(()=>import('./pages/DynamicPages').then(m=>({default:m.DynamicContentPage})))
 const ProjectPage=lazy(()=>import('./pages/DynamicPages').then(m=>({default:m.ProjectPage})))
+const GalleryPage=lazy(()=>import('./pages/GalleryPage'))
 
 function RouteScrollReset() {
   const location=useLocation()
@@ -54,6 +55,7 @@ export default function RouterApp() {
       <Route path="/our-process" element={<ProcessPage/>}/>
       <Route path="/faqs" element={<FAQsPage/>}/>
       <Route path="/contact" element={<ContactPage/>}/>
+      <Route path="/gallery" element={<GalleryPage/>}/>
       <Route path="/projects/:slug" element={<ProjectPage/>}/>
       <Route path="*" element={<DynamicContentPage/>}/>
     </Routes></Suspense>

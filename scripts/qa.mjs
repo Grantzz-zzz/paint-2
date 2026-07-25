@@ -27,6 +27,7 @@ const routes = [
   ['/our-process', 'Our painting process'],
   ['/faqs', 'Frequently asked questions'],
   ['/contact', 'Get in touch'],
+  ['/gallery', 'Every project'],
   ['/service-areas', 'Painters across Melbourne'],
   ...serviceAreas.map(area => [`/service-areas/${area.slug}`, `Painters in ${area.name}`]),
   ['/painting-guides', 'Practical painting guides'],
@@ -274,6 +275,19 @@ try {
   check(await page.locator('.media-lightbox').isVisible() && await page.locator('.media-lightbox video').count() === 1, 'project gallery: video lightbox did not open')
   await page.locator('.lightbox-close').click()
   check(!(await page.locator('.media-lightbox').count()), 'project gallery: lightbox did not close')
+
+  await page.goto(`${origin}#/gallery`, { waitUntil: 'domcontentloaded' })
+  await page.locator('.gallery-photo').first().waitFor()
+  check(await page.locator('.gallery-category').count() === 9, 'complete gallery: expected nine labelled service sections')
+  check(await page.locator('.gallery-photo').count() === 133, 'complete gallery: expected all 133 project photos to be visible in the page')
+  check(await page.locator('.gallery-directory nav a').count() === 9, 'complete gallery: section directory is incomplete')
+  const uniqueGallerySources=await page.locator('.gallery-photo img').evaluateAll(images=>new Set(images.map(image=>image.getAttribute('src'))).size)
+  check(uniqueGallerySources === 133, `complete gallery: expected 133 unique image sources, found ${uniqueGallerySources}`)
+  check(!(await page.locator('.gallery-more').count()), 'complete gallery: photos are hidden behind a load-more control')
+  await page.locator('.gallery-photo').first().click()
+  check(await page.locator('.gallery-lightbox').isVisible(), 'complete gallery: photo viewer did not open')
+  await page.locator('.gallery-lightbox .lightbox-close').click()
+  check(!(await page.locator('.gallery-lightbox').count()), 'complete gallery: photo viewer did not close')
 
   const apiPage = await interactionContext.newPage()
   await apiPage.addInitScript(() => {

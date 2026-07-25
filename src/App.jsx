@@ -17,7 +17,7 @@ import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySub
 gsap.registerPlugin(ScrollTrigger)
 
 const nav = [
-  ['/', 'Home'], ['/services', 'Services'], ['/service-areas', 'Areas'], ['/about', 'About'],
+  ['/', 'Home'], ['/services', 'Services'], ['/gallery', 'Gallery'], ['/service-areas', 'Areas'], ['/about', 'About'],
   ['/our-process', 'Our Process'], ['/faqs', 'FAQs'], ['/contact', 'Contact']
 ]
 
@@ -93,7 +93,14 @@ function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const {business,navigation,services:cmsServices}=useSiteContent()
-  const navItems=(navigation?.length?navigation:nav.map(([url,label],index)=>({id:index,label,url,children:[]}))).map(item=>({...item,path:toAppPath(item.url)}))
+  const suppliedNav=navigation?.length?navigation:nav.map(([url,label],index)=>({id:index,label,url,children:[]}))
+  const galleryIndex=Math.max(1,suppliedNav.findIndex(item=>toAppPath(item.url)==='/services')+1)
+  const navWithGallery=suppliedNav.some(item=>toAppPath(item.url)==='/gallery')?suppliedNav:[
+    ...suppliedNav.slice(0,galleryIndex),
+    {id:'gallery',label:'Gallery',url:'/gallery',children:[]},
+    ...suppliedNav.slice(galleryIndex),
+  ]
+  const navItems=navWithGallery.map(item=>({...item,path:toAppPath(item.url)}))
   const displayedServices=cmsServices?.length?cmsServices:serviceList
   const go = (path) => { navigate(path); setOpen(false); setServicesOpen(false); setAreasOpen(false) }
   const toggleMobileMenu = () => {
@@ -240,6 +247,7 @@ function Commercial({fields}) {
 }
 
 function Projects({fields,projectItems}) {
+  const navigate=useNavigate()
   const selectedIds=Array.isArray(fields?.home_project_ids)?fields.home_project_ids.map(String):[]
   const selected=selectedIds.length?projectItems.filter(item=>selectedIds.includes(String(item.id))):[]
   const cards=selected.length?selected.slice(0,3).map((project,index)=>({
@@ -253,6 +261,7 @@ function Projects({fields,projectItems}) {
     <div className="container">
       <Reveal className="section-heading"><div><Eyebrow>Selected work</Eyebrow><h2>Colour changes<br/><em>everything.</em></h2></div><p>Explore the care behind every edge, every surface and every final coat. Hover a project to reveal the colour beneath.</p></Reveal>
       <div className="projects-grid">{cards.map((project,i)=><Reveal key={project.title} delay={i*.1} className={`project project-${i+1}`}><div className="splash" style={{background:project.color}}/><div className="project-image"><img src={project.image} style={{objectPosition:project.pos}} alt={project.title}/><div className="project-wipe" style={{background:project.color}}/></div><div className="project-meta"><div><h3>{project.title}</h3><p>{project.type}</p></div><span>↗</span></div></Reveal>)}</div>
+      <div className="section-action"><button className="btn" onClick={()=>navigate('/gallery')}>View the complete gallery <ArrowRight/></button></div>
     </div>
     <Divider color="#fff" variant="wave" />
   </section>
@@ -297,7 +306,12 @@ function Footer() {
   const navigate = useNavigate()
   const {business,footer,navigation,services:cmsServices}=useSiteContent()
   const go = (path) => navigate(path)
-  const explore=(navigation?.length?navigation:nav.map(([url,label],id)=>({id,label,url}))).filter(item=>toAppPath(item.url)!=='/').slice(0,5)
+  const suppliedExplore=(navigation?.length?navigation:nav.map(([url,label],id)=>({id,label,url}))).filter(item=>toAppPath(item.url)!=='/')
+  const explore=suppliedExplore.some(item=>toAppPath(item.url)==='/gallery')?suppliedExplore:[
+    ...suppliedExplore.slice(0,1),
+    {id:'gallery',label:'Gallery',url:'/gallery'},
+    ...suppliedExplore.slice(1),
+  ]
   const hasGuides=explore.some(item=>toAppPath(item.url)==='/painting-guides')
   return <footer><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/painting-guides')}>Painting Guides</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span>{business.instagram_url&&<a href={business.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={19}/></a>}</div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
 }
