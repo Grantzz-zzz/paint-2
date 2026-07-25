@@ -51,7 +51,7 @@ export default function GalleryPage() {
     <section className="gallery-directory" aria-label="Gallery sections">
       <div className="container">
         <div className="gallery-directory-summary"><Images aria-hidden="true"/><p><strong>{photoCount} real project photos</strong><span>All visible below. Choose a section or simply keep scrolling.</span></p></div>
-        <nav>{sections.map(section=><a key={section.key} href={`#gallery-${section.key}`}><span>{section.label}</span><b>{section.items.length}</b></a>)}</nav>
+        <nav>{sections.map(section=><button key={section.key} type="button" onClick={()=>document.getElementById(`gallery-${section.key}`)?.scrollIntoView({behavior:'auto',block:'start'})}><span>{section.label}</span><b>{section.items.length}</b></button>)}</nav>
       </div>
     </section>
     <div className="complete-gallery">
