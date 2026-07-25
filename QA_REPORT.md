@@ -6,7 +6,7 @@ Run date: 25 July 2026
 
 **PASS — WordPress parity: 747 checks, 0 failures**
 
-**Current content/SEO release: PASS — React QA: 1,356 checks, 0 failures**
+**Current content/SEO release: PASS — React QA: 1,358 checks, 0 failures**
 
 - All 37 React routes passed at desktop, tablet and mobile sizes, including the
   Additional Services page, Painting Guides hub, four approved guide articles,
@@ -16,6 +16,9 @@ Run date: 25 July 2026
 - The 25 July visual-content pass added real-project imagery to service and
   area cards, a supplied training certificate, and accessible 3D flip-card
   details on About and Our Process.
+- The FAQ page now consolidates 15 client-supplied comparison boards and two
+  plaster before/after sequences; service-directory geometry and supporting
+  service icons were also verified across responsive layouts.
 - Six focused packaged-theme parity runs passed 366 checks with zero failures
   across desktop, tablet and mobile.
 - The 24 July 2026 media expansion completed all 15 baseline routes at desktop, tablet and mobile sizes in the WordPress bundle-parity sweep.

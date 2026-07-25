@@ -159,6 +159,8 @@ try {
   await secondFaq.locator('button').click()
   check(await secondFaq.locator('.faq-answer').isVisible(), 'FAQ: accordion did not open')
   check(await secondFaq.locator('button').getAttribute('aria-expanded') === 'true', 'FAQ: aria-expanded did not update')
+  check(await page.locator('.comparison-board-grid figure').count() === 15, 'FAQ: complete before-and-after comparison-board archive is missing')
+  check(await page.locator('.plaster-comparison-grid article').count() === 2, 'FAQ: plaster before-and-after sequences are missing')
 
   await page.goto(`${origin}#/about`, { waitUntil: 'domcontentloaded' })
   const aboutFlip = page.locator('.flip-feature').first()
