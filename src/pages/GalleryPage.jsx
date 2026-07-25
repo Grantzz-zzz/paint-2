@@ -37,6 +37,7 @@ export default function GalleryPage() {
     pageType="CollectionPage"
     image={projectMedia.residential.items[0].src}
     schemaData={{numberOfItems:photoCount}}
+    mainClassName="gallery-main"
   >
     <PageHero
       eyebrow="Real Melbourne projects"

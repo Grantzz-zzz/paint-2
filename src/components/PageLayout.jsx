@@ -26,7 +26,7 @@ function breadcrumbItems(pathname,currentTitle){
   return items
 }
 
-export function PageLayout({ children, title, description, pageType = 'WebPage', image = asset('client/projects/residential/residential-01.webp'), schemaData = {} }) {
+export function PageLayout({ children, title, description, pageType = 'WebPage', image = asset('client/projects/residential/residential-01.webp'), schemaData = {}, mainClassName = '' }) {
   const location = useLocation()
   const {business}=useSiteContent()
   const canonical = publicRouteUrl(location.pathname)
@@ -51,7 +51,7 @@ export function PageLayout({ children, title, description, pageType = 'WebPage',
       {'@type':'BreadcrumbList','itemListElement':breadcrumbItems(location.pathname,title).map((item,index)=>({'@type':'ListItem',position:index+1,name:item.label,item:publicRouteUrl(item.path)}))}
     ]})
   }, [location.pathname, title, description, canonical, image, pageType, schemaKey, business])
-  return <><Navbar/><main id="main-content" tabIndex="-1" className="inner-main"><Breadcrumbs currentTitle={title}/>{children}</main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1" className={`inner-main ${mainClassName}`.trim()}><Breadcrumbs currentTitle={title}/>{children}</main><Footer/></>
 }
 
 function Breadcrumbs({currentTitle}){

@@ -140,6 +140,39 @@ try {
       check(result.footerServices === 9, `${label}: footer lists ${result.footerServices} services instead of nine`)
       check(result.minParagraphSize >= 16, `${label}: paragraph text is too small at ${result.minParagraphSize}px`)
       check(result.minParagraphWeight >= 700, `${label}: paragraph text is not bold enough at weight ${result.minParagraphWeight}`)
+      if(route==='/'){
+        const descriptionSizes=await page.locator('.hero-copy>p,.section-heading>p,.commercial-top>div:last-child>p,.why-copy>p,.areas-layout>div:first-child>p,.contact-copy>p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
+        const expectedMinimum=22
+        check(descriptionSizes.length===8, `${label}: expected eight primary homepage descriptions, found ${descriptionSizes.length}`)
+        check(Math.min(...descriptionSizes)>=expectedMinimum, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
+      }
+      if(route==='/services'||route==='/gallery'){
+        const selector=route==='/services'?'.services-main .page-hero-copy>p,.services-main .inner-section-heading>p,.services-main .closing-cta p':'.gallery-main .page-hero-copy>p,.gallery-main .inner-section-heading>p,.gallery-main .closing-cta p'
+        const descriptionSizes=await page.locator(selector).evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
+        const expectedCount=route==='/services'?5:11
+        check(descriptionSizes.length===expectedCount, `${label}: expected ${expectedCount} primary descriptions, found ${descriptionSizes.length}`)
+        check(Math.min(...descriptionSizes)>=22, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
+      }
+      if(route!=='/'){
+        const allPrimarySizes=await page.locator('.inner-main .page-hero-copy>p,.inner-main .inner-section-heading>p,.inner-main .closing-cta p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
+        check(allPrimarySizes.length>0, `${label}: no primary page descriptions were detected`)
+        check(Math.min(...allPrimarySizes)>=22, `${label}: a primary page description is below 22px (${allPrimarySizes.join(', ')}px)`)
+        if(viewportName==='desktop'){
+          const alignments=await page.locator('.inner-main .inner-section-heading').evaluateAll(headings=>headings.filter(heading=>heading.querySelector(':scope>p')).map(heading=>({
+            title:heading.querySelector('h2')?.getBoundingClientRect().top,
+            description:heading.querySelector(':scope>p')?.getBoundingClientRect().top,
+          })))
+          check(alignments.every(item=>Math.abs(item.title-item.description)<=12), `${label}: a section description is not aligned with its title (${JSON.stringify(alignments)})`)
+        }
+      }
+      if(route==='/'||route==='/contact'){
+        const formReadability=await page.locator(route==='/'?'.quote-form':'.full-quote-form').evaluate(form=>({
+          labelSizes:[...form.querySelectorAll('label')].filter(label=>getComputedStyle(label).display!=='none').map(label=>Number.parseFloat(getComputedStyle(label).fontSize)),
+          helperSizes:[...form.querySelectorAll('.form-title small,.form-heading small,.form-note,.form-consent')].filter(item=>getComputedStyle(item).display!=='none').map(item=>Number.parseFloat(getComputedStyle(item).fontSize)),
+        }))
+        check(Math.min(...formReadability.labelSizes)>=16, `${label}: quote-form labels are too small (${formReadability.labelSizes.join(', ')}px)`)
+        check(!formReadability.helperSizes.length||Math.min(...formReadability.helperSizes)>=14, `${label}: quote-form supporting text is too small (${formReadability.helperSizes.join(', ')}px)`)
+      }
       check(runtimeErrors.length === 0, `${label}: runtime errors: ${runtimeErrors.join(' | ')}`)
     }
     await context.close()
@@ -247,6 +280,11 @@ try {
   check(await processFlip.getAttribute('aria-pressed') === 'true', 'Process: promise card did not expose its flipped state')
   const processBackType = await processFlip.evaluate(element => Number.parseFloat(getComputedStyle(element.querySelector('.flip-feature-back p')).fontSize))
   check(processBackType >= 16, `Process: back-card description is too small (${processBackType}px)`)
+
+  await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
+  const homeMapQuery = await page.locator('.home-location .contact-map iframe').evaluate(element => new URL(element.src).searchParams.get('q'))
+  check(homeMapQuery === '20 Rae Street, Chadstone VIC 3148, Australia', `homepage map: unexpected address “${homeMapQuery}”`)
+  check((await page.locator('.home-location .contact-street-address').textContent()).includes('20 Rae Street'), 'homepage map: verified street address is not displayed')
 
   await page.goto(`${origin}#/contact`, { waitUntil: 'domcontentloaded' })
   const contactMapQuery = await page.locator('.contact-map iframe').evaluate(element => new URL(element.src).searchParams.get('q'))
