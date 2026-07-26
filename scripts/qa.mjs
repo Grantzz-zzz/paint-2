@@ -155,7 +155,7 @@ try {
       check(result.minParagraphSize >= 16, `${label}: paragraph text is too small at ${result.minParagraphSize}px`)
       check(result.minParagraphWeight >= 700, `${label}: paragraph text is not bold enough at weight ${result.minParagraphWeight}`)
       if(route==='/'){
-        const descriptionSizes=await page.locator('.hero-copy>p,.section-heading>p,.commercial-top>div:last-child>p,.why-copy>p,.areas-layout>div:first-child>p,.contact-copy>p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
+        const descriptionSizes=await page.locator('.hero-copy>p,.section-heading>p,.commercial-top>div:last-child>p,.why-copy>p,.home-areas-copy>p,.contact-copy>p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
         const expectedMinimum=22
         check(descriptionSizes.length===8, `${label}: expected eight primary homepage descriptions, found ${descriptionSizes.length}`)
         check(Math.min(...descriptionSizes)>=expectedMinimum, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)

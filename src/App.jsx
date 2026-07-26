@@ -57,8 +57,6 @@ const testimonials = [
   { quote: 'Afshin and his team transformed my office with incredible paintwork. The space looks as good as new.', name: 'Philip', project: 'Commercial painting' },
 ]
 
-const suburbs = ['Chadstone', 'Mount Waverley', 'Glen Waverley', 'Oakleigh', 'Mulgrave', 'Clayton', 'Dandenong', 'Springvale', 'Keysborough', 'Berwick', 'Narre Warren', 'Endeavour Hills']
-
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 }
@@ -283,9 +281,57 @@ function GuidesPreview() {
   return <section className="section home-guides"><div className="container"><Reveal className="section-heading"><div><Eyebrow>Painting knowledge</Eyebrow><h2>Plan with more<br/><em>confidence.</em></h2></div><p>Practical guidance about repainting cycles, preparation, coating systems and choosing the right professional team for your property.</p></Reveal><div className="home-guide-grid">{paintingGuides.slice(0,3).map((guide,index)=><Reveal key={guide.slug} delay={index*.07}><article><button onClick={()=>navigate(`/painting-guides/${guide.slug}`)}><img src={guide.image} alt={guide.imageAlt} loading="lazy" decoding="async"/><span><Clock3/>{guide.readTime}</span></button><small>{guide.eyebrow}</small><h3>{guide.title}</h3><p>{guide.excerpt}</p><button className="guide-link" onClick={()=>navigate(`/painting-guides/${guide.slug}`)}>Read guide <ArrowRight/></button></article></Reveal>)}</div><div className="section-action"><button className="btn" onClick={()=>navigate('/painting-guides')}>Explore all painting guides <ArrowRight/></button></div></div><Divider color="#fbf6ec" variant="wave"/></section>
 }
 
-function Areas({fields,serviceAreas}) {
+function Areas({fields}) {
   const navigate=useNavigate()
-  return <section className="areas"><div className="container areas-layout"><Reveal><Eyebrow light>Melbourne-wide</Eyebrow><h2>{fields?.home_areas_title||'Your local painting team,'}<br/><em>wherever you are.</em></h2><p>{fields?.home_areas_text||'Based in Melbourne and proudly servicing homes and businesses across the east, south-east and surrounding suburbs.'}</p><button className="areas-link" onClick={()=>navigate('/service-areas')}>Explore all service areas <ArrowRight size={16}/></button></Reveal><Reveal className="suburb-cloud" delay={.15}>{serviceAreas.map((s,i)=><span className={`chip chip-${i%4}`} key={s}><MapPin size={13}/>{s}</span>)}</Reveal></div><Divider color="#fff" variant="slash" /></section>
+  const [activeRegion,setActiveRegion]=useState('all')
+  const regions=serviceAreaRegions.map(region=>({
+    ...region,
+    areas:region.suburbs.map(slug=>serviceAreaBySlug[slug]).filter(Boolean),
+  }))
+  const visibleAreas=regions
+    .filter(region=>activeRegion==='all'||region.id===activeRegion)
+    .flatMap(region=>region.areas)
+
+  return <section className="home-areas">
+    <div className="home-areas-overview">
+      <div className="container home-areas-overview-grid">
+        <Reveal className="home-areas-copy">
+          <Eyebrow>Areas we service</Eyebrow>
+          <h2>{fields?.home_areas_title||'Local painting across'}<br/><em>Melbourne’s east.</em></h2>
+          <p>{fields?.home_areas_text||'Based in Melbourne and proudly servicing homes and businesses across the eastern and south-eastern suburbs.'}</p>
+          <div className="home-area-regions" aria-label="Filter service areas by region">
+            {regions.map((region,index)=><button type="button" key={region.id} className={activeRegion===region.id?'active':''} aria-pressed={activeRegion===region.id} onClick={()=>setActiveRegion(region.id)}>
+              <span><MapPin size={20}/></span>
+              <span><b>{region.title}</b><small>{region.areas.length} local suburbs</small></span>
+              <ArrowRight size={18}/>
+              <i>{String(index+1).padStart(2,'0')}</i>
+            </button>)}
+          </div>
+        </Reveal>
+        <Reveal className="home-areas-photo" delay={.15}>
+          <img src={asset('client/projects/exterior/exterior-07.webp')} alt="Superior Plus Painting project in Melbourne’s eastern suburbs" loading="lazy"/>
+          <div><MapPin size={19}/><span><b>Local to Chadstone</b><small>Painting across Melbourne’s east and south-east</small></span></div>
+        </Reveal>
+      </div>
+    </div>
+    <div className="home-area-directory">
+      <div className="container">
+        <Reveal className="home-area-directory-head">
+          <div><Eyebrow light>Our service areas</Eyebrow><h2>Professional painters,<br/><em>close to home.</em></h2></div>
+          <div><p>Select your suburb to view local painting services, property-specific advice and nearby areas.</p>{activeRegion!=='all'&&<button type="button" onClick={()=>setActiveRegion('all')}>Show all {regions.reduce((total,region)=>total+region.areas.length,0)} suburbs <ArrowRight size={16}/></button>}</div>
+        </Reveal>
+        <motion.div layout className="home-area-grid">
+          <AnimatePresence mode="popLayout">
+            {visibleAreas.map(area=><motion.button layout initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.25}} type="button" key={area.slug} onClick={()=>navigate(area.path)}>
+              <span><MapPin size={19}/></span><span><small>Painting services</small><b>{area.name}</b></span><ArrowRight size={17}/>
+            </motion.button>)}
+          </AnimatePresence>
+        </motion.div>
+        <button type="button" className="home-area-all-link" onClick={()=>navigate('/service-areas')}>Explore our complete service area guide <ArrowRight size={17}/></button>
+      </div>
+      <Divider color="#fff" variant="slash" />
+    </div>
+  </section>
 }
 
 function Testimonials({fields,items}) {
@@ -384,7 +430,7 @@ function Footer() {
 }
 
 export default function App() {
-  const {business,services:cmsServices,service_areas:serviceAreas}=useSiteContent()
+  const {business,services:cmsServices}=useSiteContent()
   const {data:homeRoute}=useRouteContent('/')
   const {data:projectItems}=useCollection('projects',projects)
   const {data:testimonialItems}=useCollection('testimonials',testimonials)
@@ -409,7 +455,7 @@ export default function App() {
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
     return()=>ctx.revert()
   },[seo?.description,seo?.canonical_url,seo?.title,business])
-  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview/><Areas fields={fields} serviceAreas={serviceAreas?.length?serviceAreas:suburbs}/><Testimonials fields={fields} items={testimonialItems}/><Contact fields={fields} business={business}/><HomeLocation/></main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview/><Areas fields={fields}/><Testimonials fields={fields} items={testimonialItems}/><Contact fields={fields} business={business}/><HomeLocation/></main><Footer/></>
 }
 
 export { Navbar, Footer, Reveal, Eyebrow, Divider }
