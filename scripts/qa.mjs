@@ -186,6 +186,14 @@ try {
         check(await page.locator('.guide-article-body>section').count()>=6, `${label}: article content is unexpectedly incomplete`)
         check(await page.locator('.blog-more .guide-card').count()===3, `${label}: article does not offer all three alternative Blog posts`)
         check(await page.locator('.blog-more').getByRole('button',{name:/Read article/i}).count()===3, `${label}: alternative Blog posts are not directly selectable`)
+        check(await page.locator('.guide-article aside nav button').count()===await page.locator('.guide-article-body>section:not(.guide-takeaways)').count(), `${label}: numbered article navigation is incomplete`)
+        if(viewportName==='desktop'){
+          const routeHash=await page.evaluate(()=>window.location.hash)
+          await page.locator('.guide-article aside nav button').last().click()
+          await page.waitForTimeout(80)
+          check(await page.evaluate(()=>window.location.hash)===routeHash, `${label}: numbered navigation replaced the Blog route`)
+          check(await page.locator('.guide-article-body>section:not(.guide-takeaways)').last().evaluate(section=>Math.abs(section.getBoundingClientRect().top-120)<30), `${label}: numbered navigation did not scroll to its article section`)
+        }
       }
       if(route!=='/'){
         const allPrimarySizes=await page.locator('.inner-main .page-hero-copy>p,.inner-main .inner-section-heading>p,.inner-main .closing-cta p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))

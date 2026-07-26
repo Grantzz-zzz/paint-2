@@ -51,11 +51,15 @@ export function PaintingGuidePage() {
   const heroImage=mediaUrl(route?.hero?.image,fallback.image)
   const related=fallback.relatedServices.map(serviceSlug=>serviceList.find(service=>service.slug===serviceSlug)).filter(Boolean)
   const moreArticles=paintingGuides.filter(guide=>guide.slug!==slug)
+  const scrollToSection=index=>{
+    const target=document.getElementById(`guide-section-${index+1}`)
+    if(target)target.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})
+  }
   return <PageLayout mainClassName="blog-main blog-article-main" title={fallback.title} description={fallback.excerpt} image={mediaUrl(route?.seo?.social_image,heroImage)} pageType="BlogPosting" schemaData={{headline:fallback.title,datePublished:fallback.published,dateModified:fallback.published,author:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},publisher:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},about:'Professional painting in Melbourne'}}>
     <PageHero eyebrow={fallback.eyebrow} title={fallback.title} accent="A practical Melbourne article." intro={fallback.excerpt} image={heroImage} imageAlt={route?.hero?.image?.alt||fallback.imageAlt} tone="green"/>
     <TrustStrip/>
     <article className="guide-article"><div className="container guide-article-layout">
-      <aside><div><BookOpen/><small>{fallback.sourceLabel}</small><strong>{fallback.readTime}</strong></div><nav aria-label="On this page">{sections.map(([title],index)=><a href={`#guide-section-${index+1}`} key={title}><span>{String(index+1).padStart(2,'0')}</span>{title}</a>)}</nav></aside>
+      <aside><div><BookOpen/><small>{fallback.sourceLabel}</small><strong>{fallback.readTime}</strong></div><nav aria-label="On this page">{sections.map(([title],index)=><button type="button" onClick={()=>scrollToSection(index)} key={title}><span>{String(index+1).padStart(2,'0')}</span>{title}</button>)}</nav></aside>
       <div className="guide-article-body">
         {sections.map(([title,blocks],index)=><section id={`guide-section-${index+1}`} key={title}><span>{String(index+1).padStart(2,'0')}</span><h2>{title}</h2>{blocks.map((block,blockIndex)=><ArticleBlock block={block} key={typeof block==='string'?block:`${title}-${block.heading||blockIndex}`}/>)}</section>)}
         <section className="guide-takeaways"><PaintRoller/><h2>Key takeaways</h2>{fallback.takeaways.map(item=><p key={item}><Check/>{item}</p>)}</section>
