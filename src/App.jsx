@@ -6,9 +6,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import {
   ArrowRight, BadgeCheck, Brush, Building2, Check, ChevronLeft, ChevronRight,
   ChevronDown, Clock3, Hammer, HeartHandshake, Home, Instagram, Mail, MapPin, Menu, PaintRoller,
-  Palette, Phone, ShieldCheck, Sparkles, SprayCan, Star, Trees, Warehouse, X
+  Palette, Phone, ShieldCheck, SprayCan, Star, Trees, Warehouse, X
 } from 'lucide-react'
-import { serviceList } from './data/siteData'
+import { serviceList, servicePages } from './data/siteData'
 import { serviceAreaBySlug, serviceAreaRegions } from './data/serviceAreas'
 import { paintingGuides } from './data/paintingGuides'
 import { asset, publicRouteUrl, siteUrl } from './utils/assets'
@@ -26,9 +26,9 @@ const services = [
   { slug: 'commercial-painting-melbourne', icon: Building2, title: 'Commercial Painting', tone: 'green', image: asset('client/projects/commercial/commercial-02.webp') },
   { slug: 'interior-painting-melbourne', icon: PaintRoller, title: 'Interior Painting', tone: 'teal', image: asset('client/projects/interior/interior-04.webp') },
   { slug: 'exterior-painting-melbourne', icon: SprayCan, title: 'Exterior Painting', tone: 'terracotta', image: asset('client/projects/exterior/exterior-01.webp') },
-  { slug: 'roof-painting-melbourne', icon: Sparkles, title: 'Roof Painting', tone: 'maroon', image: asset('client/projects/roof/roof-01.webp') },
+  { slug: 'roof-painting-melbourne', icon: Brush, title: 'Roof Painting', tone: 'maroon', image: asset('client/projects/roof/roof-01.webp') },
   { slug: 'fence-painting-melbourne', icon: Trees, title: 'Fence Painting', tone: 'terracotta', image: asset('client/projects/fence/fence-03.webp') },
-  { slug: 'deck-painting-staining-melbourne', icon: Palette, title: 'Deck Painting & Staining', tone: 'gold', image: asset('client/projects/outdoor/outdoor-01.webp') },
+  { slug: 'deck-painting-staining-melbourne', icon: Palette, title: 'Deck Painting & Staining', tone: 'gold', image: servicePages['deck-painting-staining-melbourne'].image },
   { slug: 'wallpaper-removal-melbourne', icon: Brush, title: 'Wallpaper Removal', tone: 'teal', image: asset('client/projects/wallpaper/wallpaper-09.webp') },
   { slug: 'plaster-repairs-melbourne', icon: Hammer, title: 'Plaster Repairs', tone: 'cream', image: asset('client/projects/plaster/plaster-11.webp') },
 ]
@@ -199,13 +199,17 @@ function Services({fields,serviceItems}) {
     ...item,
     text:serviceList.find(service=>service.slug===item.slug)?.short||item.text,
   }))
-  const cards=selected.length?selected.map((item,index)=>({
-    ...item,
-    icon:services[index%services.length].icon,
-    text:item.short,
-    tone:item.tone||services[index%services.length].tone,
-    image:mediaUrl(item.hero?.image||item.image,services[index%services.length].image),
-  })):fallbackCards
+  const cards=selected.length?selected.map((item,index)=>{
+    const fallback=services.find(service=>service.slug===item.slug)||services[index%services.length]
+    const isDeck=item.slug==='deck-painting-staining-melbourne'
+    return {
+      ...item,
+      icon:fallback.icon,
+      text:item.short,
+      tone:item.tone||fallback.tone,
+      image:isDeck?servicePages['deck-painting-staining-melbourne'].image:mediaUrl(item.hero?.image||item.image,fallback.image),
+    }
+  }):fallbackCards
   return <section id="services" className="section section-track services-section">
     <div className="container">
       <Reveal className="section-heading"><div><Eyebrow>{fields?.home_services_eyebrow||'What we paint'}</Eyebrow><h2>{fields?.home_services_title||'Every surface deserves'}<br/><em>{fields?.home_services_accent||'the right finish.'}</em></h2></div><p>{fields?.home_services_intro||'From one carefully refreshed room to a complete commercial transformation, our experienced team brings the same care to every job.'}</p></Reveal>
@@ -221,9 +225,9 @@ function Services({fields,serviceItems}) {
             tabIndex="0"
             aria-label={`${service.title}. Hover or press Enter to see details.`}
             aria-pressed={isFlipped}
-            onMouseEnter={()=>setFlipped(cardKey)}
-            onMouseLeave={event=>{if(!event.currentTarget.contains(document.activeElement))setFlipped(null)}}
-            onFocus={()=>setFlipped(cardKey)}
+            onMouseEnter={()=>{if(window.matchMedia('(hover: hover)').matches)setFlipped(cardKey)}}
+            onMouseLeave={event=>{if(window.matchMedia('(hover: hover)').matches&&!event.currentTarget.contains(document.activeElement))setFlipped(null)}}
+            onFocus={event=>{if(event.currentTarget.matches(':focus-visible'))setFlipped(cardKey)}}
             onBlur={leaveCard}
             onClick={event=>{if(!event.target.closest('.home-service-read-more'))setFlipped(isFlipped?null:cardKey)}}
             onKeyDown={event=>{if(event.target===event.currentTarget&&(event.key==='Enter'||event.key===' ')){event.preventDefault();setFlipped(isFlipped?null:cardKey)}}}
@@ -432,6 +436,18 @@ function CountUpValue({ value }) {
   return <strong ref={elementRef} aria-label={String(value)}><span aria-hidden="true">{display.toLocaleString()}{suffix}</span></strong>
 }
 
+const fallbackProjectStats=[
+  {value:'670+',label:'Residential projects completed'},
+  {value:'99%',label:'Projects completed'},
+  {value:'500+',label:'Commercial projects completed'},
+]
+
+function ProjectStats({stats: suppliedStats,className=''}) {
+  const stats=Array.isArray(suppliedStats)&&suppliedStats.length===3?suppliedStats:fallbackProjectStats
+  const statIcons=[Home,Brush,PaintRoller]
+  return <div className={`container footer-stats ${className}`.trim()} aria-label="Superior Plus Painting project statistics">{stats.map((stat,index)=>{const Icon=statIcons[index];return <div key={`${stat.label}-${index}`}><Icon aria-hidden="true"/><CountUpValue value={stat.value}/><span>{stat.label}</span></div>})}</div>
+}
+
 function FooterTrustBadges() {
   const image = asset('client/trust-platform-badges.png')
   const badges = [
@@ -453,14 +469,11 @@ function Footer() {
     ...suppliedExplore.slice(1),
   ]
   const hasGuides=explore.some(item=>['/painting-guides','/blog'].includes(toAppPath(item.url)))
-  const fallbackStats=[{value:'670+',label:'Residential projects completed'},{value:'99%',label:'Projects completed'},{value:'500+',label:'Commercial projects completed'}]
-  const stats=Array.isArray(footer.stats)&&footer.stats.length===3?footer.stats:fallbackStats
-  const statIcons=[Home,Star,PaintRoller]
-  return <footer><div className="container footer-stats" aria-label="Superior Plus Painting project statistics">{stats.map((stat,index)=>{const Icon=statIcons[index];return <div key={`${stat.label}-${index}`}><Icon aria-hidden="true"/><CountUpValue value={stat.value}/><span>{stat.label}</span></div>})}</div><FooterTrustBadges/><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url)==='/painting-guides'?'/blog':toAppPath(item.url))}>{toAppPath(item.url)==='/painting-guides'?'Blog':item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/blog')}>Blog</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span><div className="footer-socials" aria-label="Follow Superior Plus Painting">{business.facebook_url&&<a className="footer-social-badge facebook" href={business.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Facebook"><FacebookMark/><b>Facebook</b></a>}{business.instagram_url&&<a className="footer-social-badge instagram" href={business.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Instagram"><Instagram aria-hidden="true"/><b>Instagram</b></a>}</div></div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
+  return <footer><ProjectStats stats={footer.stats}/><FooterTrustBadges/><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url)==='/painting-guides'?'/blog':toAppPath(item.url))}>{toAppPath(item.url)==='/painting-guides'?'Blog':item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/blog')}>Blog</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span><div className="footer-socials" aria-label="Follow Superior Plus Painting">{business.facebook_url&&<a className="footer-social-badge facebook" href={business.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Facebook"><FacebookMark/><b>Facebook</b></a>}{business.instagram_url&&<a className="footer-social-badge instagram" href={business.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Instagram"><Instagram aria-hidden="true"/><b>Instagram</b></a>}</div></div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
 }
 
 export default function App() {
-  const {business,services:cmsServices}=useSiteContent()
+  const {business,footer,services:cmsServices}=useSiteContent()
   const {data:homeRoute}=useRouteContent('/')
   const {data:projectItems}=useCollection('projects',projects)
   const {data:testimonialItems}=useCollection('testimonials',testimonials)
@@ -485,7 +498,7 @@ export default function App() {
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
     return()=>ctx.revert()
   },[seo?.description,seo?.canonical_url,seo?.title,business])
-  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview/><Areas fields={fields}/><Testimonials fields={fields} items={testimonialItems}/><Contact fields={fields} business={business}/><HomeLocation/></main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} className="home-project-stats"/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview/><Areas fields={fields}/><Testimonials fields={fields} items={testimonialItems}/><Contact fields={fields} business={business}/><HomeLocation/></main><Footer/></>
 }
 
 export { Navbar, Footer, Reveal, Eyebrow, Divider }

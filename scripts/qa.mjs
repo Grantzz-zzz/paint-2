@@ -122,9 +122,13 @@ try {
           overflow: document.documentElement.scrollWidth - window.innerWidth,
           logoFit: getComputedStyle(document.querySelector('.logo-wrap img')).objectFit,
           footerServices: document.querySelectorAll('.footer-services button').length,
-          footerStats: [...document.querySelectorAll('.footer-stats>div')].map(item=>({
+          footerStats: [...document.querySelectorAll('footer .footer-stats>div')].map(item=>({
             value:item.querySelector('strong')?.textContent.trim(),
-            label:item.querySelector('span')?.textContent.trim(),
+            label:item.querySelector(':scope>span')?.textContent.trim(),
+          })),
+          homeStats: [...document.querySelectorAll('.home-stats-band .footer-stats>div')].map(item=>({
+            value:item.querySelector('strong')?.textContent.trim(),
+            label:item.querySelector(':scope>span')?.textContent.trim(),
           })),
           quickContacts: [...document.querySelectorAll('.floating-contact-actions>a')].map(item=>({
             href:item.getAttribute('href'),
@@ -158,6 +162,8 @@ try {
       check(result.minParagraphSize >= 16, `${label}: paragraph text is too small at ${result.minParagraphSize}px`)
       check(result.minParagraphWeight >= 700, `${label}: paragraph text is not bold enough at weight ${result.minParagraphWeight}`)
       if(route==='/'){
+        check(result.homeStats.length===3, `${label}: upper homepage statistics band is incomplete`)
+        check(result.homeStats.map(item=>item.value).join('|')==='670+|99%|500+', `${label}: upper homepage statistics values changed unexpectedly (${JSON.stringify(result.homeStats)})`)
         const descriptionSizes=await page.locator('.hero-copy>p,.section-heading>p,.commercial-top>div:last-child>p,.why-copy>p,.home-areas-copy>p,.contact-copy>p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
         const expectedMinimum=22
         check(descriptionSizes.length===8, `${label}: expected eight primary homepage descriptions, found ${descriptionSizes.length}`)
