@@ -161,6 +161,19 @@ try {
         const expectedMinimum=22
         check(descriptionSizes.length===8, `${label}: expected eight primary homepage descriptions, found ${descriptionSizes.length}`)
         check(Math.min(...descriptionSizes)>=expectedMinimum, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
+        const compactAreaCards=page.locator('.home-area-grid>button')
+        const compactVisibleCount=await compactAreaCards.evaluateAll(elements=>elements.filter(element=>element.getBoundingClientRect().height>0).length)
+        check(await compactAreaCards.count()===12, `${label}: compact service-area directory should render 12 priority suburbs`)
+        check(compactVisibleCount===(viewportName==='mobile'?8:12), `${label}: compact service-area directory shows ${compactVisibleCount} visible cards`)
+        const areaToggle=page.locator('.home-area-toggle')
+        check(await areaToggle.getAttribute('aria-expanded')==='false', `${label}: service-area directory starts expanded`)
+        await areaToggle.click()
+        check(await page.locator('.home-area-grid>button').count()===serviceAreas.length, `${label}: Show more does not reveal all ${serviceAreas.length} suburbs`)
+        check(await areaToggle.getAttribute('aria-expanded')==='true', `${label}: expanded service-area state is not announced`)
+        await areaToggle.click()
+        await page.waitForFunction(()=>document.querySelectorAll('.home-area-grid>button').length===12)
+        check(await page.locator('.home-area-grid>button').count()===12, `${label}: Show fewer does not restore the compact directory`)
+        check(await page.getByRole('button',{name:/View all service areas/i}).count()===1, `${label}: full service-area directory link is missing`)
       }
       if(route==='/services'||route==='/gallery'){
         const selector=route==='/services'?'.services-main .page-hero-copy>p,.services-main .inner-section-heading>p,.services-main .closing-cta p':'.gallery-main .page-hero-copy>p,.gallery-main .inner-section-heading>p,.gallery-main .closing-cta p'

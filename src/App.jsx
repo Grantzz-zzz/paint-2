@@ -298,6 +298,7 @@ function GuidesPreview() {
 function Areas({fields}) {
   const navigate=useNavigate()
   const [activeRegion,setActiveRegion]=useState('all')
+  const [areasExpanded,setAreasExpanded]=useState(false)
   const regions=serviceAreaRegions.map(region=>({
     ...region,
     areas:region.suburbs.map(slug=>serviceAreaBySlug[slug]).filter(Boolean),
@@ -305,6 +306,15 @@ function Areas({fields}) {
   const visibleAreas=regions
     .filter(region=>activeRegion==='all'||region.id===activeRegion)
     .flatMap(region=>region.areas)
+  const priorityAreaSlugs=['chadstone','mount-waverley','glen-waverley','oakleigh','burwood','ashwood','hawthorn','kew','camberwell','box-hill','ringwood','rowville']
+  const priorityAreas=priorityAreaSlugs.map(slug=>serviceAreaBySlug[slug]).filter(Boolean)
+  const compactAreas=activeRegion==='all'?priorityAreas:visibleAreas.slice(0,12)
+  const displayedAreas=areasExpanded?visibleAreas:compactAreas
+  const hiddenAreaCount=Math.max(0,visibleAreas.length-compactAreas.length)
+  const selectRegion=regionId=>{
+    setActiveRegion(regionId)
+    setAreasExpanded(false)
+  }
 
   return <section className="home-areas">
     <div className="home-areas-overview">
@@ -314,7 +324,7 @@ function Areas({fields}) {
           <h2>{fields?.home_areas_title||'Local painting across'}<br/><em>Melbourne’s east.</em></h2>
           <p>{fields?.home_areas_text||'Based in Melbourne and proudly servicing homes and businesses across the eastern and south-eastern suburbs.'}</p>
           <div className="home-area-regions" aria-label="Filter service areas by region">
-            {regions.map((region,index)=><button type="button" key={region.id} className={activeRegion===region.id?'active':''} aria-pressed={activeRegion===region.id} onClick={()=>setActiveRegion(region.id)}>
+            {regions.map((region,index)=><button type="button" key={region.id} className={activeRegion===region.id?'active':''} aria-pressed={activeRegion===region.id} onClick={()=>selectRegion(region.id)}>
               <span><MapPin size={20}/></span>
               <span><b>{region.title}</b><small>{region.areas.length} local suburbs</small></span>
               <ArrowRight size={18}/>
@@ -332,16 +342,21 @@ function Areas({fields}) {
       <div className="container">
         <Reveal className="home-area-directory-head">
           <div><Eyebrow light>Our service areas</Eyebrow><h2>Professional painters,<br/><em>close to home.</em></h2></div>
-          <div><p>Select your suburb to view local painting services, property-specific advice and nearby areas.</p>{activeRegion!=='all'&&<button type="button" onClick={()=>setActiveRegion('all')}>Show all {regions.reduce((total,region)=>total+region.areas.length,0)} suburbs <ArrowRight size={16}/></button>}</div>
+          <div><p>Select your suburb to view local painting services, property-specific advice and nearby areas.</p>{activeRegion!=='all'&&<button type="button" onClick={()=>selectRegion('all')}>Return to featured suburbs <ArrowRight size={16}/></button>}</div>
         </Reveal>
-        <motion.div layout className="home-area-grid">
+        <motion.div layout className={`home-area-grid ${areasExpanded?'expanded':'compact'}`}>
           <AnimatePresence mode="popLayout">
-            {visibleAreas.map(area=><motion.button layout initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.25}} type="button" key={area.slug} onClick={()=>navigate(area.path)}>
+            {displayedAreas.map(area=><motion.button layout initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.25}} type="button" key={area.slug} onClick={()=>navigate(area.path)}>
               <span><MapPin size={19}/></span><span><small>Painting services</small><b>{area.name}</b></span><ArrowRight size={17}/>
             </motion.button>)}
           </AnimatePresence>
         </motion.div>
-        <button type="button" className="home-area-all-link" onClick={()=>navigate('/service-areas')}>Explore our complete service area guide <ArrowRight size={17}/></button>
+        <div className="home-area-actions">
+          {hiddenAreaCount>0&&<button type="button" className="home-area-toggle" aria-expanded={areasExpanded} onClick={()=>setAreasExpanded(value=>!value)}>
+            {areasExpanded?'Show fewer suburbs':'Show more suburbs'} <ChevronDown size={18}/>
+          </button>}
+          <button type="button" className="home-area-all-link" onClick={()=>navigate('/service-areas')}>View all service areas <ArrowRight size={17}/></button>
+        </div>
       </div>
       <Divider color="#fff" variant="slash" />
     </div>
