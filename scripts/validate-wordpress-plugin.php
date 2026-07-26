@@ -129,12 +129,12 @@ $result = array(
 	'theme_compatibility'  => $theme_compatible,
 	'uninstall_preserves_content' => $uninstall_preserves_content,
 	'content_type_count'   => count( $checks['content_types'] ),
-	'public_route_count'   => 8,
+	'public_route_count'   => 10,
 	'protected_route_count' => 2,
 );
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || ! $uninstall_preserves_content || '1.0.0' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || ! $uninstall_preserves_content || '1.0.1' !== $result['plugin_version'] ) {
 	exit( 1 );
 }

@@ -36,7 +36,8 @@ class SPP_Content_Routing {
 		if ( 'superior-plus' !== get_stylesheet() ) {
 			return;
 		}
-		add_rewrite_rule( '^(about|services|our-process|faqs|contact)/?$', 'index.php?spp_react_route=$matches[1]', 'top' );
+		add_rewrite_rule( '^(about|services|our-process|faqs|contact|blog)/?$', 'index.php?spp_react_route=$matches[1]', 'top' );
+		add_rewrite_rule( '^blog/([^/]+)/?$', 'index.php?spp_react_route=blog/$matches[1]', 'top' );
 		add_rewrite_rule( '^services/([^/]+)/?$', 'index.php?spp_react_route=services/$matches[1]', 'top' );
 		add_rewrite_rule( '^projects/([^/]+)/?$', 'index.php?spp_react_route=projects/$matches[1]', 'top' );
 	}
@@ -108,8 +109,21 @@ class SPP_Content_Routing {
 	 * @return bool
 	 */
 	private function route_exists( $route ) {
-		if ( in_array( $route, array( 'about', 'services', 'our-process', 'faqs', 'contact' ), true ) ) {
+		if ( in_array( $route, array( 'about', 'services', 'our-process', 'faqs', 'contact', 'blog' ), true ) ) {
 			return true;
+		}
+		if ( 0 === strpos( $route, 'blog/' ) ) {
+			$slug = substr( $route, strlen( 'blog/' ) );
+			return in_array(
+				$slug,
+				array(
+					'how-often-repaint-house-melbourne',
+					'interior-vs-exterior-painting',
+					'professional-painting-services-melbourne',
+					'experienced-painting-contractors-melbourne',
+				),
+				true
+			);
 		}
 		if ( 0 === strpos( $route, 'services/' ) ) {
 			$slug = substr( $route, strlen( 'services/' ) );
@@ -139,6 +153,10 @@ class SPP_Content_Routing {
 		$add( home_url( '/' ) );
 		foreach ( array( 'about', 'services', 'our-process', 'faqs', 'contact' ) as $route ) {
 			$add( home_url( '/' . $route . '/' ) );
+		}
+		$add( home_url( '/blog/' ) );
+		foreach ( array( 'how-often-repaint-house-melbourne', 'interior-vs-exterior-painting', 'professional-painting-services-melbourne', 'experienced-painting-contractors-melbourne' ) as $slug ) {
+			$add( home_url( '/blog/' . $slug . '/' ) );
 		}
 
 		$front_id = (int) get_option( 'page_on_front' );

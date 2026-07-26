@@ -21,7 +21,7 @@ function breadcrumbItems(pathname,currentTitle){
   const normalizedPath=pathname.replace(/\/+$/,'')||'/'
   if(/^\/services\/[^/]+/.test(normalizedPath)) items.push({label:'Services',path:'/services'})
   if(/^\/service-areas\/[^/]+/.test(normalizedPath)) items.push({label:'Service Areas',path:'/service-areas'})
-  if(/^\/painting-guides\/[^/]+/.test(normalizedPath)) items.push({label:'Painting Guides',path:'/painting-guides'})
+  if(/^\/(?:painting-guides|blog)\/[^/]+/.test(normalizedPath)) items.push({label:'Blog',path:'/blog'})
   if(pathname!=='/') items.push({label:currentTitle,path:pathname})
   return items
 }

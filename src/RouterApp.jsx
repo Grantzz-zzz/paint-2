@@ -52,6 +52,8 @@ export default function RouterApp() {
       <Route path="/service-areas/:slug" element={<ServiceAreaPage/>}/>
       <Route path="/painting-guides" element={<PaintingGuidesPage/>}/>
       <Route path="/painting-guides/:slug" element={<PaintingGuidePage/>}/>
+      <Route path="/blog" element={<PaintingGuidesPage/>}/>
+      <Route path="/blog/:slug" element={<PaintingGuidePage/>}/>
       <Route path="/our-process" element={<ProcessPage/>}/>
       <Route path="/faqs" element={<FAQsPage/>}/>
       <Route path="/contact" element={<ContactPage/>}/>

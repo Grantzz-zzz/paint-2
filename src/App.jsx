@@ -17,7 +17,7 @@ import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySub
 gsap.registerPlugin(ScrollTrigger)
 
 const nav = [
-  ['/', 'Home'], ['/services', 'Services'], ['/gallery', 'Gallery'], ['/service-areas', 'Areas'], ['/about', 'About'],
+  ['/', 'Home'], ['/services', 'Services'], ['/gallery', 'Gallery'], ['/blog', 'Blog'], ['/service-areas', 'Areas'], ['/about', 'About'],
   ['/our-process', 'Our Process'], ['/faqs', 'FAQs'], ['/contact', 'Contact']
 ]
 
@@ -98,7 +98,14 @@ function Navbar() {
     {id:'gallery',label:'Gallery',url:'/gallery',children:[]},
     ...suppliedNav.slice(galleryIndex),
   ]
-  const navItems=navWithGallery.map(item=>({...item,path:toAppPath(item.url)}))
+  const normalizedNav=navWithGallery.map(item=>toAppPath(item.url)==='/painting-guides'?{...item,label:'Blog',url:'/blog'}:item)
+  const blogIndex=Math.max(1,normalizedNav.findIndex(item=>toAppPath(item.url)==='/gallery')+1)
+  const navWithBlog=normalizedNav.some(item=>toAppPath(item.url)==='/blog')?normalizedNav:[
+    ...normalizedNav.slice(0,blogIndex),
+    {id:'blog',label:'Blog',url:'/blog',children:[]},
+    ...normalizedNav.slice(blogIndex),
+  ]
+  const navItems=navWithBlog.map(item=>({...item,path:toAppPath(item.url)}))
   const displayedServices=cmsServices?.length?cmsServices:serviceList
   const go = (path) => { navigate(path); setOpen(false); setServicesOpen(false); setAreasOpen(false) }
   const toggleMobileMenu = () => {
@@ -278,7 +285,7 @@ function WhyUs({fields,business}) {
 
 function GuidesPreview() {
   const navigate=useNavigate()
-  return <section className="section home-guides"><div className="container"><Reveal className="section-heading"><div><Eyebrow>Painting knowledge</Eyebrow><h2>Plan with more<br/><em>confidence.</em></h2></div><p>Practical guidance about repainting cycles, preparation, coating systems and choosing the right professional team for your property.</p></Reveal><div className="home-guide-grid">{paintingGuides.slice(0,3).map((guide,index)=><Reveal key={guide.slug} delay={index*.07}><article><button onClick={()=>navigate(`/painting-guides/${guide.slug}`)}><img src={guide.image} alt={guide.imageAlt} loading="lazy" decoding="async"/><span><Clock3/>{guide.readTime}</span></button><small>{guide.eyebrow}</small><h3>{guide.title}</h3><p>{guide.excerpt}</p><button className="guide-link" onClick={()=>navigate(`/painting-guides/${guide.slug}`)}>Read guide <ArrowRight/></button></article></Reveal>)}</div><div className="section-action"><button className="btn" onClick={()=>navigate('/painting-guides')}>Explore all painting guides <ArrowRight/></button></div></div><Divider color="#fbf6ec" variant="wave"/></section>
+  return <section className="section home-guides"><div className="container"><Reveal className="section-heading"><div><Eyebrow>From the blog</Eyebrow><h2>Plan with more<br/><em>confidence.</em></h2></div><p>Client-approved articles about repainting cycles, preparation, coating systems and choosing the right professional team for your property.</p></Reveal><div className="home-guide-grid">{paintingGuides.slice(0,3).map((guide,index)=><Reveal key={guide.slug} delay={index*.07}><article><button onClick={()=>navigate(`/blog/${guide.slug}`)}><img src={guide.image} alt={guide.imageAlt} loading="lazy" decoding="async"/><span><Clock3/>{guide.readTime}</span></button><small>{guide.category}</small><h3>{guide.title}</h3><p>{guide.excerpt}</p><button className="guide-link" onClick={()=>navigate(`/blog/${guide.slug}`)}>Read article <ArrowRight/></button></article></Reveal>)}</div><div className="section-action"><button className="btn" onClick={()=>navigate('/blog')}>Explore the painting blog <ArrowRight/></button></div></div><Divider color="#fbf6ec" variant="wave"/></section>
 }
 
 function Areas({fields}) {
@@ -422,11 +429,11 @@ function Footer() {
     {id:'gallery',label:'Gallery',url:'/gallery'},
     ...suppliedExplore.slice(1),
   ]
-  const hasGuides=explore.some(item=>toAppPath(item.url)==='/painting-guides')
+  const hasGuides=explore.some(item=>['/painting-guides','/blog'].includes(toAppPath(item.url)))
   const fallbackStats=[{value:'670+',label:'Residential projects completed'},{value:'99%',label:'Projects completed'},{value:'500+',label:'Commercial projects completed'}]
   const stats=Array.isArray(footer.stats)&&footer.stats.length===3?footer.stats:fallbackStats
   const statIcons=[Home,Star,PaintRoller]
-  return <footer><div className="container footer-stats" aria-label="Superior Plus Painting project statistics">{stats.map((stat,index)=>{const Icon=statIcons[index];return <div key={`${stat.label}-${index}`}><Icon aria-hidden="true"/><CountUpValue value={stat.value}/><span>{stat.label}</span></div>})}</div><FooterTrustBadges/><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url))}>{item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/painting-guides')}>Painting Guides</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span><div className="footer-socials" aria-label="Follow Superior Plus Painting">{business.facebook_url&&<a className="footer-social-badge facebook" href={business.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Facebook"><FacebookMark/><b>Facebook</b></a>}{business.instagram_url&&<a className="footer-social-badge instagram" href={business.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Instagram"><Instagram aria-hidden="true"/><b>Instagram</b></a>}</div></div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
+  return <footer><div className="container footer-stats" aria-label="Superior Plus Painting project statistics">{stats.map((stat,index)=>{const Icon=statIcons[index];return <div key={`${stat.label}-${index}`}><Icon aria-hidden="true"/><CountUpValue value={stat.value}/><span>{stat.label}</span></div>})}</div><FooterTrustBadges/><div className="container footer-grid"><div><Logo dark/><p>{footer.intro}</p></div><div><h4>{footer.columns?.[0]?.heading||'Explore'}</h4>{explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url)==='/painting-guides'?'/blog':toAppPath(item.url))}>{toAppPath(item.url)==='/painting-guides'?'Blog':item.label}</button>)}{!hasGuides&&<button onClick={()=>go('/blog')}>Blog</button>}</div><div className="footer-services"><h4>{footer.columns?.[1]?.heading||'Services'}</h4>{cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}</div><div><h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4><a href={business.phone_href}>{business.phone_display}</a><a href={`mailto:${business.email}`}>{business.email}</a><span>{business.location}</span><div className="footer-socials" aria-label="Follow Superior Plus Painting">{business.facebook_url&&<a className="footer-social-badge facebook" href={business.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Facebook"><FacebookMark/><b>Facebook</b></a>}{business.instagram_url&&<a className="footer-social-badge instagram" href={business.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Instagram"><Instagram aria-hidden="true"/><b>Instagram</b></a>}</div></div></div><div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div></footer>
 }
 
 export default function App() {

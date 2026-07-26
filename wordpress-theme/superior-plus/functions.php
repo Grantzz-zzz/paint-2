@@ -165,7 +165,7 @@ function spp_server_seo_data() {
 		$image_id = absint( get_post_meta( $post_id, 'spp_hero_image_id', true ) );
 	}
 	$page_uri = is_page( $post_id ) ? trim( get_page_uri( $post_id ), '/' ) : '';
-	$is_guide = $page_uri && 0 === strpos( $page_uri, 'painting-guides/' );
+	$is_guide = $page_uri && ( 0 === strpos( $page_uri, 'painting-guides/' ) || 0 === strpos( $page_uri, 'blog/' ) );
 	return array(
 		'title'       => $title ?: wp_strip_all_tags( get_the_title( $post_id ) ),
 		'description' => $description,

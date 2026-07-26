@@ -30,8 +30,10 @@ const routes = [
   ['/gallery', 'Every project'],
   ['/service-areas', 'Painters across Melbourne'],
   ...serviceAreas.map(area => [`/service-areas/${area.slug}`, `Painters in ${area.name}`]),
-  ['/painting-guides', 'Practical painting guides'],
+  ['/painting-guides', 'Practical painting advice'],
   ...paintingGuides.map(guide => [`/painting-guides/${guide.slug}`, guide.title]),
+  ['/blog', 'Practical painting advice'],
+  ...paintingGuides.map(guide => [`/blog/${guide.slug}`, guide.title]),
 ]
 
 const viewports = [
@@ -166,6 +168,22 @@ try {
         const expectedCount=route==='/services'?5:11
         check(descriptionSizes.length===expectedCount, `${label}: expected ${expectedCount} primary descriptions, found ${descriptionSizes.length}`)
         check(Math.min(...descriptionSizes)>=22, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
+      }
+      if(route==='/blog'){
+        check(await page.locator('.blog-grid .guide-card').count()===4, `${label}: dedicated blog does not show all four approved articles`)
+        check(await page.getByRole('button',{name:/Read article/i}).count()===4, `${label}: blog articles are not independently selectable`)
+        check(await page.locator('.nav-links .nav-main-link').filter({hasText:'Blog'}).count()===1, `${label}: Blog is missing from the desktop navigation`)
+      }
+      if(route.startsWith('/blog/')){
+        const articleText=await page.locator('.guide-article-body').innerText()
+        const marker={
+          'how-often-repaint-house-melbourne':'Regular painting maintenance helps prevent expensive repairs',
+          'interior-vs-exterior-painting':'Exterior paints are designed to handle',
+          'professional-painting-services-melbourne':'A Professional Painting Team You Can Trust',
+          'experienced-painting-contractors-melbourne':'Safety and Clean Work Practices',
+        }[route.split('/').pop()]
+        check(articleText.includes(marker), `${label}: PDF-approved article content marker is missing`)
+        check(await page.locator('.guide-article-body>section').count()>=6, `${label}: article content is unexpectedly incomplete`)
       }
       if(route!=='/'){
         const allPrimarySizes=await page.locator('.inner-main .page-hero-copy>p,.inner-main .inner-section-heading>p,.inner-main .closing-cta p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
