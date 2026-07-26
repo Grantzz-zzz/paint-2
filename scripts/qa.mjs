@@ -28,7 +28,7 @@ const routes = [
   ['/faqs', 'Frequently asked questions'],
   ['/contact', 'Get in touch'],
   ['/gallery', 'Every project'],
-  ['/service-areas', 'Painters across Melbourne'],
+  ['/service-areas', 'Professional painters servicing'],
   ...serviceAreas.map(area => [`/service-areas/${area.slug}`, `Painters in ${area.name}`]),
   ['/painting-guides', 'Practical painting advice'],
   ...paintingGuides.map(guide => [`/painting-guides/${guide.slug}`, guide.title]),
@@ -169,6 +169,19 @@ try {
         check(descriptionSizes.length===expectedCount, `${label}: expected ${expectedCount} primary descriptions, found ${descriptionSizes.length}`)
         check(Math.min(...descriptionSizes)>=22, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
       }
+      if(route==='/service-areas'){
+        const areaNames=await page.locator('.area-directory-card h3').allTextContents()
+        check(serviceAreas.length===67, `${label}: expected 67 deduplicated approved service areas, found ${serviceAreas.length}`)
+        check(areaNames.length===67, `${label}: service-area directory shows ${areaNames.length} suburb cards instead of 67`)
+        check(new Set(areaNames).size===67, `${label}: service-area directory contains duplicate suburbs`)
+        for(const suburb of ['Hawthorn','Kew','Camberwell','Balwyn','Box Hill','Malvern','Glen Iris','Vermont','Blackburn','Ringwood','Ferntree Gully','Rowville','Croydon','Lilydale','Chirnside Park']){
+          check(areaNames.includes(`Painters in ${suburb}`), `${label}: PDF-approved suburb ${suburb} is missing`)
+        }
+        const coverageText=await page.locator('.eastern-service-scope').innerText()
+        for(const marker of ['Interior Painting Eastern Suburbs Melbourne','Exterior Painting Eastern Suburbs Melbourne','Complete house repaints','Body corporate buildings','Quality preparation and workmanship']){
+          check(coverageText.includes(marker), `${label}: PDF-approved Eastern Suburbs content is missing “${marker}”`)
+        }
+      }
       if(route==='/blog'){
         check(await page.locator('.blog-grid .guide-card').count()===4, `${label}: dedicated blog does not show all four approved articles`)
         check(await page.getByRole('button',{name:/Read article/i}).count()===4, `${label}: blog articles are not independently selectable`)
@@ -292,7 +305,7 @@ try {
   await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
   await page.locator('.menu-btn').click()
   await page.locator('.mobile-areas-head button[aria-controls="mobile-areas-menu"]').click()
-  check(await page.locator('#mobile-areas-menu button').count() === 15, 'mobile areas menu: all 15 suburb pages are not visible')
+  check(await page.locator('#mobile-areas-menu button').count() === serviceAreas.length, `mobile areas menu: all ${serviceAreas.length} suburb pages are not visible`)
   await page.locator('#mobile-areas-menu button', { hasText: 'Chadstone' }).click()
   await page.waitForURL(/#\/service-areas\/chadstone$/)
   check(page.url().endsWith('#/service-areas/chadstone'), 'mobile areas menu: suburb navigation failed')

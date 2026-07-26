@@ -9,7 +9,37 @@ const area = (slug, name, region, propertyTypes, serviceSlugs, localContext, nei
   path: `/service-areas/${slug}`,
 })
 
+const slugifyArea = name => name.toLocaleLowerCase('en-AU').replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')
+const coreAreaNames = new Set(['Chadstone','Mount Waverley','Glen Waverley','Oakleigh','Mulgrave','Clayton','Burwood','Ashwood','Dandenong','Noble Park','Springvale','Keysborough','Berwick','Narre Warren','Endeavour Hills'])
+const pdfAreaGroups = [
+  {
+    id:'inner-eastern',
+    title:'Inner Eastern Suburbs',
+    description:'Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.',
+    names:['Hawthorn','Hawthorn East','Kew','Kew East','Camberwell','Canterbury','Balwyn','Balwyn North','Surrey Hills','Mont Albert','Deepdene','Box Hill','Box Hill North','Box Hill South'],
+  },
+  {
+    id:'south-eastern',
+    title:'South Eastern Suburbs',
+    description:'Interior, exterior and property painting for the south-eastern suburbs named in the client-approved service-area document.',
+    names:['Malvern','Malvern East','Glen Iris','Burwood East','Wheelers Hill','Hughesdale','Oakleigh East','Oakleigh South','Clayton South'],
+  },
+  {
+    id:'eastern',
+    title:'Eastern Suburbs',
+    description:'Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.',
+    names:['Vermont','Vermont South','Forest Hill','Blackburn','Blackburn North','Blackburn South','Nunawading','Mitcham','Ringwood','Ringwood East','Ringwood North','Heathmont','Bayswater','Boronia','Wantirna','Wantirna South','Knoxfield','Ferntree Gully'],
+  },
+  {
+    id:'outer-eastern',
+    title:'Outer Eastern Suburbs',
+    description:'Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.',
+    names:['Scoresby','Rowville','Lysterfield','The Basin','Croydon','Croydon Hills','Kilsyth','Montrose','Lilydale','Mooroolbark','Chirnside Park'],
+  },
+]
+
 export const serviceAreaRegions = [
+  ...pdfAreaGroups.map(group=>({...group,suburbs:group.names.map(slugifyArea)})),
   {
     id: 'monash-east',
     title: 'Monash & nearby eastern suburbs',
@@ -30,7 +60,7 @@ export const serviceAreaRegions = [
   },
 ]
 
-export const serviceAreas = [
+const coreServiceAreas = [
   area(
     'chadstone',
     'Chadstone',
@@ -167,6 +197,26 @@ export const serviceAreas = [
     ['narre-warren', 'berwick', 'dandenong'],
   ),
 ]
+
+const expandedServiceAreas = pdfAreaGroups.flatMap(group=>group.names
+  .filter(name=>!coreAreaNames.has(name))
+  .map((name,index,names)=>{
+    const slug=slugifyArea(name)
+    const neighbours=[names[(index-1+names.length)%names.length],names[(index+1)%names.length],names[(index+2)%names.length]]
+      .map(slugifyArea)
+      .filter(neighbour=>neighbour!==slug)
+    return area(
+      slug,
+      name,
+      group.title,
+      ['Homes and apartments','Renovation and rental properties','Local businesses and managed properties','Interior and exterior projects'],
+      ['residential-painting-melbourne','interior-painting-melbourne','exterior-painting-melbourne','commercial-painting-melbourne','roof-painting-melbourne','fence-painting-melbourne','deck-painting-staining-melbourne'],
+      `Superior Plus Painting and Remodeling provides professional residential and commercial painting services in ${name}. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.`,
+      neighbours,
+    )
+  }))
+
+export const serviceAreas = [...coreServiceAreas,...expandedServiceAreas]
 
 export const serviceAreaBySlug = Object.fromEntries(serviceAreas.map(item => [item.slug, item]))
 export const serviceAreaPathByName = Object.fromEntries(serviceAreas.map(item => [item.name.toLocaleLowerCase('en-AU'), item.path]))

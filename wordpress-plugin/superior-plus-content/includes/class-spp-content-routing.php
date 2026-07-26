@@ -38,6 +38,8 @@ class SPP_Content_Routing {
 		}
 		add_rewrite_rule( '^(about|services|our-process|faqs|contact|blog)/?$', 'index.php?spp_react_route=$matches[1]', 'top' );
 		add_rewrite_rule( '^blog/([^/]+)/?$', 'index.php?spp_react_route=blog/$matches[1]', 'top' );
+		add_rewrite_rule( '^service-areas/?$', 'index.php?spp_react_route=service-areas', 'top' );
+		add_rewrite_rule( '^service-areas/([^/]+)/?$', 'index.php?spp_react_route=service-areas/$matches[1]', 'top' );
 		add_rewrite_rule( '^services/([^/]+)/?$', 'index.php?spp_react_route=services/$matches[1]', 'top' );
 		add_rewrite_rule( '^projects/([^/]+)/?$', 'index.php?spp_react_route=projects/$matches[1]', 'top' );
 	}
@@ -125,6 +127,13 @@ class SPP_Content_Routing {
 				true
 			);
 		}
+		if ( 'service-areas' === $route ) {
+			return true;
+		}
+		if ( 0 === strpos( $route, 'service-areas/' ) ) {
+			$slug = substr( $route, strlen( 'service-areas/' ) );
+			return in_array( $slug, $this->service_area_slugs(), true );
+		}
 		if ( 0 === strpos( $route, 'services/' ) ) {
 			$slug = substr( $route, strlen( 'services/' ) );
 			$post = get_page_by_path( $slug, OBJECT, 'spp_service' );
@@ -158,6 +167,10 @@ class SPP_Content_Routing {
 		foreach ( array( 'how-often-repaint-house-melbourne', 'interior-vs-exterior-painting', 'professional-painting-services-melbourne', 'experienced-painting-contractors-melbourne' ) as $slug ) {
 			$add( home_url( '/blog/' . $slug . '/' ) );
 		}
+		$add( home_url( '/service-areas/' ) );
+		foreach ( $this->service_area_slugs() as $slug ) {
+			$add( home_url( '/service-areas/' . $slug . '/' ) );
+		}
 
 		$front_id = (int) get_option( 'page_on_front' );
 		foreach ( get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'posts_per_page' => -1, 'orderby' => 'ID', 'order' => 'ASC' ) ) as $page ) {
@@ -184,6 +197,29 @@ class SPP_Content_Routing {
 		}
 		echo '</urlset>';
 		exit;
+	}
+
+	/**
+	 * Client-approved Melbourne service-area slugs.
+	 *
+	 * @return string[]
+	 */
+	private function service_area_slugs() {
+		return array(
+			'hawthorn', 'hawthorn-east', 'kew', 'kew-east', 'camberwell', 'canterbury',
+			'balwyn', 'balwyn-north', 'surrey-hills', 'mont-albert', 'deepdene', 'box-hill',
+			'box-hill-north', 'box-hill-south', 'malvern', 'malvern-east', 'glen-iris',
+			'burwood-east', 'wheelers-hill', 'hughesdale', 'oakleigh-east', 'oakleigh-south',
+			'clayton-south', 'vermont', 'vermont-south', 'forest-hill', 'blackburn',
+			'blackburn-north', 'blackburn-south', 'nunawading', 'mitcham', 'ringwood',
+			'ringwood-east', 'ringwood-north', 'heathmont', 'bayswater', 'boronia',
+			'wantirna', 'wantirna-south', 'knoxfield', 'ferntree-gully', 'scoresby',
+			'rowville', 'lysterfield', 'the-basin', 'croydon', 'croydon-hills', 'kilsyth',
+			'montrose', 'lilydale', 'mooroolbark', 'chirnside-park', 'chadstone',
+			'mount-waverley', 'glen-waverley', 'oakleigh', 'mulgrave', 'clayton', 'burwood',
+			'ashwood', 'dandenong', 'noble-park', 'springvale', 'keysborough', 'berwick',
+			'narre-warren', 'endeavour-hills',
+		);
 	}
 
 	/**

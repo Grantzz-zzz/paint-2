@@ -9,27 +9,31 @@ import { mediaUrl, pairItems, useRouteContent } from '../content/ContentProvider
 import NotFoundPage from './NotFoundPage'
 
 const regionImages = {
+  'Inner Eastern Suburbs': asset('client/projects/exterior/exterior-02.webp'),
+  'South Eastern Suburbs': asset('client/projects/residential/residential-02.webp'),
+  'Eastern Suburbs': asset('client/projects/exterior/exterior-09.webp'),
+  'Outer Eastern Suburbs': asset('client/projects/roof/roof-07.webp'),
   'Monash & nearby eastern suburbs': asset('client/projects/residential/residential-01.webp'),
   'Greater Dandenong': asset('client/projects/commercial/commercial-12.webp'),
   'Casey & the outer south-east': asset('client/projects/roof/roof-07.webp'),
 }
 
 const areaCardImages = [
-  asset('client/projects/exterior/exterior-02.webp'),
-  asset('client/projects/residential/residential-02.webp'),
-  asset('client/projects/exterior/exterior-09.webp'),
-  asset('client/projects/interior/interior-02.webp'),
-  asset('client/projects/fence/fence-05.webp'),
-  asset('client/projects/residential/residential-05.webp'),
-  asset('client/projects/commercial/commercial-03.webp'),
-  asset('client/projects/interior/interior-05.webp'),
-  asset('client/projects/commercial/commercial-08.webp'),
-  asset('client/projects/fence/fence-08.webp'),
-  asset('client/projects/exterior/exterior-12.webp'),
-  asset('client/projects/residential/residential-09.webp'),
-  asset('client/projects/roof/roof-03.webp'),
-  asset('client/projects/commercial/commercial-15.webp'),
+  asset('client/projects/exterior/exterior-02.webp'), asset('client/projects/residential/residential-02.webp'),
+  asset('client/projects/exterior/exterior-09.webp'), asset('client/projects/interior/interior-02.webp'),
+  asset('client/projects/fence/fence-05.webp'), asset('client/projects/residential/residential-05.webp'),
+  asset('client/projects/commercial/commercial-03.webp'), asset('client/projects/interior/interior-05.webp'),
+  asset('client/projects/commercial/commercial-08.webp'), asset('client/projects/fence/fence-08.webp'),
+  asset('client/projects/exterior/exterior-12.webp'), asset('client/projects/residential/residential-09.webp'),
+  asset('client/projects/roof/roof-03.webp'), asset('client/projects/commercial/commercial-15.webp'),
   asset('client/projects/exterior/exterior-20.webp'),
+]
+
+const easternServiceHighlights = [
+  {title:'Interior Painting Eastern Suburbs Melbourne',text:'Our interior painting services help refresh and modernise your home with professional finishes.',items:['Walls and ceilings','Bedrooms and living areas','Doors and trims','Feature walls','Kitchens and bathrooms','Renovation projects'],Icon:Home},
+  {title:'Exterior Painting Eastern Suburbs Melbourne',text:'Melbourne weather can impact exterior surfaces over time. Our exterior painting services help protect your property.',items:['Weatherboard painting','Render painting','Brick painting','Fascia and eaves painting','Timber painting','Fence and deck painting'],Icon:PaintRoller},
+  {title:'Residential Painting Services',text:'We work with homeowners across Melbourne’s Eastern Suburbs.',items:['Complete house repaints','New home painting','Property renovations','Rental property painting','Pre-sale painting'],Icon:Home},
+  {title:'Commercial Painting Services',text:'Our commercial painting team provides professional solutions for active and managed properties.',items:['Offices','Retail shops','Warehouses','Strata properties','Body corporate buildings','Commercial facilities'],Icon:Building2},
 ]
 
 function AreaCard({area,index}) {
@@ -45,19 +49,21 @@ export function ServiceAreasPage() {
   const image=mediaUrl(route?.hero?.image,asset('client/projects/residential/residential-01.webp'))
   const seo=route?.seo
   const regionStories=[
-    {title:'Monash and nearby eastern suburbs',text:'Residential repaints, interior refreshes, exterior protection and property preparation for established homes, units, townhouses and local businesses.',image:regionImages['Monash & nearby eastern suburbs']},
-    {title:'Greater Dandenong',text:'Carefully scheduled residential and commercial work for houses, apartments, shops, offices, warehouses and managed properties.',image:regionImages['Greater Dandenong']},
-    {title:'Casey and the outer south-east',text:'Practical painting and maintenance support across growing residential areas, investment properties and suitable commercial sites.',image:regionImages['Casey & the outer south-east']},
+    {title:'Inner Eastern Suburbs',text:'Hawthorn, Kew, Camberwell, Balwyn, Surrey Hills, Mont Albert, Deepdene and the Box Hill area.',image:regionImages['Inner Eastern Suburbs']},
+    {title:'South Eastern Suburbs',text:'Chadstone, Malvern, Glen Iris, Ashwood, Burwood, Mount Waverley, Glen Waverley, Oakleigh and Clayton districts.',image:regionImages['South Eastern Suburbs']},
+    {title:'Eastern Suburbs',text:'Vermont, Forest Hill, Blackburn, Nunawading, Mitcham, Ringwood, Heathmont, Bayswater, Boronia, Wantirna and Ferntree Gully.',image:regionImages['Eastern Suburbs']},
+    {title:'Outer Eastern Suburbs',text:'Scoresby, Rowville, Lysterfield, The Basin, Croydon, Kilsyth, Montrose, Lilydale, Mooroolbark and Chirnside Park.',image:regionImages['Outer Eastern Suburbs']},
   ]
-  return <PageLayout title={seo?.title||'Service Areas — Melbourne’s Eastern Suburbs'} description={seo?.description||'Explore Superior Plus Painting services across Chadstone, Mount Waverley, Glen Waverley, Oakleigh, Greater Dandenong, Casey and surrounding suburbs.'} image={mediaUrl(seo?.social_image,image)} pageType="CollectionPage" schemaData={{mainEntity:serviceAreas.map(area=>({'@type':'Place',name:area.name,url:`/service-areas/${area.slug}`}))}}>
-    <PageHero eyebrow={route?.hero?.eyebrow||'Melbourne service areas'} title={route?.hero?.title||'Painters across Melbourne’s'} accent={route?.hero?.accent||'eastern & south-eastern suburbs.'} intro={route?.hero?.intro||'Superior Plus Painting provides residential, commercial and specialist painting services across the suburbs named in our client service-area information. Choose your suburb for relevant services, property types and a direct quote path.'} image={image} imageAlt={route?.hero?.image?.alt||'Superior Plus Painting exterior project in Melbourne'} tone="green"/>
+  return <PageLayout title={seo?.title||'Service Areas — Melbourne’s Eastern Suburbs'} description={seo?.description||`Explore professional residential and commercial painting services across ${serviceAreas.length} named Melbourne suburbs.`} image={mediaUrl(seo?.social_image,image)} pageType="CollectionPage" schemaData={{mainEntity:serviceAreas.map(area=>({'@type':'Place',name:area.name,url:`/service-areas/${area.slug}`}))}}>
+    <PageHero eyebrow={route?.hero?.eyebrow||'Melbourne service areas'} title={route?.hero?.title||'Professional painters servicing'} accent={route?.hero?.accent||'Melbourne’s Eastern Suburbs.'} intro={route?.hero?.intro||'Superior Plus Painting and Remodeling provides professional residential and commercial painting services throughout Melbourne’s Eastern Suburbs.'} image={image} imageAlt={route?.hero?.image?.alt||'Superior Plus Painting exterior project in Melbourne'} tone="green"/>
     <TrustStrip/>
-    <section className="inner-section area-coverage-story"><div className="container"><SectionIntro eyebrow="Local knowledge, complete capability" title="One painting team." accent="Different property needs." text="The supplied service-area information covers established eastern suburbs, busy commercial centres and the growing outer south-east. Every quote is still based on the actual property, surfaces and access."/><div className="area-story-grid">{regionStories.map((story,index)=><Reveal key={story.title} delay={index*.07}><article><img src={story.image} alt={`Superior Plus Painting work across ${story.title}`} loading="lazy" decoding="async"/><div><span>Region 0{index+1}</span><h3>{story.title}</h3><p>{story.text}</p></div></article></Reveal>)}</div></div><Divider color="#fbf6ec" variant="wave"/></section>
+    <section className="inner-section area-coverage-story"><div className="container"><SectionIntro eyebrow="Trusted painting contractors" title="Across Melbourne’s" accent="Eastern Suburbs." text="Our experienced painting team helps homeowners, builders, property managers and businesses transform and protect their properties with high-quality workmanship and attention to detail."/><p className="area-coverage-intro">Whether you need interior painting, exterior painting, roof painting, fence painting, commercial painting or property maintenance, our professional painters deliver reliable solutions designed to achieve long-lasting results.</p><div className="area-story-grid">{regionStories.map((story,index)=><Reveal key={story.title} delay={index*.07}><article><img src={story.image} alt={`Superior Plus Painting work across ${story.title}`} loading="lazy" decoding="async"/><div><span>Region {String(index+1).padStart(2,'0')}</span><h3>{story.title}</h3><p>{story.text}</p></div></article></Reveal>)}</div></div><Divider color="#fbf6ec" variant="wave"/></section>
+    <section className="inner-section eastern-service-scope"><div className="container"><SectionIntro eyebrow="Professional painting services we offer" title="Complete painting solutions" accent="for every property." text="We focus on detailed preparation, clean workmanship and quality finishes across residential and commercial projects."/><div className="eastern-service-grid">{easternServiceHighlights.map(({title,text,items,Icon},index)=><Reveal key={title} delay={(index%2)*.06}><article><span><Icon/></span><h3>{title}</h3><p>{text}</p><div>{items.map(item=><small key={item}><Check/>{item}</small>)}</div></article></Reveal>)}</div><Reveal className="eastern-why-band"><div><span>Why choose Superior Plus Painting and Remodeling?</span><h2>Detailed solutions,<br/><em>from start to finish.</em></h2></div><div>{['Experienced professional painters','Local Eastern Suburbs service','Quality preparation and workmanship','Reliable communication','Residential and commercial expertise'].map(item=><p key={item}><Check/>{item}</p>)}<p>We understand every property is different, which is why we provide tailored painting solutions to meet your needs and achieve the best possible result.</p></div></Reveal></div><Divider color="#fff" variant="slash"/></section>
     {serviceAreaRegions.map((region,index)=>{
       const areas=region.suburbs.map(slug=>serviceAreaBySlug[slug]).filter(Boolean)
       return <section className={`inner-section area-region ${index%2?'cream':''}`} key={region.id}><div className="container"><SectionIntro eyebrow={`Area ${String(index+1).padStart(2,'0')}`} title={region.title} accent="covered with care." text={region.description}/><div className="area-directory-grid">{areas.map((area,areaIndex)=><AreaCard area={area} index={areaIndex} key={area.slug}/>)}</div></div>{index<serviceAreaRegions.length-1&&<Divider color={index%2?'#fff':'#fbf6ec'} variant={index%2?'slash':'wave'}/>}</section>
     })}
-    <section className="local-seo-note"><div className="container"><MapPin/><div><h2>Not sure if your suburb is covered?</h2><p>The listed areas come directly from the supplied service content. Nearby Melbourne suburbs may also be available—contact the team with your property location and required service.</p></div><button className="btn" onClick={()=>navigate('/contact')}>Check your suburb <ArrowRight/></button></div></section>
+    <section className="local-seo-note"><div className="container"><MapPin/><div><h2>Get your free painting quote today</h2><p>If you are looking for reliable painters in Melbourne’s Eastern Suburbs, Superior Plus Painting and Remodeling is ready to help. Contact our professional painting team and transform your home or business with quality painting services.</p></div><button className="btn" onClick={()=>navigate('/contact')}>Request a free quote <ArrowRight/></button></div></section>
   </PageLayout>
 }
 
@@ -76,7 +82,7 @@ export function ServiceAreaPage() {
   const pageTitle=`Painters in ${area.name}`
   const description=`Professional residential and commercial painters in ${area.name}, Melbourne. Explore interior, exterior and related painting services from Superior Plus Painting.`
   const seo=route?.seo
-  return <PageLayout title={seo?.title||pageTitle} description={seo?.description||description} image={mediaUrl(seo?.social_image,image)} pageType="Service" schemaData={{serviceType:'Painting services',areaServed:{'@type':'Place',name:area.name},availableChannel:{'@type':'ServiceChannel',serviceUrl:`/contact`}}}>
+  return <PageLayout title={seo?.title||pageTitle} description={seo?.description||description} image={mediaUrl(seo?.social_image,image)} pageType="Service" schemaData={{serviceType:'Painting services',areaServed:{'@type':'Place',name:area.name},availableChannel:{'@type':'ServiceChannel',serviceUrl:'/contact'}}}>
     <PageHero eyebrow={route?.hero?.eyebrow||`${area.region} service area`} title={route?.hero?.title||`Painters in ${area.name}`} accent={route?.hero?.accent||'careful work, clearly planned.'} intro={route?.hero?.intro||`Professional painting for ${area.propertyTypes.join(', ').toLocaleLowerCase('en-AU')} in ${area.name}. We provide detailed preparation, quality application and a clean handover for every suitable project.`} image={image} imageAlt={route?.hero?.image?.alt||'Superior Plus Painting completed project representing Melbourne service capabilities'} tone={area.region==='Greater Dandenong'?'green':area.region.startsWith('Casey')?'terracotta':'maroon'}/>
     <TrustStrip/>
     <section className="inner-section"><div className="container area-intro-grid"><Reveal><SectionIntro eyebrow={`Painting in ${area.name}`} title="The right preparation" accent="for the property."/><p>{editableContext||area.localContext}</p><p>Every project begins with an inspection and written quotation. The final scope depends on the surfaces, access, repairs, coating system and finish you want to achieve.</p></Reveal><Reveal className="area-property-card" delay={.1}><Home/><h3>Properties we can quote</h3>{area.propertyTypes.map(type=><span key={type}><Check/>{type}</span>)}</Reveal></div><Divider color="#fbf6ec" variant="wave"/></section>
