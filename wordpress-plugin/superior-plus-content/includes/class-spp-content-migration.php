@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '1.5.0';
+	const VERSION = '1.6.0';
 
 	private $types;
 	private $report = array();
@@ -624,7 +624,7 @@ class SPP_Content_Migration {
 				'title' => 'Home', 'template' => 'home', 'excerpt' => 'Premium residential and commercial painting across Melbourne.',
 				'hero_asset' => 'client/projects/fence/fence-03.webp',
 				'meta' => array(
-					'spp_eyebrow' => 'Melbourne painters who care', 'spp_hero_title' => 'Made to feel', 'spp_accent' => 'beautiful.',
+					'spp_eyebrow' => 'Melbourne painters who care', 'spp_hero_title' => 'Professional painting services', 'spp_accent' => 'in Melbourne',
 					'spp_hero_intro' => 'Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.',
 					'spp_home_trust_points' => array( 'Fully insured', 'Free colour advice', 'Melbourne-wide' ),
 					'spp_home_services_eyebrow' => 'What we paint', 'spp_home_services_title' => 'Every surface deserves', 'spp_home_services_accent' => 'the right finish.',

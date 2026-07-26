@@ -12,7 +12,7 @@ const origin = `http://127.0.0.1:${port}/`
 const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 
 const routes = [
-  ['/', 'Professional painters'],
+  ['/', 'Professional painting services in Melbourne'],
   ['/about', 'Care in every coat'],
   ['/services', 'Painting & property services'],
   ['/additional-services', 'Additional property services'],
@@ -170,8 +170,14 @@ try {
         const homeStatsColors=await page.locator('.home-stats-band').evaluate(element=>({
           band:getComputedStyle(element).backgroundColor,
           panel:getComputedStyle(element.querySelector('.home-project-stats')).backgroundColor,
+          followingSection:getComputedStyle(document.querySelector('.commercial')).backgroundColor,
+          precedingDivider:getComputedStyle(document.querySelector('.services-section .divider-path')).fill,
+          boundaryHeight:Number.parseFloat(getComputedStyle(element,'::after').height),
+          boundaryBackground:getComputedStyle(element,'::after').backgroundImage,
         }))
         check(homeStatsColors.band===homeStatsColors.panel, `${label}: statistics panel does not match its green section (${JSON.stringify(homeStatsColors)})`)
+        check(homeStatsColors.band===homeStatsColors.followingSection&&homeStatsColors.band===homeStatsColors.precedingDivider, `${label}: statistics band is sandwiched between mismatched greens (${JSON.stringify(homeStatsColors)})`)
+        check(homeStatsColors.boundaryHeight>=6&&homeStatsColors.boundaryBackground!=='none', `${label}: statistics band lacks a visible transition boundary (${JSON.stringify(homeStatsColors)})`)
         const homeServiceImages=await page.locator('.home-service-front').evaluateAll(elements=>Object.fromEntries(elements.map(element=>[
           element.querySelector('strong')?.textContent.trim(),
           element.querySelector('img')?.getAttribute('src')||'',
