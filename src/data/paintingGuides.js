@@ -1,4 +1,5 @@
 import { asset } from '../utils/assets.js'
+import { expandedPaintingGuides } from './expandedPaintingGuides.js'
 
 export const paintingGuides = [
   {
@@ -193,6 +194,7 @@ export const paintingGuides = [
     takeaways: ['Preparation is a sign of an experienced contractor', 'Professional teams manage safety and quality control', 'Correct application supports long-term protection', 'A coordinated team reduces stress for the property owner'],
     relatedServices: ['residential-painting-melbourne', 'commercial-painting-melbourne', 'plaster-repairs-melbourne'],
   },
+  ...expandedPaintingGuides,
 ]
 
 export const paintingGuideBySlug = Object.fromEntries(paintingGuides.map(guide => [guide.slug, guide]))

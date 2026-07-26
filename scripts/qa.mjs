@@ -196,8 +196,9 @@ try {
         }
       }
       if(route==='/blog'){
-        check(await page.locator('.blog-grid .guide-card').count()===4, `${label}: dedicated blog does not show all four approved articles`)
-        check(await page.getByRole('button',{name:/Read article/i}).count()===4, `${label}: blog articles are not independently selectable`)
+        check(paintingGuides.length===19, `${label}: expected the four completed blogs plus 15 expanded SEO outlines`)
+        check(await page.locator('.blog-grid .guide-card').count()===paintingGuides.length, `${label}: dedicated blog does not show all ${paintingGuides.length} articles`)
+        check(await page.getByRole('button',{name:/Read article/i}).count()===paintingGuides.length, `${label}: blog articles are not independently selectable`)
         check(await page.locator('.nav-links .nav-main-link').filter({hasText:'Blog'}).count()===1, `${label}: Blog is missing from the desktop navigation`)
         const desktopNav=await page.locator('.nav-links .nav-main-link').allTextContents()
         check(desktopNav.join('|')==='Home|Services|Areas|Gallery|About|Our Process|FAQs|Blog|Contact', `${label}: desktop navigation order is incoherent (${desktopNav.join('|')})`)
@@ -210,23 +211,18 @@ try {
       }
       if(route.startsWith('/blog/')){
         const articleText=await page.locator('.guide-article-body').innerText()
-        const marker={
-          'how-often-repaint-house-melbourne':'Regular painting maintenance helps prevent expensive repairs',
-          'interior-vs-exterior-painting':'Exterior paints are designed to handle',
-          'professional-painting-services-melbourne':'A Professional Painting Team You Can Trust',
-          'experienced-painting-contractors-melbourne':'Safety and Clean Work Practices',
-        }[route.split('/').pop()]
-        check(articleText.includes(marker), `${label}: PDF-approved article content marker is missing`)
+        const guide=paintingGuides.find(item=>item.slug===route.split('/').pop())
+        check(articleText.includes(guide.sections[0][0]), `${label}: PDF-approved article content marker is missing`)
         check(await page.locator('.guide-article-body>section').count()>=6, `${label}: article content is unexpectedly incomplete`)
-        check(await page.locator('.blog-more .guide-card').count()===3, `${label}: article does not offer all three alternative Blog posts`)
-        check(await page.locator('.blog-more').getByRole('button',{name:/Read article/i}).count()===3, `${label}: alternative Blog posts are not directly selectable`)
-        check(await page.locator('.guide-article aside nav button').count()===await page.locator('.guide-article-body>section:not(.guide-takeaways)').count(), `${label}: numbered article navigation is incomplete`)
+        check(await page.locator('.blog-more .guide-card').count()===6, `${label}: article does not offer six alternative Blog posts`)
+        check(await page.locator('.blog-more').getByRole('button',{name:/Read article/i}).count()===6, `${label}: alternative Blog posts are not directly selectable`)
+        check(await page.locator('.guide-article aside nav button').count()===await page.locator('.guide-article-body>section:not(.guide-takeaways):not(.guide-references)').count(), `${label}: numbered article navigation is incomplete`)
         if(viewportName==='desktop'){
           const routeHash=await page.evaluate(()=>window.location.hash)
           await page.locator('.guide-article aside nav button').last().click()
           await page.waitForTimeout(80)
           check(await page.evaluate(()=>window.location.hash)===routeHash, `${label}: numbered navigation replaced the Blog route`)
-          check(await page.locator('.guide-article-body>section:not(.guide-takeaways)').last().evaluate(section=>Math.abs(section.getBoundingClientRect().top-120)<30), `${label}: numbered navigation did not scroll to its article section`)
+          check(await page.locator('.guide-article-body>section:not(.guide-takeaways):not(.guide-references)').last().evaluate(section=>Math.abs(section.getBoundingClientRect().top-120)<30), `${label}: numbered navigation did not scroll to its article section`)
         }
       }
       if(route!=='/'){

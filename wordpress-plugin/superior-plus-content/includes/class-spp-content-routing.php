@@ -116,16 +116,7 @@ class SPP_Content_Routing {
 		}
 		if ( 0 === strpos( $route, 'blog/' ) ) {
 			$slug = substr( $route, strlen( 'blog/' ) );
-			return in_array(
-				$slug,
-				array(
-					'how-often-repaint-house-melbourne',
-					'interior-vs-exterior-painting',
-					'professional-painting-services-melbourne',
-					'experienced-painting-contractors-melbourne',
-				),
-				true
-			);
+			return in_array( $slug, $this->blog_slugs(), true );
 		}
 		if ( 'service-areas' === $route ) {
 			return true;
@@ -164,7 +155,7 @@ class SPP_Content_Routing {
 			$add( home_url( '/' . $route . '/' ) );
 		}
 		$add( home_url( '/blog/' ) );
-		foreach ( array( 'how-often-repaint-house-melbourne', 'interior-vs-exterior-painting', 'professional-painting-services-melbourne', 'experienced-painting-contractors-melbourne' ) as $slug ) {
+		foreach ( $this->blog_slugs() as $slug ) {
 			$add( home_url( '/blog/' . $slug . '/' ) );
 		}
 		$add( home_url( '/service-areas/' ) );
@@ -197,6 +188,35 @@ class SPP_Content_Routing {
 		}
 		echo '</urlset>';
 		exit;
+	}
+
+	/**
+	 * Client-supplied and expanded Melbourne painting blog slugs.
+	 *
+	 * @return string[]
+	 */
+	private function blog_slugs() {
+		return array(
+			'how-often-repaint-house-melbourne',
+			'interior-vs-exterior-painting',
+			'professional-painting-services-melbourne',
+			'experienced-painting-contractors-melbourne',
+			'prepare-house-before-professional-painters-melbourne',
+			'interior-house-painting-melbourne-complete-guide',
+			'exterior-house-painting-melbourne-weather-protection',
+			'commercial-painting-contractors-melbourne-businesses',
+			'roof-painting-melbourne-benefits-process-cost-guide',
+			'how-professional-painters-repair-cracks-before-painting',
+			'best-paint-colours-australian-homes-2026',
+			'dulux-paint-systems-quality-paint-matters',
+			'new-home-painting-melbourne-builders',
+			'before-after-professional-painting-melbourne-homes',
+			'fence-painting-melbourne-outdoor-protection',
+			'strata-body-corporate-painting-melbourne-guide',
+			'how-long-professional-paint-job-lasts-melbourne',
+			'why-hiring-insured-painting-contractor-matters',
+			'painter-melbourne-near-me-choose-local-company',
+		);
 	}
 
 	/**

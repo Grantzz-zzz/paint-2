@@ -47,6 +47,9 @@ const routes = [
   ['blog-interior-exterior', '/blog/interior-vs-exterior-painting'],
   ['blog-professional-services', '/blog/professional-painting-services-melbourne'],
   ['blog-choosing-contractor', '/blog/experienced-painting-contractors-melbourne'],
+  ['blog-preparing-home', '/blog/prepare-house-before-professional-painters-melbourne'],
+  ['blog-colours-2026', '/blog/best-paint-colours-australian-homes-2026'],
+  ['blog-local-painter', '/blog/painter-melbourne-near-me-choose-local-company'],
 ]
 const requestedRoute = process.env.SPP_PHASE8_ROUTE || ''
 const activeRoutes = requestedRoute ? routes.filter(([, route]) => route === requestedRoute) : routes

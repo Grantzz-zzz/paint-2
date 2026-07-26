@@ -775,6 +775,92 @@ class SPP_Content_Migration {
 				),
 			),
 		);
+		$expanded_guides = array(
+			'prepare-house-before-professional-painters-melbourne' => array(
+				'title' => 'How to Prepare Your House Before Professional Painters Arrive in Melbourne',
+				'excerpt' => 'A practical Melbourne checklist for moving furniture, protecting belongings, repairing surfaces and preparing your household before painters arrive.',
+				'image' => 'client/projects/interior/interior-04.webp',
+			),
+			'interior-house-painting-melbourne-complete-guide' => array(
+				'title' => 'Interior House Painting Melbourne: Complete Guide for Homeowners',
+				'excerpt' => 'Plan an interior repaint covering walls, ceilings, trims, colour selection, preparation, timing and professional finishes.',
+				'image' => 'client/projects/interior/interior-08.webp',
+			),
+			'exterior-house-painting-melbourne-weather-protection' => array(
+				'title' => 'Exterior House Painting Melbourne: Protect Your Home From Harsh Weather',
+				'excerpt' => 'How exterior painting protects weatherboards, render, brick, roofs, fascias and other Melbourne surfaces.',
+				'image' => 'client/projects/exterior/exterior-12.webp',
+			),
+			'commercial-painting-contractors-melbourne-businesses' => array(
+				'title' => 'Commercial Painting Contractors Melbourne: Professional Painting for Businesses',
+				'excerpt' => 'Office, retail, warehouse and managed-property painting planned to reduce business disruption.',
+				'image' => 'client/projects/commercial/commercial-09.webp',
+			),
+			'roof-painting-melbourne-benefits-process-cost-guide' => array(
+				'title' => 'Roof Painting Melbourne: Benefits, Process and Cost Guide',
+				'excerpt' => 'What roof painting involves, which factors affect a quotation, and why cleaning, repairs, priming and compatible coatings matter.',
+				'image' => 'client/projects/roof/roof-04.webp',
+			),
+			'how-professional-painters-repair-cracks-before-painting' => array(
+				'title' => 'How Professional Painters Repair Cracks Before Painting',
+				'excerpt' => 'How painters assess hairline cracks, plaster damage, gaps and water staining before preparing walls.',
+				'image' => 'client/projects/plaster/plaster-06.webp',
+			),
+			'best-paint-colours-australian-homes-2026' => array(
+				'title' => 'Best Paint Colours for Australian Homes in 2026',
+				'excerpt' => 'Warm neutrals, expressive accents, gentle pastels and practical ways to test a 2026 colour scheme.',
+				'image' => 'client/projects/residential/residential-08.webp',
+			),
+			'dulux-paint-systems-quality-paint-matters' => array(
+				'title' => 'Dulux Paint Systems: Why Quality Paint Matters for Your Home',
+				'excerpt' => 'Why preparation, compatible primers, washable interior finishes and exterior protection matter more than colour alone.',
+				'image' => 'client/projects/interior/interior-10.webp',
+			),
+			'new-home-painting-melbourne-builders' => array(
+				'title' => 'New Home Painting Melbourne: Why Builders Choose Professional Painters',
+				'excerpt' => 'How painters coordinate new construction preparation, builder timelines, quality finishes and final touch-ups.',
+				'image' => 'client/projects/residential/residential-06.webp',
+			),
+			'before-after-professional-painting-melbourne-homes' => array(
+				'title' => 'Before and After: How Professional Painting Transforms Melbourne Homes',
+				'excerpt' => 'How preparation, colour planning and professional application can refresh older homes and renovations.',
+				'image' => 'client/projects/residential/residential-11.webp',
+			),
+			'fence-painting-melbourne-outdoor-protection' => array(
+				'title' => 'Fence Painting Melbourne: Protect and Improve Your Outdoor Space',
+				'excerpt' => 'Preparation, brush or spray application and suitable exterior coatings for timber and paling fences.',
+				'image' => 'client/projects/fence/fence-10.webp',
+			),
+			'strata-body-corporate-painting-melbourne-guide' => array(
+				'title' => 'Strata and Body Corporate Painting Melbourne: Complete Guide',
+				'excerpt' => 'Plan apartment, common-area and body-corporate painting with clear scopes and stakeholder communication.',
+				'image' => 'client/projects/commercial/commercial-15.webp',
+			),
+			'how-long-professional-paint-job-lasts-melbourne' => array(
+				'title' => 'How Long Does a Professional Paint Job Last in Melbourne?',
+				'excerpt' => 'Factors affecting interior and exterior paint lifespan, warning signs and practical maintenance.',
+				'image' => 'client/projects/exterior/exterior-19.webp',
+			),
+			'why-hiring-insured-painting-contractor-matters' => array(
+				'title' => 'Why Hiring an Insured Painting Contractor Matters',
+				'excerpt' => 'Why insurance, safety practices, written scopes and professional standards matter when choosing a painter.',
+				'image' => 'client/projects/brand/brand-01.webp',
+			),
+			'painter-melbourne-near-me-choose-local-company' => array(
+				'title' => 'Painter Melbourne Near Me: How to Find the Right Local Painting Company',
+				'excerpt' => 'A checklist for comparing local painters, reviews, quotations, experience, preparation and quality controls.',
+				'image' => 'client/projects/brand/brand-02.webp',
+			),
+		);
+		foreach ( $expanded_guides as $slug => $guide ) {
+			$guide['sections'] = array(
+				array(
+					'title' => 'Expanded client SEO article',
+					'text'  => 'This topic has been expanded into a complete Superior Plus Painting and Remodeling article for Melbourne property owners, with the client-supplied keywords and outline retained in the React article content.',
+				),
+			);
+			$guides[ $slug ] = $guide;
+		}
 		foreach ( $guides as $slug => $guide ) {
 			$pages[ 'painting-guides/' . $slug ] = array(
 				'title' => $guide['title'], 'template' => 'standard', 'excerpt' => $guide['excerpt'], 'hero_asset' => $guide['image'],
