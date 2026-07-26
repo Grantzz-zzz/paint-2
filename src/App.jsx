@@ -17,8 +17,8 @@ import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySub
 gsap.registerPlugin(ScrollTrigger)
 
 const nav = [
-  ['/', 'Home'], ['/services', 'Services'], ['/gallery', 'Gallery'], ['/blog', 'Blog'], ['/service-areas', 'Areas'], ['/about', 'About'],
-  ['/our-process', 'Our Process'], ['/faqs', 'FAQs'], ['/contact', 'Contact']
+  ['/', 'Home'], ['/services', 'Services'], ['/service-areas', 'Areas'], ['/gallery', 'Gallery'], ['/about', 'About'],
+  ['/our-process', 'Our Process'], ['/faqs', 'FAQs'], ['/blog', 'Blog'], ['/contact', 'Contact']
 ]
 
 const services = [
@@ -105,7 +105,14 @@ function Navbar() {
     {id:'blog',label:'Blog',url:'/blog',children:[]},
     ...normalizedNav.slice(blogIndex),
   ]
-  const navItems=navWithBlog.map(item=>({...item,path:toAppPath(item.url)}))
+  const navOrder=['/','/services','/service-areas','/gallery','/about','/our-process','/faqs','/blog','/contact']
+  const navItems=navWithBlog
+    .map(item=>({...item,path:toAppPath(item.url)}))
+    .sort((a,b)=>{
+      const aIndex=navOrder.indexOf(a.path)
+      const bIndex=navOrder.indexOf(b.path)
+      return (aIndex<0?navOrder.length:aIndex)-(bIndex<0?navOrder.length:bIndex)
+    })
   const displayedServices=cmsServices?.length?cmsServices:serviceList
   const go = (path) => { navigate(path); setOpen(false); setServicesOpen(false); setAreasOpen(false) }
   const toggleMobileMenu = () => {

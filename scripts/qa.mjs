@@ -173,6 +173,14 @@ try {
         check(await page.locator('.blog-grid .guide-card').count()===4, `${label}: dedicated blog does not show all four approved articles`)
         check(await page.getByRole('button',{name:/Read article/i}).count()===4, `${label}: blog articles are not independently selectable`)
         check(await page.locator('.nav-links .nav-main-link').filter({hasText:'Blog'}).count()===1, `${label}: Blog is missing from the desktop navigation`)
+        const desktopNav=await page.locator('.nav-links .nav-main-link').allTextContents()
+        check(desktopNav.join('|')==='Home|Services|Areas|Gallery|About|Our Process|FAQs|Blog|Contact', `${label}: desktop navigation order is incoherent (${desktopNav.join('|')})`)
+        if(viewportName!=='desktop'){
+          await page.locator('.menu-btn').click()
+          const mobileNav=await page.locator('.mobile-menu>button,.mobile-menu>.mobile-services .mobile-services-head>button:first-child').allTextContents()
+          check(mobileNav.join('|')==='Home|Services|Areas|Gallery|About|Our Process|FAQs|Blog|Contact', `${label}: mobile navigation order is incoherent (${mobileNav.join('|')})`)
+          await page.locator('.menu-btn').click()
+        }
       }
       if(route.startsWith('/blog/')){
         const articleText=await page.locator('.guide-article-body').innerText()
