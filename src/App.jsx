@@ -381,8 +381,8 @@ function Areas({fields}) {
 function Testimonials({fields,items}) {
   const [index,setIndex]=useState(0)
   const [paused,setPaused]=useState(false)
-  const [hovered,setHovered]=useState(false)
   const [pageVisible,setPageVisible]=useState(true)
+  const swipeStart=useRef(null)
   const selectedIds=Array.isArray(fields?.home_testimonial_ids)?fields.home_testimonial_ids.map(String):[]
   const displayed=selectedIds.length?items.filter(item=>selectedIds.includes(String(item.id))):items
   const safeItems=displayed.length?displayed:testimonials
@@ -394,14 +394,27 @@ function Testimonials({fields,items}) {
     return ()=>document.removeEventListener('visibilitychange',handleVisibility)
   },[])
   useEffect(()=>{
-    if(paused||hovered||!pageVisible||safeItems.length<2)return undefined
-    const timer=window.setTimeout(()=>setIndex(value=>(value+1)%safeItems.length),6500)
+    if(paused||!pageVisible||safeItems.length<2)return undefined
+    const timer=window.setTimeout(()=>setIndex(value=>(value+1)%safeItems.length),3000)
     return ()=>window.clearTimeout(timer)
-  },[index,paused,hovered,pageVisible,safeItems.length])
+  },[index,paused,pageVisible,safeItems.length])
   useEffect(()=>setIndex(value=>value%safeItems.length),[safeItems.length])
   const previous=()=>setIndex(value=>(value-1+safeItems.length)%safeItems.length)
   const next=()=>setIndex(value=>(value+1)%safeItems.length)
-  return <section className="section testimonials" onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}><div className="container testimonial-layout"><Reveal><Eyebrow>Kind words</Eyebrow><h2>Loved by<br/><em>Melbourne locals.</em></h2><div className="slider-controls"><button onClick={previous} aria-label="Previous review"><ChevronLeft/></button><span aria-live="off">{String(activeIndex+1).padStart(2,'0')} / {String(safeItems.length).padStart(2,'0')}</span><button onClick={next} aria-label="Next review"><ChevronRight/></button><button className="review-playback" onClick={()=>setPaused(value=>!value)} aria-label={paused?'Resume automatic reviews':'Pause automatic reviews'} aria-pressed={paused}>{paused?<Play/>:<Pause/>}</button></div><p className="review-autoplay-status">{paused?'Automatic rotation paused':'Reviews change automatically'}</p></Reveal><div className="quote-card" aria-live="polite" aria-atomic="true"><div className="stars">{Array.from({length:item.rating||5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><AnimatePresence mode="wait"><motion.div key={`${item.id||item.name||item.label}-${activeIndex}`} initial={{opacity:0,y:15}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-15}}><blockquote>“{item.quote}”</blockquote><div className="quote-by"><b>{item.name||item.label}</b><span>{item.project||item.label}</span></div></motion.div></AnimatePresence></div></div></section>
+  const beginSwipe=event=>{
+    if(event.pointerType==='touch'||event.pointerType==='pen')swipeStart.current={x:event.clientX,y:event.clientY}
+  }
+  const finishSwipe=event=>{
+    const start=swipeStart.current
+    swipeStart.current=null
+    if(!start)return
+    const deltaX=event.clientX-start.x
+    const deltaY=event.clientY-start.y
+    if(Math.abs(deltaX)<45||Math.abs(deltaX)<=Math.abs(deltaY)*1.15)return
+    if(deltaX<0)next()
+    else previous()
+  }
+  return <section className="section testimonials"><div className="container testimonial-layout"><Reveal><Eyebrow>Kind words</Eyebrow><h2>Loved by<br/><em>Melbourne locals.</em></h2><div className="slider-controls"><button onClick={previous} aria-label="Previous review"><ChevronLeft/></button><span aria-live="off">{String(activeIndex+1).padStart(2,'0')} / {String(safeItems.length).padStart(2,'0')}</span><button onClick={next} aria-label="Next review"><ChevronRight/></button><button className="review-playback" onClick={()=>setPaused(value=>!value)} aria-label={paused?'Resume automatic reviews':'Pause automatic reviews'} aria-pressed={paused}>{paused?<Play/>:<Pause/>}</button></div><p className="review-autoplay-status">{paused?'Automatic rotation paused':'Reviews change automatically'}<span> · Swipe to browse</span></p></Reveal><div className="quote-card" aria-live="polite" aria-atomic="true" onPointerDown={beginSwipe} onPointerUp={finishSwipe} onPointerCancel={()=>{swipeStart.current=null}}><div className="stars">{Array.from({length:item.rating||5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><AnimatePresence mode="wait"><motion.div key={`${item.id||item.name||item.label}-${activeIndex}`} initial={{opacity:0,y:15}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-15}}><blockquote>“{item.quote}”</blockquote><div className="quote-by"><b>{item.name||item.label}</b><span>{item.project||item.label}</span></div></motion.div></AnimatePresence></div></div></section>
 }
 
 function Contact({fields,business}) {
