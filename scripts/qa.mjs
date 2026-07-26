@@ -4,6 +4,7 @@ import { extname, join, normalize } from 'node:path'
 import { chromium } from 'playwright-core'
 import { serviceAreas } from '../src/data/serviceAreas.js'
 import { paintingGuides } from '../src/data/paintingGuides.js'
+import { newBatchPhotoCount } from '../src/data/newBatchMedia.js'
 
 const root = join(process.cwd(), 'dist')
 const port = 4188
@@ -373,14 +374,18 @@ try {
   check(await form.locator('.form-success').isVisible(), 'contact form: success state did not appear')
 
   await page.goto(`${origin}#/services/residential-painting-melbourne`, { waitUntil: 'domcontentloaded' })
+  const residentialHero=await page.locator('.page-hero-visual img').evaluate(image=>({src:image.getAttribute('src'),position:getComputedStyle(image).objectPosition}))
+  check(residentialHero.src.includes('/new-batch/'), `service hero: residential page is not using the new client batch (${JSON.stringify(residentialHero)})`)
+  check(residentialHero.position!=='50% 50%', `service hero: focal position was not intentionally set (${JSON.stringify(residentialHero)})`)
   await page.locator('.related-card').first().click()
   await page.waitForTimeout(100)
   check(!page.url().endsWith('residential-painting-melbourne'), 'related service: navigation did not change route')
 
   await page.goto(`${origin}#/services/fence-painting-melbourne`, { waitUntil: 'domcontentloaded' })
   check(await page.locator('.client-media-card').count() === 8, 'project gallery: initial progressive set is incorrect')
+  check(await page.locator('.client-media-card.fit-contain').count() > 0, 'project gallery: portrait and legacy photos are still forced into a cropped cover fit')
   await page.locator('.gallery-more').click()
-  check(await page.locator('.client-media-card').count() === 29, 'project gallery: full unique media set did not expand')
+  check(await page.locator('.client-media-card').count() === 36, 'project gallery: full unique media set did not expand')
   await page.locator('.client-media-card').last().click()
   check(await page.locator('.media-lightbox').isVisible() && await page.locator('.media-lightbox video').count() === 1, 'project gallery: video lightbox did not open')
   await page.locator('.lightbox-close').click()
@@ -389,10 +394,13 @@ try {
   await page.goto(`${origin}#/gallery`, { waitUntil: 'domcontentloaded' })
   await page.locator('.gallery-photo').first().waitFor()
   check(await page.locator('.gallery-category').count() === 9, 'complete gallery: expected nine labelled service sections')
-  check(await page.locator('.gallery-photo').count() === 133, 'complete gallery: expected all 133 project photos to be visible in the page')
+  check(newBatchPhotoCount === 164, `complete gallery: expected 164 unique optimized photos from the new batch, found ${newBatchPhotoCount}`)
+  check(await page.locator('.gallery-photo').count() === 297, 'complete gallery: expected all 297 project photos to be visible in the page')
   check(await page.locator('.gallery-directory nav button').count() === 9, 'complete gallery: section directory is incomplete')
   const uniqueGallerySources=await page.locator('.gallery-photo img').evaluateAll(images=>new Set(images.map(image=>image.getAttribute('src'))).size)
-  check(uniqueGallerySources === 133, `complete gallery: expected 133 unique image sources, found ${uniqueGallerySources}`)
+  check(uniqueGallerySources === 297, `complete gallery: expected 297 unique image sources, found ${uniqueGallerySources}`)
+  const newBatchGallerySources=await page.locator('.gallery-photo img[src*="/new-batch/"]').count()
+  check(newBatchGallerySources === newBatchPhotoCount, `complete gallery: ${newBatchPhotoCount-newBatchGallerySources} optimized new-batch photos are missing`)
   check(!(await page.locator('.gallery-more').count()), 'complete gallery: photos are hidden behind a load-more control')
   const galleryUrl=page.url()
   const galleryStartScroll=await page.evaluate(()=>window.scrollY)

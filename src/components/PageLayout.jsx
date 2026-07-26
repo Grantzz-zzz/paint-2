@@ -59,7 +59,7 @@ function Breadcrumbs({currentTitle}){
   return <nav className="breadcrumbs" aria-label="Breadcrumb"><div className="container">{items.map((item,index)=><span key={item.path}>{index<items.length-1?<button onClick={()=>navigate(item.path)}>{item.label}</button>:<span aria-current="page">{item.label}</span>}{index<items.length-1&&<i>/</i>}</span>)}</div></nav>
 }
 
-export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon', imageAlt }) {
+export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon', imageAlt, imagePosition = 'center center' }) {
   const {business}=useSiteContent()
   const clientProject=image?.includes('/client/')
   return <section className={`page-hero page-hero-${tone}`}>
@@ -72,7 +72,7 @@ export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon'
         <div className="page-hero-actions"><QuoteButton/><a href={business.phone_href} className="text-link"><Phone size={17}/> {business.phone_display}</a></div>
       </div>
       <div className="page-hero-visual">
-        <div className="page-image-frame"/><img src={image} alt={imageAlt || title} loading="eager" decoding="async" fetchPriority="high" />
+        <div className="page-image-frame"/><img src={image} alt={imageAlt || title} style={{objectPosition:imagePosition}} loading="eager" decoding="async" fetchPriority="high" />
         <span className="image-placeholder-note">{clientProject?'Superior Plus project':'Stock image · replace with project photography'}</span>
       </div>
     </div>

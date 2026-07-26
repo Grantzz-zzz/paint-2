@@ -4,29 +4,30 @@ import { PageLayout, PageHero, TrustStrip, SectionIntro, ClosingCTA } from '../c
 import { Divider, Reveal } from '../App'
 import { serviceList, servicePages } from '../data/siteData'
 import { serviceAreaBySlug, serviceAreaRegions, serviceAreas } from '../data/serviceAreas'
+import { newBatchHeroMedia } from '../data/newBatchMedia'
 import { asset } from '../utils/assets'
 import { mediaUrl, pairItems, useRouteContent } from '../content/ContentProvider'
 import NotFoundPage from './NotFoundPage'
 
 const regionImages = {
-  'Inner Eastern Suburbs': asset('client/projects/exterior/exterior-02.webp'),
-  'South Eastern Suburbs': asset('client/projects/residential/residential-02.webp'),
-  'Eastern Suburbs': asset('client/projects/exterior/exterior-09.webp'),
-  'Outer Eastern Suburbs': asset('client/projects/roof/roof-07.webp'),
-  'Monash & nearby eastern suburbs': asset('client/projects/residential/residential-01.webp'),
-  'Greater Dandenong': asset('client/projects/commercial/commercial-12.webp'),
-  'Casey & the outer south-east': asset('client/projects/roof/roof-07.webp'),
+  'Inner Eastern Suburbs': asset('client/projects/new-batch/batch-010.webp'),
+  'South Eastern Suburbs': asset('client/projects/new-batch/batch-145.webp'),
+  'Eastern Suburbs': asset('client/projects/new-batch/batch-165.webp'),
+  'Outer Eastern Suburbs': asset('client/projects/new-batch/batch-158.webp'),
+  'Monash & nearby eastern suburbs': asset('client/projects/new-batch/batch-096.webp'),
+  'Greater Dandenong': asset('client/projects/new-batch/batch-100.webp'),
+  'Casey & the outer south-east': asset('client/projects/new-batch/batch-161.webp'),
 }
 
 const areaCardImages = [
-  asset('client/projects/exterior/exterior-02.webp'), asset('client/projects/residential/residential-02.webp'),
-  asset('client/projects/exterior/exterior-09.webp'), asset('client/projects/interior/interior-02.webp'),
-  asset('client/projects/fence/fence-05.webp'), asset('client/projects/residential/residential-05.webp'),
-  asset('client/projects/commercial/commercial-03.webp'), asset('client/projects/interior/interior-05.webp'),
-  asset('client/projects/commercial/commercial-08.webp'), asset('client/projects/fence/fence-08.webp'),
-  asset('client/projects/exterior/exterior-12.webp'), asset('client/projects/residential/residential-09.webp'),
-  asset('client/projects/roof/roof-03.webp'), asset('client/projects/commercial/commercial-15.webp'),
-  asset('client/projects/exterior/exterior-20.webp'),
+  asset('client/projects/new-batch/batch-010.webp'), asset('client/projects/new-batch/batch-011.webp'),
+  asset('client/projects/new-batch/batch-049.webp'), asset('client/projects/new-batch/batch-070.webp'),
+  asset('client/projects/new-batch/batch-002.webp'), asset('client/projects/new-batch/batch-096.webp'),
+  asset('client/projects/new-batch/batch-100.webp'), asset('client/projects/new-batch/batch-157.webp'),
+  asset('client/projects/new-batch/batch-108.webp'), asset('client/projects/new-batch/batch-148.webp'),
+  asset('client/projects/new-batch/batch-145.webp'), asset('client/projects/new-batch/batch-158.webp'),
+  asset('client/projects/new-batch/batch-165.webp'), asset('client/projects/new-batch/batch-161.webp'),
+  asset('client/projects/new-batch/batch-154.webp'),
 ]
 
 const easternServiceHighlights = [
@@ -46,7 +47,8 @@ function AreaCard({area,index}) {
 export function ServiceAreasPage() {
   const navigate=useNavigate()
   const {data:route}=useRouteContent('/service-areas')
-  const image=mediaUrl(route?.hero?.image,asset('client/projects/residential/residential-01.webp'))
+  const image=mediaUrl(route?.hero?.image,newBatchHeroMedia.serviceAreas.src)
+  const imagePosition=route?.hero?.image?.object_position||newBatchHeroMedia.serviceAreas.position
   const seo=route?.seo
   const regionStories=[
     {title:'Inner Eastern Suburbs',text:'Hawthorn, Kew, Camberwell, Balwyn, Surrey Hills, Mont Albert, Deepdene and the Box Hill area.',image:regionImages['Inner Eastern Suburbs']},
@@ -55,7 +57,7 @@ export function ServiceAreasPage() {
     {title:'Outer Eastern Suburbs',text:'Scoresby, Rowville, Lysterfield, The Basin, Croydon, Kilsyth, Montrose, Lilydale, Mooroolbark and Chirnside Park.',image:regionImages['Outer Eastern Suburbs']},
   ]
   return <PageLayout title={seo?.title||'Service Areas — Melbourne’s Eastern Suburbs'} description={seo?.description||`Explore professional residential and commercial painting services across ${serviceAreas.length} named Melbourne suburbs.`} image={mediaUrl(seo?.social_image,image)} pageType="CollectionPage" schemaData={{mainEntity:serviceAreas.map(area=>({'@type':'Place',name:area.name,url:`/service-areas/${area.slug}`}))}}>
-    <PageHero eyebrow={route?.hero?.eyebrow||'Melbourne service areas'} title={route?.hero?.title||'Professional painters servicing'} accent={route?.hero?.accent||'Melbourne’s Eastern Suburbs.'} intro={route?.hero?.intro||'Superior Plus Painting and Remodeling provides professional residential and commercial painting services throughout Melbourne’s Eastern Suburbs.'} image={image} imageAlt={route?.hero?.image?.alt||'Superior Plus Painting exterior project in Melbourne'} tone="green"/>
+    <PageHero eyebrow={route?.hero?.eyebrow||'Melbourne service areas'} title={route?.hero?.title||'Professional painters servicing'} accent={route?.hero?.accent||'Melbourne’s Eastern Suburbs.'} intro={route?.hero?.intro||'Superior Plus Painting and Remodeling provides professional residential and commercial painting services throughout Melbourne’s Eastern Suburbs.'} image={image} imagePosition={imagePosition} imageAlt={route?.hero?.image?.alt||'Superior Plus Painting exterior project in Melbourne'} tone="green"/>
     <TrustStrip/>
     <section className="inner-section area-coverage-story"><div className="container"><SectionIntro eyebrow="Trusted painting contractors" title="Across Melbourne’s" accent="Eastern Suburbs." text="Our experienced painting team helps homeowners, builders, property managers and businesses transform and protect their properties with high-quality workmanship and attention to detail."/><p className="area-coverage-intro">Whether you need interior painting, exterior painting, roof painting, fence painting, commercial painting or property maintenance, our professional painters deliver reliable solutions designed to achieve long-lasting results.</p><div className="area-story-grid">{regionStories.map((story,index)=><Reveal key={story.title} delay={index*.07}><article><img src={story.image} alt={`Superior Plus Painting work across ${story.title}`} loading="lazy" decoding="async"/><div><span>Region {String(index+1).padStart(2,'0')}</span><h3>{story.title}</h3><p>{story.text}</p></div></article></Reveal>)}</div></div><Divider color="#fbf6ec" variant="wave"/></section>
     <section className="inner-section eastern-service-scope"><div className="container"><SectionIntro eyebrow="Professional painting services we offer" title="Complete painting solutions" accent="for every property." text="We focus on detailed preparation, clean workmanship and quality finishes across residential and commercial projects."/><div className="eastern-service-grid">{easternServiceHighlights.map(({title,text,items,Icon},index)=><Reveal key={title} delay={(index%2)*.06}><article><span><Icon/></span><h3>{title}</h3><p>{text}</p><div>{items.map(item=><small key={item}><Check/>{item}</small>)}</div></article></Reveal>)}</div><Reveal className="eastern-why-band"><div><span>Why choose Superior Plus Painting and Remodeling?</span><h2>Detailed solutions,<br/><em>from start to finish.</em></h2></div><div>{['Experienced professional painters','Local Eastern Suburbs service','Quality preparation and workmanship','Reliable communication','Residential and commercial expertise'].map(item=><p key={item}><Check/>{item}</p>)}<p>We understand every property is different, which is why we provide tailored painting solutions to meet your needs and achieve the best possible result.</p></div></Reveal></div><Divider color="#fff" variant="slash"/></section>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Images, X } from 'lucide-react'
 import { projectMedia } from '../data/projectMedia'
+import { newBatchHeroMedia } from '../data/newBatchMedia'
 import { ClosingCTA, PageHero, PageLayout, SectionIntro, TrustStrip } from '../components/PageLayout'
 
 const gallerySections = [
@@ -33,7 +34,7 @@ export default function GalleryPage() {
 
   return <PageLayout
     title="Painting Project Gallery Melbourne"
-    description="Browse 133 real Superior Plus Painting project photos, grouped by residential, commercial, interior, exterior, roof, fence and specialist painting services."
+    description={`Browse ${photoCount} real Superior Plus Painting project photos, grouped by residential, commercial, interior, exterior, roof, fence and specialist painting services.`}
     pageType="CollectionPage"
     image={projectMedia.residential.items[0].src}
     schemaData={{numberOfItems:photoCount}}
@@ -44,8 +45,9 @@ export default function GalleryPage() {
       title="Every project,"
       accent="all in one place."
       intro="Scroll through our complete project archive. Every photograph is from supplied Superior Plus Painting work and is organised by service so you can quickly find the finish that suits your property."
-      image={projectMedia.commercial.items[11].src}
-      imageAlt="Completed commercial painting project by Superior Plus Painting"
+      image={newBatchHeroMedia.exterior.src}
+      imagePosition={newBatchHeroMedia.exterior.position}
+      imageAlt="Completed Melbourne exterior painting project by Superior Plus Painting"
       tone="green"
     />
     <TrustStrip/>

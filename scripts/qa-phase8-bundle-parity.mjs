@@ -438,7 +438,7 @@ try {
   await interaction.locator('#root h1').first().waitFor()
   check(await interaction.locator('.client-media-card').count() === 8, 'gallery progressive initial count differs')
   await interaction.locator('.gallery-more').click()
-  check(await interaction.locator('.client-media-card').count() === 29, 'gallery expansion count differs')
+  check(await interaction.locator('.client-media-card').count() === 36, 'gallery expansion count differs')
   await interaction.locator('.client-media-card').first().click()
   check(await interaction.locator('.media-lightbox').isVisible(), 'gallery lightbox did not open')
   await interaction.keyboard.press('Escape')

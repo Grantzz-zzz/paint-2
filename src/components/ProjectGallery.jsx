@@ -13,6 +13,7 @@ export default function ProjectGallery({category,items}) {
     alt:item.alt||item.media?.alt||'Superior Plus Painting project',
     placeholder:item.is_placeholder,
     objectPosition:item.object_position,
+    fit:'contain',
   })).filter(item=>item.src):[]
   const gallery=fallbackGallery?{...fallbackGallery,items:cmsItems.length?cmsItems:fallbackGallery.items}:cmsItems.length?{
     eyebrow:'Project gallery',title:'Recent work.',accent:'Finished with care.',intro:'Selected Superior Plus Painting project media.',items:cmsItems,
@@ -29,8 +30,8 @@ export default function ProjectGallery({category,items}) {
   if(!gallery)return null
   return <section className="client-work"><div className="container">
     <SectionIntro eyebrow={gallery.eyebrow} title={gallery.title} accent={gallery.accent} text={gallery.intro}/>
-    <div className="client-gallery-grid">{gallery.items.slice(0,visible).map((item,index)=><Reveal key={item.src} delay={(index%4)*.035}><button className={`client-media-card ${index===0?'featured':''}`} onClick={()=>setSelected(item)} aria-label={`Open ${item.alt}`}>
-      <img src={item.type==='video'?item.poster:item.src} alt={item.alt} loading="lazy" decoding="async"/>
+    <div className="client-gallery-grid">{gallery.items.slice(0,visible).map((item,index)=><Reveal key={item.src} delay={(index%4)*.035}><button className={`client-media-card ${index===0?'featured':''} ${item.fit==='contain'?'fit-contain':''}`} onClick={()=>setSelected(item)} aria-label={`Open ${item.alt}`}>
+      <img src={item.type==='video'?item.poster:item.src} alt={item.alt} style={{objectPosition:item.objectPosition||'center center'}} loading="lazy" decoding="async"/>
       <span className="client-media-badge">{item.type==='video'?<><Play/>Video</>:<><Images/>{item.placeholder?'Showcase image':'Project photo'}</>}</span>
       <i><Plus/></i>
     </button></Reveal>)}</div>

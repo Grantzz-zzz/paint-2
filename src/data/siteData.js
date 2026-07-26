@@ -40,20 +40,20 @@ export const serviceList = [
 ]
 
 const stock = {
-  residential: asset('client/projects/exterior/exterior-07.webp'),
-  commercial: asset('client/projects/commercial/commercial-02.webp'),
-  interior: asset('client/projects/interior/interior-04.webp'),
-  exterior: asset('client/projects/exterior/exterior-01.webp'),
-  roof: asset('client/projects/roof/roof-01.webp'),
-  fence: asset('client/projects/fence/fence-03.webp'),
-  deck: asset('client/projects/outdoor/outdoor-01.webp'),
-  wallpaper: asset('client/projects/wallpaper/wallpaper-09.webp'),
-  plaster: asset('client/projects/plaster/plaster-11.webp'),
+  residential: newBatchHeroMedia.residential,
+  commercial: newBatchHeroMedia.commercial,
+  interior: newBatchHeroMedia.interior,
+  exterior: newBatchHeroMedia.exterior,
+  roof: newBatchHeroMedia.roof,
+  fence: newBatchHeroMedia.fence,
+  deck: newBatchHeroMedia.outdoor,
+  wallpaper: newBatchHeroMedia.wallpaper,
+  plaster: newBatchHeroMedia.plaster,
 }
 
 export const servicePages = {
   'residential-painting-melbourne': {
-    eyebrow: 'Painting for the way you live', title: 'Residential Painting', accent: 'that feels like home.', tone: 'maroon', image: stock.residential,
+    eyebrow: 'Painting for the way you live', title: 'Residential Painting', accent: 'that feels like home.', tone: 'maroon', image: stock.residential.src, imagePosition: stock.residential.position,
     intro: 'Superior Plus Painting provides professional residential painting across Melbourne for homeowners, landlords, builders and property managers. From a complete repaint to one carefully refreshed space, we deliver finishes that enhance the beauty, value and protection of your home.',
     scopeTitle: 'Complete residential painting services',
     scope: ['Interior house painting', 'Exterior house painting', 'New home painting', 'Repainting existing homes', 'Ceilings, walls and trims', 'Doors and window frames', 'Feature walls', 'Garage and roof painting', 'Fence and deck painting', 'Plaster repairs and preparation'],
@@ -63,7 +63,7 @@ export const servicePages = {
     related: ['interior-painting-melbourne', 'exterior-painting-melbourne', 'roof-painting-melbourne', 'plaster-repairs-melbourne'],
   },
   'commercial-painting-melbourne': {
-    eyebrow: 'Commercial painting specialists', title: 'Commercial Painting', accent: 'planned around business.', tone: 'green', image: stock.commercial,
+    eyebrow: 'Commercial painting specialists', title: 'Commercial Painting', accent: 'planned around business.', tone: 'green', image: stock.commercial.src, imagePosition: stock.commercial.position,
     intro: 'We deliver reliable commercial painting across Melbourne for businesses, builders, developers, property managers, body corporates and industrial facilities. From a small retail fit-out to an office building or industrial warehouse, every project is carefully planned to reduce disruption while achieving a professional, durable result.',
     scopeTitle: 'Spaces and industries we paint',
     scope: ['Offices and workplaces', 'Retail shops and shopping centres', 'Warehouses and factories', 'Medical centres and clinics', 'Schools and childcare centres', 'Aged care facilities', 'Restaurants and cafés', 'Apartment complexes', 'Body corporate and strata', 'Interior and exterior commercial painting', 'Scheduled maintenance painting'],
@@ -73,7 +73,7 @@ export const servicePages = {
     related: ['interior-painting-melbourne', 'exterior-painting-melbourne', 'plaster-repairs-melbourne'],
   },
   'interior-painting-melbourne': {
-    eyebrow: 'Clean lines, considered colour', title: 'Interior Painting', accent: 'made beautifully simple.', tone: 'teal', image: stock.interior,
+    eyebrow: 'Clean lines, considered colour', title: 'Interior Painting', accent: 'made beautifully simple.', tone: 'teal', image: stock.interior.src, imagePosition: stock.interior.position,
     intro: 'We provide professional interior painting for homeowners, builders, landlords, property managers and businesses throughout Melbourne. Whether you are renovating, moving, preparing to sell or refreshing your space, we deliver clean modern finishes with careful preparation.',
     scopeTitle: 'Interior spaces and surfaces',
     scope: ['Walls and ceilings', 'Bedrooms and living rooms', 'Kitchens and dining areas', 'Bathrooms and laundries', 'Hallways and staircases', 'Doors and skirting boards', 'Architraves and window trims', 'Home offices and studies', 'Apartments and townhouses', 'Complete family homes'],
@@ -83,7 +83,7 @@ export const servicePages = {
     related: ['residential-painting-melbourne', 'plaster-repairs-melbourne', 'wallpaper-removal-melbourne'],
   },
   'exterior-painting-melbourne': {
-    eyebrow: 'Protection with street appeal', title: 'Exterior Painting', accent: 'built for Melbourne.', tone: 'terracotta', image: stock.exterior,
+    eyebrow: 'Protection with street appeal', title: 'Exterior Painting', accent: 'built for Melbourne.', tone: 'terracotta', image: stock.exterior.src, imagePosition: stock.exterior.position,
     intro: 'Superior Plus Painting provides exterior painting for homes, townhouses, apartments and commercial properties. A professionally finished exterior improves street appeal while protecting surfaces from moisture, UV exposure and Melbourne’s changing weather.',
     scopeTitle: 'Complete exterior painting',
     scope: ['Weatherboards', 'Brick and rendered homes', 'Cladding', 'Fascia boards and eaves', 'Gutters and downpipes', 'Garage and front doors', 'Window frames and timber trims', 'Pergolas and outdoor structures', 'Full exterior house repaints'],
@@ -93,7 +93,7 @@ export const servicePages = {
     related: ['residential-painting-melbourne', 'roof-painting-melbourne', 'fence-painting-melbourne', 'deck-painting-staining-melbourne'],
   },
   'roof-painting-melbourne': {
-    eyebrow: 'Restore the view from the street', title: 'Roof Painting', accent: 'protection from the top down.', tone: 'maroon', image: stock.roof,
+    eyebrow: 'Restore the view from the street', title: 'Roof Painting', accent: 'protection from the top down.', tone: 'maroon', image: stock.roof.src, imagePosition: stock.roof.position,
     intro: 'Our roof painting services help Melbourne homeowners protect, restore and update the appearance of suitable roofing. Careful cleaning and preparation support strong adhesion and a durable, high-quality finish.',
     scopeTitle: 'Roof painting and preparation',
     scope: ['Concrete tile roofs', 'Metal roof painting', 'Suitable Colorbond repainting', 'Pressure washing', 'Suitable minor repairs before painting', 'Roof priming and sealing', 'Protective roof coatings', 'Roof restoration painting'],
@@ -103,7 +103,7 @@ export const servicePages = {
     related: ['exterior-painting-melbourne', 'residential-painting-melbourne'],
   },
   'fence-painting-melbourne': {
-    eyebrow: 'A better boundary', title: 'Fence Painting', accent: 'fresh, even, protected.', tone: 'terracotta', image: stock.fence,
+    eyebrow: 'A better boundary', title: 'Fence Painting', accent: 'fresh, even, protected.', tone: 'terracotta', image: stock.fence.src, imagePosition: stock.fence.position,
     intro: 'We paint new and weathered fences for residential and commercial properties across Melbourne. Brush and spray techniques create smooth, even coverage while surrounding gardens, paving and landscaping are carefully protected.',
     scopeTitle: 'Fence finishes for every property',
     scope: ['Timber paling fences', 'Fence spraying', 'New fence staining', 'Repainting and restoration', 'Boundary fences', 'Picket fences', 'Suitable Colorbond fence painting', 'Gates and timber screens', 'Pergolas and outdoor timber'],
@@ -113,7 +113,7 @@ export const servicePages = {
     related: ['exterior-painting-melbourne', 'deck-painting-staining-melbourne', 'residential-painting-melbourne'],
   },
   'deck-painting-staining-melbourne': {
-    eyebrow: 'Bring outdoor timber back to life', title: 'Deck Painting & Staining', accent: 'made for living outside.', tone: 'gold', image: stock.deck,
+    eyebrow: 'Bring outdoor timber back to life', title: 'Deck Painting & Staining', accent: 'made for living outside.', tone: 'gold', image: stock.deck.src, imagePosition: stock.deck.position,
     intro: 'We restore, protect and enhance Melbourne decks and outdoor timber. Regular maintenance helps timber stand up to sunlight, rain, moisture and foot traffic while preserving its natural character.',
     scopeTitle: 'Deck and timber services',
     scope: ['Timber deck painting', 'Deck staining and re-staining', 'Deck oiling', 'New timber finishes', 'Cleaning and pressure washing', 'Sanding and preparation', 'Suitable minor timber repairs', 'Pergola and outdoor timber coating'],
@@ -123,7 +123,7 @@ export const servicePages = {
     related: ['fence-painting-melbourne', 'exterior-painting-melbourne', 'residential-painting-melbourne'],
   },
   'wallpaper-removal-melbourne': {
-    eyebrow: 'A clean start for your walls', title: 'Wallpaper Removal', accent: 'ready for what comes next.', tone: 'teal', image: stock.wallpaper,
+    eyebrow: 'A clean start for your walls', title: 'Wallpaper Removal', accent: 'ready for what comes next.', tone: 'teal', image: stock.wallpaper.src, imagePosition: stock.wallpaper.position,
     intro: 'Professional wallpaper removal for homes, apartments, offices and commercial properties protects the plaster underneath and creates the smooth foundation required for a quality repaint. We remove old coverings, adhesive residue and minor surface damage with care.',
     scopeTitle: 'Wallpaper removal and preparation',
     scope: ['Wallpaper stripping', 'Vinyl wallpaper removal', 'Feature-wall removal', 'Adhesive and glue removal', 'Steam removal where appropriate', 'Surface cleaning', 'Minor plaster repairs', 'Sanding and priming before paint'],
@@ -133,7 +133,7 @@ export const servicePages = {
     related: ['interior-painting-melbourne', 'plaster-repairs-melbourne', 'residential-painting-melbourne'],
   },
   'plaster-repairs-melbourne': {
-    eyebrow: 'Repair first. Finish beautifully.', title: 'Plaster Repairs', accent: 'smooth from every angle.', tone: 'cream', image: stock.plaster,
+    eyebrow: 'Repair first. Finish beautifully.', title: 'Plaster Repairs', accent: 'smooth from every angle.', tone: 'cream', image: stock.plaster.src, imagePosition: stock.plaster.position,
     intro: 'Damaged plaster affects both the appearance and durability of a painted finish. We restore walls and ceilings in homes, apartments, commercial buildings and investment properties across Melbourne so surfaces are smooth, strong and properly prepared for painting.',
     scopeTitle: 'Wall and ceiling repairs',
     scope: ['Wall and ceiling cracks', 'Hole patching', 'Water-damaged plaster', 'Cornice repairs', 'Minor plasterboard replacement', 'Joint setting and sanding', 'Pre-paint surface preparation', 'Renovation touch-ups'],
@@ -157,3 +157,4 @@ export const faqs = [
   ['How do I book my project?', 'Contact us to arrange a free consultation. Once you approve the written quotation, we schedule the project for a suitable time.'],
 ]
 import { asset } from '../utils/assets'
+import { newBatchHeroMedia } from './newBatchMedia.js'

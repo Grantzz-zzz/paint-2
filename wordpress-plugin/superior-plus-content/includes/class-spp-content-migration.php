@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '1.3.0';
+	const VERSION = '1.4.0';
 
 	private $types;
 	private $report = array();
@@ -299,15 +299,15 @@ class SPP_Content_Migration {
 			'plaster-repairs-melbourne' => 'plaster',
 		);
 		$hero_assets = array(
-			'residential-painting-melbourne'    => 'client/projects/exterior/exterior-07.webp',
-			'commercial-painting-melbourne'     => 'client/projects/commercial/commercial-02.webp',
-			'interior-painting-melbourne'       => 'client/projects/interior/interior-04.webp',
-			'exterior-painting-melbourne'       => 'client/projects/exterior/exterior-01.webp',
-			'roof-painting-melbourne'           => 'client/projects/roof/roof-01.webp',
-			'fence-painting-melbourne'          => 'client/projects/fence/fence-03.webp',
-			'deck-painting-staining-melbourne'  => 'client/projects/outdoor/outdoor-01.webp',
-			'wallpaper-removal-melbourne'       => 'client/projects/wallpaper/wallpaper-09.webp',
-			'plaster-repairs-melbourne'         => 'client/projects/plaster/plaster-11.webp',
+			'residential-painting-melbourne'    => 'client/projects/new-batch/batch-049.webp',
+			'commercial-painting-melbourne'     => 'client/projects/new-batch/batch-100.webp',
+			'interior-painting-melbourne'       => 'client/projects/new-batch/batch-157.webp',
+			'exterior-painting-melbourne'       => 'client/projects/new-batch/batch-165.webp',
+			'roof-painting-melbourne'           => 'client/projects/new-batch/batch-145.webp',
+			'fence-painting-melbourne'          => 'client/projects/new-batch/batch-002.webp',
+			'deck-painting-staining-melbourne'  => 'client/projects/new-batch/batch-108.webp',
+			'wallpaper-removal-melbourne'       => 'client/projects/new-batch/batch-005.webp',
+			'plaster-repairs-melbourne'         => 'client/projects/new-batch/batch-073.webp',
 		);
 		$ids = array();
 		foreach ( spp_default_services() as $slug => $service ) {
@@ -523,6 +523,17 @@ class SPP_Content_Migration {
 			'plaster'    => 'Plaster and surface repair',
 		);
 		$subject = isset( $subjects[ $category ] ) ? $subjects[ $category ] : ucfirst( $category ) . ' painting';
+		$batch_indexes = array(
+			'residential' => array( 1, 4, 12, 25, 48, 57, 63, 96, 102, 107, 117, 118, 121, 123, 124, 126, 128, 130, 159 ),
+			'commercial'  => array( 59, 61, 75, 80, 89, 93, 94, 100, 103, 114, 147, 150 ),
+			'exterior'    => array( 6, 10, 11, 13, 16, 24, 98, 104, 105, 106, 129, 131, 132, 133, 134, 135, 136, 137, 140, 144, 154, 158, 160, 161, 164 ),
+			'fence'       => array( 2, 3, 125, 127, 148, 156 ),
+			'outdoor'     => array( 46, 108, 110, 111, 112, 113, 115, 116, 119, 122, 141, 152, 162, 163 ),
+			'roof'        => array( 21, 22, 47, 87, 99, 120, 145, 165 ),
+			'wallpaper'   => array( 5, 8, 32, 33, 34, 38, 60, 64, 76 ),
+			'plaster'     => array( 7, 9, 17, 19, 20, 37, 41, 42, 43, 67, 71, 73, 74, 77, 81, 83, 88, 143 ),
+			'interior'    => array( 14, 15, 18, 23, 26, 27, 28, 29, 30, 31, 35, 36, 39, 40, 44, 45, 49, 50, 51, 52, 53, 54, 55, 56, 58, 62, 65, 66, 68, 69, 70, 72, 78, 79, 82, 84, 85, 86, 90, 91, 92, 95, 97, 101, 109, 138, 139, 142, 146, 149, 151, 155, 157 ),
+		);
 		$roots = array( 'client/projects/' . $category );
 		$items = array();
 		foreach ( $roots as $relative_dir ) {
@@ -556,6 +567,36 @@ class SPP_Content_Migration {
 						'type' => 'video', 'alt' => $alt, 'object_position' => '50% 50%',
 					);
 				}
+			}
+		}
+		foreach ( isset( $batch_indexes[ $category ] ) ? $batch_indexes[ $category ] : array() as $index ) {
+			$relative = 'client/projects/new-batch/batch-' . str_pad( (string) $index, 3, '0', STR_PAD_LEFT ) . '.webp';
+			$alt = $subject . ' project by Superior Plus Painting';
+			$id = $this->import_asset( $relative, $alt );
+			if ( $id ) {
+				$items[] = array(
+					'attachment_id' => $id,
+					'type' => 'image',
+					'alt' => $alt,
+					'object_position' => '50% 50%',
+					'is_placeholder' => false,
+				);
+			}
+		}
+		$batch_video = 'residential' === $category ? 166 : ( 'fence' === $category ? 167 : 0 );
+		if ( $batch_video ) {
+			$stem = 'client/projects/new-batch/batch-' . $batch_video;
+			$alt = $subject . ' project video by Superior Plus Painting';
+			$video_id = $this->import_remote_video( $stem . '.mp4', $alt );
+			$poster_id = $this->import_asset( $stem . '-poster.webp', $alt . ' poster' );
+			if ( $video_id ) {
+				$items[] = array(
+					'attachment_id' => $video_id,
+					'poster_attachment_id' => $poster_id,
+					'type' => 'video',
+					'alt' => $alt,
+					'object_position' => '50% 50%',
+				);
 			}
 		}
 		return $items;
@@ -692,7 +733,7 @@ class SPP_Content_Migration {
 		$pages = array(
 			'service-areas' => array(
 				'title' => 'Service Areas', 'template' => 'standard', 'excerpt' => 'Professional painters across Melbourne’s eastern and south-eastern suburbs.',
-				'hero_asset' => 'client/projects/residential/residential-01.webp',
+				'hero_asset' => 'client/projects/new-batch/batch-010.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Melbourne service areas', 'spp_hero_title' => 'Painters across Melbourne’s', 'spp_accent' => 'eastern & south-eastern suburbs.',
 					'spp_hero_intro' => 'Superior Plus Painting provides residential, commercial and specialist painting services across Melbourne’s east and south-east. Choose your suburb for relevant services, property types and a direct quote path.',

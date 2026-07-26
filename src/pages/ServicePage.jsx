@@ -21,6 +21,7 @@ export default function ServicePage() {
     intro:cms.hero?.intro,
     image:mediaUrl(cms.hero?.image),
     imageAlt:cms.hero?.image?.alt,
+    imagePosition:cms.hero?.image?.object_position,
     scopeTitle:cms.scope_title,
     scope:textItems(cms.scope),
     process:textItems(cms.process),
@@ -37,7 +38,7 @@ export default function ServicePage() {
   const cta=route?.closing_cta
   const image=page.image||fallbackPage?.image
   return <PageLayout title={seo?.title||`${page.title} Melbourne`} description={seo?.description||page.intro} pageType="Service" image={mediaUrl(seo?.social_image,image)}>
-    <PageHero {...page} image={image} imageAlt={page.imageAlt||(image?.includes('/client/')?`${page.title} project completed by Superior Plus Painting`:`${page.title} service placeholder`)}/>
+    <PageHero {...page} image={image} imagePosition={page.imagePosition||fallbackPage?.imagePosition} imageAlt={page.imageAlt||(image?.includes('/client/')?`${page.title} project completed by Superior Plus Painting`:`${page.title} service placeholder`)}/>
     <TrustStrip/>
 
     <section className="inner-section scope-section"><div className="container">

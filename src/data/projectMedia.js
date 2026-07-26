@@ -1,4 +1,5 @@
-import { asset, remoteProjectVideo } from '../utils/assets'
+import { asset, remoteProjectVideo } from '../utils/assets.js'
+import { newBatchProjectMedia } from './newBatchMedia.js'
 
 const root = 'client/projects'
 
@@ -7,13 +8,14 @@ function photos(category,count,subject) {
     type:'image',
     src:asset(`${root}/${category}/${category}-${String(index+1).padStart(2,'0')}.webp`),
     alt:`${subject} project by Superior Plus Painting`,
+    fit:'contain',
   }))
 }
 
 function videos(category,count,subject) {
   return Array.from({length:count},(_,index)=>{
     const stem=`${root}/${category}/${category}-video-${String(index+1).padStart(2,'0')}`
-    return {type:'video',src:remoteProjectVideo(`${stem}.mp4`),poster:asset(`${stem}-poster.webp`),alt:`${subject} project video by Superior Plus Painting`}
+    return {type:'video',src:remoteProjectVideo(`${stem}.mp4`),poster:asset(`${stem}-poster.webp`),alt:`${subject} project video by Superior Plus Painting`,fit:'contain'}
   })
 }
 
@@ -21,47 +23,47 @@ export const projectMedia = {
   residential: {
     eyebrow:'Residential portfolio', title:'Homes refreshed.', accent:'Inside and out.',
     intro:'Real residential projects from the supplied Superior Plus archive, including completed rooms, exterior transformations and preparation in progress.',
-    items:photos('residential',11,'Residential painting'),
+    items:[...photos('residential',11,'Residential painting'),...newBatchProjectMedia.residential],
   },
   commercial: {
     eyebrow:'Commercial portfolio', title:'Real work.', accent:'Real working spaces.',
     intro:'Completed commercial interiors, warehouses, floor coatings, hospitality spaces and active job sites from the Superior Plus project archive.',
-    items:photos('commercial',20,'Commercial painting'),
+    items:[...photos('commercial',20,'Commercial painting'),...newBatchProjectMedia.commercial],
   },
   interior: {
     eyebrow:'Interior portfolio', title:'Fresh rooms.', accent:'Careful finishes.',
     intro:'A selection of completed rooms, preparation work and interior transformations delivered by the Superior Plus team.',
-    items:photos('interior',11,'Interior painting'),
+    items:[...photos('interior',11,'Interior painting'),...newBatchProjectMedia.interior],
   },
   exterior: {
     eyebrow:'Exterior portfolio', title:'Street appeal.', accent:'Built back beautifully.',
     intro:'Exterior repaints, detailed preparation, weatherboards, windows, eaves and residential transformations from supplied projects.',
-    items:[...photos('exterior',22,'Exterior painting'),...videos('exterior',3,'Exterior painting')],
+    items:[...photos('exterior',22,'Exterior painting'),...newBatchProjectMedia.exterior,...videos('exterior',3,'Exterior painting')],
   },
   fence: {
     eyebrow:'Fence portfolio', title:'Boundaries transformed.', accent:'From prep to finish.',
     intro:'The complete fence-painting archive, including preparation, spraying, detail work and finished boundaries.',
-    items:[...photos('fence',28,'Fence painting'),...videos('fence',1,'Fence painting')],
+    items:[...photos('fence',28,'Fence painting'),...newBatchProjectMedia.fence,...videos('fence',1,'Fence painting')],
   },
   outdoor: {
     eyebrow:'Outdoor portfolio', title:'Outdoor structures.', accent:'Protected with care.',
     intro:'Preparation and coating work for pergolas, covered outdoor areas, porches and suitable exterior timber.',
-    items:[...photos('outdoor',3,'Outdoor timber painting'),...videos('outdoor',1,'Outdoor timber painting')],
+    items:[...photos('outdoor',3,'Outdoor timber painting'),...newBatchProjectMedia.outdoor,...videos('outdoor',1,'Outdoor timber painting')],
   },
   roof: {
     eyebrow:'Roofline portfolio', title:'Protection considered.', accent:'From the top down.',
     intro:'Real residential exterior projects showing rooflines, elevated details and whole-home context. Dedicated roof-coating sequences can be added when the client supplies them.',
-    items:photos('roof',7,'Residential exterior and roofline'),
+    items:[...photos('roof',7,'Residential exterior and roofline'),...newBatchProjectMedia.roof],
   },
   wallpaper: {
     eyebrow:'Wall preparation portfolio', title:'Old surfaces prepared.', accent:'A clean start.',
     intro:'Real interior preparation, repair and repainting work from the supplied archive. Dedicated wallpaper-removal sequences can be added when available.',
-    items:photos('wallpaper',16,'Interior wall preparation'),
+    items:[...photos('wallpaper',16,'Interior wall preparation'),...newBatchProjectMedia.wallpaper],
   },
   plaster: {
     eyebrow:'Plaster repair portfolio', title:'Damage repaired.', accent:'Surfaces made smooth.',
     intro:'Real wall, ceiling, cornice and cabinetry preparation from the supplied Superior Plus project archive.',
-    items:photos('plaster',15,'Plaster and surface repair'),
+    items:[...photos('plaster',15,'Plaster and surface repair'),...newBatchProjectMedia.plaster],
   },
 }
 
