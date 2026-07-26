@@ -117,14 +117,14 @@ export function AboutPage() {
     ['Useful advice before any commitment.','The initial consultation is an opportunity to discuss surfaces, colours, finishes, repairs and timing before receiving a detailed written quotation.'],
   ]
   const standardImages=[
-    asset('client/projects/exterior/exterior-05.webp'),
-    asset('client/projects/interior/interior-08.webp'),
-    asset('client/projects/fence/fence-14.webp'),
-    asset('client/projects/commercial/commercial-10.webp'),
-    asset('client/projects/residential/residential-06.webp'),
-    asset('client/projects/brand/brand-01.webp'),
-    asset('client/projects/roof/roof-05.webp'),
-    asset('client/projects/residential/residential-03.webp'),
+    asset('client/projects/new-batch/batch-073.webp'),
+    asset('client/projects/new-batch/batch-049.webp'),
+    asset('client/projects/new-batch/batch-102.webp'),
+    asset('client/projects/new-batch/batch-155.webp'),
+    asset('client/projects/new-batch/batch-067.webp'),
+    asset('client/projects/new-batch/batch-107.webp'),
+    asset('client/projects/new-batch/batch-096.webp'),
+    asset('client/projects/new-batch/batch-145.webp'),
   ]
   const standardCards=standards.map((title,index)=>({title,brief:standardDetails[index]?.[0]||'Professional care throughout the project.',detail:standardDetails[index]?.[1]||'Every suitable project is inspected, planned and delivered with clear communication and careful workmanship.',image:standardImages[index%standardImages.length],alt:`${title} demonstrated on a Superior Plus Painting project`}))
   const certificateImage=asset('client/certificate-mpa-costing-estimating.png')
@@ -153,12 +153,12 @@ export function ProcessPage() {
     ['Inspect the small details before sign-off.','Coverage, lines, trims and the completed surfaces are checked, suitable touch-ups are completed and the client can review the result during the final walkthrough.'],
   ]
   const proofImages=[
-    asset('client/projects/brand/brand-02.webp'),
-    asset('client/projects/plaster/plaster-09.webp'),
-    asset('client/projects/fence/fence-18.webp'),
-    asset('client/projects/interior/interior-06.webp'),
-    asset('client/projects/commercial/commercial-16.webp'),
-    asset('client/projects/exterior/exterior-18.webp'),
+    asset('client/projects/new-batch/batch-155.webp'),
+    asset('client/projects/new-batch/batch-100.webp'),
+    asset('client/projects/new-batch/batch-049.webp'),
+    asset('client/projects/new-batch/batch-067.webp'),
+    asset('client/projects/new-batch/batch-145.webp'),
+    asset('client/projects/new-batch/batch-102.webp'),
   ]
   const proofCards=proof.map((title,index)=>({title,brief:proofDetails[index]?.[0]||'A carefully managed part of the project.',detail:proofDetails[index]?.[1]||'The project is planned and checked carefully from quotation to handover.',image:proofImages[index%proofImages.length],alt:`${title} during a Superior Plus Painting project`}))
   const preparationStories=[
