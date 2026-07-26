@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '1.6.0';
+	const VERSION = '2.0.0';
 
 	private $types;
 	private $report = array();
@@ -92,7 +92,7 @@ class SPP_Content_Migration {
 			'reused'        => array(),
 			'protected'     => array(),
 			'errors'        => array(),
-			'expected'      => array( 'pages' => 28, 'services' => 9, 'faqs' => 10, 'testimonials' => 4, 'projects' => 9 ),
+			'expected'      => array( 'pages' => 28, 'services' => 9, 'articles' => 19, 'faqs' => 10, 'testimonials' => 4, 'projects' => 9 ),
 		);
 
 		$config_id = $this->types->ensure_site_config();
@@ -102,12 +102,14 @@ class SPP_Content_Migration {
 		$testimonial_ids = $this->migrate_testimonials();
 		$project_ids = $this->migrate_projects();
 		$service_ids = $this->migrate_services( $project_ids );
+		$article_ids = $this->migrate_articles( $service_ids );
 		$this->connect_relationships( $page_ids, $service_ids, $faq_ids, $testimonial_ids, $project_ids );
 		$this->ensure_navigation( $page_ids, $service_ids );
 
 		$this->report['actual'] = array(
 			'pages'       => count( $page_ids ),
 			'services'    => count( $service_ids ),
+			'articles'    => count( $article_ids ),
 			'faqs'        => count( $faq_ids ),
 			'testimonials'=> count( $testimonial_ids ),
 			'projects'    => count( $project_ids ),
@@ -132,6 +134,7 @@ class SPP_Content_Migration {
 			'spp_phone_normalized' => '0470234567',
 			'spp_email' => 'sppainting.remodeling@gmail.com',
 			'spp_location' => 'Melbourne, Victoria',
+			'spp_street_address' => '20 Rae Street, Chadstone VIC 3148, Australia',
 			'spp_facebook_url' => 'https://www.facebook.com/people/Superior-Plus-Painting-Remodeling-Services/100075874374049/',
 			'spp_instagram_url' => 'https://www.instagram.com/sppainting.remodeling',
 			'spp_logo_id' => $logo_id,
@@ -142,6 +145,11 @@ class SPP_Content_Migration {
 			'spp_footer_contact_heading' => 'Get in touch',
 			'spp_footer_copyright' => '© ' . gmdate( 'Y' ) . ' Superior Plus Painting & Remodeling',
 			'spp_footer_closing_line' => 'Made with care in Melbourne.',
+			'spp_project_stats' => array(
+				array( 'title' => '670+', 'text' => 'Residential projects completed' ),
+				array( 'title' => '99%', 'text' => 'Projects completed' ),
+				array( 'title' => '500+', 'text' => 'Commercial projects completed' ),
+			),
 			'spp_trust_items' => array( 'Fully insured', 'Free written quotes', 'Careful preparation', 'Clean, tidy sites' ),
 			'spp_service_areas' => spp_suburbs(),
 			'spp_default_cta_title' => 'Ready for a fresh start?',
@@ -285,6 +293,7 @@ class SPP_Content_Migration {
 			if ( $featured ) {
 				set_post_thumbnail( $post->ID, $featured );
 			}
+			wp_set_object_terms( $post->ID, $category, 'spp_project_category', false );
 			$ids[ $category ] = (int) $post->ID;
 		}
 		return $ids;
@@ -349,6 +358,93 @@ class SPP_Content_Migration {
 			$this->write_meta( $post->ID, 'service:' . $slug, $meta, $is_new );
 			if ( $hero ) {
 				set_post_thumbnail( $post->ID, $hero );
+			}
+			$ids[ $slug ] = (int) $post->ID;
+		}
+		return $ids;
+	}
+
+	/**
+	 * Import the complete approved blog library into editable article records.
+	 *
+	 * Existing client-edited records are protected by the same ownership rules
+	 * used for pages and services.
+	 *
+	 * @param array $service_ids Service IDs keyed by slug.
+	 * @return array
+	 */
+	private function migrate_articles( $service_ids ) {
+		$source = SPP_CONTENT_PATH . 'data/blog-articles.json';
+		$items  = is_file( $source ) ? json_decode( file_get_contents( $source ), true ) : array(); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		if ( ! is_array( $items ) ) {
+			$this->report['errors'][] = 'articles:invalid-seed';
+			return array();
+		}
+		$ids = array();
+		foreach ( $items as $index => $item ) {
+			$slug = isset( $item['slug'] ) ? sanitize_title( $item['slug'] ) : '';
+			if ( ! $slug ) {
+				continue;
+			}
+			$key     = 'article:' . $slug;
+			$post    = $this->find_source( $key, 'spp_article' );
+			$post    = $post ? $post : get_page_by_path( $slug, OBJECT, 'spp_article' );
+			$is_new  = ! $post;
+			$postarr = array(
+				'post_type'    => 'spp_article',
+				'post_status'  => 'publish',
+				'post_name'    => $slug,
+				'post_title'   => sanitize_text_field( $item['title'] ),
+				'post_excerpt' => sanitize_textarea_field( $item['excerpt'] ),
+				'post_content' => wp_kses_post( $item['content'] ),
+				'post_date'    => ! empty( $item['published'] ) ? sanitize_text_field( $item['published'] ) . ' 09:00:00' : current_time( 'mysql' ),
+				'menu_order'   => $index + 1,
+			);
+			if ( $is_new ) {
+				$id = wp_insert_post( $postarr, true );
+				if ( is_wp_error( $id ) ) {
+					$this->report['errors'][] = $key;
+					continue;
+				}
+				$post = get_post( $id );
+			} elseif ( ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) && get_post_meta( $post->ID, '_spp_source_key', true ) === $key ) {
+				$postarr['ID'] = $post->ID;
+				wp_update_post( $postarr );
+			}
+			$image_id = ! empty( $item['image_asset'] ) ? $this->import_asset( $item['image_asset'], $item['image_alt'] ) : 0;
+			$references = array();
+			foreach ( isset( $item['references'] ) && is_array( $item['references'] ) ? $item['references'] : array() as $reference ) {
+				$references[] = array( 'title' => $reference['label'], 'text' => $reference['url'] );
+			}
+			$related = array_values( array_filter( array_map(
+				function ( $slug_key ) use ( $service_ids ) {
+					return isset( $service_ids[ $slug_key ] ) ? $service_ids[ $slug_key ] : 0;
+				},
+				isset( $item['related_services'] ) ? $item['related_services'] : array()
+			) ) );
+			$this->write_meta(
+				$post->ID,
+				$key,
+				array(
+					'spp_template_key'          => 'article',
+					'spp_article_category'      => $item['category'],
+					'spp_article_eyebrow'       => $item['eyebrow'],
+					'spp_article_read_time'     => $item['read_time'],
+					'spp_article_source_label'  => $item['source_label'],
+					'spp_article_takeaways'     => $item['takeaways'],
+					'spp_article_references'    => $references,
+					'spp_related_service_ids'   => $related,
+					'spp_hero_title'            => $item['title'],
+					'spp_hero_intro'            => $item['excerpt'],
+					'spp_hero_image_id'         => $image_id,
+					'spp_hero_image_alt'        => $item['image_alt'],
+					'spp_seo_title'             => $item['title'],
+					'spp_seo_description'       => $item['excerpt'],
+				),
+				$is_new
+			);
+			if ( $image_id ) {
+				set_post_thumbnail( $post->ID, $image_id );
 			}
 			$ids[ $slug ] = (int) $post->ID;
 		}

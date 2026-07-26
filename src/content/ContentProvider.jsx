@@ -45,6 +45,7 @@ export const fallbackBootstrap = {
     phone_href: `tel:${fallbackContact.phone}`,
     email: fallbackContact.email,
     location: fallbackContact.location,
+    street_address: '20 Rae Street, Chadstone VIC 3148, Australia',
     facebook_url: 'https://www.facebook.com/people/Superior-Plus-Painting-Remodeling-Services/100075874374049/',
     instagram_url: 'https://www.instagram.com/sppainting.remodeling',
     logo: { url: asset('logo.webp'), alt: 'Superior Plus Painting & Remodeling' },

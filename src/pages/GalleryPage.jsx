@@ -3,6 +3,7 @@ import { Images, X } from 'lucide-react'
 import { projectMedia } from '../data/projectMedia'
 import { newBatchHeroMedia } from '../data/newBatchMedia'
 import { ClosingCTA, PageHero, PageLayout, SectionIntro, TrustStrip } from '../components/PageLayout'
+import { mediaUrl, useCollection, useRouteContent } from '../content/ContentProvider'
 
 const gallerySections = [
   ['residential','Residential Painting'],
@@ -15,12 +16,24 @@ const gallerySections = [
   ['wallpaper','Wallpaper Removal & Wall Preparation'],
   ['plaster','Plaster Repairs'],
 ]
+const emptyProjects=[]
 
 export default function GalleryPage() {
-  const sections=useMemo(()=>gallerySections.map(([key,label])=>({
-    key,label,...projectMedia[key],
-    items:projectMedia[key].items.filter(item=>item.type==='image'),
-  })),[])
+  const {data:projects}=useCollection('projects',emptyProjects)
+  const {data:route}=useRouteContent('/gallery')
+  const sections=useMemo(()=>gallerySections.map(([key,label])=>{
+    const managed=(projects||[]).filter(project=>{
+      const slugs=(project.categories||[]).map(category=>category.slug)
+      return slugs.includes(key)||String(project.project_type||'').toLowerCase().includes(key)
+    }).flatMap(project=>{
+      const gallery=(project.gallery||[]).filter(item=>item.type==='image').map(item=>({src:mediaUrl(item.media),type:'image',position:item.object_position,alt:item.alt||item.media?.alt,caption:item.caption}))
+      const featured=mediaUrl(project.featured_media)
+      return featured?[{src:featured,type:'image',position:project.object_position,alt:project.featured_media?.alt,caption:project.title},...gallery]:gallery
+    }).filter(item=>item.src)
+    const combined=[...managed,...projectMedia[key].items.filter(item=>item.type==='image')]
+    const unique=combined.filter((item,index,items)=>items.findIndex(candidate=>candidate.src===item.src)===index)
+    return {key,label,...projectMedia[key],items:unique}
+  }),[projects])
   const photoCount=sections.reduce((total,section)=>total+section.items.length,0)
   const [selected,setSelected]=useState(null)
 
@@ -41,11 +54,11 @@ export default function GalleryPage() {
     mainClassName="gallery-main"
   >
     <PageHero
-      eyebrow="Real Melbourne projects"
-      title="Every project,"
-      accent="all in one place."
-      intro="Scroll through our complete project archive. Every photograph is from supplied Superior Plus Painting work and is organised by service so you can quickly find the finish that suits your property."
-      image={newBatchHeroMedia.exterior.src}
+      eyebrow={route?.hero?.eyebrow||"Real Melbourne projects"}
+      title={route?.hero?.title||"Every project,"}
+      accent={route?.hero?.accent||"all in one place."}
+      intro={route?.hero?.intro||"Scroll through our complete project archive. Every photograph is from supplied Superior Plus Painting work and is organised by service so you can quickly find the finish that suits your property."}
+      image={mediaUrl(route?.hero?.image,newBatchHeroMedia.exterior.src)}
       imagePosition={newBatchHeroMedia.exterior.position}
       imageAlt="Completed Melbourne exterior painting project by Superior Plus Painting"
       tone="green"
@@ -71,7 +84,7 @@ export default function GalleryPage() {
               onClick={()=>setSelected({...item,section:section.label,number:index+1})}
               aria-label={`Open ${section.label} project photo ${index+1}`}
             >
-              <img src={item.src} alt={`${section.label} project ${index+1} by Superior Plus Painting`} loading="lazy" decoding="async"/>
+              <img src={item.src} style={{objectPosition:item.position||'50% 50%'}} alt={item.alt||`${section.label} project ${index+1} by Superior Plus Painting`} loading="lazy" decoding="async"/>
               <span><b>{section.label}</b><small>Project {String(index+1).padStart(2,'0')}</small></span>
             </button>)}
           </div>

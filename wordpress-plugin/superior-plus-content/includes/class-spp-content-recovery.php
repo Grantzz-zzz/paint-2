@@ -134,7 +134,7 @@ class SPP_Content_Recovery {
 	}
 
 	private function restore_record( $record ) {
-		$allowed_types = array( 'spp_site_config', 'page', 'spp_service', 'spp_project', 'spp_testimonial', 'spp_faq' );
+		$allowed_types = array( 'spp_site_config', 'page', 'spp_service', 'spp_project', 'spp_article', 'spp_testimonial', 'spp_faq' );
 		$post_type = isset( $record['post_type'] ) ? sanitize_key( $record['post_type'] ) : '';
 		$source_key = isset( $record['source_key'] ) ? sanitize_text_field( $record['source_key'] ) : '';
 		if ( ! in_array( $post_type, $allowed_types, true ) || ! $source_key ) {

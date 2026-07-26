@@ -8,8 +8,8 @@ const base = (process.env.SPP_PHASE9_WP_URL || 'http://127.0.0.1:9492').replace(
 const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 const outputRoot = join(root, 'wordpress-plugin', 'dist', 'phase9')
 const backupPath = join(outputRoot, 'content-backup.json')
-const pluginZip = join(root, 'wordpress-plugin', 'dist', 'superior-plus-content-0.8.1.zip')
-const themeZip = join(root, 'wordpress-theme', 'dist', 'superior-plus-2.4.2.zip')
+const pluginZip = join(root, 'wordpress-plugin', 'dist', 'superior-plus-content-2.0.0.zip')
+const themeZip = join(root, 'wordpress-theme', 'dist', 'superior-plus-3.0.0.zip')
 const focus = process.env.SPP_PHASE9_FOCUS || (process.argv.includes('--uninstall') ? 'uninstall' : 'core')
 const wpUser = process.env.SPP_WP_USER || ''
 const wpPassword = process.env.SPP_WP_PASSWORD || ''
@@ -49,7 +49,7 @@ async function exportPackage() {
   check(response.status === 200, 'Authenticated export endpoint responds', `status ${response.status}`)
   const packageData = response.body?.data
   check(packageData?.format === 'spp-content-export', 'Export format is valid')
-  check(Array.isArray(packageData.records) && packageData.records.length >= 39, 'Export contains the 39 baseline records and any client-created content', `records ${packageData?.records?.length}`)
+  check(Array.isArray(packageData.records) && packageData.records.length >= 58, 'Export contains the baseline records, 19 blog articles and any client-created content', `records ${packageData?.records?.length}`)
   return packageData
 }
 

@@ -74,6 +74,7 @@ class SPP_Content_Fields {
 				'spp_phone_normalized'    => array( 'label' => 'Phone number for links', 'type' => 'phone', 'max' => 30 ),
 				'spp_email'               => array( 'label' => 'Email address', 'type' => 'email', 'max' => 254 ),
 				'spp_location'            => array( 'label' => 'Location', 'type' => 'text', 'max' => 180 ),
+				'spp_street_address'      => array( 'label' => 'Map street address', 'type' => 'text', 'max' => 250 ),
 				'spp_facebook_url'        => array( 'label' => 'Facebook URL', 'type' => 'url', 'max' => 500 ),
 				'spp_instagram_url'       => array( 'label' => 'Instagram URL', 'type' => 'url', 'max' => 500 ),
 				'spp_logo_id'             => array( 'label' => 'Site logo', 'type' => 'media', 'mime' => 'image' ),
@@ -84,6 +85,8 @@ class SPP_Content_Fields {
 				'spp_footer_contact_heading' => array( 'label' => 'Footer contact heading', 'type' => 'text', 'max' => 80 ),
 				'spp_footer_copyright'    => array( 'label' => 'Footer copyright', 'type' => 'text', 'max' => 200 ),
 				'spp_footer_closing_line' => array( 'label' => 'Footer closing line', 'type' => 'text', 'max' => 200 ),
+				'spp_project_stats'       => array( 'label' => 'Homepage counters — Number | Label', 'type' => 'pairs', 'max_items' => 6 ),
+				'spp_trust_badge_image_id' => array( 'label' => 'Homepage review-platform badge image', 'type' => 'media', 'mime' => 'image' ),
 				'spp_trust_items'         => array( 'label' => 'Trust strip — exactly four lines', 'type' => 'list', 'max_items' => 4 ),
 				'spp_service_areas'       => array( 'label' => 'Service areas — one suburb per line', 'type' => 'list', 'max_items' => 100 ),
 				'spp_default_cta_title'   => array( 'label' => 'Default CTA title', 'type' => 'text', 'max' => 180 ),
@@ -107,6 +110,32 @@ class SPP_Content_Fields {
 					'spp_benefits'           => array( 'label' => 'Benefits — one per line', 'type' => 'list', 'max_items' => 12 ),
 					'spp_related_service_ids' => array( 'label' => 'Related services', 'type' => 'services' ),
 					'spp_gallery_items'      => array( 'label' => 'Service gallery', 'type' => 'gallery', 'max_items' => 100 ),
+					'spp_scope_eyebrow'      => array( 'label' => 'Scope eyebrow', 'type' => 'text', 'max' => 120 ),
+					'spp_scope_accent'       => array( 'label' => 'Scope accent', 'type' => 'text', 'max' => 180 ),
+					'spp_scope_intro'        => array( 'label' => 'Scope introduction', 'type' => 'textarea', 'max' => 700 ),
+					'spp_process_eyebrow'    => array( 'label' => 'Process eyebrow', 'type' => 'text', 'max' => 120 ),
+					'spp_process_title'      => array( 'label' => 'Process section title', 'type' => 'text', 'max' => 180 ),
+					'spp_process_accent'     => array( 'label' => 'Process section accent', 'type' => 'text', 'max' => 180 ),
+					'spp_benefits_title'     => array( 'label' => 'Benefits section title', 'type' => 'text', 'max' => 180 ),
+					'spp_benefits_accent'    => array( 'label' => 'Benefits section accent', 'type' => 'text', 'max' => 180 ),
+					'spp_related_eyebrow'    => array( 'label' => 'Related-services eyebrow', 'type' => 'text', 'max' => 120 ),
+					'spp_related_title'      => array( 'label' => 'Related-services title', 'type' => 'text', 'max' => 180 ),
+					'spp_related_accent'     => array( 'label' => 'Related-services accent', 'type' => 'text', 'max' => 180 ),
+				)
+			);
+		}
+
+		if ( 'spp_article' === $post->post_type ) {
+			return array_merge(
+				$this->shared_page_fields(),
+				array(
+					'spp_article_category'    => array( 'label' => 'Article category', 'type' => 'text', 'max' => 120 ),
+					'spp_article_eyebrow'     => array( 'label' => 'Article eyebrow', 'type' => 'text', 'max' => 160 ),
+					'spp_article_read_time'   => array( 'label' => 'Read time (example: 8 min read)', 'type' => 'text', 'max' => 60 ),
+					'spp_article_source_label' => array( 'label' => 'Source label', 'type' => 'text', 'max' => 120 ),
+					'spp_article_takeaways'   => array( 'label' => 'Key takeaways — one per line', 'type' => 'list', 'max_items' => 20 ),
+					'spp_article_references'  => array( 'label' => 'Official references — Label | URL', 'type' => 'pairs', 'max_items' => 20 ),
+					'spp_related_service_ids' => array( 'label' => 'Related services', 'type' => 'relationships', 'post_type' => 'spp_service' ),
 				)
 			);
 		}
@@ -127,6 +156,10 @@ class SPP_Content_Fields {
 				'spp_testimonial_label'   => array( 'label' => 'Review label', 'type' => 'text', 'max' => 180 ),
 				'spp_testimonial_project' => array( 'label' => 'Project label', 'type' => 'text', 'max' => 180 ),
 				'spp_testimonial_rating'  => array( 'label' => 'Star rating', 'type' => 'rating' ),
+				'spp_testimonial_source'  => array( 'label' => 'Review source (Google, Facebook, email, etc.)', 'type' => 'text', 'max' => 80 ),
+				'spp_testimonial_url'     => array( 'label' => 'Original review URL', 'type' => 'url', 'max' => 500 ),
+				'spp_testimonial_date'    => array( 'label' => 'Review date', 'type' => 'text', 'max' => 40 ),
+				'spp_testimonial_image_id' => array( 'label' => 'Client/project image (optional)', 'type' => 'media', 'mime' => 'image' ),
 				'spp_is_placeholder'      => array( 'label' => 'Placeholder review (not yet verified)', 'type' => 'checkbox' ),
 			);
 		}
@@ -170,6 +203,13 @@ class SPP_Content_Fields {
 					'spp_home_quote_text'         => array( 'label' => 'Quote section text', 'type' => 'textarea', 'max' => 700 ),
 					'spp_home_response_label'     => array( 'label' => 'Response-time label', 'type' => 'text', 'max' => 120 ),
 					'spp_home_form_fields'        => array( 'label' => 'Quote form fields — Label | Placeholder', 'type' => 'pairs', 'max_items' => 20 ),
+					'spp_home_blog_eyebrow'       => array( 'label' => 'Blog preview eyebrow', 'type' => 'text', 'max' => 120 ),
+					'spp_home_blog_title'         => array( 'label' => 'Blog preview title', 'type' => 'text', 'max' => 180 ),
+					'spp_home_blog_accent'        => array( 'label' => 'Blog preview accent', 'type' => 'text', 'max' => 180 ),
+					'spp_home_blog_intro'         => array( 'label' => 'Blog preview introduction', 'type' => 'textarea', 'max' => 700 ),
+					'spp_home_article_ids'        => array( 'label' => 'Selected homepage blog articles', 'type' => 'relationships', 'post_type' => 'spp_article' ),
+					'spp_home_projects_heading'   => array( 'label' => 'Projects section heading', 'type' => 'text', 'max' => 180 ),
+					'spp_home_projects_intro'     => array( 'label' => 'Projects section introduction', 'type' => 'textarea', 'max' => 700 ),
 				);
 				break;
 			case 'about':
@@ -180,24 +220,33 @@ class SPP_Content_Fields {
 					'spp_about_archive_image_id' => array( 'label' => 'Company archive image', 'type' => 'media', 'mime' => 'image' ),
 					'spp_about_roots_copy'     => array( 'label' => 'Local-roots copy', 'type' => 'textarea', 'max' => 1600 ),
 					'spp_about_standards'      => array( 'label' => 'Standards — one per line', 'type' => 'list', 'max_items' => 20 ),
+					'spp_about_standard_summaries' => array( 'label' => 'Standard card summaries — one per line', 'type' => 'list', 'max_items' => 20 ),
+					'spp_about_standard_details' => array( 'label' => 'Standard card full descriptions — one per line', 'type' => 'list', 'max_items' => 20 ),
+					'spp_about_standard_images' => array( 'label' => 'Standard card images — same order as cards', 'type' => 'gallery', 'max_items' => 20 ),
 				);
 				break;
 			case 'services_directory':
 				$fields += array(
 					'spp_services_intro'      => array( 'label' => 'Core services introduction', 'type' => 'textarea', 'max' => 900 ),
 					'spp_additional_services' => array( 'label' => 'Additional services — Heading | Description', 'type' => 'pairs', 'max_items' => 30 ),
+					'spp_service_principles' => array( 'label' => 'Professional-service cards — Heading | Description', 'type' => 'pairs', 'max_items' => 12 ),
+					'spp_service_principle_images' => array( 'label' => 'Professional-service card images', 'type' => 'gallery', 'max_items' => 12 ),
 				);
 				break;
 			case 'process':
 				$fields += array(
 					'spp_master_process' => array( 'label' => 'Process steps — Heading | Description', 'type' => 'pairs', 'max_items' => 20 ),
 					'spp_process_proof'  => array( 'label' => 'Why-it-works points — one per line', 'type' => 'list', 'max_items' => 20 ),
+					'spp_process_proof_summaries' => array( 'label' => 'Why-it-works summaries — one per line', 'type' => 'list', 'max_items' => 20 ),
+					'spp_process_proof_details' => array( 'label' => 'Why-it-works full descriptions — one per line', 'type' => 'list', 'max_items' => 20 ),
+					'spp_process_proof_images' => array( 'label' => 'Why-it-works images — same order as cards', 'type' => 'gallery', 'max_items' => 20 ),
 				);
 				break;
 			case 'faqs':
 				$fields += array(
 					'spp_faq_intro' => array( 'label' => 'FAQ introduction', 'type' => 'textarea', 'max' => 900 ),
 					'spp_faq_ids'   => array( 'label' => 'Displayed FAQs', 'type' => 'relationships', 'post_type' => 'spp_faq' ),
+					'spp_faq_project_gallery' => array( 'label' => 'Before-and-after / project images', 'type' => 'gallery', 'max_items' => 100 ),
 				);
 				break;
 			case 'contact':
@@ -244,7 +293,7 @@ class SPP_Content_Fields {
 	 * Add meta boxes.
 	 */
 	public function register_meta_boxes() {
-		foreach ( array( 'page', 'spp_service', 'spp_project', 'spp_testimonial', 'spp_site_config' ) as $post_type ) {
+		foreach ( array( 'page', 'spp_service', 'spp_project', 'spp_article', 'spp_testimonial', 'spp_site_config' ) as $post_type ) {
 			add_meta_box(
 				'spp-locked-content',
 				__( 'Superior Plus editable content', 'superior-plus-content' ),
@@ -415,8 +464,9 @@ class SPP_Content_Fields {
 	 * @param mixed   $value Current value.
 	 */
 	private function render_template_field( $post, $key, $value ) {
-		if ( 'spp_service' === $post->post_type ) {
-			echo '<input type="hidden" name="' . esc_attr( $key ) . '" value="service"><code>service</code>';
+		if ( in_array( $post->post_type, array( 'spp_service', 'spp_article' ), true ) ) {
+			$template = 'spp_article' === $post->post_type ? 'article' : 'service';
+			echo '<input type="hidden" name="' . esc_attr( $key ) . '" value="' . esc_attr( $template ) . '"><code>' . esc_html( $template ) . '</code>';
 			return;
 		}
 		$current = $value ? $value : $this->default_template_for_slug( $post->post_name );
@@ -561,7 +611,7 @@ class SPP_Content_Fields {
 			return max( 1, min( 5, absint( $raw ) ) );
 		}
 		if ( 'template' === $type ) {
-			$allowed = array( 'home', 'about', 'services_directory', 'process', 'faqs', 'contact', 'standard', 'landing', 'service', 'project' );
+			$allowed = array( 'home', 'about', 'services_directory', 'process', 'faqs', 'contact', 'standard', 'landing', 'service', 'project', 'article' );
 			$value   = sanitize_key( $raw );
 			return in_array( $value, $allowed, true ) ? $value : 'standard';
 		}
@@ -710,7 +760,7 @@ class SPP_Content_Fields {
 			return;
 		}
 		$screen = get_current_screen();
-		if ( ! $screen || ! in_array( $screen->post_type, array( 'page', 'spp_service', 'spp_project', 'spp_testimonial', 'spp_site_config' ), true ) ) {
+		if ( ! $screen || ! in_array( $screen->post_type, array( 'page', 'spp_service', 'spp_project', 'spp_article', 'spp_testimonial', 'spp_site_config' ), true ) ) {
 			return;
 		}
 		wp_enqueue_media();

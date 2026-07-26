@@ -58,6 +58,7 @@ final class SPP_Content_Plugin {
 
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_menu', array( $this, 'register_admin_menu' ), 5 );
+		add_action( 'admin_init', array( $this, 'maybe_upgrade' ), 1 );
 		add_filter( 'plugin_action_links_' . plugin_basename( SPP_CONTENT_FILE ), array( $this, 'action_links' ) );
 	}
 
@@ -104,6 +105,7 @@ final class SPP_Content_Plugin {
 					<a class="button button-primary" href="<?php echo esc_url( get_edit_post_link( $config_id, 'url' ) ); ?>"><?php esc_html_e( 'Site settings', 'superior-plus-content' ); ?></a>
 					<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=spp_service' ) ); ?>"><?php esc_html_e( 'Services', 'superior-plus-content' ); ?></a>
 					<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=spp_project' ) ); ?>"><?php esc_html_e( 'Projects', 'superior-plus-content' ); ?></a>
+					<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=spp_article' ) ); ?>"><?php esc_html_e( 'Blog Articles', 'superior-plus-content' ); ?></a>
 					<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=spp_testimonial' ) ); ?>"><?php esc_html_e( 'Testimonials', 'superior-plus-content' ); ?></a>
 					<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=spp_faq' ) ); ?>"><?php esc_html_e( 'FAQs', 'superior-plus-content' ); ?></a>
 					<a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=page' ) ); ?>"><?php esc_html_e( 'Pages', 'superior-plus-content' ); ?></a>
@@ -146,6 +148,17 @@ final class SPP_Content_Plugin {
 	}
 
 	/**
+	 * Apply capability additions when an already-active plugin is updated.
+	 */
+	public function maybe_upgrade() {
+		if ( SPP_CONTENT_VERSION === get_option( 'spp_content_db_version' ) ) {
+			return;
+		}
+		self::add_capabilities();
+		update_option( 'spp_content_db_version', SPP_CONTENT_VERSION, false );
+	}
+
+	/**
 	 * Activation tasks.
 	 */
 	public static function activate() {
@@ -177,7 +190,7 @@ final class SPP_Content_Plugin {
 	private static function add_capabilities() {
 		$common_caps = array( 'manage_spp_content' );
 		$type_caps   = array();
-		foreach ( array( 'service', 'project', 'testimonial', 'faq' ) as $singular ) {
+		foreach ( array( 'service', 'project', 'article', 'testimonial', 'faq' ) as $singular ) {
 			$plural = ( 'faq' === $singular ) ? 'faqs' : $singular . 's';
 			$type_caps = array_merge(
 				$type_caps,

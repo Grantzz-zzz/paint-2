@@ -93,7 +93,19 @@ class SPP_Content_REST {
 				),
 			)
 		);
-		foreach ( array( 'projects', 'faqs', 'testimonials' ) as $collection ) {
+		register_rest_route(
+			'spp/v1',
+			'/articles/(?P<slug>[a-z0-9-]+)',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'article' ),
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'slug' => array( 'sanitize_callback' => 'sanitize_title' ),
+				),
+			)
+		);
+		foreach ( array( 'articles', 'projects', 'faqs', 'testimonials' ) as $collection ) {
 			register_rest_route(
 				'spp/v1',
 				'/' . $collection,
@@ -164,6 +176,7 @@ class SPP_Content_REST {
 				'phone_href'    => 'tel:' . $get( 'spp_phone_normalized', '0470234567' ),
 				'email'         => $get( 'spp_email', 'sppainting.remodeling@gmail.com' ),
 				'location'      => $get( 'spp_location', 'Melbourne, Victoria' ),
+				'street_address' => $get( 'spp_street_address', '20 Rae Street, Chadstone VIC 3148, Australia' ),
 				'facebook_url'  => $get( 'spp_facebook_url', 'https://www.facebook.com/people/Superior-Plus-Painting-Remodeling-Services/100075874374049/' ),
 				'instagram_url' => $get( 'spp_instagram_url', 'https://www.instagram.com/sppainting.remodeling' ),
 				'logo'          => $this->media( $logo_id ),
@@ -174,6 +187,8 @@ class SPP_Content_REST {
 				'columns'      => $this->footer_columns( $config_id ),
 				'copyright'    => $get( 'spp_footer_copyright', '© ' . gmdate( 'Y' ) . ' Superior Plus Painting & Remodeling' ),
 				'closing_line' => $get( 'spp_footer_closing_line', 'Made with care in Melbourne.' ),
+				'stats'        => $this->stat_values( $get( 'spp_project_stats', array() ) ),
+				'trust_badge'  => $this->media( $get( 'spp_trust_badge_image_id', 0 ) ),
 			),
 			'trust_items'   => $this->text_values(
 				$get(
@@ -211,6 +226,26 @@ class SPP_Content_REST {
 	 */
 	public function route( $request ) {
 		$path = $this->sanitize_route_path( $request->get_param( 'path' ) );
+		if ( 0 === strpos( $path, 'blog/' ) || 0 === strpos( $path, 'painting-guides/' ) ) {
+			$slug = substr( $path, strpos( $path, '/' ) + 1 );
+			$post = get_page_by_path( $slug, OBJECT, 'spp_article' );
+			if ( ! $post || 'publish' !== $post->post_status ) {
+				return new WP_Error( 'spp_route_not_found', __( 'Route not found.', 'superior-plus-content' ), array( 'status' => 404 ) );
+			}
+			$article = $this->article_data( $post, true );
+			return $this->response(
+				array(
+					'id'           => (int) $post->ID,
+					'path'         => '/blog/' . $post->post_name,
+					'template_key' => 'article',
+					'title'        => $this->plain_title( $post ),
+					'seo'          => $this->seo( $post ),
+					'hero'         => $article['hero'],
+					'content'      => $article,
+					'closing_cta'  => $this->cta( $post ),
+				)
+			);
+		}
 		if ( 0 === strpos( $path, 'services/' ) ) {
 			$slug = substr( $path, strlen( 'services/' ) );
 			$post = get_page_by_path( $slug, OBJECT, 'spp_service' );
@@ -327,6 +362,35 @@ class SPP_Content_REST {
 	}
 
 	/**
+	 * Published blog article collection.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function articles() {
+		$items = array_map(
+			function ( $post ) {
+				return $this->article_data( $post, false );
+			},
+			$this->published_posts( 'spp_article' )
+		);
+		return $this->response( $items );
+	}
+
+	/**
+	 * Single blog article.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function article( $request ) {
+		$post = get_page_by_path( $request['slug'], OBJECT, 'spp_article' );
+		if ( ! $post || 'publish' !== $post->post_status ) {
+			return new WP_Error( 'spp_article_not_found', __( 'Article not found.', 'superior-plus-content' ), array( 'status' => 404 ) );
+		}
+		return $this->response( $this->article_data( $post, true ) );
+	}
+
+	/**
 	 * Authenticated draft/published preview payload.
 	 *
 	 * @param WP_REST_Request $request Request.
@@ -334,7 +398,7 @@ class SPP_Content_REST {
 	 */
 	public function preview( $request ) {
 		$post = get_post( absint( $request['id'] ) );
-		if ( ! $post || ! in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project' ), true ) ) {
+		if ( ! $post || ! in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project', 'spp_article' ), true ) ) {
 			return new WP_Error( 'spp_preview_not_found', __( 'Preview not found.', 'superior-plus-content' ), array( 'status' => 404 ) );
 		}
 		if ( 'spp_service' === $post->post_type ) {
@@ -345,6 +409,10 @@ class SPP_Content_REST {
 			$content  = $this->project_data( $post );
 			$template = 'project';
 			$path     = '/projects/' . $post->post_name;
+		} elseif ( 'spp_article' === $post->post_type ) {
+			$content  = $this->article_data( $post, true );
+			$template = 'article';
+			$path     = '/blog/' . $post->post_name;
 		} else {
 			$meta     = $this->fields->get_public_meta( $post );
 			$content  = array(
@@ -404,6 +472,10 @@ class SPP_Content_REST {
 					'label'          => get_post_meta( $post->ID, 'spp_testimonial_label', true ),
 					'project'        => get_post_meta( $post->ID, 'spp_testimonial_project', true ),
 					'rating'         => max( 1, min( 5, (int) get_post_meta( $post->ID, 'spp_testimonial_rating', true ) ?: 5 ) ),
+					'source'         => get_post_meta( $post->ID, 'spp_testimonial_source', true ),
+					'source_url'     => get_post_meta( $post->ID, 'spp_testimonial_url', true ),
+					'date'           => get_post_meta( $post->ID, 'spp_testimonial_date', true ),
+					'image'          => $this->media( get_post_meta( $post->ID, 'spp_testimonial_image_id', true ) ),
 					'is_placeholder' => (bool) get_post_meta( $post->ID, 'spp_is_placeholder', true ),
 				);
 			},
@@ -428,7 +500,7 @@ class SPP_Content_REST {
 	 */
 	public function export_package() {
 		$records = array();
-		foreach ( array( 'spp_site_config', 'page', 'spp_service', 'spp_project', 'spp_testimonial', 'spp_faq' ) as $post_type ) {
+		foreach ( array( 'spp_site_config', 'page', 'spp_service', 'spp_project', 'spp_article', 'spp_testimonial', 'spp_faq' ) as $post_type ) {
 			$posts = get_posts(
 				array(
 					'post_type'      => $post_type,
@@ -495,6 +567,7 @@ class SPP_Content_REST {
 			'title' => $this->plain_title( $post ),
 			'short' => wp_strip_all_tags( $short ),
 			'url'   => get_permalink( $post ),
+			'hero'  => $this->hero( $post ),
 		);
 		if ( ! $full ) {
 			return $data;
@@ -509,7 +582,6 @@ class SPP_Content_REST {
 		}
 
 		$data += array(
-			'hero'        => $this->hero( $post ),
 			'scope_title' => get_post_meta( $post->ID, 'spp_scope_title', true ),
 			'scope'       => $this->ordered_items( get_post_meta( $post->ID, 'spp_scope', true ) ),
 			'process'     => $this->ordered_items( get_post_meta( $post->ID, 'spp_process', true ) ),
@@ -517,6 +589,61 @@ class SPP_Content_REST {
 			'benefits'    => $this->ordered_items( get_post_meta( $post->ID, 'spp_benefits', true ) ),
 			'related'     => $related,
 			'gallery'     => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
+			'section_labels' => array(
+				'scope_eyebrow'   => get_post_meta( $post->ID, 'spp_scope_eyebrow', true ),
+				'scope_accent'    => get_post_meta( $post->ID, 'spp_scope_accent', true ),
+				'scope_intro'     => get_post_meta( $post->ID, 'spp_scope_intro', true ),
+				'process_eyebrow' => get_post_meta( $post->ID, 'spp_process_eyebrow', true ),
+				'process_title'   => get_post_meta( $post->ID, 'spp_process_title', true ),
+				'process_accent'  => get_post_meta( $post->ID, 'spp_process_accent', true ),
+				'benefits_title'  => get_post_meta( $post->ID, 'spp_benefits_title', true ),
+				'benefits_accent' => get_post_meta( $post->ID, 'spp_benefits_accent', true ),
+				'related_eyebrow' => get_post_meta( $post->ID, 'spp_related_eyebrow', true ),
+				'related_title'   => get_post_meta( $post->ID, 'spp_related_title', true ),
+				'related_accent'  => get_post_meta( $post->ID, 'spp_related_accent', true ),
+			),
+		);
+		return $data;
+	}
+
+	/**
+	 * Build one reusable blog article payload.
+	 *
+	 * @param WP_Post $post Article.
+	 * @param bool    $full Include full article body and relationships.
+	 * @return array
+	 */
+	private function article_data( $post, $full ) {
+		$excerpt = $post->post_excerpt ? $post->post_excerpt : wp_trim_words( wp_strip_all_tags( $post->post_content ), 32 );
+		$data = array(
+			'id'           => (int) $post->ID,
+			'slug'         => $post->post_name,
+			'title'        => $this->plain_title( $post ),
+			'excerpt'      => wp_strip_all_tags( $excerpt ),
+			'url'          => get_permalink( $post ),
+			'category'     => get_post_meta( $post->ID, 'spp_article_category', true ) ?: __( 'Painting advice', 'superior-plus-content' ),
+			'eyebrow'      => get_post_meta( $post->ID, 'spp_article_eyebrow', true ),
+			'read_time'    => get_post_meta( $post->ID, 'spp_article_read_time', true ) ?: __( 'Practical guide', 'superior-plus-content' ),
+			'source_label' => get_post_meta( $post->ID, 'spp_article_source_label', true ) ?: __( 'Superior Plus guide', 'superior-plus-content' ),
+			'published'    => mysql2date( 'Y-m-d', $post->post_date ),
+			'modified'     => mysql2date( 'Y-m-d', $post->post_modified ),
+			'hero'         => $this->hero( $post ),
+		);
+		if ( ! $full ) {
+			return $data;
+		}
+		$related = array();
+		foreach ( (array) get_post_meta( $post->ID, 'spp_related_service_ids', true ) as $related_id ) {
+			$related_post = get_post( absint( $related_id ) );
+			if ( $related_post && 'spp_service' === $related_post->post_type && 'publish' === $related_post->post_status ) {
+				$related[] = $this->service_data( $related_post, false );
+			}
+		}
+		$data += array(
+			'body'             => apply_filters( 'the_content', $post->post_content ),
+			'takeaways'        => $this->text_values( get_post_meta( $post->ID, 'spp_article_takeaways', true ) ),
+			'references'       => $this->reference_values( get_post_meta( $post->ID, 'spp_article_references', true ) ),
+			'related_services' => $related,
 		);
 		return $data;
 	}
@@ -532,6 +659,7 @@ class SPP_Content_REST {
 		if ( ! $featured_id ) {
 			$featured_id = get_post_thumbnail_id( $post );
 		}
+		$terms = wp_get_post_terms( $post->ID, 'spp_project_category' );
 		return array(
 			'id'               => (int) $post->ID,
 			'slug'             => $post->post_name,
@@ -540,6 +668,13 @@ class SPP_Content_REST {
 			'featured_media'   => $this->media( $featured_id ),
 			'object_position'  => get_post_meta( $post->ID, 'spp_object_position', true ) ?: '50% 50%',
 			'gallery'          => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
+			'excerpt'          => wp_strip_all_tags( $post->post_excerpt ),
+			'categories'       => is_wp_error( $terms ) ? array() : array_map(
+				function ( $term ) {
+					return array( 'slug' => $term->slug, 'name' => $term->name );
+				},
+				$terms
+			),
 			'related_page_ids' => array_map( 'absint', (array) get_post_meta( $post->ID, 'spp_related_page_ids', true ) ),
 			'related_pages'    => $this->related_pages( get_post_meta( $post->ID, 'spp_related_page_ids', true ) ),
 		);
@@ -679,11 +814,50 @@ class SPP_Content_REST {
 				$meta[ preg_replace( '/_id$/', '', $key ) ] = $this->media( $value );
 				unset( $meta[ $key ] );
 			}
+			if ( false !== strpos( $key, 'gallery' ) || false !== strpos( $key, '_images' ) ) {
+				$meta[ $key ] = $this->gallery( $value );
+			}
 		}
 		if ( isset( $meta['related_page_ids'] ) ) {
 			$meta['related_pages'] = $this->related_pages( $meta['related_page_ids'] );
 		}
 		return $meta;
+	}
+
+	/**
+	 * Convert stored Label | URL pairs into safe reference links.
+	 *
+	 * @param mixed $items Stored pairs.
+	 * @return array
+	 */
+	private function reference_values( $items ) {
+		$result = array();
+		foreach ( is_array( $items ) ? $items : array() as $item ) {
+			if ( ! is_array( $item ) || empty( $item['title'] ) || empty( $item['text'] ) ) {
+				continue;
+			}
+			$url = esc_url_raw( $item['text'], array( 'http', 'https' ) );
+			if ( $url ) {
+				$result[] = array( 'label' => $item['title'], 'url' => $url );
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * Convert Number | Label pairs into counter records.
+	 *
+	 * @param mixed $items Stored pairs.
+	 * @return array
+	 */
+	private function stat_values( $items ) {
+		$result = array();
+		foreach ( is_array( $items ) ? $items : array() as $item ) {
+			if ( is_array( $item ) && ! empty( $item['title'] ) ) {
+				$result[] = array( 'value' => $item['title'], 'label' => isset( $item['text'] ) ? $item['text'] : '' );
+			}
+		}
+		return $result;
 	}
 
 	/**

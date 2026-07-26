@@ -44,6 +44,14 @@ class SPP_Content_Types {
 			array( 'slug' => 'projects', 'with_front' => false )
 		);
 		$this->register_public_type(
+			'spp_article',
+			__( 'Blog Articles', 'superior-plus-content' ),
+			__( 'Blog Article', 'superior-plus-content' ),
+			'edit-page',
+			array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes', 'revisions', 'author' ),
+			array( 'slug' => 'blog', 'with_front' => false )
+		);
+		$this->register_public_type(
 			'spp_testimonial',
 			__( 'Testimonials', 'superior-plus-content' ),
 			__( 'Testimonial', 'superior-plus-content' ),

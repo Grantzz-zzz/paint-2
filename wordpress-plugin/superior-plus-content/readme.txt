@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 2.0.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -11,11 +11,11 @@ Locked-design content management for the Superior Plus React WordPress website.
 == Description ==
 
 This companion plugin keeps client-managed text, images, services, projects,
-testimonials, FAQs and site settings separate from the React theme.
+blog articles, testimonials, FAQs and site settings separate from the React theme.
 
 It provides:
 
-* Services, Projects, Testimonials and FAQ content types
+* Services, Projects, Blog Articles, Testimonials and FAQ content types
 * A revision-backed Site Settings record
 * Locked page-template fields
 * Media Library image and ordered gallery controls
@@ -38,6 +38,12 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.0.0 =
+* Adds the reusable locked Blog Article template and imports all 19 approved articles as editable WordPress records.
+* Expands page, service, flip-card, review, counter and Media Library controls while preserving the approved layouts.
+* Makes service hero updates flow to homepage cards and project galleries flow to the complete Gallery page.
+* Supports unlimited verified reviews with optional source, date, URL and image metadata.
 
 = 1.0.4 =
 * Imports the optimized client media batch, improves service-gallery fitting and refreshes service and Eastern Suburbs hero photography.

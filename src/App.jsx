@@ -15,6 +15,8 @@ import { paintingGuides } from './data/paintingGuides'
 import { asset, publicRouteUrl, siteUrl } from './utils/assets'
 import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
 
+const emptyArticles=[]
+
 gsap.registerPlugin(ScrollTrigger)
 
 const nav = [
@@ -179,9 +181,9 @@ function Hero({hero,fields}) {
     <div className="paint-ribbon ribbon-green"/><div className="paint-ribbon ribbon-gold"/>
     <div className="container hero-content">
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">
-        <Eyebrow>{hero?.eyebrow||'Melbourne’s eastern suburbs painting team'}</Eyebrow>
+        <Eyebrow>{hero?.eyebrow||'Melbourne painting team'}</Eyebrow>
         <h1 className="hero-title-seo">{title}<br/>{' '}<em>{accent}</em>{closing&&<><br/>{' '}{closing}</>}</h1>
-        <p>{hero?.intro||'Professional residential and commercial painting across Melbourne’s eastern and south-eastern suburbs, delivered with careful preparation, honest advice and a finish made to last.'}</p>
+        <p>{hero?.intro||'Professional residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and a finish made to last.'}</p>
         <div className="hero-buttons"><button className="btn" onClick={() => navigate('/contact')}>Get a free quote <ArrowRight size={18}/></button><button className="text-link" onClick={() => scrollTo('projects')}>See our work <span>↘</span></button></div>
         <div className="hero-trust">{trustPoints.map(item=><span key={item}><Check/> {item}</span>)}</div>
       </motion.div>
@@ -296,13 +298,19 @@ function WhyUs({fields,business}) {
   </section>
 }
 
-function GuidesPreview() {
+function GuidesPreview({fields,items}) {
   const navigate=useNavigate()
-  return <section className="section home-guides"><div className="container"><Reveal className="section-heading"><div><Eyebrow>From the blog</Eyebrow><h2>Plan with more<br/><em>confidence.</em></h2></div><p>Client-approved articles about repainting cycles, preparation, coating systems and choosing the right professional team for your property.</p></Reveal><div className="home-guide-grid">{paintingGuides.slice(0,3).map((guide,index)=><Reveal key={guide.slug} delay={index*.07}><article><button onClick={()=>navigate(`/blog/${guide.slug}`)}><img src={guide.image} alt={guide.imageAlt} loading="lazy" decoding="async"/><span><Clock3/>{guide.readTime}</span></button><small>{guide.category}</small><h3>{guide.title}</h3><p>{guide.excerpt}</p><button className="guide-link" onClick={()=>navigate(`/blog/${guide.slug}`)}>Read article <ArrowRight/></button></article></Reveal>)}</div><div className="section-action"><button className="btn" onClick={()=>navigate('/blog')}>Explore the painting blog <ArrowRight/></button></div></div><Divider color="#fbf6ec" variant="wave"/></section>
+  const selectedIds=Array.isArray(fields?.home_article_ids)?fields.home_article_ids.map(String):[]
+  const cms=(items||[]).map(item=>({...item,image:mediaUrl(item.hero?.image,item.image),imageAlt:item.hero?.image?.alt||item.imageAlt,readTime:item.read_time||item.readTime||'Practical guide'}))
+  const available=cms.length?cms:paintingGuides
+  const selected=selectedIds.length?available.filter(item=>selectedIds.includes(String(item.id))):available
+  const guides=selected.slice(0,3)
+  return <section className="section home-guides"><div className="container"><Reveal className="section-heading"><div><Eyebrow>{fields?.home_blog_eyebrow||'From the blog'}</Eyebrow><h2>{fields?.home_blog_title||'Plan with more'}<br/><em>{fields?.home_blog_accent||'confidence.'}</em></h2></div><p>{fields?.home_blog_intro||'Client-approved articles about repainting cycles, preparation, coating systems and choosing the right professional team for your property.'}</p></Reveal><div className="home-guide-grid">{guides.map((guide,index)=><Reveal key={guide.slug} delay={index*.07}><article><button onClick={()=>navigate(`/blog/${guide.slug}`)}><img src={guide.image} alt={guide.imageAlt} loading="lazy" decoding="async"/><span><Clock3/>{guide.readTime}</span></button><small>{guide.category}</small><h3>{guide.title}</h3><p>{guide.excerpt}</p><button className="guide-link" onClick={()=>navigate(`/blog/${guide.slug}`)}>Read article <ArrowRight/></button></article></Reveal>)}</div><div className="section-action"><button className="btn" onClick={()=>navigate('/blog')}>Explore the painting blog <ArrowRight/></button></div></div><Divider color="#fbf6ec" variant="wave"/></section>
 }
 
 function Areas({fields}) {
   const navigate=useNavigate()
+  const directoryRef=useRef(null)
   const [activeRegion,setActiveRegion]=useState('all')
   const [areasExpanded,setAreasExpanded]=useState(false)
   const regions=serviceAreaRegions.map(region=>({
@@ -320,6 +328,9 @@ function Areas({fields}) {
   const selectRegion=regionId=>{
     setActiveRegion(regionId)
     setAreasExpanded(false)
+    if(regionId!=='all'&&window.matchMedia('(max-width: 760px)').matches){
+      window.setTimeout(()=>directoryRef.current?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}),40)
+    }
   }
 
   return <section className="home-areas">
@@ -344,18 +355,16 @@ function Areas({fields}) {
         </Reveal>
       </div>
     </div>
-    <div className="home-area-directory">
+    <div className="home-area-directory" ref={directoryRef}>
       <div className="container">
         <Reveal className="home-area-directory-head">
           <div><Eyebrow light>Our service areas</Eyebrow><h2>Professional painters,<br/><em>close to home.</em></h2></div>
           <div><p>Select your suburb to view local painting services, property-specific advice and nearby areas.</p>{activeRegion!=='all'&&<button type="button" onClick={()=>selectRegion('all')}>Return to featured suburbs <ArrowRight size={16}/></button>}</div>
         </Reveal>
-        <motion.div layout className={`home-area-grid ${areasExpanded?'expanded':'compact'}`}>
-          <AnimatePresence mode="popLayout">
-            {displayedAreas.map(area=><motion.button layout initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.25}} type="button" key={area.slug} onClick={()=>navigate(area.path)}>
+        <motion.div key={`${activeRegion}-${areasExpanded?'expanded':'compact'}`} initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:.22}} className={`home-area-grid ${areasExpanded?'expanded':'compact'}`}>
+            {displayedAreas.map(area=><motion.button type="button" key={area.slug} onClick={()=>navigate(area.path)}>
               <span><MapPin size={19}/></span><span><small>Painting services</small><b>{area.name}</b></span><ArrowRight size={17}/>
             </motion.button>)}
-          </AnimatePresence>
         </motion.div>
         <div className="home-area-actions">
           {hiddenAreaCount>0&&<button type="button" className="home-area-toggle" aria-expanded={areasExpanded} onClick={()=>setAreasExpanded(value=>!value)}>
@@ -372,7 +381,7 @@ function Areas({fields}) {
 function Testimonials({fields,items}) {
   const [index,setIndex]=useState(0)
   const selectedIds=Array.isArray(fields?.home_testimonial_ids)?fields.home_testimonial_ids.map(String):[]
-  const displayed=selectedIds.length?items.filter(item=>selectedIds.includes(String(item.id))):testimonials
+  const displayed=selectedIds.length?items.filter(item=>selectedIds.includes(String(item.id))):items
   const safeItems=displayed.length?displayed:testimonials
   const item=safeItems[index%safeItems.length]
   return <section className="section testimonials"><div className="container testimonial-layout"><Reveal><Eyebrow>Kind words</Eyebrow><h2>Loved by<br/><em>Melbourne locals.</em></h2><div className="slider-controls"><button onClick={()=>setIndex((index-1+safeItems.length)%safeItems.length)} aria-label="Previous review"><ChevronLeft/></button><span>{String(index%safeItems.length+1).padStart(2,'0')} / {String(safeItems.length).padStart(2,'0')}</span><button onClick={()=>setIndex((index+1)%safeItems.length)} aria-label="Next review"><ChevronRight/></button></div></Reveal><div className="quote-card"><div className="stars">{Array.from({length:item.rating||5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><AnimatePresence mode="wait"><motion.div key={index} initial={{opacity:0,y:15}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-15}}><blockquote>“{item.quote}”</blockquote><div className="quote-by"><b>{item.name||item.label}</b><span>{item.project||item.label}</span></div></motion.div></AnimatePresence></div></div></section>
@@ -383,8 +392,8 @@ function Contact({fields,business}) {
   return <section id="contact" className="contact section-track"><div className="contact-blob"/><div className="container contact-layout"><Reveal className="contact-copy"><Eyebrow light>Let’s talk colour</Eyebrow><h2>{fields?.home_quote_title||'Ready for a'}<br/><em>fresh start?</em></h2><p>{fields?.home_quote_text||'Tell us what you’re planning. We’ll arrange a free, no-obligation quote and help you choose the right way forward.'}</p><div className="contact-direct"><a href={business.phone_href}><span><Phone/></span><div><small>Call us</small><b>{business.phone_display}</b></div></a><a href={`mailto:${business.email}`}><span><Mail/></span><div><small>Email us</small><b>{business.email}</b></div></a></div></Reveal><Reveal delay={.15}><form className="quote-form" onSubmit={enquiry.submit} aria-busy={enquiry.pending}>{enquiry.sent ? <motion.div initial={{opacity:0,scale:.95}} animate={{opacity:1,scale:1}} className="form-success"><span><Check/></span><h3>Thanks — we’ll be in touch.</h3><p>Your enquiry was delivered successfully. Our team will review the details and contact you.</p><button type="button" className="text-link" onClick={enquiry.reset}>Send another enquiry</button></motion.div> : <><div className="form-title"><span>Free quote request</span><small>{fields?.home_response_label||'Usually replies within 2 hours'}</small></div><input className="spp-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true"/><input type="hidden" name="source" value="homepage"/><div className="form-row"><label>Name<input name="name" required autoComplete="name" placeholder="Your name"/></label><label>Phone<input name="phone" required type="tel" autoComplete="tel" placeholder="04xx xxx xxx"/></label></div><div className="form-row"><label>Email<input name="email" required type="email" autoComplete="email" placeholder="you@email.com"/></label><label>Suburb<input name="suburb" required autoComplete="address-level2" placeholder="Your suburb"/></label></div><label>Tell us about your project<textarea name="details" required minLength="10" rows="4" placeholder="What would you like painted?"/></label>{enquiry.privacyText&&<label className="form-consent"><input name="consent" value="yes" type="checkbox" required/><span>{enquiry.privacyText}</span></label>}{enquiry.error&&<p className="form-error" role="alert">{enquiry.error}</p>}<button className="btn btn-wide" type="submit" disabled={enquiry.pending}>{enquiry.pending?'Sending…':<>Request my free quote <ArrowRight/></>}</button><p className="form-note"><ShieldCheck/> No obligation. Your details stay private.</p></>}</form></Reveal></div></section>
 }
 
-function HomeLocation() {
-  const mapAddress='20 Rae Street, Chadstone VIC 3148, Australia'
+function HomeLocation({business}) {
+  const mapAddress=business.street_address||'20 Rae Street, Chadstone VIC 3148, Australia'
   const mapUrl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapAddress)}`
   const mapEmbedUrl=`https://www.google.com/maps?q=${encodeURIComponent(mapAddress)}&output=embed`
   return <section className="contact-location home-location"><div className="container contact-location-grid"><Reveal className="home-location-copy"><div className="location-icon"><MapPin/></div><Eyebrow>Our Melbourne location</Eyebrow><h2>Local to Chadstone.<br/><em>Ready to come to you.</em></h2><address className="contact-street-address"><MapPin/>{mapAddress}</address><p>Superior Plus Painting services homes and businesses across Melbourne’s eastern and south-eastern suburbs from our Chadstone location.</p><a className="btn" href={mapUrl} target="_blank" rel="noreferrer">View address in Google Maps <ArrowRight size={17}/></a></Reveal><Reveal className="contact-map" delay={.1}><iframe src={mapEmbedUrl} title={`Superior Plus Painting at ${mapAddress}`} loading="lazy" referrerPolicy="no-referrer-when-downgrade"/></Reveal></div></section>
@@ -503,6 +512,7 @@ export default function App() {
   const {data:homeRoute}=useRouteContent('/')
   const {data:projectItems}=useCollection('projects',projects)
   const {data:testimonialItems}=useCollection('testimonials',testimonials)
+  const {data:articleItems}=useCollection('articles',emptyArticles)
   const fields=homeRoute?.content?.fields||{}
   const seo=homeRoute?.seo
   const homeHero=homeRoute?{
@@ -513,7 +523,7 @@ export default function App() {
     image:fields.hero_image||homeRoute.hero?.image,
   }:null
   useEffect(()=>{
-    const description=seo?.description||'Professional residential and commercial painters across Melbourne’s eastern and south-eastern suburbs, delivering careful preparation and quality workmanship.'
+    const description=seo?.description||'Professional residential and commercial painters across Melbourne, delivering careful preparation and quality workmanship.'
     const canonical=publicRouteUrl('/')
     const title=seo?.title||'Professional Painting Services in Melbourne | Superior Plus Painting'
     document.title=title
@@ -524,7 +534,7 @@ export default function App() {
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
     return()=>ctx.revert()
   },[seo?.description,seo?.canonical_url,seo?.title,business])
-  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview/><Areas fields={fields}/><Testimonials fields={fields} items={testimonialItems}/><Contact fields={fields} business={business}/><HomeLocation/></main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview fields={fields} items={articleItems}/><Areas fields={fields}/><Testimonials fields={fields} items={testimonialItems}/><Contact fields={fields} business={business}/><HomeLocation business={business}/></main><Footer/></>
 }
 
 export { Navbar, Footer, Reveal, Eyebrow, Divider }

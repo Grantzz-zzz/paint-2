@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPP_VERSION', '2.6.0' );
+define( 'SPP_VERSION', '3.0.0' );
 define( 'SPP_PATH', get_template_directory() );
 define( 'SPP_URI', get_template_directory_uri() );
 

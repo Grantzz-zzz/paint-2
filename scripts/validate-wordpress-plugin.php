@@ -11,6 +11,7 @@ $required = array(
 	'superior-plus-content.php',
 	'uninstall.php',
 	'readme.txt',
+	'data/blog-articles.json',
 	'assets/admin.css',
 	'assets/admin.js',
 	'includes/class-spp-content-plugin.php',
@@ -43,6 +44,7 @@ $checks = array(
 	'content_types' => array(
 		'spp_service',
 		'spp_project',
+		'spp_article',
 		'spp_testimonial',
 		'spp_faq',
 		'spp_site_config',
@@ -51,7 +53,8 @@ $checks = array(
 		'/bootstrap',
 		'/routes',
 		'/services',
-		"'projects', 'faqs', 'testimonials'",
+		'/articles',
+		"'articles', 'projects', 'faqs', 'testimonials'",
 		'/export',
 		'/preview/',
 		'/quote',
@@ -135,6 +138,6 @@ $result = array(
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || ! $uninstall_preserves_content || '1.0.6' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || ! $uninstall_preserves_content || '2.0.0' !== $result['plugin_version'] ) {
 	exit( 1 );
 }

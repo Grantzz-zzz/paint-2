@@ -29,6 +29,7 @@ export default function ServicePage() {
     benefits:textItems(cms.benefits),
     related:cms.related,
     gallery:cms.gallery,
+    sectionLabels:cms.section_labels,
   }):fallbackPage
   const navigate = useNavigate()
   if (!page && status==='loading') return <PageLayout title="Loading service" description="Loading the latest service information." pageType="Service"><section className="inner-section"><div className="container"><p>Loading the latest service information…</p></div></section></PageLayout>
@@ -37,25 +38,26 @@ export default function ServicePage() {
   const seo=route?.seo
   const cta=route?.closing_cta
   const image=page.image||fallbackPage?.image
+  const labels=page.sectionLabels||{}
   return <PageLayout title={seo?.title||`${page.title} Melbourne`} description={seo?.description||page.intro} pageType="Service" image={mediaUrl(seo?.social_image,image)}>
     <PageHero {...page} image={image} imagePosition={page.imagePosition||fallbackPage?.imagePosition} imageAlt={page.imageAlt||(image?.includes('/client/')?`${page.title} project completed by Superior Plus Painting`:`${page.title} service placeholder`)}/>
     <TrustStrip/>
 
     <section className="inner-section scope-section"><div className="container">
-      <SectionIntro eyebrow="What we can help with" title={page.scopeTitle} accent="covered with care." text="Every quote is tailored to the property, surface condition and finish you want to achieve."/>
+      <SectionIntro eyebrow={labels.scope_eyebrow||"What we can help with"} title={page.scopeTitle} accent={labels.scope_accent||"covered with care."} text={labels.scope_intro||"Every quote is tailored to the property, surface condition and finish you want to achieve."}/>
       <div className="scope-grid">{page.scope.map((item,i)=><Reveal key={item} delay={(i%5)*.04}><div className={`scope-item scope-${page.tone}`}><span>{String(i+1).padStart(2,'0')}</span><Check/><b>{item}</b></div></Reveal>)}</div>
     </div><Divider color="#fbf6ec" variant="slash"/></section>
 
     <section className="inner-section process-section"><div className="container">
-      <SectionIntro eyebrow="How it comes together" title="A considered process." accent="A lasting finish." text={page.why}/>
+      <SectionIntro eyebrow={labels.process_eyebrow||"How it comes together"} title={labels.process_title||"A considered process."} accent={labels.process_accent||"A lasting finish."} text={page.why}/>
       <div className="service-process">{page.process.map((item,i)=><Reveal key={item} delay={i*.06}><article><b>{String(i+1).padStart(2,'0')}</b><span>{item}</span>{i<page.process.length-1&&<i/>}</article></Reveal>)}</div>
     </div></section>
 
     <ProjectGallery category={serviceMediaCategory[slug]} items={page.gallery}/>
 
-    <section className={`benefit-section benefit-${page.tone}`}><div className="container benefit-grid"><Reveal><PaintRoller/><h2>Why this work<br/><em>makes a difference.</em></h2></Reveal><div className="benefit-list">{page.benefits.map((item,i)=><Reveal key={item} delay={i*.06}><div><span>0{i+1}</span><h3>{item}</h3></div></Reveal>)}</div></div><Divider color="#fff" variant="drip"/></section>
+    <section className={`benefit-section benefit-${page.tone}`}><div className="container benefit-grid"><Reveal><PaintRoller/><h2>{labels.benefits_title||"Why this work"}<br/><em>{labels.benefits_accent||"makes a difference."}</em></h2></Reveal><div className="benefit-list">{page.benefits.map((item,i)=><Reveal key={item} delay={i*.06}><div><span>0{i+1}</span><h3>{item}</h3></div></Reveal>)}</div></div><Divider color="#fff" variant="drip"/></section>
 
-    <section className="inner-section related-section"><div className="container"><SectionIntro eyebrow="Keep exploring" title="Related services" accent="for the whole property."/><div className="related-grid">{related.map(service=><button key={service.slug} className={`related-card tone-${service.tone}`} onClick={()=>navigate(`/services/${service.slug}`)}><span>Superior Plus</span><h3>{service.title}</h3><p>{service.short}</p><ArrowRight/></button>)}</div></div></section>
+    <section className="inner-section related-section"><div className="container"><SectionIntro eyebrow={labels.related_eyebrow||"Keep exploring"} title={labels.related_title||"Related services"} accent={labels.related_accent||"for the whole property."}/><div className="related-grid">{related.map(service=><button key={service.slug} className={`related-card tone-${service.tone}`} onClick={()=>navigate(`/services/${service.slug}`)}><span>Superior Plus</span><h3>{service.title}</h3><p>{service.short}</p><ArrowRight/></button>)}</div></div></section>
 
     <TestimonialBand index={Math.max(0,services.findIndex(item=>item.slug===slug))}/>
     <AreasBand/>

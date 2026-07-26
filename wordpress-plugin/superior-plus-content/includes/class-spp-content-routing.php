@@ -168,7 +168,7 @@ class SPP_Content_Routing {
 			$url = $front_id === (int) $page->ID ? home_url( '/' ) : get_permalink( $page );
 			$add( $url, $page->post_modified_gmt );
 		}
-		foreach ( array( 'spp_service', 'spp_project' ) as $post_type ) {
+		foreach ( array( 'spp_service', 'spp_project', 'spp_article' ) as $post_type ) {
 			foreach ( get_posts( array( 'post_type' => $post_type, 'post_status' => 'publish', 'posts_per_page' => -1, 'orderby' => 'ID', 'order' => 'ASC' ) ) as $post ) {
 				$add( get_permalink( $post ), $post->post_modified_gmt );
 			}
@@ -196,7 +196,7 @@ class SPP_Content_Routing {
 	 * @return string[]
 	 */
 	private function blog_slugs() {
-		return array(
+		$fallbacks = array(
 			'how-often-repaint-house-melbourne',
 			'interior-vs-exterior-painting',
 			'professional-painting-services-melbourne',
@@ -217,6 +217,18 @@ class SPP_Content_Routing {
 			'why-hiring-insured-painting-contractor-matters',
 			'painter-melbourne-near-me-choose-local-company',
 		);
+		$posts = get_posts(
+			array(
+				'post_type'      => 'spp_article',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+			)
+		);
+		foreach ( $posts as $post_id ) {
+			$fallbacks[] = get_post_field( 'post_name', $post_id );
+		}
+		return array_values( array_unique( array_filter( $fallbacks ) ) );
 	}
 
 	/**

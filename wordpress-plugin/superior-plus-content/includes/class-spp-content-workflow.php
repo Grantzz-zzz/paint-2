@@ -82,6 +82,12 @@ class SPP_Content_Workflow {
 				'post_type'   => 'spp_project',
 				'icon'        => 'dashicons-format-gallery',
 			),
+			'article'  => array(
+				'label'       => __( 'Blog Article', 'superior-plus-content' ),
+				'description' => __( 'A reusable article with the approved hero, reading navigation, references, takeaways, related services and CTA.', 'superior-plus-content' ),
+				'post_type'   => 'spp_article',
+				'icon'        => 'dashicons-edit-page',
+			),
 		);
 	}
 
@@ -119,6 +125,7 @@ class SPP_Content_Workflow {
 			'page'        => 'standard',
 			'spp_service' => 'service',
 			'spp_project' => 'project',
+			'spp_article' => 'article',
 		);
 		if ( isset( $map[ $post_type ] ) ) {
 			wp_safe_redirect( admin_url( 'admin.php?page=spp-content-create&template=' . $map[ $post_type ] ) );
@@ -234,7 +241,7 @@ class SPP_Content_Workflow {
 	 * Add workflow status to supported edit screens.
 	 */
 	public function register_workflow_box() {
-		foreach ( array( 'page', 'spp_service', 'spp_project' ) as $post_type ) {
+		foreach ( array( 'page', 'spp_service', 'spp_project', 'spp_article' ) as $post_type ) {
 			add_meta_box(
 				'spp-publishing-workflow',
 				__( 'Superior Plus publishing', 'superior-plus-content' ),
@@ -254,7 +261,7 @@ class SPP_Content_Workflow {
 	public function render_workflow_box( $post ) {
 		$template = get_post_meta( $post->ID, 'spp_template_key', true );
 		if ( ! $template ) {
-			$template = 'spp_service' === $post->post_type ? 'service' : ( 'spp_project' === $post->post_type ? 'project' : $this->fields->default_template_for_slug( $post->post_name ) );
+			$template = 'spp_service' === $post->post_type ? 'service' : ( 'spp_project' === $post->post_type ? 'project' : ( 'spp_article' === $post->post_type ? 'article' : $this->fields->default_template_for_slug( $post->post_name ) ) );
 		}
 		$missing = $this->missing_required_fields( $post );
 		$preview = $this->react_preview_link( $post );
@@ -286,6 +293,9 @@ class SPP_Content_Workflow {
 		if ( 'spp_project' === $post->post_type ) {
 			return '/projects/' . ( $post->post_name ?: sanitize_title( $post->post_title ) );
 		}
+		if ( 'spp_article' === $post->post_type ) {
+			return '/blog/' . ( $post->post_name ?: sanitize_title( $post->post_title ) );
+		}
 		if ( 'page' === $post->post_type ) {
 			return '/' . trim( get_page_uri( $post ), '/' );
 		}
@@ -300,7 +310,7 @@ class SPP_Content_Workflow {
 	 * @return string
 	 */
 	public function preview_link( $link, $post ) {
-		if ( ! in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project' ), true ) ) {
+		if ( ! in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project', 'spp_article' ), true ) ) {
 			return $link;
 		}
 		return $this->react_preview_link( $post );
@@ -325,7 +335,7 @@ class SPP_Content_Workflow {
 	 * @return array
 	 */
 	public function row_preview_action( $actions, $post ) {
-		if ( in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project' ), true ) && current_user_can( 'edit_post', $post->ID ) ) {
+		if ( in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project', 'spp_article' ), true ) && current_user_can( 'edit_post', $post->ID ) ) {
 			$actions['spp_preview'] = '<a href="' . esc_url( $this->preview_link( '', $post ) ) . '" target="_blank" rel="noopener">' . esc_html__( 'Content preview', 'superior-plus-content' ) . '</a>';
 		}
 		return $actions;
@@ -435,10 +445,26 @@ class SPP_Content_Workflow {
 				'spp_project_type'        => 'Project type',
 				'spp_featured_media_id'   => 'Featured project image',
 			),
+			'article'  => array(
+				'post_title'              => 'Title',
+				'post_content'            => 'Article body',
+				'post_excerpt'            => 'Article excerpt',
+				'spp_article_category'    => 'Article category',
+				'spp_article_read_time'   => 'Read time',
+				'spp_hero_image_id'       => 'Article image',
+			),
 		);
 		$missing = array();
 		foreach ( isset( $required[ $template ] ) ? $required[ $template ] : array() as $key => $label ) {
-			$value = 'post_title' === $key ? $post->post_title : get_post_meta( $post->ID, $key, true );
+			if ( 'post_title' === $key ) {
+				$value = $post->post_title;
+			} elseif ( 'post_content' === $key ) {
+				$value = $post->post_content;
+			} elseif ( 'post_excerpt' === $key ) {
+				$value = $post->post_excerpt;
+			} else {
+				$value = get_post_meta( $post->ID, $key, true );
+			}
 			if ( '' === $value || null === $value || 0 === $value || array() === $value ) {
 				$missing[] = $label;
 			}
@@ -453,7 +479,7 @@ class SPP_Content_Workflow {
 	 * @param WP_Post $post Record.
 	 */
 	public function validate_publish( $post_id, $post ) {
-		if ( $this->correcting_status || 'publish' !== $post->post_status || ! in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project' ), true ) ) {
+		if ( $this->correcting_status || 'publish' !== $post->post_status || ! in_array( $post->post_type, array( 'page', 'spp_service', 'spp_project', 'spp_article' ), true ) ) {
 			return;
 		}
 		$missing = $this->missing_required_fields( $post );

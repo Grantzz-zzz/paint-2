@@ -57,11 +57,14 @@ export function ServicesPage() {
   const fallbackExtras=[['Wallpaper removal','Adhesive removal and wall preparation for a smooth paint-ready finish.'],['Carpentry services','Suitable repairs or replacement for damaged trims, frames, weatherboards and timber details.'],['Caulking & gap sealing','Neat sealing around windows, doors, skirtings and suitable interior or exterior joints.'],['Tiling services','Tiling support for suitable residential and commercial improvement projects.'],['Timber restoration','Preparation and restoration for decks, fences, pergolas and weatherboards.'],['Surface preparation','Pressure washing, sanding, scraping, filling and priming.'],['Property maintenance','Ongoing support to keep residential and commercial properties in excellent condition.']]
   const extras=pairItems(fields.additional_services,fallbackExtras)
   const extraIcons=[SprayCan,Hammer,ShieldCheck,Palette,Trees,PaintRoller,ClipboardCheck]
-  const servicePrinciples=[
+  const fallbackServicePrinciples=[
     {title:'A complete, written scope',text:'We inspect the property, discuss the surfaces, colours and finish, then provide a detailed no-obligation quotation with preparation and pricing clearly explained.',image:asset('client/projects/residential/residential-01.webp'),alt:'Superior Plus vehicle attending a residential painting inspection'},
     {title:'Preparation selected for the surface',text:'Cleaning, pressure washing, scraping, sanding, filling, suitable repairs, gap sealing and priming are matched to the condition of the project—not treated as an afterthought.',image:asset('client/projects/plaster/plaster-07.webp'),alt:'Detailed plaster and surface preparation before painting'},
     {title:'A finish planned for daily use',text:'Paint systems and application methods are selected around exposure, expected wear and the substrate, with careful protection, inspection, touch-ups and a tidy handover.',image:asset('client/projects/commercial/commercial-06.webp'),alt:'Commercial painting work prepared for a durable professional finish'},
   ]
+  const principlePairs=pairItems(fields.service_principles,fallbackServicePrinciples.map(item=>[item.title,item.text]))
+  const principleImages=(fields.service_principle_images||[]).map(item=>mediaUrl(item.media)).filter(Boolean)
+  const servicePrinciples=principlePairs.map(([title,text],index)=>({title,text,image:principleImages[index]||fallbackServicePrinciples[index%fallbackServicePrinciples.length].image,alt:fields.service_principle_images?.[index]?.alt||fallbackServicePrinciples[index%fallbackServicePrinciples.length].alt}))
   return <PageLayout title={seo?.title||'Painting & Property Services'} description={seo?.description||'Explore Superior Plus Painting’s complete painting, preparation, repair and property improvement services across Melbourne.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="CollectionPage" mainClassName="services-main">
     <PageHero {...hero}/>
     <TrustStrip/>
@@ -116,6 +119,8 @@ export function AboutPage() {
     ['Confidence while work is underway.','The supplied company information states that Superior Plus Painting is fully insured, supporting a professional approach to work in and around client properties.'],
     ['Useful advice before any commitment.','The initial consultation is an opportunity to discuss surfaces, colours, finishes, repairs and timing before receiving a detailed written quotation.'],
   ]
+  const standardSummaries=textItems(fields.about_standard_summaries,standardDetails.map(item=>item[0]))
+  const standardDescriptions=textItems(fields.about_standard_details,standardDetails.map(item=>item[1]))
   const standardImages=[
     asset('client/projects/new-batch/batch-073.webp'),
     asset('client/projects/new-batch/batch-049.webp'),
@@ -126,7 +131,8 @@ export function AboutPage() {
     asset('client/projects/new-batch/batch-096.webp'),
     asset('client/projects/new-batch/batch-145.webp'),
   ]
-  const standardCards=standards.map((title,index)=>({title,brief:standardDetails[index]?.[0]||'Professional care throughout the project.',detail:standardDetails[index]?.[1]||'Every suitable project is inspected, planned and delivered with clear communication and careful workmanship.',image:standardImages[index%standardImages.length],alt:`${title} demonstrated on a Superior Plus Painting project`}))
+  const managedStandardImages=(fields.about_standard_images||[]).map(item=>mediaUrl(item.media)).filter(Boolean)
+  const standardCards=standards.map((title,index)=>({title,brief:standardSummaries[index]||'Professional care throughout the project.',detail:standardDescriptions[index]||'Every suitable project is inspected, planned and delivered with clear communication and careful workmanship.',image:managedStandardImages[index]||standardImages[index%standardImages.length],alt:fields.about_standard_images?.[index]?.alt||`${title} demonstrated on a Superior Plus Painting project`}))
   const certificateImage=asset('client/certificate-mpa-costing-estimating.png')
   return <PageLayout title={seo?.title||'About Us'} description={seo?.description||'Meet Superior Plus Painting, Melbourne painting professionals committed to careful preparation, reliable service and quality workmanship.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="AboutPage">
     <PageHero {...hero}/>
@@ -152,6 +158,8 @@ export function ProcessPage() {
     ['Plan access, timing and disruption.','The proposed schedule is discussed before work begins, with commercial projects able to consider operating hours and residential projects organised around the property.'],
     ['Inspect the small details before sign-off.','Coverage, lines, trims and the completed surfaces are checked, suitable touch-ups are completed and the client can review the result during the final walkthrough.'],
   ]
+  const proofSummaries=textItems(fields.process_proof_summaries,proofDetails.map(item=>item[0]))
+  const proofDescriptions=textItems(fields.process_proof_details,proofDetails.map(item=>item[1]))
   const proofImages=[
     asset('client/projects/new-batch/batch-155.webp'),
     asset('client/projects/new-batch/batch-100.webp'),
@@ -160,7 +168,8 @@ export function ProcessPage() {
     asset('client/projects/new-batch/batch-145.webp'),
     asset('client/projects/new-batch/batch-102.webp'),
   ]
-  const proofCards=proof.map((title,index)=>({title,brief:proofDetails[index]?.[0]||'A carefully managed part of the project.',detail:proofDetails[index]?.[1]||'The project is planned and checked carefully from quotation to handover.',image:proofImages[index%proofImages.length],alt:`${title} during a Superior Plus Painting project`}))
+  const managedProofImages=(fields.process_proof_images||[]).map(item=>mediaUrl(item.media)).filter(Boolean)
+  const proofCards=proof.map((title,index)=>({title,brief:proofSummaries[index]||'A carefully managed part of the project.',detail:proofDescriptions[index]||'The project is planned and checked carefully from quotation to handover.',image:managedProofImages[index]||proofImages[index%proofImages.length],alt:fields.process_proof_images?.[index]?.alt||`${title} during a Superior Plus Painting project`}))
   const preparationStories=[
     {icon:ClipboardCheck,title:'Inspect and document',text:'The quote starts with the site, surface condition, access, repairs, colour direction and finish. This creates a practical written scope before scheduling.',image:asset('client/projects/residential/residential-10.webp'),alt:'Residential property inspection before a painting quotation'},
     {icon:Hammer,title:'Repair and protect',text:'Suitable cracks, holes, plaster or timber defects are addressed, while floors, furniture, windows, landscaping and adjacent surfaces are protected.',image:asset('client/projects/plaster/plaster-13.webp'),alt:'Wall preparation and repairs before a new painted finish'},

@@ -302,6 +302,18 @@ try {
   const page = await interactionContext.newPage()
 
   await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
+  const southEasternFilter=page.locator('.home-area-regions button',{hasText:'South Eastern Suburbs'})
+  await southEasternFilter.click()
+  await page.waitForFunction(()=>document.querySelectorAll('.home-area-grid>button').length===9)
+  const filteredAreaState=await page.locator('.home-area-grid>button').evaluateAll(elements=>({
+    names:elements.map(element=>element.textContent),
+    visible:elements.filter(element=>element.getBoundingClientRect().height>0).length,
+    scrollY:window.scrollY,
+  }))
+  check(filteredAreaState.names.some(name=>name.includes('Malvern'))&&filteredAreaState.names.some(name=>name.includes('Clayton South')), 'homepage areas: South Eastern Suburbs filter did not populate its suburb cards')
+  check(filteredAreaState.visible===8, `homepage areas: expected eight visible filtered cards on mobile, found ${filteredAreaState.visible}`)
+  check(filteredAreaState.scrollY>0, 'homepage areas: mobile region selection did not move to the suburb directory')
+  await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
   const homeServiceCard = page.locator('.home-service-flip').first()
   await homeServiceCard.waitFor()
   const homeServiceCount = await page.locator('.home-service-flip').count()
