@@ -50,6 +50,7 @@ export function PaintingGuidePage() {
   const sections=fallback.sections
   const heroImage=mediaUrl(route?.hero?.image,fallback.image)
   const related=fallback.relatedServices.map(serviceSlug=>serviceList.find(service=>service.slug===serviceSlug)).filter(Boolean)
+  const moreArticles=paintingGuides.filter(guide=>guide.slug!==slug)
   return <PageLayout mainClassName="blog-main blog-article-main" title={fallback.title} description={fallback.excerpt} image={mediaUrl(route?.seo?.social_image,heroImage)} pageType="BlogPosting" schemaData={{headline:fallback.title,datePublished:fallback.published,dateModified:fallback.published,author:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},publisher:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},about:'Professional painting in Melbourne'}}>
     <PageHero eyebrow={fallback.eyebrow} title={fallback.title} accent="A practical Melbourne article." intro={fallback.excerpt} image={heroImage} imageAlt={route?.hero?.image?.alt||fallback.imageAlt} tone="green"/>
     <TrustStrip/>
@@ -60,6 +61,7 @@ export function PaintingGuidePage() {
         <section className="guide-takeaways"><PaintRoller/><h2>Key takeaways</h2>{fallback.takeaways.map(item=><p key={item}><Check/>{item}</p>)}</section>
       </div>
     </div></article>
+    <section className="inner-section blog-more"><div className="container"><SectionIntro eyebrow="Continue reading" title="Choose another" accent="painting article." text="Keep exploring without returning to the main Blog page. Select any article below to open it directly."/><div className="guide-grid">{moreArticles.map((guide,index)=><GuideCard guide={guide} index={index+1} key={guide.slug}/>)}</div></div></section>
     <section className="inner-section cream"><div className="container"><SectionIntro eyebrow="Relevant services" title="Turn the advice" accent="into a clear project plan."/><div className="related-grid">{related.map(service=><button className={`related-card tone-${service.tone}`} key={service.slug} onClick={()=>navigate(`/services/${service.slug}`)}><span>Superior Plus service</span><h3>{service.title}</h3><p>{service.short}</p><ArrowRight/></button>)}</div></div></section>
     <ClosingCTA title="Would you like advice for your property?" text="Arrange a free consultation and written quote based on the actual surfaces, preparation and finish your project needs."/>
   </PageLayout>

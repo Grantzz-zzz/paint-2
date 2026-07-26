@@ -184,6 +184,8 @@ try {
         }[route.split('/').pop()]
         check(articleText.includes(marker), `${label}: PDF-approved article content marker is missing`)
         check(await page.locator('.guide-article-body>section').count()>=6, `${label}: article content is unexpectedly incomplete`)
+        check(await page.locator('.blog-more .guide-card').count()===3, `${label}: article does not offer all three alternative Blog posts`)
+        check(await page.locator('.blog-more').getByRole('button',{name:/Read article/i}).count()===3, `${label}: alternative Blog posts are not directly selectable`)
       }
       if(route!=='/'){
         const allPrimarySizes=await page.locator('.inner-main .page-hero-copy>p,.inner-main .inner-section-heading>p,.inner-main .closing-cta p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
