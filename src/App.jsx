@@ -146,6 +146,7 @@ function Navbar() {
         })}
       </div>
       <div className="nav-actions"><a href={business.phone_href}><Phone size={15} /> {business.phone_display}</a><button className="btn btn-small" onClick={() => go('/contact')}>Free quote <ArrowRight size={15} /></button></div>
+      <button className="mobile-quote-btn" onClick={() => go('/contact')}>Get a quote</button>
       <button className="menu-btn" onClick={toggleMobileMenu} aria-label="Toggle menu" aria-expanded={open} aria-controls="mobile-navigation">{open ? <X /> : <Menu />}</button>
     </nav>
     <AnimatePresence>{open && <motion.div id="mobile-navigation" className="mobile-menu" initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }} exit={{ opacity:0, height:0 }}>
