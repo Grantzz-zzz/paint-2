@@ -9,7 +9,7 @@ import NotFoundPage from './NotFoundPage'
 
 function GuideCard({guide,index}) {
   const navigate=useNavigate()
-  return <Reveal className={index===0?'blog-featured-wrap':''} delay={(index%3)*.05}><article className={`guide-card ${index===0?'blog-featured-card':''}`}>
+  return <Reveal className={`guide-card-reveal ${index===0?'blog-featured-wrap':''}`} delay={(index%3)*.05}><article className={`guide-card ${index===0?'blog-featured-card':''}`}>
     <button className="guide-card-image" onClick={()=>navigate(`/blog/${guide.slug}`)} aria-label={`Read ${guide.title}`}>
       <img src={guide.image} alt={guide.imageAlt} loading="lazy" decoding="async"/>
       <span><Clock/>{guide.readTime}</span>
