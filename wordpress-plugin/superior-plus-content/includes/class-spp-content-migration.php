@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '1.4.0';
+	const VERSION = '1.5.0';
 
 	private $types;
 	private $report = array();
@@ -303,7 +303,7 @@ class SPP_Content_Migration {
 			'commercial-painting-melbourne'     => 'client/projects/new-batch/batch-100.webp',
 			'interior-painting-melbourne'       => 'client/projects/new-batch/batch-157.webp',
 			'exterior-painting-melbourne'       => 'client/projects/new-batch/batch-165.webp',
-			'roof-painting-melbourne'           => 'client/projects/new-batch/batch-145.webp',
+			'roof-painting-melbourne'           => 'client/projects/roof/roof-spray-coating.webp',
 			'fence-painting-melbourne'          => 'client/projects/new-batch/batch-002.webp',
 			'deck-painting-staining-melbourne'  => 'client/projects/new-batch/batch-108.webp',
 			'wallpaper-removal-melbourne'       => 'client/projects/new-batch/batch-005.webp',
@@ -840,7 +840,7 @@ class SPP_Content_Migration {
 			'roof-painting-melbourne-benefits-process-cost-guide' => array(
 				'title' => 'Roof Painting Melbourne: Benefits, Process and Cost Guide',
 				'excerpt' => 'What roof painting involves, which factors affect a quotation, and why cleaning, repairs, priming and compatible coatings matter.',
-				'image' => 'client/projects/roof/roof-04.webp',
+				'image' => 'client/projects/roof/roof-client-2026.webp',
 			),
 			'how-professional-painters-repair-cracks-before-painting' => array(
 				'title' => 'How Professional Painters Repair Cracks Before Painting',

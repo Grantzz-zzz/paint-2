@@ -1,6 +1,10 @@
 import { asset, remoteProjectVideo } from '../utils/assets.js'
 
 const root='client/projects/new-batch'
+const clientRoofImage=asset('client/projects/roof/roof-client-2026.webp')
+const roofServiceHero=asset('client/projects/roof/roof-spray-coating.webp')
+const roofBeforeAfter=asset('client/projects/roof/roof-before-after.webp')
+const roofCommercialCoating=asset('client/projects/roof/roof-commercial-coating.webp')
 const portrait=new Set([1,4,7,8,9,15,17,18,19,20,23,25,27,28,29,31,32,34,37,38,40,41,42,43,44,45,47,50,54,55,60,61,62,64,65,68,69,76,77,78,82,86,90,92,93,95,99,105,107,109,146,163])
 
 const groups={
@@ -39,6 +43,37 @@ export const newBatchProjectMedia=Object.fromEntries(
   Object.entries(groups).map(([category,indexes])=>[category,indexes.map(index=>photo(category,index))])
 )
 
+newBatchProjectMedia.roof.unshift(
+  {
+    type:'image',
+    src:roofServiceHero,
+    alt:'Superior Plus painters applying a protective coating to a corrugated metal roof',
+    fit:'cover',
+    batchIndex:'roof-spray-coating',
+  },
+  {
+    type:'image',
+    src:roofBeforeAfter,
+    alt:'Before and after comparison of a restored corrugated metal roof',
+    fit:'cover',
+    batchIndex:'roof-before-after',
+  },
+  {
+    type:'image',
+    src:roofCommercialCoating,
+    alt:'Commercial metal roof coating project by Superior Plus Painting',
+    fit:'contain',
+    batchIndex:'roof-commercial-coating',
+  },
+  {
+    type:'image',
+    src:clientRoofImage,
+    alt:'Metal roof and upper exterior painting project by Superior Plus Painting',
+    fit:'contain',
+    batchIndex:'roof-client-2026',
+  },
+)
+
 newBatchProjectMedia.residential.push({
   type:'video',
   src:remoteProjectVideo(`${root}/batch-166.mp4`),
@@ -62,12 +97,14 @@ export const newBatchHeroMedia={
   commercial:{src:asset(`${root}/batch-100.webp`),position:'center 50%'},
   interior:{src:asset(`${root}/batch-157.webp`),position:'center 55%'},
   exterior:{src:asset(`${root}/batch-165.webp`),position:'center 52%'},
-  roof:{src:asset(`${root}/batch-145.webp`),position:'center 38%'},
+  roof:{src:roofServiceHero,position:'center 46%'},
   fence:{src:asset(`${root}/batch-002.webp`),position:'center 50%'},
   outdoor:{src:asset(`${root}/batch-108.webp`),position:'center 58%'},
   wallpaper:{src:asset(`${root}/batch-005.webp`),position:'center 45%'},
   plaster:{src:asset(`${root}/batch-073.webp`),position:'center 52%'},
   serviceAreas:{src:asset(`${root}/batch-010.webp`),position:'center 48%'},
 }
+
+export const roofHomepageCardImage={src:roofCommercialCoating,position:'center 65%'}
 
 export const newBatchPhotoCount=Object.values(groups).reduce((total,indexes)=>total+indexes.length,0)

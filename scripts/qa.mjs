@@ -130,6 +130,8 @@ try {
             value:item.querySelector('strong')?.textContent.trim(),
             label:item.querySelector(':scope>span')?.textContent.trim(),
           })),
+          footerTrustBadges: document.querySelectorAll('footer .footer-trust-image').length,
+          homeTrustBadges: document.querySelectorAll('.home-stats-band .footer-trust-image').length,
           quickContacts: [...document.querySelectorAll('.floating-contact-actions>a')].map(item=>({
             href:item.getAttribute('href'),
             label:item.getAttribute('aria-label'),
@@ -154,8 +156,8 @@ try {
       check(result.overflow <= 1, `${label}: horizontal overflow of ${result.overflow}px`)
       check(result.logoFit === 'contain', `${label}: logo is cropped because object-fit is “${result.logoFit}”`)
       check(result.footerServices === 9, `${label}: footer lists ${result.footerServices} services instead of nine`)
-      check(result.footerStats.length===3, `${label}: footer statistics band is incomplete`)
-      check(result.footerStats.map(item=>item.value).join('|')==='670+|99%|500+', `${label}: footer statistics values changed unexpectedly (${JSON.stringify(result.footerStats)})`)
+      check(result.footerStats.length===0, `${label}: footer still contains the removed statistics band`)
+      check(result.footerTrustBadges===0, `${label}: footer still contains the relocated trust badges`)
       check(result.quickContacts.length===2&&result.quickContacts.every(item=>item.visible), `${label}: floating contact actions are missing or clipped`)
       check(result.quickContacts[0]?.href?.startsWith('tel:')&&result.quickContacts[1]?.href?.startsWith('mailto:'), `${label}: floating contact destinations are incorrect (${JSON.stringify(result.quickContacts)})`)
       check(result.quickContacts.every(item=>item.label), `${label}: floating contact action is missing an accessible label`)
@@ -164,6 +166,27 @@ try {
       if(route==='/'){
         check(result.homeStats.length===3, `${label}: upper homepage statistics band is incomplete`)
         check(result.homeStats.map(item=>item.value).join('|')==='670+|99%|500+', `${label}: upper homepage statistics values changed unexpectedly (${JSON.stringify(result.homeStats)})`)
+        check(result.homeTrustBadges===3, `${label}: homepage trust badge group is incomplete`)
+        const homeStatsColors=await page.locator('.home-stats-band').evaluate(element=>({
+          band:getComputedStyle(element).backgroundColor,
+          panel:getComputedStyle(element.querySelector('.home-project-stats')).backgroundColor,
+        }))
+        check(homeStatsColors.band===homeStatsColors.panel, `${label}: statistics panel does not match its green section (${JSON.stringify(homeStatsColors)})`)
+        const homeServiceImages=await page.locator('.home-service-front').evaluateAll(elements=>Object.fromEntries(elements.map(element=>[
+          element.querySelector('strong')?.textContent.trim(),
+          element.querySelector('img')?.getAttribute('src')||'',
+        ])))
+        check(Object.keys(homeServiceImages).length===9, `${label}: expected nine homepage service images`)
+        check(Object.values(homeServiceImages).every(source=>source.includes('/new-batch/')||source.includes('/projects/roof/')), `${label}: an outdated homepage service image remains (${JSON.stringify(homeServiceImages)})`)
+        check(homeServiceImages['Roof Painting']?.includes('/roof-commercial-coating.webp'), `${label}: roof card is not using the requested commercial-roof photo`)
+        check(homeServiceImages['Deck Painting & Staining']?.includes('/batch-108.webp'), `${label}: deck card no longer matches its service hero`)
+        const badgeLayout=await page.locator('.home-project-stats .footer-trust-image').evaluateAll(elements=>elements.map(element=>({
+          width:Math.round(element.getBoundingClientRect().width),
+          height:Math.round(element.getBoundingClientRect().height),
+          alignedWithCounter:element.parentElement?.matches('.home-project-stats>div')||false,
+        })))
+        check(badgeLayout.every(item=>item.width===badgeLayout[0].width&&item.height===badgeLayout[0].height), `${label}: homepage trust badges are not equally sized (${JSON.stringify(badgeLayout)})`)
+        check(badgeLayout.every(item=>item.alignedWithCounter), `${label}: a homepage trust badge is not aligned inside its counter column`)
         const descriptionSizes=await page.locator('.hero-copy>p,.section-heading>p,.commercial-top>div:last-child>p,.why-copy>p,.home-areas-copy>p,.contact-copy>p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
         const expectedMinimum=22
         check(descriptionSizes.length===8, `${label}: expected eight primary homepage descriptions, found ${descriptionSizes.length}`)
@@ -387,6 +410,10 @@ try {
   await page.waitForTimeout(100)
   check(!page.url().endsWith('residential-painting-melbourne'), 'related service: navigation did not change route')
 
+  await page.goto(`${origin}#/services/roof-painting-melbourne`, { waitUntil: 'domcontentloaded' })
+  const roofHeroSource=await page.locator('.page-hero-visual img').getAttribute('src')
+  check(roofHeroSource?.includes('/roof-spray-coating.webp'), `roof service hero: expected the new roof-spraying photo, found ${roofHeroSource}`)
+
   await page.goto(`${origin}#/services/fence-painting-melbourne`, { waitUntil: 'domcontentloaded' })
   check(await page.locator('.client-media-card').count() === 8, 'project gallery: initial progressive set is incorrect')
   check(await page.locator('.client-media-card.fit-contain').count() > 0, 'project gallery: portrait and legacy photos are still forced into a cropped cover fit')
@@ -401,10 +428,10 @@ try {
   await page.locator('.gallery-photo').first().waitFor()
   check(await page.locator('.gallery-category').count() === 9, 'complete gallery: expected nine labelled service sections')
   check(newBatchPhotoCount === 164, `complete gallery: expected 164 unique optimized photos from the new batch, found ${newBatchPhotoCount}`)
-  check(await page.locator('.gallery-photo').count() === 297, 'complete gallery: expected all 297 project photos to be visible in the page')
+  check(await page.locator('.gallery-photo').count() === 301, 'complete gallery: expected all 301 project photos to be visible in the page')
   check(await page.locator('.gallery-directory nav button').count() === 9, 'complete gallery: section directory is incomplete')
   const uniqueGallerySources=await page.locator('.gallery-photo img').evaluateAll(images=>new Set(images.map(image=>image.getAttribute('src'))).size)
-  check(uniqueGallerySources === 297, `complete gallery: expected 297 unique image sources, found ${uniqueGallerySources}`)
+  check(uniqueGallerySources === 301, `complete gallery: expected 301 unique image sources, found ${uniqueGallerySources}`)
   const newBatchGallerySources=await page.locator('.gallery-photo img[src*="/new-batch/"]').count()
   check(newBatchGallerySources === newBatchPhotoCount, `complete gallery: ${newBatchPhotoCount-newBatchGallerySources} optimized new-batch photos are missing`)
   check(!(await page.locator('.gallery-more').count()), 'complete gallery: photos are hidden behind a load-more control')
