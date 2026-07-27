@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { ArrowRight, Check, MapPin, Phone, ShieldCheck, Sparkles, Star } from 'lucide-react'
 import { Navbar, Footer, Reveal, Eyebrow, Divider } from '../App'
 import { suburbs, testimonials } from '../data/siteData'
@@ -61,22 +62,43 @@ function Breadcrumbs({currentTitle}){
 }
 
 export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon', imageAlt, imagePosition = 'center center' }) {
-  const {business}=useSiteContent()
-  const clientProject=image?.includes('/client/')
-  return <section className={`page-hero page-hero-${tone}`}>
-    <div className="page-hero-paint paint-one"/><div className="page-hero-paint paint-two"/>
+  const {trust_items: trustItems}=useSiteContent()
+  const navigate=useNavigate()
+  const trust=(trustItems?.length ? trustItems : ['Fully insured', 'Free colour advice', 'Melbourne-wide']).slice(0, 3)
+  const longTitle=((title?.length || 0) + (accent?.length || 0)) > 42
+  return <section className={`page-hero page-hero-${tone} ${longTitle ? 'page-hero-long-title' : ''}`}>
+    <motion.div
+      className="page-hero-visual"
+      initial={{opacity:0, scale:1.035}}
+      animate={{opacity:1, scale:1}}
+      transition={{duration:.9, ease:[.2,.8,.2,1]}}
+    >
+      <img src={image} alt={imageAlt || title} style={{objectPosition:imagePosition}} loading="eager" decoding="async" fetchPriority="high" />
+    </motion.div>
+    <motion.div className="page-hero-paint paint-one" initial={{scaleX:0}} animate={{scaleX:1}} transition={{duration:.7, delay:.35}}/>
+    <motion.div className="page-hero-paint paint-two" initial={{scaleX:0}} animate={{scaleX:1}} transition={{duration:.7, delay:.5}}/>
     <div className="container page-hero-grid">
-      <div className="page-hero-copy">
+      <motion.div
+        className="page-hero-copy"
+        initial={{opacity:0, x:-42}}
+        animate={{opacity:1, x:0}}
+        transition={{duration:.75, ease:[.2,.8,.2,1]}}
+      >
         <Eyebrow>{eyebrow}</Eyebrow>
         <h1>{title}<br/><em>{accent}</em></h1>
         <p>{intro}</p>
-        <div className="page-hero-actions"><QuoteButton/><a href={business.phone_href} className="text-link"><Phone size={17}/> {business.phone_display}</a></div>
-      </div>
-      <div className="page-hero-visual">
-        <div className="page-image-frame"/><img src={image} alt={imageAlt || title} style={{objectPosition:imagePosition}} loading="eager" decoding="async" fetchPriority="high" />
-        <span className="image-placeholder-note">{clientProject?'Superior Plus project':'Stock image · replace with project photography'}</span>
-      </div>
+        <div className="page-hero-actions">
+          <QuoteButton/>
+          <button type="button" className="text-link" onClick={()=>navigate('/gallery')}>See our work <span aria-hidden="true">↘</span></button>
+        </div>
+        <div className="page-hero-trust">
+          {trust.map(item=><span key={item}><Check size={17}/>{item}</span>)}
+        </div>
+      </motion.div>
     </div>
+    <motion.div className="page-hero-stamp" initial={{opacity:0, rotate:-16, scale:.75}} animate={{opacity:1, rotate:0, scale:1}} transition={{duration:.65, delay:.65}}>
+      <span>Quality finish</span><b>100%</b><small>Every detail</small>
+    </motion.div>
     <Divider color="#fff" variant="wave"/>
   </section>
 }

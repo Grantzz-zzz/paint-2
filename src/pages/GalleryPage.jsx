@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Images, X } from 'lucide-react'
 import { projectMedia } from '../data/projectMedia'
-import { newBatchHeroMedia } from '../data/newBatchMedia'
 import { ClosingCTA, PageHero, PageLayout, SectionIntro, TrustStrip } from '../components/PageLayout'
 import { mediaUrl, useCollection, useRouteContent } from '../content/ContentProvider'
+import { asset } from '../utils/assets'
 
 const gallerySections = [
   ['residential','Residential Painting'],
@@ -58,9 +58,9 @@ export default function GalleryPage() {
       title={route?.hero?.title||"Every project,"}
       accent={route?.hero?.accent||"all in one place."}
       intro={route?.hero?.intro||"Scroll through our complete project archive. Every photograph is from supplied Superior Plus Painting work and is organised by service so you can quickly find the finish that suits your property."}
-      image={mediaUrl(route?.hero?.image,newBatchHeroMedia.exterior.src)}
-      imagePosition={newBatchHeroMedia.exterior.position}
-      imageAlt="Completed Melbourne exterior painting project by Superior Plus Painting"
+      image={mediaUrl(route?.hero?.image,asset('stock-main/gallery.webp'))}
+      imagePosition={route?.hero?.image?.object_position||'center center'}
+      imageAlt={route?.hero?.image?.alt||"A polished contemporary interior representing Superior Plus Painting's project gallery"}
       tone="green"
     />
     <TrustStrip/>

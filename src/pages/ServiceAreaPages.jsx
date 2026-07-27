@@ -4,7 +4,6 @@ import { PageLayout, PageHero, TrustStrip, SectionIntro, ClosingCTA } from '../c
 import { Divider, Reveal } from '../App'
 import { serviceList, servicePages } from '../data/siteData'
 import { serviceAreaBySlug, serviceAreaRegions, serviceAreas } from '../data/serviceAreas'
-import { newBatchHeroMedia } from '../data/newBatchMedia'
 import { asset } from '../utils/assets'
 import { mediaUrl, pairItems, useRouteContent } from '../content/ContentProvider'
 import NotFoundPage from './NotFoundPage'
@@ -47,8 +46,8 @@ function AreaCard({area,index}) {
 export function ServiceAreasPage() {
   const navigate=useNavigate()
   const {data:route}=useRouteContent('/service-areas')
-  const image=mediaUrl(route?.hero?.image,newBatchHeroMedia.serviceAreas.src)
-  const imagePosition=route?.hero?.image?.object_position||newBatchHeroMedia.serviceAreas.position
+  const image=mediaUrl(route?.hero?.image,asset('stock-main/areas.webp'))
+  const imagePosition=route?.hero?.image?.object_position||'center center'
   const seo=route?.seo
   const regionStories=[
     {title:'Inner Eastern Suburbs',text:'Hawthorn, Kew, Camberwell, Balwyn, Surrey Hills, Mont Albert, Deepdene and the Box Hill area.',image:regionImages['Inner Eastern Suburbs']},

@@ -9,11 +9,11 @@ import { asset } from '../utils/assets'
 import { collectionFallbacks, mediaUrl, mergeContent, pairItems, textItems, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from '../content/ContentProvider'
 
 const images = {
-  about: asset('client/projects/fence/fence-03.webp'),
-  services: asset('client/projects/commercial/commercial-02.webp'),
-  process: asset('client/projects/wallpaper/wallpaper-01.webp'),
-  faq: asset('client/projects/interior/interior-04.webp'),
-  contact: asset('client/projects/residential/residential-01.webp'),
+  about: asset('stock-main/about.webp'),
+  services: asset('stock-main/services.webp'),
+  process: asset('stock-main/process.webp'),
+  faq: asset('stock-main/faq.webp'),
+  contact: asset('stock-main/contact.webp'),
 }
 
 function usePageContent(path,fallbackHero) {
@@ -91,7 +91,7 @@ export function AdditionalServicesPage() {
     ['Pressure washing','Surface cleaning for suitable exteriors, driveways, fences, decks and preparation work before a new coating is applied.'],
   ]
   const serviceIcons=[Hammer,ShieldCheck,Palette,Trees,SprayCan,ClipboardCheck,PaintRoller,ShieldCheck,Palette,SprayCan]
-  const image=mediaUrl(route?.hero?.image,asset('client/projects/plaster/plaster-11.webp'))
+  const image=mediaUrl(route?.hero?.image,asset('stock-main/additional-services.webp'))
   const seo=route?.seo
   return <PageLayout title={seo?.title||'Additional Property Improvement Services Melbourne'} description={seo?.description||'Explore carpentry, caulking, tiling, timber restoration, surface preparation, maintenance and suitable coating services from Superior Plus Painting.'} image={mediaUrl(seo?.social_image,image)} pageType="Service" mainClassName="additional-services-main">
     <PageHero eyebrow={route?.hero?.eyebrow||'More than the final coat'} title={route?.hero?.title||'Additional property services'} accent={route?.hero?.accent||'coordinated with care.'} intro={route?.hero?.intro||'To make renovation and maintenance easier, Superior Plus can coordinate selected preparation, repair and improvement services alongside residential and commercial painting.'} image={image} imageAlt={route?.hero?.image?.alt||'Surface preparation and repair work by Superior Plus Painting'} tone="terracotta"/>

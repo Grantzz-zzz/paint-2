@@ -6,6 +6,7 @@ import { Divider, Reveal } from '../App'
 import { paintingGuideBySlug, paintingGuides } from '../data/paintingGuides'
 import { serviceList } from '../data/siteData'
 import { mediaUrl, useCollection, useRouteContent } from '../content/ContentProvider'
+import { asset } from '../utils/assets'
 import NotFoundPage from './NotFoundPage'
 
 const emptyArticles=[]
@@ -41,7 +42,7 @@ export function PaintingGuidesPage() {
     const cmsSlugs=new Set(cms.map(item=>item.slug))
     return [...cms,...paintingGuides.filter(item=>!cmsSlugs.has(item.slug))]
   },[cmsArticles])
-  const image=mediaUrl(route?.hero?.image,articles[0]?.image)
+  const image=mediaUrl(route?.hero?.image,asset('stock-main/blog.webp'))
   return <PageLayout mainClassName="blog-main" title={route?.seo?.title||'Painting Blog for Melbourne Property Owners'} description={route?.seo?.description||'Melbourne painting articles about preparation, colour, interiors, exteriors, roofs, commercial projects and choosing a professional painter.'} image={mediaUrl(route?.seo?.social_image,image)} pageType="Blog" schemaData={{blogPost:articles.map(guide=>({'@type':'BlogPosting',headline:guide.title,url:`/blog/${guide.slug}`,datePublished:guide.published}))}}>
     <PageHero eyebrow={route?.hero?.eyebrow||'Superior Plus Painting blog'} title={route?.hero?.title||'Practical painting advice'} accent={route?.hero?.accent||'for Melbourne properties.'} intro={route?.hero?.intro||'Explore client-approved articles for homeowners, property managers and businesses planning a repaint, repair or property refresh.'} image={image} imageAlt={route?.hero?.image?.alt||articles[0]?.imageAlt} tone="gold"/>
     <TrustStrip/>

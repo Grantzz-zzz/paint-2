@@ -29,3 +29,19 @@ Real client photography now replaces the Home project cards and the Residential,
 5. Close-up preparation sequence for Plaster and Wallpaper Removal.
 
 Keep future replacements in WebP or AVIF, approximately 1600px wide for hero images, with the same filenames when a direct swap is desired.
+
+## Main landing-page editorial hero set (27 July 2026)
+
+These WebP fallbacks are intentionally limited to the main landing pages. WordPress-managed hero images still take priority, and individual service and suburb pages continue to use the relevant client project library.
+
+| Main page | Optimised local asset | Source image |
+|---|---|---|
+| Services | `public/assets/stock-main/services.webp` | `https://unsplash.com/photos/a-painter-is-working-on-a-buildings-exterior-h3FRYkgqJSg` |
+| Additional services | `public/assets/stock-main/additional-services.webp` | `https://images.unsplash.com/photo-1589939705384-5185137a7f0f` |
+| Service areas | `public/assets/stock-main/areas.webp` | `https://images.unsplash.com/photo-1600585154340-be6161a56a0c` |
+| Gallery | `public/assets/stock-main/gallery.webp` | `https://images.unsplash.com/photo-1600607687939-ce8a6c25118c` |
+| About | `public/assets/stock-main/about.webp` | `https://unsplash.com/photos/a-man-with-a-paint-roller-painting-a-wall-f1UwaROA2UQ` |
+| Our process | `public/assets/stock-main/process.webp` | `https://unsplash.com/photos/paint-color-swatches-are-displayed-on-a-shelf-XsJQc5r33Ik` |
+| FAQs | `public/assets/stock-main/faq.webp` | `https://images.unsplash.com/photo-1600585152915-d208bec867a1` |
+| Contact | `public/assets/stock-main/contact.webp` | `https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea` |
+| Blog | `public/assets/stock-main/blog.webp` | `https://images.unsplash.com/photo-1562184552-997c461abbe6` |
