@@ -24,7 +24,7 @@ const routes = [
   ['/services/fence-painting-melbourne', 'Fence Painting'],
   ['/services/deck-painting-staining-melbourne', 'Deck Painting'],
   ['/services/wallpaper-removal-melbourne', 'Wallpaper Removal'],
-  ['/services/plaster-repairs-melbourne', 'Plaster Repairs'],
+  ['/services/plaster-repairs-melbourne', 'Plaster repair'],
   ['/our-process', 'Our painting process'],
   ['/faqs', 'Frequently asked questions'],
   ['/contact', 'Get in touch'],
@@ -155,7 +155,7 @@ try {
       check(result.emptyButtons === 0, `${label}: unnamed buttons detected`)
       check(result.overflow <= 1, `${label}: horizontal overflow of ${result.overflow}px`)
       check(result.logoFit === 'contain', `${label}: logo is cropped because object-fit is “${result.logoFit}”`)
-      check(result.footerServices === 9, `${label}: footer lists ${result.footerServices} services instead of nine`)
+      check(result.footerServices === 10, `${label}: footer does not include all nine core services and the additional-services page (${result.footerServices})`)
       check(result.footerStats.length===0, `${label}: footer still contains the removed statistics band`)
       check(result.footerTrustBadges===0, `${label}: footer still contains the relocated trust badges`)
       check(result.quickContacts.length===2&&result.quickContacts.every(item=>item.visible), `${label}: floating contact actions are missing or clipped`)
@@ -217,6 +217,15 @@ try {
         const expectedCount=route==='/services'?5:11
         check(descriptionSizes.length===expectedCount, `${label}: expected ${expectedCount} primary descriptions, found ${descriptionSizes.length}`)
         check(Math.min(...descriptionSizes)>=22, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
+      }
+      if(route.startsWith('/services/')){
+        check(result.h1.toLowerCase().includes('service'),`${label}: service headline is missing the requested services keyword`)
+        check(await page.locator('.inner-areas .inner-suburbs span').count()===12,`${label}: local suburb selection is not limited to 12 areas`)
+      }
+      if(route==='/additional-services'){
+        check(await page.locator('.additional-services-main').count()===1,`${label}: additional services is not using its standalone page treatment`)
+        check(await page.locator('.additional-service-grid article').count()===10,`${label}: additional services directory is incomplete`)
+        check(await page.locator('.additional-service-icon svg').count()===10,`${label}: additional services cards are missing professional icon treatments`)
       }
       if(route==='/service-areas'){
         const areaNames=await page.locator('.area-directory-card h3').allTextContents()
@@ -293,6 +302,7 @@ try {
   const desktopNavType = await desktopNavPage.locator('.nav-main-link').first().evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize))
   await desktopNavPage.locator('.nav-dropdown').first().hover()
   await desktopNavPage.locator('.services-dropdown-grid button').first().waitFor()
+  check(await desktopNavPage.locator('.additional-services-link').isVisible(),'desktop menu: dedicated Additional property services slot is missing')
   const desktopDropdownType = await desktopNavPage.locator('.services-dropdown-grid button b').first().evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize))
   check(desktopNavType >= 16, `desktop menu: primary navigation text is too small (${desktopNavType}px)`)
   check(desktopDropdownType >= 14, `desktop menu: dropdown text is too small (${desktopDropdownType}px)`)
@@ -366,12 +376,12 @@ try {
   const mobileDropdownType = await page.locator('#mobile-services-menu button').first().evaluate(element => Number.parseFloat(getComputedStyle(element).fontSize))
   check(mobileNavType >= 17, `mobile menu: primary navigation text is too small (${mobileNavType}px)`)
   check(mobileDropdownType >= 16, `mobile menu: dropdown text is too small (${mobileDropdownType}px)`)
-  check(await page.locator('#mobile-services-menu button').count() === 9, 'mobile menu: all nine service pages are not visible')
+  check(await page.locator('#mobile-services-menu button').count() === 10, 'mobile menu: nine core services plus Additional property services are not visible')
   await page.locator('#mobile-services-menu button', { hasText: 'Interior Painting' }).click()
   await page.waitForURL(/#\/services\/interior-painting-melbourne$/)
   check(page.url().endsWith('#/services/interior-painting-melbourne'), 'mobile submenu: service-page navigation failed')
   await page.locator('.menu-btn').click()
-  await page.locator('#mobile-navigation button', { hasText: 'Services' }).click()
+  await page.locator('#mobile-navigation').getByRole('button',{name:'Services',exact:true}).click()
   await page.waitForURL(/#\/services$/)
   check(page.url().endsWith('#/services'), 'mobile menu: Services navigation failed')
 
@@ -437,6 +447,17 @@ try {
   check(await form.locator('.form-success').isVisible(), 'contact form: success state did not appear')
 
   await page.goto(`${origin}#/services/residential-painting-melbourne`, { waitUntil: 'domcontentloaded' })
+  check((await page.locator('.page-hero-copy h1').textContent()).startsWith('Residential painting services'),'service hero: residential headline was not updated')
+  const residentialReadability=await page.evaluate(()=>({
+    scopeItems:document.querySelectorAll('.scope-item').length,
+    scopeIcons:document.querySelectorAll('.scope-item .scope-icon svg').length,
+    scopeType:Math.min(...[...document.querySelectorAll('.scope-item b')].map(element=>Number.parseFloat(getComputedStyle(element).fontSize))),
+    processType:Math.min(...[...document.querySelectorAll('.service-process span')].map(element=>Number.parseFloat(getComputedStyle(element).fontSize))),
+  }))
+  check(residentialReadability.scopeIcons===residentialReadability.scopeItems&&residentialReadability.scopeIcons>0,'service scope: painting icons are missing')
+  check(residentialReadability.scopeType>=16,'service scope: card text is still too small')
+  check(residentialReadability.processType>=16,'service process: step text is still too small')
+  const residentialLocalAreas=await page.locator('.inner-areas .inner-suburbs span').allTextContents()
   const residentialHero=await page.locator('.page-hero-visual img').evaluate(image=>({src:image.getAttribute('src'),position:getComputedStyle(image).objectPosition}))
   check(residentialHero.src.includes('/new-batch/'), `service hero: residential page is not using the new client batch (${JSON.stringify(residentialHero)})`)
   check(residentialHero.position!=='50% 50%', `service hero: focal position was not intentionally set (${JSON.stringify(residentialHero)})`)
@@ -447,6 +468,8 @@ try {
   await page.goto(`${origin}#/services/roof-painting-melbourne`, { waitUntil: 'domcontentloaded' })
   const roofHeroSource=await page.locator('.page-hero-visual img').getAttribute('src')
   check(roofHeroSource?.includes('/roof-spray-coating.webp'), `roof service hero: expected the new roof-spraying photo, found ${roofHeroSource}`)
+  const roofLocalAreas=await page.locator('.inner-areas .inner-suburbs span').allTextContents()
+  check(residentialLocalAreas.join('|')!==roofLocalAreas.join('|'),'service local areas: Residential and Roof pages still show the same suburb combination')
 
   await page.goto(`${origin}#/services/fence-painting-melbourne`, { waitUntil: 'domcontentloaded' })
   check(await page.locator('.client-media-card').count() === 8, 'project gallery: initial progressive set is incorrect')

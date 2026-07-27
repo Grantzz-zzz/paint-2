@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowRight, Check, PaintRoller } from 'lucide-react'
+import { ArrowRight, Brush, Hammer, PaintRoller, Palette, SprayCan } from 'lucide-react'
 import { PageLayout, PageHero, TrustStrip, SectionIntro, TestimonialBand, AreasBand, ClosingCTA } from '../components/PageLayout'
 import { serviceList, servicePages } from '../data/siteData'
 import { Reveal, Divider } from '../App'
@@ -7,6 +7,19 @@ import ProjectGallery from '../components/ProjectGallery'
 import { serviceMediaCategory } from '../data/projectMedia'
 import NotFoundPage from './NotFoundPage'
 import { mediaUrl, mergeContent, textItems, useRouteContent, useSiteContent } from '../content/ContentProvider'
+
+const scopeIcons=[PaintRoller,Brush,Palette,SprayCan,Hammer]
+const serviceHeadlines={
+  'residential-painting-melbourne':['Residential Painting','Residential painting services'],
+  'commercial-painting-melbourne':['Commercial Painting','Commercial painting services'],
+  'interior-painting-melbourne':['Interior Painting','Interior painting services'],
+  'exterior-painting-melbourne':['Exterior Painting','Exterior painting services'],
+  'roof-painting-melbourne':['Roof Painting','Roof painting services'],
+  'fence-painting-melbourne':['Fence Painting','Fence painting services'],
+  'deck-painting-staining-melbourne':['Deck Painting & Staining','Deck painting and staining services'],
+  'wallpaper-removal-melbourne':['Wallpaper Removal','Wallpaper removal services'],
+  'plaster-repairs-melbourne':['Plaster Repairs','Plaster repair services'],
+}
 
 export default function ServicePage() {
   const { slug } = useParams()
@@ -39,13 +52,15 @@ export default function ServicePage() {
   const cta=route?.closing_cta
   const image=page.image||fallbackPage?.image
   const labels=page.sectionLabels||{}
+  const headlineRule=serviceHeadlines[slug]
+  const heroTitle=headlineRule&&page.title?.trim().toLowerCase()===headlineRule[0].toLowerCase()?headlineRule[1]:page.title
   return <PageLayout title={seo?.title||`${page.title} Melbourne`} description={seo?.description||page.intro} pageType="Service" image={mediaUrl(seo?.social_image,image)}>
-    <PageHero {...page} image={image} imagePosition={page.imagePosition||fallbackPage?.imagePosition} imageAlt={page.imageAlt||(image?.includes('/client/')?`${page.title} project completed by Superior Plus Painting`:`${page.title} service placeholder`)}/>
+    <PageHero {...page} title={heroTitle} image={image} imagePosition={page.imagePosition||fallbackPage?.imagePosition} imageAlt={page.imageAlt||(image?.includes('/client/')?`${page.title} project completed by Superior Plus Painting`:`${page.title} service placeholder`)}/>
     <TrustStrip/>
 
     <section className="inner-section scope-section"><div className="container">
       <SectionIntro eyebrow={labels.scope_eyebrow||"What we can help with"} title={page.scopeTitle} accent={labels.scope_accent||"covered with care."} text={labels.scope_intro||"Every quote is tailored to the property, surface condition and finish you want to achieve."}/>
-      <div className="scope-grid">{page.scope.map((item,i)=><Reveal key={item} delay={(i%5)*.04}><div className={`scope-item scope-${page.tone}`}><span>{String(i+1).padStart(2,'0')}</span><Check/><b>{item}</b></div></Reveal>)}</div>
+      <div className="scope-grid">{page.scope.map((item,i)=>{const Icon=scopeIcons[i%scopeIcons.length];return <Reveal key={item} delay={(i%5)*.04}><div className={`scope-item scope-${page.tone}`}><small>{String(i+1).padStart(2,'0')}</small><span className="scope-icon"><Icon/></span><b>{item}</b></div></Reveal>})}</div>
     </div><Divider color="#fbf6ec" variant="slash"/></section>
 
     <section className="inner-section process-section"><div className="container">
@@ -60,7 +75,7 @@ export default function ServicePage() {
     <section className="inner-section related-section"><div className="container"><SectionIntro eyebrow={labels.related_eyebrow||"Keep exploring"} title={labels.related_title||"Related services"} accent={labels.related_accent||"for the whole property."}/><div className="related-grid">{related.map(service=><button key={service.slug} className={`related-card tone-${service.tone}`} onClick={()=>navigate(`/services/${service.slug}`)}><span>Superior Plus</span><h3>{service.title}</h3><p>{service.short}</p><ArrowRight/></button>)}</div></div></section>
 
     <TestimonialBand index={Math.max(0,services.findIndex(item=>item.slug===slug))}/>
-    <AreasBand/>
+    <AreasBand seed={slug}/>
     <ClosingCTA title={cta?.title||`Planning ${page.title.toLowerCase()}?`} text={cta?.text} label={cta?.link?.label} url={cta?.link?.url}/>
   </PageLayout>
 }

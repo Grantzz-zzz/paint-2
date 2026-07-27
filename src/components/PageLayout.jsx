@@ -20,6 +20,7 @@ function breadcrumbItems(pathname,currentTitle){
   const items=[{label:'Home',path:'/'}]
   const normalizedPath=pathname.replace(/\/+$/,'')||'/'
   if(/^\/services\/[^/]+/.test(normalizedPath)) items.push({label:'Services',path:'/services'})
+  if(normalizedPath==='/additional-services') items.push({label:'Services',path:'/services'})
   if(/^\/service-areas\/[^/]+/.test(normalizedPath)) items.push({label:'Service Areas',path:'/service-areas'})
   if(/^\/(?:painting-guides|blog)\/[^/]+/.test(normalizedPath)) items.push({label:'Blog',path:'/blog'})
   if(pathname!=='/') items.push({label:currentTitle,path:pathname})
@@ -100,10 +101,18 @@ export function TestimonialBand({ index = 0 }) {
   return <section className="testimonial-band"><div className="container testimonial-band-grid"><Reveal><Eyebrow light>Client feedback</Eyebrow><h2>Work people feel<br/><em>good about.</em></h2>{item.is_placeholder&&<p className="placeholder-disclosure">Placeholder testimonial — replace with a verified client review before launch.</p>}</Reveal><Reveal className="testimonial-band-card" delay={.1}><div>{Array.from({length:item.rating||5},(_,n)=><Star key={n} fill="currentColor"/>)}</div><blockquote>“{item.quote}”</blockquote><b>{item.label||item.name}</b></Reveal></div><Divider color="#fff" variant="slash"/></section>
 }
 
-export function AreasBand() {
+function stableAreaScore(value) {
+  let score=2166136261
+  for(let index=0;index<value.length;index+=1)score=Math.imul(score^value.charCodeAt(index),16777619)
+  return score>>>0
+}
+
+export function AreasBand({seed=''}) {
   const {service_areas:areas}=useSiteContent()
   const items=areas?.length?areas:suburbs
-  return <section className="inner-areas"><div className="container"><SectionIntro eyebrow="Melbourne-wide" title="Local service," accent="carefully delivered." text="We work across Melbourne’s south-east and surrounding suburbs."/><div className="inner-suburbs">{items.map(s=><span key={s}><MapPin size={13}/>{s}</span>)}</div></div></section>
+  const displayName=item=>typeof item==='string'?item:item?.name||item?.title||String(item)
+  const displayed=seed&&items.length>12?[...items].sort((a,b)=>stableAreaScore(`${seed}:${displayName(a)}`)-stableAreaScore(`${seed}:${displayName(b)}`)).slice(0,12):items
+  return <section className="inner-areas"><div className="container"><SectionIntro eyebrow="Melbourne-wide" title="Local service," accent="carefully delivered." text="A selection of Melbourne suburbs regularly serviced for this type of work."/><div className="inner-suburbs">{displayed.map(s=>{const name=displayName(s);return <span key={name}><MapPin size={13}/>{name}</span>})}</div></div></section>
 }
 
 export function ClosingCTA({ title, text, label, url }) {

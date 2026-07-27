@@ -130,11 +130,12 @@ function Navbar() {
       <div className="nav-links">
         {navItems.map(item => {
           if(item.path==='/services') return <div className="nav-dropdown" key={item.id} onMouseEnter={()=>{setServicesOpen(true);setAreasOpen(false)}} onMouseLeave={()=>setServicesOpen(false)}>
-            <button className={`nav-main-link ${location.pathname.startsWith('/services') ? 'active' : ''}`} onClick={() => go(item.path)}>{item.label}</button>
+            <button className={`nav-main-link ${location.pathname.startsWith('/services')||location.pathname==='/additional-services' ? 'active' : ''}`} onClick={() => go(item.path)}>{item.label}</button>
             <button className="dropdown-trigger" onClick={()=>{setServicesOpen(value=>!value);setAreasOpen(false)}} aria-label="Show service pages" aria-expanded={servicesOpen} aria-controls="desktop-services-menu"><ChevronDown size={14}/></button>
             <AnimatePresence>{servicesOpen&&<motion.div id="desktop-services-menu" className="services-dropdown" role="navigation" aria-label="Service pages" initial={{opacity:0,y:-8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-6}} transition={{duration:.16}}>
               <button className="services-overview" onClick={()=>go('/services')}><span><b>All services</b><small>View the complete service directory</small></span><ArrowRight size={17}/></button>
               <div className="services-dropdown-grid">{displayedServices.map(service=><button key={service.slug} className={location.pathname.endsWith(service.slug)?'current':''} onClick={()=>go(service.url||`/services/${service.slug}`)}><b>{service.title}</b><ArrowRight size={14}/></button>)}</div>
+              <button className={`additional-services-link ${location.pathname==='/additional-services'?'current':''}`} onClick={()=>go('/additional-services')}><span><Hammer/><span><b>Additional property services</b><small>Repairs, preparation, coatings and maintenance</small></span></span><ArrowRight size={16}/></button>
             </motion.div>}</AnimatePresence>
           </div>
           if(item.path==='/service-areas') return <div className="nav-dropdown nav-areas-dropdown" key={item.id} onMouseEnter={()=>{setAreasOpen(true);setServicesOpen(false)}} onMouseLeave={()=>setAreasOpen(false)}>
@@ -157,6 +158,7 @@ function Navbar() {
         <div className="mobile-services-head"><button onClick={()=>go(item.path)}>{item.label}</button><button onClick={()=>{setServicesOpen(value=>!value);setAreasOpen(false)}} aria-label="Toggle service pages" aria-expanded={servicesOpen} aria-controls="mobile-services-menu"><ChevronDown size={18}/></button></div>
         <AnimatePresence>{servicesOpen&&<motion.div id="mobile-services-menu" className="mobile-services-pages" initial={{height:0,opacity:0}} animate={{height:'auto',opacity:1}} exit={{height:0,opacity:0}}>
           {displayedServices.map(service=><button key={service.slug} className={location.pathname.endsWith(service.slug)?'current':''} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}<ArrowRight size={14}/></button>)}
+          <button className={`mobile-additional-services ${location.pathname==='/additional-services'?'current':''}`} onClick={()=>go('/additional-services')}><span><Hammer/>Additional property services</span><ArrowRight size={14}/></button>
         </motion.div>}</AnimatePresence>
       </div> : item.path==='/service-areas' ? <div className={`mobile-services mobile-areas ${areasOpen?'open':''}`} key={item.id}>
         <div className="mobile-services-head mobile-areas-head"><button onClick={()=>go(item.path)}>{item.label}</button><button onClick={()=>{setAreasOpen(value=>!value);setServicesOpen(false)}} aria-label="Toggle service areas" aria-expanded={areasOpen} aria-controls="mobile-areas-menu"><ChevronDown size={18}/></button></div>
@@ -521,6 +523,7 @@ function Footer() {
       <div className="footer-services">
         <h4>{footer.columns?.[1]?.heading||'Services'}</h4>
         {cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}
+        <button onClick={()=>go('/additional-services')}>Additional property services</button>
       </div>
       <div>
         <h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4>
