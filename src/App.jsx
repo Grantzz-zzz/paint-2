@@ -167,13 +167,13 @@ function Navbar() {
 
 function Hero({hero,fields}) {
   const navigate = useNavigate()
-  const image=mediaUrl(hero?.image,asset('client/projects/brand/home-hero-ai.webp'))
+  const image=mediaUrl(hero?.image,asset('client/projects/brand/home-hero-ai-v2.webp'))
   const trustPoints=textItems(fields?.home_trust_points,['Fully insured','Free colour advice','Melbourne-wide'])
   const title=hero?.title||'Professional painting services'
   const accent=hero?.accent||'in Melbourne'
   const closing=fields?.home_hero_closing||''
   return <section id="home" className="hero section-track">
-    <div className="hero-bg"><img src={image} alt={hero?.image?.alt||'Superior Plus painter applying a fresh exterior finish to a Melbourne home'} loading="eager" decoding="async" fetchPriority="high" /></div>
+    <div className="hero-bg"><img src={image} alt={hero?.image?.alt||'Superior Plus painters transforming a premium Melbourne home exterior'} loading="eager" decoding="async" fetchPriority="high" /></div>
     <div className="paint-ribbon ribbon-green"/><div className="paint-ribbon ribbon-gold"/>
     <div className="container hero-content">
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">

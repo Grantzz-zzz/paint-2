@@ -312,7 +312,7 @@ try {
   const page = await interactionContext.newPage()
 
   await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
-  check((await page.locator('.hero-bg img').getAttribute('src')).includes('client/projects/brand/home-hero-ai.webp'),'homepage hero: generated branded image is missing')
+  check((await page.locator('.hero-bg img').getAttribute('src')).includes('client/projects/brand/home-hero-ai-v2.webp'),'homepage hero: high-impact generated branded image is missing')
   const initialReviewNumber=await page.locator('.slider-controls>span').textContent()
   await page.waitForFunction(previous=>document.querySelector('.slider-controls>span')?.textContent!==previous,initialReviewNumber,{timeout:4500})
   check((await page.locator('.review-autoplay-status').textContent()).startsWith('Reviews change automatically'),'homepage reviews: automatic carousel status is missing')

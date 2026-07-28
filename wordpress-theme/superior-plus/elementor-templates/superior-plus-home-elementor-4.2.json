@@ -16,9 +16,9 @@
           "settings": {
             "_css_classes": "spp-el-hero-image",
             "image": {
-              "url": "{{SPP_THEME_URI}}/assets/images/projects/brand/home-hero-ai.webp",
+              "url": "{{SPP_THEME_URI}}/assets/images/projects/brand/home-hero-ai-v2.webp",
               "id": "",
-              "alt": "Superior Plus painter applying a fresh exterior finish to a Melbourne home",
+              "alt": "Superior Plus painters transforming a premium Melbourne home exterior",
               "source": "library"
             },
             "image_size": "full"
