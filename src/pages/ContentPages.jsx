@@ -149,7 +149,7 @@ export function AboutPage() {
 }
 
 export function ProcessPage() {
-  const fallbackHero={eyebrow:'A proven path to a better finish',title:'Our painting process',accent:'planned down to the detail.',intro:'Outstanding painting starts with careful planning, detailed preparation and clear communication. Our six-step process keeps every residential and commercial project organised from quote to handover.',image:images.process,imageAlt:'Professional painter applying a fresh exterior finish to a modern residential home',tone:'gold'}
+  const fallbackHero={eyebrow:'A proven path to a better finish',title:'Our painting process',accent:'planned down to the detail.',intro:'Outstanding painting starts with careful planning, detailed preparation and clear communication. Our six-step process keeps every residential and commercial project organised from quote to handover.',image:images.process,imagePosition:'74% center',imageAlt:'Professional painter applying a fresh exterior finish to a modern residential home',tone:'gold'}
   const {fields,hero,seo,cta}=usePageContent('/our-process',fallbackHero)
   const steps=pairItems(fields.master_process,masterProcess.map(item=>[item.title,item.text])).map(([title,text])=>({title,text}))
   const proof=textItems(fields.process_proof,['Clear communication','Thorough preparation','High-quality workmanship','Respect for your property','Reliable scheduling','Attention to detail'])
