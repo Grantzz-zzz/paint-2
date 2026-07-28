@@ -428,13 +428,19 @@ try {
   check(processBackType >= 16, `Process: back-card description is too small (${processBackType}px)`)
 
   await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
-  const homeMapQuery = await page.locator('.home-location .contact-map iframe').evaluate(element => new URL(element.src).searchParams.get('q'))
-  check(homeMapQuery === '20 Rae Street, Chadstone VIC 3148, Australia', `homepage map: unexpected address “${homeMapQuery}”`)
+  const homeMap = await page.locator('.home-location .contact-map iframe').evaluate(element => {
+    const url = new URL(element.src)
+    return { hostname: url.hostname, pathname: url.pathname, place: url.searchParams.get('pb') }
+  })
+  check(homeMap.hostname === 'www.google.com' && homeMap.pathname === '/maps/embed' && homeMap.place?.includes('Superior plus painting & remodeling'), `homepage map: unexpected business listing “${JSON.stringify(homeMap)}”`)
   check((await page.locator('.home-location .contact-street-address').textContent()).includes('20 Rae Street'), 'homepage map: verified street address is not displayed')
 
   await page.goto(`${origin}#/contact`, { waitUntil: 'domcontentloaded' })
-  const contactMapQuery = await page.locator('.contact-map iframe').evaluate(element => new URL(element.src).searchParams.get('q'))
-  check(contactMapQuery === '20 Rae Street, Chadstone VIC 3148, Australia', `contact map: unexpected address “${contactMapQuery}”`)
+  const contactMap = await page.locator('.contact-map iframe').evaluate(element => {
+    const url = new URL(element.src)
+    return { hostname: url.hostname, pathname: url.pathname, place: url.searchParams.get('pb') }
+  })
+  check(contactMap.hostname === 'www.google.com' && contactMap.pathname === '/maps/embed' && contactMap.place?.includes('Superior plus painting & remodeling'), `contact map: unexpected business listing “${JSON.stringify(contactMap)}”`)
   check((await page.locator('.contact-street-address').textContent()).includes('20 Rae Street'), 'contact map: street address is not displayed beside the map')
   const form = page.locator('.full-quote-form')
   await form.locator('[name="name"]').fill('QA Test')
