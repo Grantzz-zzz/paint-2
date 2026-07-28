@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight, Award, BookOpen, Check, ChevronDown, ClipboardCheck, ExternalLink, Hammer, Mail, MapPin, PaintRoller, Palette, Phone, RotateCw, ShieldCheck, SprayCan, Trees } from 'lucide-react'
 import { PageLayout, PageHero, TrustStrip, SectionIntro, TestimonialBand, AreasBand, ClosingCTA } from '../components/PageLayout'
-import { Reveal, Divider } from '../App'
+import { Reveal, Divider, Testimonials } from '../App'
 import { faqs, masterProcess, serviceList, servicePages, suburbs } from '../data/siteData'
 import { brandTeamArchive } from '../data/projectMedia'
 import { asset } from '../utils/assets'
@@ -191,6 +191,7 @@ export function FAQsPage() {
   const fallbackHero={eyebrow:'Straight answers before we start',title:'Frequently asked questions',accent:'made easy.',intro:'Painting comes with practical questions. Here are clear answers about quoting, preparation, scheduling, products and what to expect from our team.',image:images.faq,tone:'cream'}
   const {fields,hero,seo,cta}=usePageContent('/faqs',fallbackHero)
   const {data:allFaqs}=useCollection('faqs',collectionFallbacks.faqs)
+  const {data:reviewItems}=useCollection('testimonials',collectionFallbacks.testimonials)
   const selectedIds=Array.isArray(fields.faq_ids)?fields.faq_ids.map(String):[]
   const items=selectedIds.length?allFaqs.filter(item=>selectedIds.includes(String(item.id))):allFaqs
   const comparisonBoards=[
@@ -209,6 +210,26 @@ export function FAQsPage() {
     ['Residential exterior comparison',asset('client/projects/roof/roof-05.webp')],
     ['Interior preparation and repaint',asset('client/projects/wallpaper/wallpaper-06.webp')],
     ['Feature-wall transformation',asset('client/projects/wallpaper/wallpaper-12.webp')],
+    ['Roof coating restoration',asset('client/projects/roof/roof-before-after.webp')],
+    ['Whole-home repaint comparison',asset('client/projects/new-batch/batch-001.webp')],
+    ['Windows, garage and entry refresh',asset('client/projects/new-batch/batch-057.webp')],
+    ['Commercial ceiling transformation',asset('client/projects/new-batch/batch-089.webp')],
+    ['Exterior window restoration',asset('client/projects/new-batch/batch-102.webp')],
+    ['Deck and outdoor finish comparison',asset('client/projects/new-batch/batch-111.webp')],
+    ['Garage preparation and finish',asset('client/projects/new-batch/batch-114.webp')],
+    ['Deck restoration comparison',asset('client/projects/new-batch/batch-116.webp')],
+    ['Interior rooms before and after',asset('client/projects/new-batch/batch-117.webp')],
+    ['Whole-interior transformation',asset('client/projects/new-batch/batch-118.webp')],
+    ['Exterior repaint transformation',asset('client/projects/new-batch/batch-120.webp')],
+    ['Cabinetry painting comparison',asset('client/projects/new-batch/batch-121.webp')],
+    ['Porch and veranda restoration',asset('client/projects/new-batch/batch-122.webp')],
+    ['Façade before and after',asset('client/projects/new-batch/batch-123.webp')],
+    ['Fence staining transformation',asset('client/projects/new-batch/batch-125.webp')],
+    ['Exterior detail comparison',asset('client/projects/new-batch/batch-126.webp')],
+    ['Fence repaint before and after',asset('client/projects/new-batch/batch-127.webp')],
+    ['Weatherboard restoration details',asset('client/projects/new-batch/batch-128.webp')],
+    ['Interior colour transformation',asset('client/projects/new-batch/batch-130.webp')],
+    ['Residential exterior transformation',asset('client/projects/new-batch/batch-159.webp')],
   ]
   const plasterComparisons=[
     {title:'Ceiling and cornice repairs',before:asset('client/projects/plaster/plaster-01.webp'),after:asset('client/projects/plaster/plaster-03.webp')},
@@ -217,6 +238,7 @@ export function FAQsPage() {
   return <PageLayout title={seo?.title||'Frequently Asked Questions'} description={seo?.description||'Answers about quotes, service areas, preparation, timing, paint systems and booking with Superior Plus Painting.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="FAQPage" schemaData={{mainEntity:items.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))}}>
     <PageHero {...hero} intro={fields.faq_intro||hero.intro}/>
     <section className="inner-section"><div className="container faq-layout"><SectionIntro eyebrow="What clients ask us" title="Everything you need" accent="to move forward."/><div className="faq-list">{items.map((item,i)=><div className={`faq-item ${open===i?'open':''}`} key={item.id||item.question}><button onClick={()=>setOpen(open===i?-1:i)} aria-expanded={open===i}><span>{String(i+1).padStart(2,'0')}</span><b>{item.question}</b><ChevronDown/></button>{open===i&&<div className="faq-answer" dangerouslySetInnerHTML={{__html:item.answer}}/>}</div>)}</div></div></section>
+    <Testimonials items={reviewItems} className="faq-google-reviews"/>
     <section className="inner-section cream faq-transformations"><div className="container"><SectionIntro eyebrow="Before & after archive" title="The preparation." accent="The visible difference." text="A collection of client-supplied comparison boards showing exterior, fence, interior and repair work. Project results vary with the original surface, repairs and selected coating system."/><div className="comparison-board-grid">{comparisonBoards.map(([title,image],index)=><Reveal key={image} className={index===0||index===9?'comparison-board-featured':''} delay={(index%4)*.04}><figure><div><img src={image} alt={`${title} before and after comparison supplied by Superior Plus Painting`} loading="lazy" decoding="async"/><span>Comparison {String(index+1).padStart(2,'0')}</span></div><figcaption><Palette/><b>{title}</b><small>Client project archive</small></figcaption></figure></Reveal>)}</div><div className="plaster-comparison-grid">{plasterComparisons.map((comparison,index)=><Reveal key={comparison.title} delay={index*.08}><article><div className="plaster-pair"><figure><img src={comparison.before} alt={`${comparison.title} before repair`} loading="lazy" decoding="async"/><span>Before</span></figure><figure><img src={comparison.after} alt={`${comparison.title} after repair`} loading="lazy" decoding="async"/><span>After</span></figure></div><div><span>Repair sequence 0{index+1}</span><h3>{comparison.title}</h3><p>Preparation and finishing images retained together from the supplied plaster-repair archive.</p></div></article></Reveal>)}</div></div></section>
     <ClosingCTA title={cta?.title||'Still have a question?'} text={cta?.text||'Call our team or send an enquiry. We’ll talk through your property, surfaces and preferred timing before arranging a quote.'} label={cta?.link?.label} url={cta?.link?.url}/>
   </PageLayout>

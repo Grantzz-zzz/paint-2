@@ -8,7 +8,7 @@ import {
   ChevronDown, Clock3, Hammer, HeartHandshake, Home, Instagram, Mail, MapPin, Menu, PaintRoller,
   Palette, Pause, Phone, Play, ShieldCheck, SprayCan, Star, Trees, Warehouse, X
 } from 'lucide-react'
-import { serviceList, servicePages } from './data/siteData'
+import { googleReviewProfile, serviceList, servicePages, testimonials } from './data/siteData'
 import { roofHomepageCardImage } from './data/newBatchMedia'
 import { serviceAreaBySlug, serviceAreaRegions } from './data/serviceAreas'
 import { paintingGuides } from './data/paintingGuides'
@@ -52,12 +52,6 @@ const projects = [
   { title: 'Warm modern interior', type: 'Residential project · Melbourne', image: asset('client/projects/residential/residential-07.webp'), pos: 'center', color: '#f3c51d' },
   { title: 'Exterior transformation', type: 'Residential project · Melbourne', image: asset('client/projects/residential/residential-01.webp'), pos: 'center', color: '#8f2824' },
   { title: 'Commercial precision', type: 'Commercial project · Melbourne', image: asset('client/projects/commercial/commercial-12.webp'), pos: 'center', color: '#1f5140' },
-]
-
-const testimonials = [
-  { quote: 'I’m truly amazed by their quality of work and dedication. The painters were courteous, friendly and completed outstanding paintwork in a short time.', name: 'John', project: 'Residential painting' },
-  { quote: 'They painted the exterior of our house and did an amazing job. The team arrived on time every morning. We’re very happy and would definitely use them again.', name: 'Jenny', project: 'Exterior repaint' },
-  { quote: 'Afshin and his team transformed my office with incredible paintwork. The space looks as good as new.', name: 'Philip', project: 'Commercial painting' },
 ]
 
 function scrollTo(id) {
@@ -380,14 +374,17 @@ function Areas({fields}) {
   </section>
 }
 
-function Testimonials({fields,items}) {
+function GoogleWordmark() {
+  return <span className="google-wordmark" aria-label="Google"><i>G</i><i>o</i><i>o</i><i>g</i><i>l</i><i>e</i></span>
+}
+
+export function Testimonials({items,className=''}) {
   const [index,setIndex]=useState(0)
   const [paused,setPaused]=useState(false)
   const [pageVisible,setPageVisible]=useState(true)
   const swipeStart=useRef(null)
-  const selectedIds=Array.isArray(fields?.home_testimonial_ids)?fields.home_testimonial_ids.map(String):[]
-  const displayed=selectedIds.length?items.filter(item=>selectedIds.includes(String(item.id))):items
-  const safeItems=displayed.length?displayed:testimonials
+  const verifiedItems=(items||[]).filter(item=>item.name&&item.quote&&!item.is_placeholder)
+  const safeItems=(verifiedItems.length>=10?verifiedItems:testimonials).slice(0,10)
   const activeIndex=index%safeItems.length
   const item=safeItems[activeIndex]
   useEffect(()=>{
@@ -416,7 +413,11 @@ function Testimonials({fields,items}) {
     if(deltaX<0)next()
     else previous()
   }
-  return <section className="section testimonials"><div className="container testimonial-layout"><Reveal><Eyebrow>Kind words</Eyebrow><h2>Loved by<br/><em>Melbourne locals.</em></h2><div className="slider-controls"><button onClick={previous} aria-label="Previous review"><ChevronLeft/></button><span aria-live="off">{String(activeIndex+1).padStart(2,'0')} / {String(safeItems.length).padStart(2,'0')}</span><button onClick={next} aria-label="Next review"><ChevronRight/></button><button className="review-playback" onClick={()=>setPaused(value=>!value)} aria-label={paused?'Resume automatic reviews':'Pause automatic reviews'} aria-pressed={paused}>{paused?<Play/>:<Pause/>}</button></div><p className="review-autoplay-status">{paused?'Automatic rotation paused':'Reviews change automatically'}<span> · Swipe to browse</span></p></Reveal><div className="quote-card" aria-live="polite" aria-atomic="true" onPointerDown={beginSwipe} onPointerUp={finishSwipe} onPointerCancel={()=>{swipeStart.current=null}}><div className="stars">{Array.from({length:item.rating||5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><AnimatePresence mode="wait"><motion.div key={`${item.id||item.name||item.label}-${activeIndex}`} initial={{opacity:0,y:15}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-15}}><blockquote>“{item.quote}”</blockquote><div className="quote-by"><b>{item.name||item.label}</b><span>{item.project||item.label}</span></div></motion.div></AnimatePresence></div></div></section>
+  const source=item.source||'Client review'
+  const isGoogle=source.toLowerCase()==='google'
+  const sourceUrl=item.source_url||(isGoogle?googleReviewProfile.url:'#')
+  const initials=(item.name||'Verified reviewer').split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase()
+  return <section className={`section testimonials google-reviews ${className}`}><div className="container testimonial-layout"><Reveal className="google-review-summary"><Eyebrow>Verified client feedback</Eyebrow><h2>Excellent</h2><strong>{googleReviewProfile.rating.toFixed(1)}</strong><div className="google-summary-stars" aria-label={`${googleReviewProfile.rating} out of 5 stars`}>{Array.from({length:5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><p>Based on <b>{googleReviewProfile.count} reviews</b></p><GoogleWordmark/><a href={googleReviewProfile.url} target="_blank" rel="noreferrer">View all reviews on Google <ArrowRight size={17}/></a></Reveal><div><div className="quote-card google-review-card" aria-live="polite" aria-atomic="true" onPointerDown={beginSwipe} onPointerUp={finishSwipe} onPointerCancel={()=>{swipeStart.current=null}}><AnimatePresence mode="wait"><motion.article key={`${item.id||item.name}-${activeIndex}`} initial={{opacity:0,x:24}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-24}}><header><span className="review-avatar" aria-hidden="true">{initials}</span><div><b>{item.name}</b><small>{item.date||'Verified review'} · {source}</small></div><span className={isGoogle?'google-g':'review-source-badge'} aria-label={`${source} review`}>{isGoogle?'G':'TL'}</span></header><div className="stars" aria-label={`${item.rating||5} out of 5 stars`}>{Array.from({length:item.rating||5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><blockquote>“{item.quote}”</blockquote><a href={sourceUrl} target="_blank" rel="noreferrer">Read on {source}</a></motion.article></AnimatePresence></div><div className="review-controls-row"><div className="slider-controls"><button onClick={previous} aria-label="Previous review"><ChevronLeft/></button><span aria-live="off">{String(activeIndex+1).padStart(2,'0')} / {String(safeItems.length).padStart(2,'0')}</span><button onClick={next} aria-label="Next review"><ChevronRight/></button><button className="review-playback" onClick={()=>setPaused(value=>!value)} aria-label={paused?'Resume automatic reviews':'Pause automatic reviews'} aria-pressed={paused}>{paused?<Play/>:<Pause/>}</button></div><p className="review-autoplay-status">{paused?'Automatic rotation paused':'Reviews change automatically'}<span> · Swipe to browse</span></p></div></div></div></section>
 }
 
 function Contact({fields,business}) {
@@ -567,7 +568,7 @@ export default function App() {
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
     return()=>ctx.revert()
   },[seo?.description,seo?.canonical_url,seo?.title,business])
-  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview fields={fields} items={articleItems}/><Areas fields={fields}/><Testimonials fields={fields} items={testimonialItems}/><Contact fields={fields} business={business}/><HomeLocation business={business}/></main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview fields={fields} items={articleItems}/><Areas fields={fields}/><Testimonials items={testimonialItems}/><Contact fields={fields} business={business}/><HomeLocation business={business}/></main><Footer/></>
 }
 
 export { Navbar, Footer, Reveal, Eyebrow, Divider }

@@ -20,11 +20,24 @@ export const masterProcess = [
   { title: 'Clean-up & handover', text: 'We remove coverings, clean the work area and complete a final walkthrough so you can review the finished result before handover.' },
 ]
 
+export const googleReviewProfile = {
+  rating: 5,
+  count: 129,
+  url: 'https://tinyurl.com/36jdkp9d',
+  label: 'Superior plus painting & remodeling',
+}
+
 export const testimonials = [
-  { quote: 'Superior Plus Painting completed the work on time with excellent attention to detail. The finish was outstanding, and the team kept everything clean throughout the project.', label: 'Professional & reliable', placeholder: true },
-  { quote: 'We were impressed with the preparation and workmanship. The painters were friendly, punctual and delivered exactly what they promised. Our home looks fantastic.', label: 'Excellent quality', placeholder: true },
-  { quote: 'From the first quote to the final inspection, the communication was excellent. The project was completed on schedule and the quality exceeded our expectations.', label: 'Great communication', placeholder: true },
-  { quote: 'We received honest advice, competitive pricing and a high-quality finish. We would definitely use Superior Plus Painting again.', label: 'Value for money', placeholder: true },
+  { name: 'chen yangyang', date: 'A week ago', rating: 5, source: 'Google', source_url: googleReviewProfile.url, quote: 'Always quick to respond, reliable, and genuinely cares about the quality of his work.', placeholder: false },
+  { name: 'Indigo Jewel', date: 'A week ago', rating: 5, source: 'Google', source_url: googleReviewProfile.url, quote: 'I recently completed an extensive renovation and was in need of a painter for a full internal house paint. Afshin and his team was professional, easy to work with, and produced a very high quality finish in a timely manner. Would happily recommend him to anyone in need of a painter.', placeholder: false },
+  { name: 'Shane McLachlan', date: '2 months ago', rating: 5, source: 'Google', source_url: googleReviewProfile.url, quote: 'Afshin does a great job and is very well priced. He’s done two jobs for me now, always listens to what I would like done, works fast with good detail and works in with my schedule. A++', placeholder: false },
+  { name: 'Timothy Fagan', date: '3 months ago', rating: 5, source: 'Google', source_url: googleReviewProfile.url, quote: 'We are so incredibly happy and impressed with Superior Plus Painting & Remodeling. Afshin is an expert as well as a lovely human being. He communicated clearly, quoted fairly, and the job was finished quickly and beautifully. I would recommend him to anyone looking for a painter.', placeholder: false },
+  { name: 'Sern Boey', date: '3 months ago', rating: 5, source: 'Google', source_url: googleReviewProfile.url, quote: 'Afshin did a good job painting and restoring the old windows of our house. Always on time and very proficient at his job.', placeholder: false },
+  { name: 'Josh Vatansever Ly', date: '4 months ago', rating: 5, source: 'Google', source_url: googleReviewProfile.url, quote: 'I’m very happy with the service that Afshin and his team delivered. I called on a Friday because I needed urgent assistance painting my barbershop shopfront, and they did not disappoint. They came the next day at 8am and started the work right away. Couldn’t be happier; they are also reasonably priced. Would recommend.', placeholder: false },
+  { name: 'Omid Ashur', date: '4 months ago', rating: 5, source: 'Google', source_url: googleReviewProfile.url, quote: 'Thank you, Afshin, for doing an outstanding job. Afshin recently painted my house and truly went above and beyond. If anyone is looking to have their house painted, Afshin is the person to call.', placeholder: false },
+  { name: 'Jenifer', date: 'Verified client review', rating: 5, source: 'TrueLocal', source_url: 'https://www.truelocal.com.au/vic/chadstone/superior-plus-painting-and-remodeling-1000002729734', quote: 'Would highly recommend Superior Plus Painting and Remodeling. Very reliable and very professional. I will definitely recommend them to my family and friends. Thank you so much for the great work.', placeholder: false },
+  { name: 'Frank', date: 'Verified client review', rating: 5, source: 'TrueLocal', source_url: 'https://www.truelocal.com.au/vic/chadstone/superior-plus-painting-and-remodeling-1000002729734', quote: 'I would highly recommend Afshin and his team. They are very professional, reliable and highly skilled. They create a great, clean and tidy finish. Thanks, guys!', placeholder: false },
+  { name: 'Stive', date: 'Verified client review', rating: 5, source: 'TrueLocal', source_url: 'https://www.truelocal.com.au/vic/chadstone/superior-plus-painting-and-remodeling-1000002729734', quote: 'The team provided great service. They were punctual, finished the job on time and cleaned up after themselves. I was very happy with the team and very happy with the paint job!', placeholder: false },
 ]
 
 export const serviceList = [
