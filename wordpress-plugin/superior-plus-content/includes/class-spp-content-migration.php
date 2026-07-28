@@ -790,7 +790,7 @@ class SPP_Content_Migration {
 			),
 			'our-process' => array(
 				'title' => 'Our Process', 'template' => 'process', 'excerpt' => 'A six-step process from consultation to clean handover.',
-				'hero_asset' => 'generated/our-process-house-art.jpg',
+				'hero_asset' => 'client/heroes/our-process-house-hero.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'A proven path to a better finish', 'spp_hero_title' => 'Our painting process', 'spp_accent' => 'planned down to the detail.',
 					'spp_hero_intro' => 'Outstanding painting starts with careful planning, detailed preparation and clear communication. Our six-step process keeps every residential and commercial project organised from quote to handover.',
@@ -892,7 +892,7 @@ class SPP_Content_Migration {
 			),
 			'painting-guides' => array(
 				'title' => 'Painting Guides', 'template' => 'blog_hub', 'excerpt' => 'Practical painting guidance for Melbourne property owners and managers.',
-				'hero_asset' => 'generated/blog-house-art.jpg',
+				'hero_asset' => 'client/heroes/blog-house-hero.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'Advice from the preparation stage', 'spp_hero_title' => 'Practical painting guides', 'spp_accent' => 'for better project decisions.',
 					'spp_hero_intro' => 'Clear information about repainting cycles, preparation, product differences and choosing a professional painting team.',
