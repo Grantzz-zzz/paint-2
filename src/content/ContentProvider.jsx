@@ -13,8 +13,8 @@ import { toInternalAppPath } from '../utils/routes'
  * @typedef {{url:string, alt?:string, srcset?:string, sizes?:string}} SppMedia
  * @typedef {{label:string, url:string}} SppLink
  * @typedef {{id:number|string, label:string, url:string, children?:SppLink[]}} SppNavigationItem
- * @typedef {{name:string, phone_display:string, phone_href:string, email:string, location:string, facebook_url?:string, instagram_url?:string, logo?:SppMedia|null}} SppBusiness
- * @typedef {{business:SppBusiness, navigation:SppNavigationItem[], footer:{intro:string, columns:Array<{heading:string,links:SppLink[]}>, stats:Array<{value:string,label:string}>, copyright:string, closing_line:string}, trust_items:string[], service_areas:string[], default_cta:{title:string,text:string,link:SppLink}}} SppBootstrap
+ * @typedef {{name:string, phone_display:string, phone_href:string, email:string, location:string, google_maps_url?:string, google_maps_embed_url?:string, facebook_url?:string, instagram_url?:string, logo?:SppMedia|null}} SppBusiness
+ * @typedef {{business:SppBusiness, review_profile:{rating:number,count:number,url:string}, navigation:SppNavigationItem[], footer:{intro:string, columns:Array<{heading:string,links:SppLink[]}>, stats:Array<{value:string,label:string}>, copyright:string, closing_line:string}, trust_items:string[], service_areas:string[], default_cta:{title:string,text:string,link:SppLink}}} SppBootstrap
  * @typedef {{id?:number,slug:string,title:string,short:string,url?:string,tone?:string}} SppServiceSummary
  */
 
@@ -46,9 +46,16 @@ export const fallbackBootstrap = {
     email: fallbackContact.email,
     location: fallbackContact.location,
     street_address: '20 Rae Street, Chadstone VIC 3148, Australia',
+    google_maps_url: 'https://www.google.com/maps/search/?api=1&query=Superior%20plus%20painting%20%26%20remodeling',
+    google_maps_embed_url: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1574.426042956306!2d145.0931577603448!3d-37.88714169706206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad66b1a91253ba3%3A0x5219727b7db56b2d!2sSuperior%20plus%20painting%20%26%20remodeling!5e0!3m2!1sen!2sph!4v1785206391867!5m2!1sen!2sph',
     facebook_url: 'https://www.facebook.com/people/Superior-Plus-Painting-Remodeling-Services/100075874374049/',
     instagram_url: 'https://www.instagram.com/sppainting.remodeling',
     logo: { url: asset('logo.webp'), alt: 'Superior Plus Painting & Remodeling' },
+  },
+  review_profile: {
+    rating: 5,
+    count: 129,
+    url: 'https://tinyurl.com/36jdkp9d',
   },
   navigation: fallbackNavigation,
   footer: {

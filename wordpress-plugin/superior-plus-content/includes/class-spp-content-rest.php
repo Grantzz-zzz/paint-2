@@ -177,6 +177,8 @@ class SPP_Content_REST {
 				'email'         => $get( 'spp_email', 'sppainting.remodeling@gmail.com' ),
 				'location'      => $get( 'spp_location', 'Melbourne, Victoria' ),
 				'street_address' => $get( 'spp_street_address', '20 Rae Street, Chadstone VIC 3148, Australia' ),
+				'google_maps_url' => $get( 'spp_google_maps_url', 'https://www.google.com/maps/search/?api=1&query=Superior%20plus%20painting%20%26%20remodeling' ),
+				'google_maps_embed_url' => $get( 'spp_google_maps_embed_url', '' ),
 				'facebook_url'  => $get( 'spp_facebook_url', 'https://www.facebook.com/people/Superior-Plus-Painting-Remodeling-Services/100075874374049/' ),
 				'instagram_url' => $get( 'spp_instagram_url', 'https://www.instagram.com/sppainting.remodeling' ),
 				'logo'          => $this->media( $logo_id ),
@@ -213,6 +215,11 @@ class SPP_Content_REST {
 			'quote_form'    => array(
 				'enabled'      => is_email( $get( 'spp_quote_recipient', '' ) ),
 				'privacy_text' => $get( 'spp_privacy_text', '' ),
+			),
+			'review_profile' => array(
+				'rating' => (float) $get( 'spp_google_rating', '5.0' ),
+				'count'  => max( 0, (int) $get( 'spp_google_review_count', 129 ) ),
+				'url'    => $get( 'spp_google_reviews_url', 'https://tinyurl.com/36jdkp9d' ),
 			),
 		);
 		return $this->response( $data );

@@ -1,7 +1,7 @@
 # Superior Plus WordPress React Theme Handoff
 
-Theme 2.6.0 embeds the compiled React frontend inside WordPress. The companion
-Superior Plus Content 1.0.0 plugin supplies editable approved content, local SEO
+Theme 3.1.0 embeds the compiled React frontend inside WordPress. The companion
+Superior Plus Content 2.1.0 plugin supplies editable approved content, local SEO
 pages, forms and recovery tools.
 
 ## Included
@@ -19,8 +19,8 @@ pages, forms and recovery tools.
 
 1. Confirm you are in the staging dashboard.
 2. Create a current files-and-database backup.
-3. Upload `wordpress-plugin/dist/superior-plus-content-1.0.0.zip` through Plugins → Add New Plugin.
-4. Upload `wordpress-theme/dist/superior-plus-2.6.0.zip` through Appearance → Themes → Add New.
+3. Upload `wordpress-plugin/dist/superior-plus-content-2.1.0.zip` through Plugins → Add New Plugin.
+4. Upload `wordpress-theme/dist/superior-plus-3.1.0.zip` through Appearance → Themes → Add New.
 5. Approve replacing the existing Superior Plus packages when WordPress asks.
 6. Activate both packages on staging and run the safe approved-content importer once.
 7. Resave permalinks and clear WordPress, host and CDN caches.

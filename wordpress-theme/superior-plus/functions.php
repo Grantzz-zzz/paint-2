@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPP_VERSION', '3.0.0' );
+define( 'SPP_VERSION', '3.1.0' );
 define( 'SPP_PATH', get_template_directory() );
 define( 'SPP_URI', get_template_directory_uri() );
 
@@ -125,6 +125,9 @@ function spp_react_route_for_request() {
 	if ( is_singular( 'spp_project' ) ) {
 		return '/projects/' . get_post_field( 'post_name', get_queried_object_id() );
 	}
+	if ( is_singular( 'spp_article' ) ) {
+		return '/blog/' . get_post_field( 'post_name', get_queried_object_id() );
+	}
 	if ( is_page() ) {
 		$page_id = get_queried_object_id();
 		return (int) get_option( 'page_on_front' ) === (int) $page_id ? '/' : '/' . trim( get_page_uri( $page_id ), '/' );
@@ -148,7 +151,7 @@ function spp_canonical_url_for_route( $route ) {
 
 function spp_server_seo_data() {
 	$post_id = get_queried_object_id();
-	if ( ! $post_id || ! is_singular( array( 'page', 'spp_service', 'spp_project' ) ) ) {
+	if ( ! $post_id || ! is_singular( array( 'page', 'spp_service', 'spp_project', 'spp_article' ) ) ) {
 		return array();
 	}
 	$title = trim( (string) get_post_meta( $post_id, 'spp_seo_title', true ) );
@@ -171,7 +174,7 @@ function spp_server_seo_data() {
 		'description' => $description,
 		'canonical'   => $canonical,
 		'image'       => $image_id ? wp_get_attachment_image_url( $image_id, 'full' ) : '',
-		'type'        => ( 'post' === get_post_type( $post_id ) || $is_guide ) ? 'article' : 'website',
+		'type'        => ( in_array( get_post_type( $post_id ), array( 'post', 'spp_article' ), true ) || $is_guide ) ? 'article' : 'website',
 	);
 }
 

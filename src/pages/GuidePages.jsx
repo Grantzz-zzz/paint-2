@@ -42,13 +42,13 @@ export function PaintingGuidesPage() {
     const cmsSlugs=new Set(cms.map(item=>item.slug))
     return [...cms,...paintingGuides.filter(item=>!cmsSlugs.has(item.slug))]
   },[cmsArticles])
-  const image=mediaUrl(route?.hero?.image,asset('stock-main/blog.webp'))
+  const image=mediaUrl(route?.hero?.image,asset('generated/blog-house-art.jpg'))
   return <PageLayout mainClassName="blog-main" title={route?.seo?.title||'Painting Blog for Melbourne Property Owners'} description={route?.seo?.description||'Melbourne painting articles about preparation, colour, interiors, exteriors, roofs, commercial projects and choosing a professional painter.'} image={mediaUrl(route?.seo?.social_image,image)} pageType="Blog" schemaData={{blogPost:articles.map(guide=>({'@type':'BlogPosting',headline:guide.title,url:`/blog/${guide.slug}`,datePublished:guide.published}))}}>
-    <PageHero eyebrow={route?.hero?.eyebrow||'Superior Plus Painting blog'} title={route?.hero?.title||'Practical painting advice'} accent={route?.hero?.accent||'for Melbourne properties.'} intro={route?.hero?.intro||'Explore client-approved articles for homeowners, property managers and businesses planning a repaint, repair or property refresh.'} image={image} imageAlt={route?.hero?.image?.alt||articles[0]?.imageAlt} tone="gold"/>
+    <PageHero eyebrow={route?.hero?.eyebrow||'Superior Plus Painting blog'} title={route?.hero?.title||'Practical painting advice'} accent={route?.hero?.accent||'for Melbourne properties.'} intro={route?.hero?.intro||'Explore client-approved articles for homeowners, property managers and businesses planning a repaint, repair or property refresh.'} image={image} imageAlt={route?.hero?.image?.alt||'Editorial illustration of a freshly painted Melbourne weatherboard home with a considered exterior colour palette'} tone="gold"/>
     <TrustStrip/>
     <section className="inner-section guide-directory"><div className="container"><SectionIntro eyebrow={`${articles.length} practical articles`} title="Select a topic" accent="and plan with confidence." text="Choose a guide below. New articles added in WordPress automatically use this same approved layout."/><div className="guide-grid blog-grid">{articles.map((guide,index)=><GuideCard guide={guide} index={index} key={guide.slug}/>)}</div></div></section>
     <section className="guide-help-band"><div className="container"><Reveal><BookOpen/><span>Advice for your property</span><h2>Useful information,<br/><em>grounded in real work.</em></h2></Reveal><Reveal delay={.1}><p>These articles help you understand the process, but the right coating system still depends on the existing surface, exposure, access and preparation identified during an inspection.</p></Reveal></div><Divider color="#fff" variant="drip"/></section>
-    <ClosingCTA title="Ready to discuss your painting project?" text="Tell us about the property, the surfaces involved and what you would like to change. We’ll arrange a free, no-obligation quotation."/>
+    <ClosingCTA title={route?.closing_cta?.title||"Ready to discuss your painting project?"} text={route?.closing_cta?.text||"Tell us about the property, the surfaces involved and what you would like to change. We’ll arrange a free, no-obligation quotation."} label={route?.closing_cta?.link?.label} url={route?.closing_cta?.link?.url}/>
   </PageLayout>
 }
 

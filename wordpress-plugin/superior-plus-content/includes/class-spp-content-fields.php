@@ -75,6 +75,11 @@ class SPP_Content_Fields {
 				'spp_email'               => array( 'label' => 'Email address', 'type' => 'email', 'max' => 254 ),
 				'spp_location'            => array( 'label' => 'Location', 'type' => 'text', 'max' => 180 ),
 				'spp_street_address'      => array( 'label' => 'Map street address', 'type' => 'text', 'max' => 250 ),
+				'spp_google_maps_url'     => array( 'label' => 'Public Google Maps URL', 'type' => 'url', 'max' => 1200 ),
+				'spp_google_maps_embed_url' => array( 'label' => 'Google Maps embed URL', 'type' => 'url', 'max' => 3000 ),
+				'spp_google_rating'       => array( 'label' => 'Google rating', 'type' => 'decimal_rating' ),
+				'spp_google_review_count' => array( 'label' => 'Google review count', 'type' => 'number' ),
+				'spp_google_reviews_url'  => array( 'label' => 'Google reviews page URL', 'type' => 'url', 'max' => 1200 ),
 				'spp_facebook_url'        => array( 'label' => 'Facebook URL', 'type' => 'url', 'max' => 500 ),
 				'spp_instagram_url'       => array( 'label' => 'Instagram URL', 'type' => 'url', 'max' => 500 ),
 				'spp_logo_id'             => array( 'label' => 'Site logo', 'type' => 'media', 'mime' => 'image' ),
@@ -181,6 +186,7 @@ class SPP_Content_Fields {
 		switch ( $template_key ) {
 			case 'home':
 				$fields += array(
+					'spp_home_hero_closing'       => array( 'label' => 'Optional third hero headline line', 'type' => 'text', 'max' => 180 ),
 					'spp_home_trust_points'       => array( 'label' => 'Hero trust points — one per line', 'type' => 'list', 'max_items' => 8 ),
 					'spp_home_services_eyebrow'   => array( 'label' => 'Services eyebrow', 'type' => 'text', 'max' => 120 ),
 					'spp_home_services_title'     => array( 'label' => 'Services title', 'type' => 'text', 'max' => 180 ),
@@ -209,6 +215,7 @@ class SPP_Content_Fields {
 					'spp_home_blog_intro'         => array( 'label' => 'Blog preview introduction', 'type' => 'textarea', 'max' => 700 ),
 					'spp_home_article_ids'        => array( 'label' => 'Selected homepage blog articles', 'type' => 'relationships', 'post_type' => 'spp_article' ),
 					'spp_home_projects_heading'   => array( 'label' => 'Projects section heading', 'type' => 'text', 'max' => 180 ),
+					'spp_home_projects_accent'    => array( 'label' => 'Projects section accent line', 'type' => 'text', 'max' => 180 ),
 					'spp_home_projects_intro'     => array( 'label' => 'Projects section introduction', 'type' => 'textarea', 'max' => 700 ),
 				);
 				break;
@@ -231,6 +238,14 @@ class SPP_Content_Fields {
 					'spp_additional_services' => array( 'label' => 'Additional services — Heading | Description', 'type' => 'pairs', 'max_items' => 30 ),
 					'spp_service_principles' => array( 'label' => 'Professional-service cards — Heading | Description', 'type' => 'pairs', 'max_items' => 12 ),
 					'spp_service_principle_images' => array( 'label' => 'Professional-service card images', 'type' => 'gallery', 'max_items' => 12 ),
+				);
+				break;
+			case 'additional_services':
+				$fields += array(
+					'spp_additional_services' => array( 'label' => 'Additional services — Heading | Description', 'type' => 'pairs', 'max_items' => 40 ),
+					'spp_content_sections'   => array( 'label' => 'Supporting content — Heading | Body', 'type' => 'pairs', 'max_items' => 20 ),
+					'spp_secondary_image_id' => array( 'label' => 'Secondary image', 'type' => 'media', 'mime' => 'image' ),
+					'spp_related_page_ids'   => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
 				);
 				break;
 			case 'process':
@@ -260,6 +275,9 @@ class SPP_Content_Fields {
 				break;
 			case 'landing':
 			case 'standard':
+			case 'service_areas':
+			case 'gallery':
+			case 'blog_hub':
 				$fields += array(
 					'spp_content_sections'   => array( 'label' => 'Content sections — Heading | Body', 'type' => 'pairs', 'max_items' => 20 ),
 					'spp_secondary_image_id' => array( 'label' => 'Secondary image', 'type' => 'media', 'mime' => 'image' ),
@@ -282,6 +300,11 @@ class SPP_Content_Fields {
 			'home'        => 'home',
 			'about'       => 'about',
 			'services'    => 'services_directory',
+			'additional-services' => 'additional_services',
+			'service-areas' => 'service_areas',
+			'gallery'     => 'gallery',
+			'painting-guides' => 'blog_hub',
+			'blog'        => 'blog_hub',
 			'our-process' => 'process',
 			'faqs'        => 'faqs',
 			'contact'     => 'contact',
@@ -381,9 +404,10 @@ class SPP_Content_Fields {
 			}
 			echo '</select>';
 		} else {
-			$input_type = in_array( $type, array( 'email', 'url' ), true ) ? $type : 'text';
+			$input_type = in_array( $type, array( 'email', 'url', 'number' ), true ) ? $type : 'text';
+			$extra      = 'decimal_rating' === $type ? ' inputmode="decimal" pattern="(?:[1-4](?:\.[0-9])?|5(?:\.0)?)"' : ( 'number' === $type ? ' min="0" step="1"' : '' );
 			$disabled   = ( 'system_email' === $type && ! current_user_can( 'manage_spp_system' ) ) ? ' disabled' : '';
-			echo '<input class="widefat" type="' . esc_attr( $input_type ) . '" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '"' . $disabled . '>';
+			echo '<input class="widefat" type="' . esc_attr( $input_type ) . '" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '"' . $extra . $disabled . '>';
 		}
 		echo '</div>';
 	}
@@ -474,6 +498,10 @@ class SPP_Content_Fields {
 			'home'               => 'Homepage',
 			'about'              => 'About',
 			'services_directory' => 'Services directory',
+			'additional_services'=> 'Additional services',
+			'service_areas'      => 'Service areas directory',
+			'gallery'            => 'Project gallery',
+			'blog_hub'           => 'Blog directory',
 			'process'            => 'Process',
 			'faqs'               => 'FAQs',
 			'contact'            => 'Contact',
@@ -610,8 +638,14 @@ class SPP_Content_Fields {
 		if ( 'rating' === $type ) {
 			return max( 1, min( 5, absint( $raw ) ) );
 		}
+		if ( 'decimal_rating' === $type ) {
+			return number_format( max( 1, min( 5, (float) $raw ) ), 1, '.', '' );
+		}
+		if ( 'number' === $type ) {
+			return max( 0, absint( $raw ) );
+		}
 		if ( 'template' === $type ) {
-			$allowed = array( 'home', 'about', 'services_directory', 'process', 'faqs', 'contact', 'standard', 'landing', 'service', 'project', 'article' );
+			$allowed = array( 'home', 'about', 'services_directory', 'additional_services', 'service_areas', 'gallery', 'blog_hub', 'process', 'faqs', 'contact', 'standard', 'landing', 'service', 'project', 'article' );
 			$value   = sanitize_key( $raw );
 			return in_array( $value, $allowed, true ) ? $value : 'standard';
 		}

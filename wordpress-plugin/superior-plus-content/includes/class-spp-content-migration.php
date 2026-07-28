@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.0.0';
+	const VERSION = '2.1.0';
 
 	private $types;
 	private $report = array();
@@ -92,7 +92,7 @@ class SPP_Content_Migration {
 			'reused'        => array(),
 			'protected'     => array(),
 			'errors'        => array(),
-			'expected'      => array( 'pages' => 28, 'services' => 9, 'articles' => 19, 'faqs' => 10, 'testimonials' => 4, 'projects' => 9 ),
+			'expected'      => array( 'pages' => 81, 'services' => 9, 'articles' => 19, 'faqs' => 10, 'testimonials' => 4, 'projects' => 9 ),
 		);
 
 		$config_id = $this->types->ensure_site_config();
@@ -135,6 +135,11 @@ class SPP_Content_Migration {
 			'spp_email' => 'sppainting.remodeling@gmail.com',
 			'spp_location' => 'Melbourne, Victoria',
 			'spp_street_address' => '20 Rae Street, Chadstone VIC 3148, Australia',
+			'spp_google_maps_url' => 'https://www.google.com/maps/search/?api=1&query=Superior%20plus%20painting%20%26%20remodeling',
+			'spp_google_maps_embed_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1574.426042956306!2d145.0931577603448!3d-37.88714169706206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad66b1a91253ba3%3A0x5219727b7db56b2d!2sSuperior%20plus%20painting%20%26%20remodeling!5e0!3m2!1sen!2sph!4v1785206391867!5m2!1sen!2sph',
+			'spp_google_rating' => '5.0',
+			'spp_google_review_count' => '129',
+			'spp_google_reviews_url' => 'https://tinyurl.com/36jdkp9d',
 			'spp_facebook_url' => 'https://www.facebook.com/people/Superior-Plus-Painting-Remodeling-Services/100075874374049/',
 			'spp_instagram_url' => 'https://www.instagram.com/sppainting.remodeling',
 			'spp_logo_id' => $logo_id,
@@ -721,12 +726,16 @@ class SPP_Content_Migration {
 				'hero_asset' => 'client/projects/brand/home-hero-ai-v2.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Melbourne painters who care', 'spp_hero_title' => 'Professional painting services', 'spp_accent' => 'in Melbourne',
+					'spp_home_hero_closing' => '',
 					'spp_hero_intro' => 'Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.',
 					'spp_home_trust_points' => array( 'Fully insured', 'Free colour advice', 'Melbourne-wide' ),
 					'spp_home_services_eyebrow' => 'What we paint', 'spp_home_services_title' => 'Every surface deserves', 'spp_home_services_accent' => 'the right finish.',
 					'spp_home_services_intro' => 'From one carefully refreshed room to a complete commercial transformation, our experienced team brings the same care to every job.',
 					'spp_home_commercial_title' => 'We keep your business', 'spp_home_commercial_accent' => 'looking its best.',
 					'spp_home_commercial_text' => 'Professional finishes, clear communication and scheduling built around your operation—from a single office to multi-site projects.',
+					'spp_home_projects_heading' => 'Colour changes',
+					'spp_home_projects_accent' => 'everything.',
+					'spp_home_projects_intro' => 'Explore the care behind every edge, every surface and every final coat. Hover a project to reveal the colour beneath.',
 					'spp_home_why_title' => 'Good painting starts', 'spp_home_why_accent' => 'before the first coat.',
 					'spp_home_why_text' => 'We listen, prepare properly and communicate clearly. It’s how we deliver polished, durable work—without turning your home or workplace upside down.',
 					'spp_home_trust_cards' => array(
@@ -781,7 +790,7 @@ class SPP_Content_Migration {
 			),
 			'our-process' => array(
 				'title' => 'Our Process', 'template' => 'process', 'excerpt' => 'A six-step process from consultation to clean handover.',
-				'hero_asset' => 'client/projects/wallpaper/wallpaper-01.webp',
+				'hero_asset' => 'generated/our-process-house-art.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'A proven path to a better finish', 'spp_hero_title' => 'Our painting process', 'spp_accent' => 'planned down to the detail.',
 					'spp_hero_intro' => 'Outstanding painting starts with careful planning, detailed preparation and clear communication. Our six-step process keeps every residential and commercial project organised from quote to handover.',
@@ -828,7 +837,7 @@ class SPP_Content_Migration {
 	private function expanded_page_dataset() {
 		$pages = array(
 			'service-areas' => array(
-				'title' => 'Service Areas', 'template' => 'standard', 'excerpt' => 'Professional painters across Melbourne’s eastern and south-eastern suburbs.',
+				'title' => 'Service Areas', 'template' => 'service_areas', 'excerpt' => 'Professional painters across Melbourne’s eastern and south-eastern suburbs.',
 				'hero_asset' => 'client/projects/new-batch/batch-010.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Melbourne service areas', 'spp_hero_title' => 'Painters across Melbourne’s', 'spp_accent' => 'eastern & south-eastern suburbs.',
@@ -841,7 +850,7 @@ class SPP_Content_Migration {
 				),
 			),
 			'additional-services' => array(
-				'title' => 'Additional Services', 'template' => 'standard', 'excerpt' => 'Preparation, repairs and complementary property improvement services across Melbourne.',
+				'title' => 'Additional Services', 'template' => 'additional_services', 'excerpt' => 'Preparation, repairs and complementary property improvement services across Melbourne.',
 				'hero_asset' => 'client/projects/plaster/plaster-11.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'More than the final coat', 'spp_hero_title' => 'Additional property services', 'spp_accent' => 'coordinated with care.',
@@ -851,13 +860,39 @@ class SPP_Content_Migration {
 						array( 'title' => 'Timber and surface restoration', 'text' => 'Preparation can include pressure washing, sanding, scraping, filling, priming and suitable restoration for decks, fences, pergolas and weatherboards.' ),
 						array( 'title' => 'Property maintenance and coatings', 'text' => 'Ongoing maintenance, suitable cabinet painting, garage floor coatings and driveway coatings are assessed during the site inspection.' ),
 					),
+					'spp_additional_services' => array(
+						array( 'title' => 'Carpentry services', 'text' => 'Repair or replacement of suitable damaged timber, skirting boards, architraves, door frames, window trims, weatherboards and related features.' ),
+						array( 'title' => 'Caulking & gap sealing', 'text' => 'Neat sealing around windows, doors, skirting boards, wet areas and suitable exterior joints to improve presentation and help limit moisture, dust and drafts.' ),
+						array( 'title' => 'Tiling services', 'text' => 'Tiling support for suitable residential and commercial renovation or maintenance projects, discussed and scoped during the quotation.' ),
+						array( 'title' => 'Timber repairs & restoration', 'text' => 'Preparation and restoration for decks, fences, pergolas, weatherboards and other suitable timber surfaces before painting or staining.' ),
+						array( 'title' => 'Detailed surface preparation', 'text' => 'Pressure washing, sanding, scraping, filling, priming and minor repairs selected for the existing surface and coating condition.' ),
+						array( 'title' => 'Property maintenance', 'text' => 'Coordinated maintenance painting and suitable improvement work for homes, rentals, commercial properties and managed sites.' ),
+						array( 'title' => 'Kitchen cabinet painting', 'text' => 'Preparation and repainting for suitable cabinet surfaces where an updated finish can refresh the room without complete replacement.' ),
+						array( 'title' => 'Garage floor coatings', 'text' => 'Preparation and coating options for suitable residential garage floors, assessed for moisture, contamination and existing surface condition.' ),
+						array( 'title' => 'Driveway painting & coatings', 'text' => 'Suitable driveway cleaning, preparation and coating work where the substrate and existing finish allow a durable system.' ),
+						array( 'title' => 'Pressure washing', 'text' => 'Surface cleaning for suitable exteriors, driveways, fences, decks and preparation work before a new coating is applied.' ),
+					),
 					'spp_seo_title' => 'Additional Property Improvement Services Melbourne',
 					'spp_seo_description' => 'Explore carpentry, caulking, tiling, timber restoration, surface preparation, maintenance and suitable coating services in Melbourne.',
 				),
 			),
+			'gallery' => array(
+				'title' => 'Gallery', 'template' => 'gallery', 'excerpt' => 'Real Superior Plus Painting projects across Melbourne.',
+				'hero_asset' => 'client/projects/new-batch/batch-089.webp',
+				'meta' => array(
+					'spp_eyebrow' => 'Real Melbourne projects', 'spp_hero_title' => 'Every project,', 'spp_accent' => 'all in one place.',
+					'spp_hero_intro' => 'Scroll through our complete project archive. Every photograph is from supplied Superior Plus Painting work and is organised by service so you can quickly find the finish that suits your property.',
+					'spp_seo_title' => 'Painting Project Gallery Melbourne',
+					'spp_seo_description' => 'Browse real Superior Plus Painting project photos grouped by residential, commercial, interior, exterior, roof, fence and specialist painting services.',
+					'spp_cta_title' => 'Seen a finish you like?',
+					'spp_cta_text' => 'Tell us which project caught your eye and we’ll help you plan a practical, durable finish for your own property.',
+					'spp_cta_label' => 'Request a free quote',
+					'spp_cta_url' => '/contact',
+				),
+			),
 			'painting-guides' => array(
-				'title' => 'Painting Guides', 'template' => 'standard', 'excerpt' => 'Practical painting guidance for Melbourne property owners and managers.',
-				'hero_asset' => 'client/projects/residential/residential-01.webp',
+				'title' => 'Painting Guides', 'template' => 'blog_hub', 'excerpt' => 'Practical painting guidance for Melbourne property owners and managers.',
+				'hero_asset' => 'generated/blog-house-art.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'Advice from the preparation stage', 'spp_hero_title' => 'Practical painting guides', 'spp_accent' => 'for better project decisions.',
 					'spp_hero_intro' => 'Clear information about repainting cycles, preparation, product differences and choosing a professional painting team.',
@@ -1027,9 +1062,28 @@ class SPP_Content_Migration {
 			'narre-warren' => array( 'Narre Warren', 'Casey & the outer south-east', 'Narre Warren enquiries include homes, townhouses, rentals and commercial spaces supported by a written scope, preparation details and proposed schedule.' ),
 			'endeavour-hills' => array( 'Endeavour Hills', 'Casey & the outer south-east', 'Endeavour Hills projects often involve established homes where worn coatings, minor defects and detailed preparation need to be addressed before repainting.' ),
 		);
+		$expanded_area_groups = array(
+			'Inner Eastern Suburbs' => array( 'Hawthorn', 'Hawthorn East', 'Kew', 'Kew East', 'Camberwell', 'Canterbury', 'Balwyn', 'Balwyn North', 'Surrey Hills', 'Mont Albert', 'Deepdene', 'Box Hill', 'Box Hill North', 'Box Hill South' ),
+			'South Eastern Suburbs' => array( 'Malvern', 'Malvern East', 'Glen Iris', 'Burwood East', 'Wheelers Hill', 'Hughesdale', 'Oakleigh East', 'Oakleigh South', 'Clayton South' ),
+			'Eastern Suburbs' => array( 'Vermont', 'Vermont South', 'Forest Hill', 'Blackburn', 'Blackburn North', 'Blackburn South', 'Nunawading', 'Mitcham', 'Ringwood', 'Ringwood East', 'Ringwood North', 'Heathmont', 'Bayswater', 'Boronia', 'Wantirna', 'Wantirna South', 'Knoxfield', 'Ferntree Gully' ),
+			'Outer Eastern Suburbs' => array( 'Scoresby', 'Rowville', 'Lysterfield', 'The Basin', 'Croydon', 'Croydon Hills', 'Kilsyth', 'Montrose', 'Lilydale', 'Mooroolbark', 'Chirnside Park' ),
+		);
+		foreach ( $expanded_area_groups as $region => $names ) {
+			foreach ( $names as $name ) {
+				$slug = sanitize_title( $name );
+				if ( isset( $areas[ $slug ] ) ) {
+					continue;
+				}
+				$areas[ $slug ] = array(
+					$name,
+					$region,
+					'Superior Plus Painting and Remodeling provides professional residential and commercial painting services in ' . $name . '. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.',
+				);
+			}
+		}
 		foreach ( $areas as $slug => $area ) {
 			$pages[ 'service-areas/' . $slug ] = array(
-				'title' => 'Painters in ' . $area[0], 'template' => 'standard',
+				'title' => 'Painters in ' . $area[0], 'template' => 'service_areas',
 				'excerpt' => 'Professional residential and commercial painting services in ' . $area[0] . ', Melbourne.',
 				'hero_asset' => 'client/projects/residential/residential-01.webp',
 				'meta' => array(

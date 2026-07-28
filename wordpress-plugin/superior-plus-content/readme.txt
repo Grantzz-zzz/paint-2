@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -39,6 +39,12 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 
 == Changelog ==
 
+= 2.1.0 =
+* Synchronises editable controls with the current approved React site.
+* Adds editable Google review profile and official Google Maps settings.
+* Adds locked service-area, gallery, blog-directory and additional-services creation templates.
+* Exposes the homepage third headline line and selected-work heading and description.
+
 = 2.0.0 =
 * Adds the reusable locked Blog Article template and imports all 19 approved articles as editable WordPress records.
 * Expands page, service, flip-card, review, counter and Media Library controls while preserving the approved layouts.
@@ -60,7 +66,7 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 = 1.0.0 =
 * Added editable pages for the service-area hub, all 15 approved local areas, additional services and four supplied painting guides.
 * Added approved guide and local SEO metadata to the idempotent importer.
-* Expanded the approved page dataset from 6 to 28 editable WordPress pages.
+* Expanded the approved page dataset to 81 editable WordPress pages, including the managed gallery and all 67 current suburb pages.
 
 = 0.9.0 =
 * Replaced stock and generated showcase imports with optimized client project photography.

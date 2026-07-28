@@ -70,6 +70,30 @@ class SPP_Content_Workflow {
 				'post_type'   => 'page',
 				'icon'        => 'dashicons-welcome-widgets-menus',
 			),
+			'service_areas' => array(
+				'label'       => __( 'Service Area Page', 'superior-plus-content' ),
+				'description' => __( 'A local SEO page using the approved service-area hero, content sections, related pages and quote path.', 'superior-plus-content' ),
+				'post_type'   => 'page',
+				'icon'        => 'dashicons-location-alt',
+			),
+			'blog_hub' => array(
+				'label'       => __( 'Blog Directory', 'superior-plus-content' ),
+				'description' => __( 'A reusable article directory; published Blog Articles are inserted automatically.', 'superior-plus-content' ),
+				'post_type'   => 'page',
+				'icon'        => 'dashicons-book-alt',
+			),
+			'gallery' => array(
+				'label'       => __( 'Gallery Directory', 'superior-plus-content' ),
+				'description' => __( 'A reusable gallery hub populated from editable Project records and their Media Library galleries.', 'superior-plus-content' ),
+				'post_type'   => 'page',
+				'icon'        => 'dashicons-images-alt2',
+			),
+			'additional_services' => array(
+				'label'       => __( 'Additional Services Directory', 'superior-plus-content' ),
+				'description' => __( 'The approved preparation, repair and property-care service directory.', 'superior-plus-content' ),
+				'post_type'   => 'page',
+				'icon'        => 'dashicons-admin-tools',
+			),
 			'service'  => array(
 				'label'       => __( 'Service Page', 'superior-plus-content' ),
 				'description' => __( 'Scope, process, gallery, benefits, related services and SEO in the approved service design.', 'superior-plus-content' ),

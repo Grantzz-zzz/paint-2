@@ -46,10 +46,10 @@ export default function GalleryPage() {
   },[selected])
 
   return <PageLayout
-    title="Painting Project Gallery Melbourne"
-    description={`Browse ${photoCount} real Superior Plus Painting project photos, grouped by residential, commercial, interior, exterior, roof, fence and specialist painting services.`}
+    title={route?.seo?.title||"Painting Project Gallery Melbourne"}
+    description={route?.seo?.description||`Browse ${photoCount} real Superior Plus Painting project photos, grouped by residential, commercial, interior, exterior, roof, fence and specialist painting services.`}
     pageType="CollectionPage"
-    image={projectMedia.residential.items[0].src}
+    image={mediaUrl(route?.seo?.social_image,projectMedia.residential.items[0].src)}
     schemaData={{numberOfItems:photoCount}}
     mainClassName="gallery-main"
   >
@@ -91,7 +91,7 @@ export default function GalleryPage() {
         </div>
       </section>)}
     </div>
-    <ClosingCTA title="Seen a finish you like?" text="Tell us which project caught your eye and we’ll help you plan a practical, durable finish for your own property."/>
+    <ClosingCTA title={route?.closing_cta?.title||"Seen a finish you like?"} text={route?.closing_cta?.text||"Tell us which project caught your eye and we’ll help you plan a practical, durable finish for your own property."} label={route?.closing_cta?.link?.label} url={route?.closing_cta?.link?.url}/>
     {selected&&<div className="media-lightbox gallery-lightbox" role="dialog" aria-modal="true" aria-label={`${selected.section} project ${selected.number}`} onMouseDown={event=>{if(event.target===event.currentTarget)setSelected(null)}}>
       <button className="lightbox-close" onClick={()=>setSelected(null)} aria-label="Close project photo"><X/></button>
       <div className="lightbox-media"><img src={selected.src} alt={`${selected.section} project ${selected.number} by Superior Plus Painting`}/><p>{selected.section} · Project {String(selected.number).padStart(2,'0')}</p></div>

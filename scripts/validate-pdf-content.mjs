@@ -30,7 +30,8 @@ const coverage = [
   ['Plaster Repairs', ['water-damaged plaster', 'cornice repairs', 'investment properties']],
   ['Residential Painting', ['new home painting', 'feature walls', 'garage and roof painting']],
   ['Roof Painting', ['concrete tile roofs', 'suitable colorbond repainting', 'protective roof coatings']],
-  ['Testimonials & Reviews', ['professional & reliable', 'excellent quality', 'great communication', 'value for money']],
+  // The client later limited public testimonials to the verified Google set.
+  ['Official Google Reviews', ['chen yangyang', 'indigo jewel', 'shane mclachlan', 'timothy fagan']],
   ['Wallpaper Removal', ['vinyl wallpaper removal', 'adhesive and glue removal', 'steam removal where appropriate']],
   ['SEO Blog 1 — Preparing for painters', ['moving furniture', 'protecting floors', 'removing wall decorations', 'what homeowners should expect']],
   ['SEO Blog 2 — Interior house painting', ['walls, ceilings, doors', 'choosing paint colours', 'how long interior painting takes']],
