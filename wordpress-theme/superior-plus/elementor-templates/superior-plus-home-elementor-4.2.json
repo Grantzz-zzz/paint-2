@@ -16,9 +16,9 @@
           "settings": {
             "_css_classes": "spp-el-hero-image",
             "image": {
-              "url": "{{SPP_THEME_URI}}/assets/images/projects/fence/fence-03.webp",
+              "url": "{{SPP_THEME_URI}}/assets/images/projects/brand/home-hero-ai.webp",
               "id": "",
-              "alt": "Professional painter applying a deep red finish in a modern Melbourne home",
+              "alt": "Superior Plus painter applying a fresh exterior finish to a Melbourne home",
               "source": "library"
             },
             "image_size": "full"

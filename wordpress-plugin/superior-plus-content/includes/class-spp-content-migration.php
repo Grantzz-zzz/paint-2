@@ -718,7 +718,7 @@ class SPP_Content_Migration {
 		$pages = array(
 			'home' => array(
 				'title' => 'Home', 'template' => 'home', 'excerpt' => 'Premium residential and commercial painting across Melbourne.',
-				'hero_asset' => 'client/projects/fence/fence-03.webp',
+				'hero_asset' => 'client/projects/brand/home-hero-ai.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Melbourne painters who care', 'spp_hero_title' => 'Professional painting services', 'spp_accent' => 'in Melbourne',
 					'spp_hero_intro' => 'Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.',
