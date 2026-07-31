@@ -21,6 +21,15 @@ class SPP_Content_Enquiries {
 	public function register_route() {
 		register_rest_route(
 			'spp/v1',
+			'/quote-token',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'token' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+		register_rest_route(
+			'spp/v1',
 			'/quote',
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
@@ -28,6 +37,27 @@ class SPP_Content_Enquiries {
 				'permission_callback' => '__return_true',
 			)
 		);
+	}
+
+	/**
+	 * Return a fresh public-form nonce without allowing page caches to retain it.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function token() {
+		$response = rest_ensure_response(
+			array(
+				'schema_version' => SPP_CONTENT_SCHEMA_VERSION,
+				'generated_at'   => gmdate( 'c' ),
+				'data'           => array(
+					'nonce' => wp_create_nonce( 'spp_quote_form' ),
+				),
+			)
+		);
+		$response->header( 'Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0' );
+		$response->header( 'Pragma', 'no-cache' );
+		$response->header( 'Expires', 'Wed, 11 Jan 1984 05:00:00 GMT' );
+		return $response;
 	}
 
 	public function submit( $request ) {

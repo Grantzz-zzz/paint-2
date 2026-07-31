@@ -152,18 +152,46 @@ async function request(endpoint) {
 async function submitEnquiry(payload) {
   const base = configuredApiBase()
   if (!base) return { delivered: true, prototype: true }
-  const response = await fetch(`${base}/quote`, {
+
+  const fetchFormNonce = async () => {
+    const response = await fetch(`${base}/quote-token?_=${Date.now()}`, {
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: { Accept: 'application/json' },
+    })
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok || !result?.data?.nonce) {
+      throw new Error('The secure form session could not be refreshed. Please reload the page and try again.')
+    }
+    return result.data.nonce
+  }
+
+  const postEnquiry = async nonce => fetch(`${base}/quote`, {
     method: 'POST',
     credentials: 'same-origin',
     cache: 'no-store',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-SPP-Form-Nonce': window.__SPP_FORM_NONCE__ || '',
+      'X-SPP-Form-Nonce': nonce,
     },
     body: JSON.stringify(payload),
   })
-  const result = await response.json().catch(() => ({}))
+
+  let nonce = window.__SPP_FORM_NONCE__ || ''
+  try {
+    nonce = await fetchFormNonce()
+  } catch {
+    // The embedded token remains a safe fallback when a host blocks the token refresh request.
+  }
+
+  let response = await postEnquiry(nonce)
+  let result = await response.json().catch(() => ({}))
+  if (response.status === 403 && result?.code === 'spp_quote_token') {
+    nonce = await fetchFormNonce()
+    response = await postEnquiry(nonce)
+    result = await response.json().catch(() => ({}))
+  }
   if (!response.ok) throw new Error(result?.message || 'We could not send your enquiry. Please try again.')
   if (result?.schema_version !== '1.0.0' || result?.data?.delivered !== true) {
     throw new Error('The website could not confirm delivery. Please try again.')

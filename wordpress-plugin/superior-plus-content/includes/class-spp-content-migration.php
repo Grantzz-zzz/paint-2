@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.1.0';
+	const VERSION = '2.1.2';
 
 	private $types;
 	private $report = array();
