@@ -4,6 +4,18 @@ Updated: 24 July 2026
 
 This is the working checklist for the React/GitHub Pages site first, followed by WordPress staging. A checked item must be visible in the site, supported by the code, or verified in the relevant platform account.
 
+## Localhost-first WordPress safeguard
+
+**Localhost is the canonical source of truth for the site's design and presentation.**
+
+- [x] WordPress imports may update only the editable content explicitly placed under plugin control.
+- [x] Imports must not rearrange, remove, restyle or replace the approved localhost layout, navigation, responsive behaviour, animations, routes or fallback content.
+- [x] Region, suburb, card and gallery ordering must be deterministic and must not depend on WordPress database ordering.
+- [x] Importers must remain repeatable and safe to run again without duplicating or unexpectedly replacing content.
+- [x] Before releasing a WordPress theme or plugin package, compare it with the current localhost build on desktop and mobile.
+- [x] Any intentional presentation change requires approval in localhost first, followed by the corresponding WordPress update.
+- [x] If WordPress and localhost differ unexpectedly, restore parity with localhost rather than treating the WordPress version as the new baseline.
+
 ## Status key
 
 - `[x]` Complete and verified
