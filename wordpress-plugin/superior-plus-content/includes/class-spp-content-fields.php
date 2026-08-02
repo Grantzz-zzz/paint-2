@@ -391,8 +391,7 @@ class SPP_Content_Fields {
 		if ( 'textarea' === $type ) {
 			echo '<textarea class="widefat" rows="5" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '">' . esc_textarea( $value ) . '</textarea>';
 		} elseif ( 'list' === $type || 'pairs' === $type ) {
-			echo '<textarea class="widefat" rows="7" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '">' . esc_textarea( $this->structured_to_lines( $value, $type ) ) . '</textarea>';
-			echo '<p class="description">' . ( 'pairs' === $type ? esc_html__( 'Use one item per line and separate the heading from its description with |.', 'superior-plus-content' ) : esc_html__( 'Use one item per line. Drag-and-drop controls will preserve this order on the frontend.', 'superior-plus-content' ) ) . '</p>';
+			$this->render_structured_field( $key, $value, $type );
 		} elseif ( 'media' === $type ) {
 			$this->render_media_field( $key, $value, $definition );
 		} elseif ( 'gallery' === $type ) {
@@ -414,6 +413,35 @@ class SPP_Content_Fields {
 			$disabled   = ( 'system_email' === $type && ! current_user_can( 'manage_spp_system' ) ) ? ' disabled' : '';
 			echo '<input class="widefat" type="' . esc_attr( $input_type ) . '" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '"' . $extra . $disabled . '>';
 		}
+		echo '</div>';
+	}
+
+	/**
+	 * Render a repeatable list/card editor.
+	 *
+	 * @param string $key Meta key.
+	 * @param mixed  $value Stored rows.
+	 * @param string $type list or pairs.
+	 */
+	private function render_structured_field( $key, $value, $type ) {
+		$items = is_array( $value ) ? array_values( $value ) : array();
+		if ( ! $items && is_string( $value ) && trim( $value ) ) {
+			foreach ( preg_split( '/\r\n|\r|\n/', $value ) as $index => $line ) {
+				$line = trim( $line );
+				if ( ! $line ) {
+					continue;
+				}
+				$parts   = 'pairs' === $type ? array_map( 'trim', explode( '|', $line, 2 ) ) : array( $line );
+				$items[] = 'pairs' === $type
+					? array( 'id' => wp_generate_uuid4(), 'title' => $parts[0], 'text' => isset( $parts[1] ) ? $parts[1] : '', 'order' => $index )
+					: array( 'id' => wp_generate_uuid4(), 'text' => $parts[0], 'order' => $index );
+			}
+		}
+		echo '<div class="spp-structured-control" data-structured-type="' . esc_attr( $type ) . '">';
+		echo '<input type="hidden" class="spp-structured-json" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( wp_json_encode( $items ) ) . '">';
+		echo '<div class="spp-structured-items"></div>';
+		echo '<button type="button" class="button button-secondary spp-add-structured-item">' . esc_html( 'pairs' === $type ? __( 'Add card', 'superior-plus-content' ) : __( 'Add item', 'superior-plus-content' ) ) . '</button>';
+		echo '<p class="description">' . esc_html__( 'Add, edit, reorder or delete individual rows. Deleting a row removes its frontend card completely.', 'superior-plus-content' ) . '</p>';
 		echo '</div>';
 	}
 
@@ -668,6 +696,31 @@ class SPP_Content_Fields {
 	 * @return array
 	 */
 	private function sanitize_lines( $raw, $type, $limit, $existing ) {
+		$decoded = json_decode( (string) $raw, true );
+		if ( is_array( $decoded ) ) {
+			$result = array();
+			foreach ( array_slice( $decoded, 0, $limit ) as $index => $item ) {
+				if ( ! is_array( $item ) ) {
+					continue;
+				}
+				$id = ! empty( $item['id'] ) ? sanitize_key( $item['id'] ) : wp_generate_uuid4();
+				if ( 'pairs' === $type ) {
+					$title = isset( $item['title'] ) ? sanitize_text_field( $item['title'] ) : '';
+					$text  = isset( $item['text'] ) ? sanitize_textarea_field( $item['text'] ) : '';
+					if ( '' === $title && '' === $text ) {
+						continue;
+					}
+					$result[] = array( 'id' => $id, 'title' => $title, 'text' => $text, 'order' => count( $result ) );
+				} else {
+					$text = isset( $item['text'] ) ? sanitize_text_field( $item['text'] ) : '';
+					if ( '' === $text ) {
+						continue;
+					}
+					$result[] = array( 'id' => $id, 'text' => $text, 'order' => count( $result ) );
+				}
+			}
+			return $result;
+		}
 		$lines    = preg_split( '/\r\n|\r|\n/', sanitize_textarea_field( $raw ) );
 		$lines    = array_slice( array_values( array_filter( array_map( 'trim', $lines ) ) ), 0, $limit );
 		$existing = is_array( $existing ) ? array_values( $existing ) : array();
@@ -816,8 +869,13 @@ class SPP_Content_Fields {
 				'remove'      => __( 'Remove', 'superior-plus-content' ),
 				'moveUp'      => __( 'Move up', 'superior-plus-content' ),
 				'moveDown'    => __( 'Move down', 'superior-plus-content' ),
+				'replace'     => __( 'Replace media', 'superior-plus-content' ),
 				'altText'     => __( 'Alt text', 'superior-plus-content' ),
 				'caption'     => __( 'Caption', 'superior-plus-content' ),
+				'focalPoint'  => __( 'Image focal point (example: 50% 50%)', 'superior-plus-content' ),
+				'heading'     => __( 'Heading', 'superior-plus-content' ),
+				'description' => __( 'Description', 'superior-plus-content' ),
+				'itemText'    => __( 'Item text', 'superior-plus-content' ),
 			)
 		);
 	}

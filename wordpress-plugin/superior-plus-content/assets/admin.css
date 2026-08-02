@@ -57,6 +57,46 @@
   margin: 8px 0 12px;
 }
 
+.spp-structured-items {
+  display: grid;
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+
+.spp-structured-item {
+  align-items: start;
+  background: #f6f7f7;
+  border: 1px solid #dcdcde;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  padding: 12px;
+}
+
+.spp-structured-number {
+  color: #8f1f1f;
+  padding-top: 25px;
+}
+
+.spp-structured-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.spp-structured-copy label {
+  display: grid;
+  font-size: 12px;
+  font-weight: 600;
+  gap: 4px;
+}
+
+.spp-structured-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 20px;
+}
+
 .spp-gallery-item {
   align-items: center;
   background: #f6f7f7;
@@ -119,5 +159,15 @@
   .spp-gallery-actions {
     flex-direction: row;
     grid-column: 1 / -1;
+  }
+
+  .spp-structured-item {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .spp-structured-actions {
+    flex-direction: row;
+    grid-column: 1 / -1;
+    padding-top: 0;
   }
 }

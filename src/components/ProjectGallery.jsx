@@ -6,16 +6,18 @@ import { projectMedia } from '../data/projectMedia'
 
 export default function ProjectGallery({category,items,heading}) {
   const fallbackGallery=projectMedia[category]
+  const hasManagedItems=Array.isArray(items)
   const cmsItems=Array.isArray(items)?items.map(item=>({
     type:item.type||'image',
     src:item.media?.url,
     poster:item.poster?.url,
     alt:item.alt||item.media?.alt||'Superior Plus Painting project',
+    caption:item.caption||'',
     placeholder:item.is_placeholder,
     objectPosition:item.object_position,
     fit:'contain',
   })).filter(item=>item.src):[]
-  const gallery=fallbackGallery?{...fallbackGallery,items:cmsItems.length?cmsItems:fallbackGallery.items}:cmsItems.length?{
+  const gallery=fallbackGallery?{...fallbackGallery,items:hasManagedItems?cmsItems:fallbackGallery.items}:cmsItems.length?{
     eyebrow:'Project gallery',title:'Recent work.',accent:'Finished with care.',intro:'Selected Superior Plus Painting project media.',items:cmsItems,
   }:null
   const [visible,setVisible]=useState(8)
@@ -38,14 +40,14 @@ export default function ProjectGallery({category,items,heading}) {
     <SectionIntro {...intro} light={Boolean(heading)}/>
     <div className="client-gallery-grid">{gallery.items.slice(0,visible).map((item,index)=><Reveal key={item.src} delay={(index%4)*.035}><button className={`client-media-card ${index===0?'featured':''} ${item.fit==='contain'?'fit-contain':''}`} onClick={()=>setSelected(item)} aria-label={`Open ${item.alt}`}>
       <img src={item.type==='video'?item.poster:item.src} alt={item.alt} style={{objectPosition:item.objectPosition||'center center'}} loading="lazy" decoding="async"/>
-      <span className="client-media-badge">{item.type==='video'?<><Play/>Video</>:<><Images/>{item.placeholder?'Showcase image':'Project photo'}</>}</span>
+      <span className="client-media-badge">{item.type==='video'?<><Play/>{item.caption||'Video'}</>:<><Images/>{item.caption||(item.placeholder?'Showcase image':'Project photo')}</>}</span>
       <i><Plus/></i>
     </button></Reveal>)}</div>
     {visible<gallery.items.length&&<button className="gallery-more" onClick={()=>setVisible(gallery.items.length)}>View all {gallery.items.length} project items <Plus/></button>}
   </div>
   {selected&&<div className="media-lightbox" role="dialog" aria-modal="true" aria-label={selected.alt} onMouseDown={event=>{if(event.target===event.currentTarget)setSelected(null)}}>
     <button className="lightbox-close" onClick={()=>setSelected(null)} aria-label="Close project viewer"><X/></button>
-    <div className="lightbox-media">{selected.type==='video'?<video src={selected.src} poster={selected.poster} controls autoPlay playsInline/>:<img src={selected.src} alt={selected.alt}/>}<p>{selected.alt}</p></div>
+    <div className="lightbox-media">{selected.type==='video'?<video src={selected.src} poster={selected.poster} controls autoPlay playsInline/>:<img src={selected.src} alt={selected.alt}/>}<p>{selected.caption||selected.alt}</p></div>
   </div>}
   </section>
 }

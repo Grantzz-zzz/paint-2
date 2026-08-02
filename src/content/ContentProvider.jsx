@@ -206,12 +206,12 @@ function hasContent(value) {
 }
 
 /**
- * Merge CMS data into a complete local object. Empty optional CMS fields retain
- * their designed fallback so a section cannot disappear accidentally.
+ * Merge CMS data into a complete local object. Explicit arrays are authoritative,
+ * including an intentionally empty array created by deleting every managed card.
  */
 export function mergeContent(fallback, incoming) {
+  if (Array.isArray(fallback)) return Array.isArray(incoming) ? incoming : fallback
   if (!hasContent(incoming)) return fallback
-  if (Array.isArray(fallback)) return Array.isArray(incoming) && incoming.length ? incoming : fallback
   if (fallback && typeof fallback === 'object' && !Array.isArray(fallback)) {
     const source = incoming && typeof incoming === 'object' ? incoming : {}
     return Object.keys({ ...fallback, ...source }).reduce((result, key) => {
@@ -346,8 +346,9 @@ export function useEnquirySubmission() {
   }
 }
 
-export function useCollection(name, fallback) {
+export function useCollection(name, fallback, options = {}) {
   const { enabled } = useSiteContent()
+  const preserveEmpty=Boolean(options.preserveEmpty)
   const [data, setData] = useState(fallback)
   const [status, setStatus] = useState(enabled ? 'loading' : 'fallback')
   useEffect(() => {
@@ -360,7 +361,7 @@ export function useCollection(name, fallback) {
     request(`/${name}`)
       .then(next => {
         if (active) {
-          setData(Array.isArray(next) && next.length ? next : fallback)
+          setData(Array.isArray(next) && (next.length || preserveEmpty) ? next : fallback)
           setStatus('ready')
         }
       })
@@ -371,7 +372,7 @@ export function useCollection(name, fallback) {
         }
       })
     return () => { active = false }
-  }, [enabled, name, fallback])
+  }, [enabled, name, fallback, preserveEmpty])
   return { data, status }
 }
 

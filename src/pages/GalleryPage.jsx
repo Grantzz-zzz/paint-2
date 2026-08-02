@@ -19,7 +19,7 @@ const gallerySections = [
 const emptyProjects=[]
 
 export default function GalleryPage() {
-  const {data:projects}=useCollection('projects',emptyProjects)
+  const {data:projects,status:projectsStatus}=useCollection('projects',emptyProjects,{preserveEmpty:true})
   const {data:route}=useRouteContent('/gallery')
   const sections=useMemo(()=>gallerySections.map(([key,label])=>{
     const managed=(projects||[]).filter(project=>{
@@ -30,10 +30,10 @@ export default function GalleryPage() {
       const featured=mediaUrl(project.featured_media)
       return featured?[{src:featured,type:'image',position:project.object_position,alt:project.featured_media?.alt,caption:project.title},...gallery]:gallery
     }).filter(item=>item.src)
-    const combined=[...managed,...projectMedia[key].items.filter(item=>item.type==='image')]
+    const combined=projectsStatus==='ready'?managed:[...managed,...projectMedia[key].items.filter(item=>item.type==='image')]
     const unique=combined.filter((item,index,items)=>items.findIndex(candidate=>candidate.src===item.src)===index)
     return {key,label,...projectMedia[key],items:unique}
-  }),[projects])
+  }),[projects,projectsStatus])
   const photoCount=sections.reduce((total,section)=>total+section.items.length,0)
   const [selected,setSelected]=useState(null)
 

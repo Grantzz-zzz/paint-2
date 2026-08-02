@@ -280,7 +280,7 @@ def main() -> None:
         # useful, Superior Plus-branded expansion stored in the article record.
         article["seo_keywords"] = [keyword.strip() for keyword in keywords.split(",")]
         article["outline_topics"] = topics
-        article["source_label"] = "Client SEO brief · Expanded"
+        article["source_label"] = "Superior Plus Painting guide"
         article["copy_version"] = "pdf-verbatim-2026-08-01"
     for article in blogs[:4]:
         article["copy_version"] = "pdf-verbatim-2026-08-01"

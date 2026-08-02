@@ -1,7 +1,7 @@
 import { asset } from '../utils/assets.js'
 
 const published = '2026-07-26'
-const sourceLabel = 'Client SEO brief · Expanded'
+const sourceLabel = 'Superior Plus Painting guide'
 
 export const expandedPaintingGuides = [
   {

@@ -12,7 +12,7 @@ export const paintingGuides = [
     imageAlt: 'Completed Melbourne residential repaint by Superior Plus Painting',
     readTime: '7 min read',
     published: '2026-07-25',
-    sourceLabel: 'Client-approved Blog 1',
+    sourceLabel: 'Superior Plus Painting guide',
     sections: [
       ['Introduction', [
         'A fresh coat of paint can completely transform the look of your home while also protecting your property from Melbourne’s changing weather conditions. Many homeowners ask: “How often should I repaint my house?”',
@@ -59,7 +59,7 @@ export const paintingGuides = [
     imageAlt: 'Freshly completed interior painting project in Melbourne',
     readTime: '6 min read',
     published: '2026-07-25',
-    sourceLabel: 'Client-approved Blog 2',
+    sourceLabel: 'Superior Plus Painting guide',
     sections: [
       ['Introduction', [
         'Painting your home is one of the best ways to improve its appearance and protect your property. However, interior and exterior painting require different preparation methods, products and techniques.',
@@ -105,7 +105,7 @@ export const paintingGuides = [
     imageAlt: 'Superior Plus commercial painting project in progress',
     readTime: '8 min read',
     published: '2026-07-25',
-    sourceLabel: 'Client-approved Blog 11',
+    sourceLabel: 'Superior Plus Painting guide',
     sections: [
       ['Introduction', [
         'When it comes to improving your home or commercial property, choosing the right professional painting services in Melbourne can make a significant difference. A high-quality paint job requires more than just applying paint—it requires experience, preparation, attention to detail and a skilled professional team.',
@@ -155,7 +155,7 @@ export const paintingGuides = [
     imageAlt: 'Superior Plus painter applying a professional spray finish',
     readTime: '7 min read',
     published: '2026-07-25',
-    sourceLabel: 'Client-approved Blog 12',
+    sourceLabel: 'Superior Plus Painting guide',
     sections: [
       ['Introduction', [
         'A professional painting contractor can transform the appearance, protection and value of your property. However, achieving outstanding results requires an experienced team that understands preparation, colour selection, materials and professional painting techniques.',

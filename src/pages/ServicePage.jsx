@@ -55,7 +55,7 @@ export default function ServicePage() {
     scope:itemSection?.items||[],
     process:stepSection?.steps||[],
   }):fallbackPage
-  const page=cms?.copy_version==='pdf-verbatim-2026-08-01'?mergeContent(approvedPage||{},{
+  const mergedPage=cms?.copy_version==='pdf-verbatim-2026-08-01'?mergeContent(approvedPage||{},{
     eyebrow:cms.hero?.eyebrow,
     title:cms.hero?.title||cms.title,
     accent:cms.hero?.accent,
@@ -72,6 +72,13 @@ export default function ServicePage() {
     gallery:cms.gallery,
     sectionLabels:cms.section_labels,
   }):approvedPage
+  const page=cms?.copy_version==='pdf-verbatim-2026-08-01'?{
+    ...mergedPage,
+    scope:Array.isArray(cms.scope)?cms.scope.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.scope,
+    process:Array.isArray(cms.process)?cms.process.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.process,
+    benefits:Array.isArray(cms.benefits)?cms.benefits.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.benefits,
+    gallery:Array.isArray(cms.gallery)?cms.gallery:mergedPage.gallery,
+  }:mergedPage
   const narrative=cms?.copy_version==='pdf-verbatim-2026-08-01'&&cms.document_sections?.length
     ?pairItems(cms.document_sections).map(([heading,text])=>({heading,paragraphs:[text]}))
     :approvedNarrative
@@ -107,7 +114,7 @@ export default function ServicePage() {
 
     <ProjectGallery category={serviceMediaCategory[slug]} items={page.gallery} heading={whySection?{eyebrow:"Why Superior Plus",title:whySection.heading,accent:"Proven through our work.",text:sectionText(whySection)}:undefined}/>
 
-    {storySections.map((section,index)=><section className={`inner-section service-approved-story ${index%2?'cream':''}`} key={section.heading}><div className="container service-story-grid"><Reveal className="service-story-photo"><img src={storyImages[index%storyImages.length]||image} alt={`${section.heading} for ${page.title}`} loading="lazy" decoding="async"/><span>Superior Plus project</span></Reveal><Reveal className="service-story-copy" delay={.1}><span className="service-story-icon">{index%2?<Palette/>:<PaintRoller/>}</span><SectionIntro eyebrow="Approved service information" title={section.heading} accent=""/>{section.paragraphs?.map(paragraph=><p key={paragraph}>{paragraph}</p>)}</Reveal></div></section>)}
+    {storySections.map((section,index)=><section className={`inner-section service-approved-story ${index%2?'cream':''}`} key={section.heading}><div className="container service-story-grid"><Reveal className="service-story-photo"><img src={storyImages[index%storyImages.length]||image} alt={`${section.heading} for ${page.title}`} loading="lazy" decoding="async"/><span>Superior Plus project</span></Reveal><Reveal className="service-story-copy" delay={.1}><span className="service-story-icon">{index%2?<Palette/>:<PaintRoller/>}</span><SectionIntro eyebrow="Service information" title={section.heading} accent=""/>{section.paragraphs?.map(paragraph=><p key={paragraph}>{paragraph}</p>)}</Reveal></div></section>)}
 
     <section className={`benefit-section benefit-${page.tone}`}><div className="container benefit-grid"><Reveal><PaintRoller/><h2>{benefitSection?.heading||labels.benefits_title||"Why this work"}<br/><em>{labels.benefits_accent||"makes a difference."}</em></h2><p className="benefit-intro">{sectionText(benefitSection)||"Careful preparation and a coating system suited to the surface help deliver a cleaner, stronger and longer-lasting result."}</p></Reveal><div className="benefit-list">{(page.benefits||[]).map((item,i)=><Reveal key={item} delay={i*.06}><div><span>0{i+1}</span><h3>{item}</h3></div></Reveal>)}</div></div><Divider color="#fff" variant="drip"/></section>
 

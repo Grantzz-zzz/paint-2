@@ -11,6 +11,21 @@ import NotFoundPage from './NotFoundPage'
 import approvedBlogData from '../data/clientApprovedBlogs.json'
 
 const emptyArticles=[]
+const publicSourceLabel='Superior Plus Painting guide'
+function repairDisplayCopy(value='') {
+  const replacements=[
+    ['\u00e2\u20ac\u2122','\u2019'],
+    ['\u00e2\u20ac\u02dc','\u2018'],
+    ['\u00e2\u20ac\u0153','\u201c'],
+    ['\u00e2\u20ac\u009d','\u201d'],
+    ['\u00e2\u20ac\u201c','\u2013'],
+    ['\u00e2\u20ac\u201d','\u2014'],
+    ['\u00e2\u20ac\u00a6','\u2026'],
+    ['\u00c2\u00b7','\u00b7'],
+    ['\u00c2\u0020',' '],
+  ]
+  return replacements.reduce((clean,[broken,restored])=>clean.split(broken).join(restored),String(value))
+}
 const approvedPaintingGuides=approvedBlogData.map(article=>({
   ...article,
   image:asset(article.image_asset),
@@ -27,10 +42,13 @@ function normalizeArticle(article) {
   return {
     ...fallback,
     ...article,
+    title:repairDisplayCopy(article.title||fallback?.title),
+    excerpt:repairDisplayCopy(article.excerpt||fallback?.excerpt),
+    body:repairDisplayCopy(article.body||fallback?.body),
     image:mediaUrl(article.hero?.image,article.image||fallback?.image),
     imageAlt:article.hero?.image?.alt||article.imageAlt||fallback?.imageAlt||`${article.title} by Superior Plus Painting`,
     readTime:article.read_time||article.readTime||fallback?.readTime||'Practical guide',
-    sourceLabel:article.source_label||article.sourceLabel||fallback?.sourceLabel||'Superior Plus guide',
+    sourceLabel:publicSourceLabel,
   }
 }
 
@@ -55,7 +73,7 @@ export function PaintingGuidesPage() {
   },[cmsArticles])
   const image=mediaUrl(route?.hero?.image,asset('client/heroes/blog-house-hero.jpg'))
   return <PageLayout mainClassName="blog-main" title={route?.seo?.title||'Painting Blog for Melbourne Property Owners'} description={route?.seo?.description||'Melbourne painting articles about preparation, colour, interiors, exteriors, roofs, commercial projects and choosing a professional painter.'} image={mediaUrl(route?.seo?.social_image,image)} pageType="Blog" schemaData={{blogPost:articles.map(guide=>({'@type':'BlogPosting',headline:guide.title,url:`/blog/${guide.slug}`,datePublished:guide.published}))}}>
-    <PageHero eyebrow={route?.hero?.eyebrow||'Superior Plus Painting blog'} title={route?.hero?.title||'Practical painting advice'} accent={route?.hero?.accent||'for Melbourne properties.'} intro={route?.hero?.intro||'Explore client-approved articles for homeowners, property managers and businesses planning a repaint, repair or property refresh.'} image={image} imageAlt={route?.hero?.image?.alt||'Professional painting team refreshing the exterior of a residential home'} tone="gold"/>
+    <PageHero eyebrow={route?.hero?.eyebrow||'Superior Plus Painting blog'} title={route?.hero?.title||'Practical painting advice'} accent={route?.hero?.accent||'for Melbourne properties.'} intro={route?.hero?.intro||'Explore practical articles for homeowners, property managers and businesses planning a repaint, repair or property refresh.'} image={image} imageAlt={route?.hero?.image?.alt||'Professional painting team refreshing the exterior of a residential home'} tone="gold"/>
     <TrustStrip/>
     <section className="inner-section guide-directory"><div className="container"><SectionIntro eyebrow={`${articles.length} practical articles`} title="Select a topic" accent="and plan with confidence." text="Choose a guide below. New articles added in WordPress automatically use this same approved layout."/><div className="guide-grid blog-grid">{articles.map((guide,index)=><GuideCard guide={guide} index={index} key={guide.slug}/>)}</div></div></section>
     <section className="guide-help-band"><div className="container"><Reveal><BookOpen/><span>Advice for your property</span><h2>Useful information,<br/><em>grounded in real work.</em></h2></Reveal><Reveal delay={.1}><p>These articles help you understand the process, but the right coating system still depends on the existing surface, exposure, access and preparation identified during an inspection.</p></Reveal></div><Divider color="#fff" variant="drip"/></section>
@@ -75,7 +93,7 @@ function ArticleBlock({block}) {
 function prepareCmsBody(body='') {
   const headings=[]
   let index=0
-  const html=String(body).replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi,(match,attributes,label)=>{
+  const html=repairDisplayCopy(body).replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi,(match,attributes,label)=>{
     index+=1
     const text=label.replace(/<[^>]+>/g,'').trim()
     headings.push(text)
@@ -86,7 +104,7 @@ function prepareCmsBody(body='') {
 
 function splitApprovedBody(body='') {
   const sections=[]
-  String(body).replace(/<h2[^>]*>([\s\S]*?)<\/h2>([\s\S]*?)(?=<h2[^>]*>|$)/gi,(_match,label,content)=>{
+  repairDisplayCopy(body).replace(/<h2[^>]*>([\s\S]*?)<\/h2>([\s\S]*?)(?=<h2[^>]*>|$)/gi,(_match,label,content)=>{
     sections.push({title:label.replace(/<[^>]+>/g,'').trim(),content})
     return _match
   })
@@ -122,7 +140,7 @@ export function PaintingGuidePage() {
     <PageHero eyebrow={cms?.eyebrow||article.eyebrow} title={cms?.hero?.title||article.title} accent={cms?.hero?.accent||'A practical Melbourne article.'} intro={cms?.hero?.intro||article.excerpt} image={heroImage} imageAlt={cms?.hero?.image?.alt||article.imageAlt} tone="green"/>
     <TrustStrip/>
     <article className="guide-article"><div className="container guide-article-layout">
-      <aside><div><BookOpen/><small>{cms?.source_label||article.sourceLabel}</small><strong>{cms?.read_time||article.readTime}</strong></div>{sections.length>0&&<nav aria-label="On this page">{sections.map((title,index)=><button type="button" onClick={()=>scrollToSection(index)} key={`${title}-${index}`}><span>{String(index+1).padStart(2,'0')}</span>{title}</button>)}</nav>}</aside>
+      <aside><div><BookOpen/><small>{publicSourceLabel}</small><strong>{cms?.read_time||article.readTime}</strong></div>{sections.length>0&&<nav aria-label="On this page">{sections.map((title,index)=><button type="button" onClick={()=>scrollToSection(index)} key={`${title}-${index}`}><span>{String(index+1).padStart(2,'0')}</span>{repairDisplayCopy(title)}</button>)}</nav>}</aside>
       <div className="guide-article-body">
         {cms?<div className="cms-article-content" dangerouslySetInnerHTML={{__html:prepared.html}}/>:article.body?approvedSections.map((section,index)=><section id={`guide-section-${index+1}`} key={`${section.title}-${index}`}><span>{String(index+1).padStart(2,'0')}</span><h2>{section.title}</h2><div className="cms-article-content" dangerouslySetInnerHTML={{__html:section.content}}/></section>):(article.sections||[]).map(([title,blocks],index)=><section id={`guide-section-${index+1}`} key={title}><span>{String(index+1).padStart(2,'0')}</span><h2>{title}</h2>{blocks.map((block,blockIndex)=><ArticleBlock block={block} key={typeof block==='string'?block:`${title}-${block.heading||blockIndex}`}/>)}</section>)}
         {references.length>0&&<section className="guide-references"><span>Sources</span><h2>Official references</h2><p>Product guidance and colour information can change. Review current manufacturer information for the selected system.</p><div>{references.map(reference=><a href={reference.url} target="_blank" rel="noopener noreferrer" key={reference.url}>{reference.label}<ArrowRight/></a>)}</div></section>}

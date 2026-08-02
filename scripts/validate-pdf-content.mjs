@@ -43,7 +43,7 @@ for(const [index,article] of blogs.entries()){
     check(article.content.length>2200,`${article.slug}: expanded SEO-brief article is unexpectedly short`)
     check(article.seo_keywords?.length>0,`${article.slug}: original SEO keywords are missing`)
     check(article.outline_topics?.length>0,`${article.slug}: original outline topics are missing`)
-    check(article.source_label==='Client SEO brief · Expanded',`${article.slug}: expanded-source label is missing`)
+    check(article.source_label==='Superior Plus Painting guide',`${article.slug}: public source label is not branded`)
   }
 }
 

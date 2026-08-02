@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.2.1
+Stable tag: 2.3.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.

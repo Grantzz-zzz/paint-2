@@ -50,7 +50,7 @@ function FlipFeatureGrid({items,className=''}) {
   })}</div>
 }
 
-function ApprovedSections({sections,eyebrow='Client-approved information'}) {
+function ApprovedSections({sections,eyebrow='Helpful information'}) {
   return <>{sections.map((section,index)=><section className={`inner-section approved-copy-section ${index%2?'cream':''}`} key={section.heading}><div className="container"><SectionIntro eyebrow={eyebrow} title={section.heading} accent=""/><Reveal className="approved-copy-body"><div>{section.body?<p>{section.body}</p>:null}</div>{section.items?.length?<ul>{section.items.map(item=><li key={item}><Check/>{item}</li>)}</ul>:null}</Reveal></div></section>)}</>
 }
 

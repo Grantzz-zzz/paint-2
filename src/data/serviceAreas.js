@@ -21,7 +21,7 @@ const pdfAreaGroups = [
   {
     id:'south-eastern',
     title:'South Eastern Suburbs',
-    description:'Interior, exterior and property painting for the south-eastern suburbs named in the client-approved service-area document.',
+    description:'Interior, exterior and property painting for Melbourne’s south-eastern suburbs.',
     names:['Malvern','Malvern East','Glen Iris','Burwood East','Wheelers Hill','Hughesdale','Oakleigh East','Oakleigh South','Clayton South'],
   },
   {
