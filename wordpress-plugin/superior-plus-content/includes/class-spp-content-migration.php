@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.1.2';
+	const VERSION = '2.2.0';
 
 	private $types;
 	private $report = array();
@@ -168,6 +168,8 @@ class SPP_Content_Migration {
 
 	private function migrate_pages() {
 		$pages = $this->page_dataset();
+		$approved_manifest = json_decode( file_get_contents( SPP_CONTENT_PATH . 'data/client-approved-content.json' ), true );
+		$approved_documents = isset( $approved_manifest['documents'] ) ? $approved_manifest['documents'] : array();
 		$ids = array();
 		foreach ( $pages as $slug => $data ) {
 			$post = get_page_by_path( $slug, OBJECT, 'page' );
@@ -197,6 +199,54 @@ class SPP_Content_Migration {
 			$ids[ $slug ] = (int) $post->ID;
 			$meta = $data['meta'];
 			$meta['spp_template_key'] = $data['template'];
+			$document_key = 'our-process' === $slug ? 'process' : ( 'additional-services' === $slug ? 'additional_services' : $slug );
+			if ( isset( $approved_documents[ $document_key ] ) ) {
+				$document = $approved_documents[ $document_key ];
+				$meta['spp_eyebrow'] = $document['title'];
+				$meta['spp_hero_title'] = isset( $document['headline'] ) ? $document['headline'] : $document['title'];
+				$meta['spp_accent'] = '';
+				if ( ! empty( $document['sections'][0]['body'] ) ) {
+					$meta['spp_hero_intro'] = $document['sections'][0]['body'];
+				}
+				$meta['spp_copy_source_version'] = 'pdf-verbatim-2026-08-01';
+			}
+			if ( 'about' === $slug && isset( $approved_documents['about'] ) ) {
+				$sections = array_slice( $approved_documents['about']['sections'], 1 );
+				$meta['spp_content_sections'] = array_map( function ( $section ) {
+					$body = isset( $section['body'] ) ? $section['body'] : '';
+					if ( ! empty( $section['items'] ) ) { $body .= ( $body ? "\n" : '' ) . implode( "\n", $section['items'] ); }
+					return array( 'title' => $section['heading'], 'text' => $body );
+				}, $sections );
+			}
+			if ( 'additional-services' === $slug && isset( $approved_documents['additional_services'] ) ) {
+				$sections = $approved_documents['additional_services']['sections'];
+				$meta['spp_additional_services'] = array_map( function ( $section ) { return array( 'title' => $section['heading'], 'text' => $section['body'] ); }, array_slice( $sections, 1, 8 ) );
+				$meta['spp_content_sections'] = array_map( function ( $section ) { return array( 'title' => $section['heading'], 'text' => $section['body'] ); }, array_slice( $sections, 9 ) );
+			}
+			if ( 'our-process' === $slug && isset( $approved_documents['process'] ) ) {
+				$document = $approved_documents['process'];
+				$meta['spp_master_process'] = array_map( function ( $step ) { return array( 'title' => $step['heading'], 'text' => $step['body'] ); }, $document['steps'] );
+				$why = $document['sections'][7];
+				$ready = $document['sections'][8];
+				$meta['spp_content_sections'] = array(
+					array( 'title' => $why['heading'], 'text' => implode( "\n", $why['items'] ) ),
+					array( 'title' => $ready['heading'], 'text' => $ready['body'] ),
+				);
+			}
+			if ( 'contact' === $slug && isset( $approved_documents['contact'] ) ) {
+				$document = $approved_documents['contact'];
+				$meta['spp_eyebrow'] = '';
+				$meta['spp_hero_title'] = $document['title'];
+				$meta['spp_accent'] = '';
+				$meta['spp_hero_intro'] = '';
+				$meta['spp_service_options'] = $document['service_options'];
+				$meta['spp_property_options'] = $document['property_options'];
+				$meta['spp_contact_form_fields'] = array(
+					array( 'title' => 'Name', 'text' => 'Your name' ), array( 'title' => 'Phone Number', 'text' => '04xx xxx xxx' ),
+					array( 'title' => 'Email Address', 'text' => 'you@email.com' ), array( 'title' => 'Suburb', 'text' => 'Your suburb' ),
+					array( 'title' => 'Property Address', 'text' => 'Street address' ), array( 'title' => 'Project Details', 'text' => 'What would you like painted or repaired?' ),
+				);
+			}
 			if ( ! empty( $data['hero_asset'] ) ) {
 				$meta['spp_hero_image_id'] = $this->import_asset( $data['hero_asset'], $data['title'] . ' hero' );
 			}
@@ -207,6 +257,11 @@ class SPP_Content_Migration {
 				$meta['spp_about_archive_image_id'] = $this->import_asset( $data['archive_asset'], 'Superior Plus company archive' );
 			}
 			$this->write_meta( $post->ID, 'page:' . $slug, $meta, $is_new );
+			if ( isset( $approved_documents[ $document_key ] ) ) {
+				foreach ( array( 'spp_copy_source_version', 'spp_eyebrow', 'spp_hero_title', 'spp_accent', 'spp_hero_intro', 'spp_content_sections', 'spp_additional_services', 'spp_master_process', 'spp_service_options', 'spp_property_options', 'spp_contact_form_fields' ) as $approved_key ) {
+					if ( array_key_exists( $approved_key, $meta ) ) { update_post_meta( $post->ID, $approved_key, $meta[ $approved_key ] ); }
+				}
+			}
 		}
 		if ( isset( $ids['home'] ) ) {
 			update_option( 'show_on_front', 'page' );
@@ -233,6 +288,7 @@ class SPP_Content_Migration {
 				$this->report['created'][] = $key;
 			}
 			$ids[] = (int) $post->ID;
+			wp_update_post( array( 'ID' => $post->ID, 'post_title' => $item[0], 'post_content' => $item[1], 'menu_order' => $index + 1 ) );
 			$this->claim_record( $post->ID, $key, array( 'question' => $item[0], 'answer' => $item[1] ) );
 		}
 		return $ids;
@@ -240,10 +296,10 @@ class SPP_Content_Migration {
 
 	private function migrate_testimonials() {
 		$items = array(
-			array( 'Professional & reliable', 'Superior Plus Painting completed the work on time with excellent attention to detail. The finish was outstanding, and the team kept everything clean throughout the project.' ),
-			array( 'Excellent quality', 'We were impressed with the preparation and workmanship. The painters were friendly, punctual and delivered exactly what they promised. Our home looks fantastic.' ),
-			array( 'Great communication', 'From the first quote to the final inspection, the communication was excellent. The project was completed on schedule and the quality exceeded our expectations.' ),
-			array( 'Value for money', 'We received honest advice, competitive pricing and a high-quality finish. We would definitely use Superior Plus Painting again.' ),
+			array( 'Professional & Reliable', 'Superior Plus Painting completed the work on time with excellent attention to detail. The finish was outstanding, and the team kept everything clean throughout the project. Highly recommended.' ),
+			array( 'Excellent Quality', 'We were impressed with the preparation and workmanship. The painters were friendly, punctual and delivered exactly what they promised. Our home looks fantastic.' ),
+			array( 'Great Communication', 'From the first quote to the final inspection, the communication was excellent. The project was completed on schedule and the quality exceeded our expectations.' ),
+			array( 'Value for Money', 'We received honest advice, competitive pricing and a high-quality finish. We would definitely use Superior Plus Painting again and recommend them to friends and family.' ),
 		);
 		$ids = array();
 		foreach ( $items as $index => $item ) {
@@ -305,6 +361,8 @@ class SPP_Content_Migration {
 	}
 
 	private function migrate_services( $project_ids ) {
+		$approved_manifest = json_decode( file_get_contents( SPP_CONTENT_PATH . 'data/client-approved-content.json' ), true );
+		$approved_services = isset( $approved_manifest['services'] ) ? $approved_manifest['services'] : array();
 		$category_map = array(
 			'residential-painting-melbourne' => 'residential', 'commercial-painting-melbourne' => 'commercial',
 			'interior-painting-melbourne' => 'interior', 'exterior-painting-melbourne' => 'exterior',
@@ -325,6 +383,28 @@ class SPP_Content_Migration {
 		);
 		$ids = array();
 		foreach ( spp_default_services() as $slug => $service ) {
+			$approved = isset( $approved_services[ $slug ] ) ? $approved_services[ $slug ] : array();
+			$item_section = array();
+			$step_section = array();
+			$cta_section  = array();
+			$document_sections = array();
+			if ( $approved ) {
+				foreach ( $approved['sections'] as $section_index => $section ) {
+					if ( ! empty( $section['items'] ) && ! $item_section ) {
+						$item_section = $section;
+					} elseif ( ! empty( $section['steps'] ) && ! $step_section ) {
+						$step_section = $section;
+					} elseif ( $section_index === count( $approved['sections'] ) - 1 ) {
+						$cta_section = $section;
+					} else {
+						$body = ! empty( $section['paragraphs'] ) ? implode( "\n\n", $section['paragraphs'] ) : '';
+						if ( ! empty( $section['items'] ) ) {
+							$body .= ( $body ? "\n\n" : '' ) . implode( "\n", $section['items'] );
+						}
+						$document_sections[] = array( 'title' => $section['heading'], 'text' => $body );
+					}
+				}
+			}
 			$menu_order = count( $ids ) + 1;
 			$post = get_page_by_path( $slug, OBJECT, 'spp_service' );
 			$is_new = ! $post;
@@ -360,7 +440,28 @@ class SPP_Content_Migration {
 				'spp_closing_cta_text' => '',
 				'spp_closing_cta_label' => 'Request my free quote', 'spp_closing_cta_url' => '/contact',
 			);
+			if ( $approved ) {
+				$meta['spp_copy_source_version'] = 'pdf-verbatim-2026-08-01';
+				$meta['spp_eyebrow'] = $approved['document_title'];
+				$meta['spp_hero_title'] = $approved['headline'];
+				$meta['spp_accent'] = '';
+				$meta['spp_hero_intro'] = $approved['intro'];
+				$meta['spp_scope_title'] = isset( $item_section['heading'] ) ? $item_section['heading'] : '';
+				$meta['spp_scope'] = isset( $item_section['items'] ) ? $item_section['items'] : array();
+				$meta['spp_process'] = isset( $step_section['steps'] ) ? $step_section['steps'] : array();
+				$meta['spp_process_title'] = isset( $step_section['heading'] ) ? $step_section['heading'] : '';
+				$meta['spp_document_sections'] = $document_sections;
+				$meta['spp_closing_cta_title'] = isset( $cta_section['heading'] ) ? $cta_section['heading'] : '';
+				$meta['spp_closing_cta_text'] = ! empty( $cta_section['paragraphs'] ) ? implode( ' ', $cta_section['paragraphs'] ) : '';
+				$meta['spp_seo_title'] = $approved['document_title'];
+				$meta['spp_seo_description'] = $approved['intro'];
+			}
 			$this->write_meta( $post->ID, 'service:' . $slug, $meta, $is_new );
+			if ( $approved ) {
+				foreach ( array( 'spp_copy_source_version', 'spp_eyebrow', 'spp_hero_title', 'spp_accent', 'spp_hero_intro', 'spp_scope_title', 'spp_scope', 'spp_process', 'spp_process_title', 'spp_document_sections', 'spp_closing_cta_title', 'spp_closing_cta_text', 'spp_seo_title', 'spp_seo_description' ) as $approved_key ) {
+					update_post_meta( $post->ID, $approved_key, $meta[ $approved_key ] );
+				}
+			}
 			if ( $hero ) {
 				set_post_thumbnail( $post->ID, $hero );
 			}
@@ -412,7 +513,7 @@ class SPP_Content_Migration {
 					continue;
 				}
 				$post = get_post( $id );
-			} elseif ( ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) && get_post_meta( $post->ID, '_spp_source_key', true ) === $key ) {
+			} elseif ( get_post_meta( $post->ID, '_spp_source_key', true ) === $key ) {
 				$postarr['ID'] = $post->ID;
 				wp_update_post( $postarr );
 			}
@@ -431,11 +532,14 @@ class SPP_Content_Migration {
 				$post->ID,
 				$key,
 				array(
+					'spp_copy_source_version' => 'pdf-verbatim-2026-08-01',
 					'spp_template_key'          => 'article',
 					'spp_article_category'      => $item['category'],
 					'spp_article_eyebrow'       => $item['eyebrow'],
 					'spp_article_read_time'     => $item['read_time'],
 					'spp_article_source_label'  => $item['source_label'],
+					'spp_article_seo_keywords'  => isset( $item['seo_keywords'] ) ? $item['seo_keywords'] : array(),
+					'spp_article_outline_topics' => isset( $item['outline_topics'] ) ? $item['outline_topics'] : array(),
 					'spp_article_takeaways'     => $item['takeaways'],
 					'spp_article_references'    => $references,
 					'spp_related_service_ids'   => $related,
@@ -448,6 +552,16 @@ class SPP_Content_Migration {
 				),
 				$is_new
 			);
+			update_post_meta( $post->ID, 'spp_copy_source_version', 'pdf-verbatim-2026-08-01' );
+			update_post_meta( $post->ID, 'spp_article_read_time', $item['read_time'] );
+			update_post_meta( $post->ID, 'spp_article_source_label', $item['source_label'] );
+			update_post_meta( $post->ID, 'spp_article_seo_keywords', isset( $item['seo_keywords'] ) ? $item['seo_keywords'] : array() );
+			update_post_meta( $post->ID, 'spp_article_outline_topics', isset( $item['outline_topics'] ) ? $item['outline_topics'] : array() );
+			update_post_meta( $post->ID, 'spp_article_takeaways', $item['takeaways'] );
+			update_post_meta( $post->ID, 'spp_hero_title', $item['title'] );
+			update_post_meta( $post->ID, 'spp_hero_intro', $item['excerpt'] );
+			update_post_meta( $post->ID, 'spp_seo_title', $item['title'] );
+			update_post_meta( $post->ID, 'spp_seo_description', $item['excerpt'] );
 			if ( $image_id ) {
 				set_post_thumbnail( $post->ID, $image_id );
 			}
@@ -771,7 +885,7 @@ class SPP_Content_Migration {
 			),
 			'services' => array(
 				'title' => 'Services', 'template' => 'services_directory', 'excerpt' => 'Painting, preparation, repair and property improvement services.',
-				'hero_asset' => 'client/projects/commercial/commercial-02.webp',
+				'hero_asset' => 'client/projects/commercial/commercial-12.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Everything under one careful eye', 'spp_hero_title' => 'Painting & property services', 'spp_accent' => 'made beautifully simple.',
 					'spp_hero_intro' => 'From complete residential and commercial painting to the preparation and repairs behind a lasting finish, our team can coordinate more of your project from one place.',

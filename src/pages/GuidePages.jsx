@@ -8,11 +8,22 @@ import { serviceList } from '../data/siteData'
 import { mediaUrl, useCollection, useRouteContent } from '../content/ContentProvider'
 import { asset } from '../utils/assets'
 import NotFoundPage from './NotFoundPage'
+import approvedBlogData from '../data/clientApprovedBlogs.json'
 
 const emptyArticles=[]
+const approvedPaintingGuides=approvedBlogData.map(article=>({
+  ...article,
+  image:asset(article.image_asset),
+  imageAlt:article.image_alt,
+  readTime:article.read_time,
+  sourceLabel:article.source_label,
+  relatedServices:article.related_services,
+  body:article.content,
+}))
+const approvedGuideBySlug=Object.fromEntries(approvedPaintingGuides.map(article=>[article.slug,article]))
 
 function normalizeArticle(article) {
-  const fallback=paintingGuideBySlug[article.slug]
+  const fallback=approvedGuideBySlug[article.slug]||paintingGuideBySlug[article.slug]
   return {
     ...fallback,
     ...article,
@@ -40,7 +51,7 @@ export function PaintingGuidesPage() {
   const articles=useMemo(()=>{
     const cms=(cmsArticles||[]).map(normalizeArticle)
     const cmsSlugs=new Set(cms.map(item=>item.slug))
-    return [...cms,...paintingGuides.filter(item=>!cmsSlugs.has(item.slug))]
+    return [...cms,...approvedPaintingGuides.filter(item=>!cmsSlugs.has(item.slug))]
   },[cmsArticles])
   const image=mediaUrl(route?.hero?.image,asset('client/heroes/blog-house-hero.jpg'))
   return <PageLayout mainClassName="blog-main" title={route?.seo?.title||'Painting Blog for Melbourne Property Owners'} description={route?.seo?.description||'Melbourne painting articles about preparation, colour, interiors, exteriors, roofs, commercial projects and choosing a professional painter.'} image={mediaUrl(route?.seo?.social_image,image)} pageType="Blog" schemaData={{blogPost:articles.map(guide=>({'@type':'BlogPosting',headline:guide.title,url:`/blog/${guide.slug}`,datePublished:guide.published}))}}>
@@ -73,23 +84,33 @@ function prepareCmsBody(body='') {
   return {html,headings}
 }
 
+function splitApprovedBody(body='') {
+  const sections=[]
+  String(body).replace(/<h2[^>]*>([\s\S]*?)<\/h2>([\s\S]*?)(?=<h2[^>]*>|$)/gi,(_match,label,content)=>{
+    sections.push({title:label.replace(/<[^>]+>/g,'').trim(),content})
+    return _match
+  })
+  return sections
+}
+
 export function PaintingGuidePage() {
   const {slug}=useParams()
   const navigate=useNavigate()
-  const fallback=paintingGuideBySlug[slug]
+  const fallback=approvedGuideBySlug[slug]||paintingGuideBySlug[slug]
   const {data:route,status}=useRouteContent(`/blog/${slug}`)
   const {data:cmsArticles}=useCollection('articles',emptyArticles)
   const cms=route?.template_key==='article'?route.content:null
   const article=cms?normalizeArticle(cms):fallback
-  const prepared=useMemo(()=>prepareCmsBody(cms?.body),[cms?.body])
+  const prepared=useMemo(()=>prepareCmsBody(cms?.body||article?.body),[cms?.body,article?.body])
+  const approvedSections=useMemo(()=>splitApprovedBody(article?.body),[article?.body])
   const allArticles=useMemo(()=>{
     const normalized=(cmsArticles||[]).map(normalizeArticle)
     const slugs=new Set(normalized.map(item=>item.slug))
-    return [...normalized,...paintingGuides.filter(item=>!slugs.has(item.slug))]
+    return [...normalized,...approvedPaintingGuides.filter(item=>!slugs.has(item.slug))]
   },[cmsArticles])
   if(!article&&status==='loading')return <PageLayout title="Loading article" description="Loading the latest article."><section className="inner-section"><div className="container"><p>Loading article…</p></div></section></PageLayout>
   if(!article)return <NotFoundPage/>
-  const sections=cms?prepared.headings:(article.sections||[]).map(([title])=>title)
+  const sections=cms?prepared.headings:article.body?approvedSections.map(section=>section.title):(article.sections||[]).map(([title])=>title)
   const heroImage=mediaUrl(cms?.hero?.image,article.image)
   const related=cms?.related_services?.length?cms.related_services:(article.relatedServices||[]).map(serviceSlug=>serviceList.find(service=>service.slug===serviceSlug)).filter(Boolean)
   const currentIndex=Math.max(0,allArticles.findIndex(guide=>guide.slug===slug))
@@ -97,13 +118,13 @@ export function PaintingGuidePage() {
   const scrollToSection=index=>document.getElementById(`guide-section-${index+1}`)?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})
   const takeaways=cms?.takeaways||article.takeaways||[]
   const references=cms?.references||article.references||[]
-  return <PageLayout mainClassName="blog-main blog-article-main" title={route?.seo?.title||article.title} description={route?.seo?.description||article.excerpt} image={mediaUrl(route?.seo?.social_image,heroImage)} pageType="BlogPosting" schemaData={{headline:article.title,datePublished:article.published,dateModified:article.modified||article.published,author:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},publisher:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},about:'Professional painting in Melbourne'}}>
+  return <PageLayout mainClassName="blog-main blog-article-main" title={route?.seo?.title||article.title} description={route?.seo?.description||article.excerpt} image={mediaUrl(route?.seo?.social_image,heroImage)} pageType="BlogPosting" schemaData={{headline:article.title,datePublished:article.published,dateModified:article.modified||article.published,keywords:article.seo_keywords?.join(', '),author:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},publisher:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},about:'Professional painting in Melbourne'}}>
     <PageHero eyebrow={cms?.eyebrow||article.eyebrow} title={cms?.hero?.title||article.title} accent={cms?.hero?.accent||'A practical Melbourne article.'} intro={cms?.hero?.intro||article.excerpt} image={heroImage} imageAlt={cms?.hero?.image?.alt||article.imageAlt} tone="green"/>
     <TrustStrip/>
     <article className="guide-article"><div className="container guide-article-layout">
       <aside><div><BookOpen/><small>{cms?.source_label||article.sourceLabel}</small><strong>{cms?.read_time||article.readTime}</strong></div>{sections.length>0&&<nav aria-label="On this page">{sections.map((title,index)=><button type="button" onClick={()=>scrollToSection(index)} key={`${title}-${index}`}><span>{String(index+1).padStart(2,'0')}</span>{title}</button>)}</nav>}</aside>
       <div className="guide-article-body">
-        {cms?<div className="cms-article-content" dangerouslySetInnerHTML={{__html:prepared.html}}/>:(article.sections||[]).map(([title,blocks],index)=><section id={`guide-section-${index+1}`} key={title}><span>{String(index+1).padStart(2,'0')}</span><h2>{title}</h2>{blocks.map((block,blockIndex)=><ArticleBlock block={block} key={typeof block==='string'?block:`${title}-${block.heading||blockIndex}`}/>)}</section>)}
+        {cms?<div className="cms-article-content" dangerouslySetInnerHTML={{__html:prepared.html}}/>:article.body?approvedSections.map((section,index)=><section id={`guide-section-${index+1}`} key={`${section.title}-${index}`}><span>{String(index+1).padStart(2,'0')}</span><h2>{section.title}</h2><div className="cms-article-content" dangerouslySetInnerHTML={{__html:section.content}}/></section>):(article.sections||[]).map(([title,blocks],index)=><section id={`guide-section-${index+1}`} key={title}><span>{String(index+1).padStart(2,'0')}</span><h2>{title}</h2>{blocks.map((block,blockIndex)=><ArticleBlock block={block} key={typeof block==='string'?block:`${title}-${block.heading||blockIndex}`}/>)}</section>)}
         {references.length>0&&<section className="guide-references"><span>Sources</span><h2>Official references</h2><p>Product guidance and colour information can change. Review current manufacturer information for the selected system.</p><div>{references.map(reference=><a href={reference.url} target="_blank" rel="noopener noreferrer" key={reference.url}>{reference.label}<ArrowRight/></a>)}</div></section>}
         {takeaways.length>0&&<section className="guide-takeaways"><PaintRoller/><h2>Key takeaways</h2>{takeaways.map(item=><p key={item}><Check/>{item}</p>)}</section>}
       </div>

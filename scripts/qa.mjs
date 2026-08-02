@@ -13,19 +13,19 @@ const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 
 const routes = [
   ['/', 'Professional painting services in Melbourne'],
-  ['/about', 'Care in every coat'],
+  ['/about', 'Your Trusted Painting Professionals in Melbourne'],
   ['/services', 'Painting & property services'],
-  ['/additional-services', 'Additional property services'],
-  ['/services/residential-painting-melbourne', 'Residential Painting'],
-  ['/services/commercial-painting-melbourne', 'Commercial Painting'],
-  ['/services/interior-painting-melbourne', 'Interior Painting'],
-  ['/services/exterior-painting-melbourne', 'Exterior Painting'],
-  ['/services/roof-painting-melbourne', 'Roof Painting'],
-  ['/services/fence-painting-melbourne', 'Fence Painting'],
-  ['/services/deck-painting-staining-melbourne', 'Deck Painting'],
-  ['/services/wallpaper-removal-melbourne', 'Wallpaper Removal'],
-  ['/services/plaster-repairs-melbourne', 'Plaster repair'],
-  ['/our-process', 'Our painting process'],
+  ['/additional-services', 'Complete Property Improvement Services in Melbourne'],
+  ['/services/residential-painting-melbourne', 'Trusted Residential Painters in Melbourne'],
+  ['/services/commercial-painting-melbourne', 'Professional Commercial Painting Services in Melbourne'],
+  ['/services/interior-painting-melbourne', 'Professional Interior Painting Services in Melbourne'],
+  ['/services/exterior-painting-melbourne', 'Professional Exterior Painting Services in Melbourne'],
+  ['/services/roof-painting-melbourne', 'Professional Roof Painting Services in Melbourne'],
+  ['/services/fence-painting-melbourne', 'Professional Fence Painting Services in Melbourne'],
+  ['/services/deck-painting-staining-melbourne', 'Professional Deck Painting & Staining Services in Melbourne'],
+  ['/services/wallpaper-removal-melbourne', 'Professional Wallpaper Removal Services in Melbourne'],
+  ['/services/plaster-repairs-melbourne', 'Professional Plaster Repairs in Melbourne'],
+  ['/our-process', 'A Proven Process for Exceptional Results'],
   ['/faqs', 'Frequently asked questions'],
   ['/contact', 'Get in touch'],
   ['/gallery', 'Every project'],
@@ -219,13 +219,13 @@ try {
         check(Math.min(...descriptionSizes)>=22, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
       }
       if(route.startsWith('/services/')){
-        check(result.h1.toLowerCase().includes('service'),`${label}: service headline is missing the requested services keyword`)
-        check(await page.locator('.inner-areas .inner-suburbs span').count()===12,`${label}: local suburb selection is not limited to 12 areas`)
+        check((await page.locator('.approved-copy-section').count())>=2,`${label}: client-approved PDF sections are incomplete`)
+        check((await page.locator('.closing-cta').innerText()).toLowerCase().includes('quote'),`${label}: client-approved quote section is missing`)
       }
       if(route==='/additional-services'){
         check(await page.locator('.additional-services-main').count()===1,`${label}: additional services is not using its standalone page treatment`)
-        check(await page.locator('.additional-service-grid article').count()===10,`${label}: additional services directory is incomplete`)
-        check(await page.locator('.additional-service-icon svg').count()===10,`${label}: additional services cards are missing professional icon treatments`)
+        check(await page.locator('.additional-service-grid article').count()===8,`${label}: PDF-approved additional services directory is incomplete`)
+        check(await page.locator('.additional-service-icon svg').count()===8,`${label}: additional services cards are missing professional icon treatments`)
       }
       if(route==='/service-areas'){
         const areaNames=await page.locator('.area-directory-card h3').allTextContents()
@@ -241,7 +241,7 @@ try {
         }
       }
       if(route==='/blog'){
-        check(paintingGuides.length===19, `${label}: expected the four completed blogs plus 15 expanded SEO outlines`)
+        check(paintingGuides.length===19, `${label}: expected the four completed blogs plus 15 expanded client SEO briefs`)
         check(await page.locator('.blog-grid .guide-card').count()===paintingGuides.length, `${label}: dedicated blog does not show all ${paintingGuides.length} articles`)
         check(await page.getByRole('button',{name:/Read article/i}).count()===paintingGuides.length, `${label}: blog articles are not independently selectable`)
         check(await page.locator('.nav-links .nav-main-link').filter({hasText:'Blog'}).count()===1, `${label}: Blog is missing from the desktop navigation`)
@@ -257,8 +257,10 @@ try {
       if(route.startsWith('/blog/')){
         const articleText=await page.locator('.guide-article-body').innerText()
         const guide=paintingGuides.find(item=>item.slug===route.split('/').pop())
-        check(articleText.includes(guide.sections[0][0]), `${label}: PDF-approved article content marker is missing`)
-        check(await page.locator('.guide-article-body>section').count()>=6, `${label}: article content is unexpectedly incomplete`)
+        const guideIndex=paintingGuides.findIndex(item=>item.slug===route.split('/').pop())
+        const expectedMarker=guide.sections[0][0]
+        check(articleText.includes(expectedMarker), `${label}: PDF-approved article content marker is missing`)
+        check(await page.locator('.guide-article-body>section').count()>=(guideIndex<4?6:4), `${label}: client-supplied or expanded article is incomplete`)
         check(await page.locator('.blog-more .guide-card').count()===6, `${label}: article does not offer six alternative Blog posts`)
         check(await page.locator('.blog-more').getByRole('button',{name:/Read article/i}).count()===6, `${label}: alternative Blog posts are not directly selectable`)
         check(await page.locator('.guide-article aside nav button').count()===await page.locator('.guide-article-body>section:not(.guide-takeaways):not(.guide-references)').count(), `${label}: numbered article navigation is incomplete`)
@@ -461,12 +463,14 @@ try {
   check(await faqReviews.count()===1,'FAQs: Google review section is missing')
   check(await faqReviews.locator('.google-review-card').count()===1,'FAQs: Google review carousel card is missing')
   check((await faqReviews.locator('.slider-controls>span').textContent()).includes('/ 07'),'FAQs: carousel does not contain the seven verified Google reviews')
-  check(await page.locator('.faq-google-reviews + .faq-transformations').count()===1,'FAQs: Google reviews are not immediately before the before-and-after archive')
+  check(await page.locator('.faq-google-reviews + .client-testimonial-archive').count()===1,'FAQs: supplied testimonial archive is not placed after Google reviews')
+  check(await page.locator('.client-testimonial-grid article').count()===4,'FAQs: four client-supplied PDF testimonials are not present')
+  check(await page.locator('.client-testimonial-archive ~ .faq-transformations').count()===1,'FAQs: before-and-after archive is not placed after the review content')
   check(await page.locator('.comparison-board-grid figure').count()>=35,'FAQs: expanded before-and-after archive is incomplete')
   check(await page.locator('.comparison-board-grid img[src*="roof-before-after"]').count()===1,'FAQs: roof before-and-after comparison is missing')
 
   await page.goto(`${origin}#/services/residential-painting-melbourne`, { waitUntil: 'domcontentloaded' })
-  check((await page.locator('.page-hero-copy h1').textContent()).startsWith('Residential painting services'),'service hero: residential headline was not updated')
+  check((await page.locator('.page-hero-copy h1').textContent()).startsWith('Trusted Residential Painters in Melbourne'),'service hero: residential headline does not match the client PDF')
   const residentialReadability=await page.evaluate(()=>({
     scopeItems:document.querySelectorAll('.scope-item').length,
     scopeIcons:document.querySelectorAll('.scope-item .scope-icon svg').length,
@@ -476,7 +480,8 @@ try {
   check(residentialReadability.scopeIcons===residentialReadability.scopeItems&&residentialReadability.scopeIcons>0,'service scope: painting icons are missing')
   check(residentialReadability.scopeType>=16,'service scope: card text is still too small')
   check(residentialReadability.processType>=16,'service process: step text is still too small')
-  const residentialLocalAreas=await page.locator('.inner-areas .inner-suburbs span').allTextContents()
+  const residentialAreaCopy=await page.locator('main').innerText()
+  check(residentialAreaCopy.includes('We proudly service Melbourne including Chadstone, Mount Waverley, Glen Waverley, Oakleigh, Mulgrave, Clayton, Dandenong, Noble Park, Berwick, Narre Warren, Endeavour Hills and surrounding suburbs.'),'service local areas: exact PDF paragraph is missing')
   const residentialHero=await page.locator('.page-hero-visual img').evaluate(image=>({src:image.getAttribute('src'),position:getComputedStyle(image).objectPosition}))
   check(residentialHero.src.includes('/new-batch/'), `service hero: residential page is not using the new client batch (${JSON.stringify(residentialHero)})`)
   check(residentialHero.position!=='50% 50%', `service hero: focal position was not intentionally set (${JSON.stringify(residentialHero)})`)
@@ -487,8 +492,7 @@ try {
   await page.goto(`${origin}#/services/roof-painting-melbourne`, { waitUntil: 'domcontentloaded' })
   const roofHeroSource=await page.locator('.page-hero-visual img').getAttribute('src')
   check(roofHeroSource?.includes('/roof-spray-coating.webp'), `roof service hero: expected the new roof-spraying photo, found ${roofHeroSource}`)
-  const roofLocalAreas=await page.locator('.inner-areas .inner-suburbs span').allTextContents()
-  check(residentialLocalAreas.join('|')!==roofLocalAreas.join('|'),'service local areas: Residential and Roof pages still show the same suburb combination')
+  check((await page.locator('main').innerText()).includes('We provide roof painting services across Melbourne, including Chadstone, Mount Waverley, Glen Waverley, Oakleigh, Mulgrave, Clayton, Dandenong, Noble Park, Springvale, Keysborough, Berwick, Narre Warren, Endeavour Hills and surrounding suburbs.'),'roof service local areas: exact PDF paragraph is missing')
 
   await page.goto(`${origin}#/services/fence-painting-melbourne`, { waitUntil: 'domcontentloaded' })
   check(await page.locator('.client-media-card').count() === 8, 'project gallery: initial progressive set is incorrect')
@@ -504,10 +508,10 @@ try {
   await page.locator('.gallery-photo').first().waitFor()
   check(await page.locator('.gallery-category').count() === 9, 'complete gallery: expected nine labelled service sections')
   check(newBatchPhotoCount === 164, `complete gallery: expected 164 unique optimized photos from the new batch, found ${newBatchPhotoCount}`)
-  check(await page.locator('.gallery-photo').count() === 301, 'complete gallery: expected all 301 project photos to be visible in the page')
+  check(await page.locator('.gallery-photo').count() === 300, 'complete gallery: expected all 300 approved project photos to be visible in the page')
   check(await page.locator('.gallery-directory nav button').count() === 9, 'complete gallery: section directory is incomplete')
   const uniqueGallerySources=await page.locator('.gallery-photo img').evaluateAll(images=>new Set(images.map(image=>image.getAttribute('src'))).size)
-  check(uniqueGallerySources === 301, `complete gallery: expected 301 unique image sources, found ${uniqueGallerySources}`)
+  check(uniqueGallerySources === 300, `complete gallery: expected 300 unique approved image sources, found ${uniqueGallerySources}`)
   const newBatchGallerySources=await page.locator('.gallery-photo img[src*="/new-batch/"]').count()
   check(newBatchGallerySources === newBatchPhotoCount, `complete gallery: ${newBatchPhotoCount-newBatchGallerySources} optimized new-batch photos are missing`)
   check(!(await page.locator('.gallery-more').count()), 'complete gallery: photos are hidden behind a load-more control')

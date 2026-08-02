@@ -589,11 +589,13 @@ class SPP_Content_REST {
 		}
 
 		$data += array(
+			'copy_version' => get_post_meta( $post->ID, 'spp_copy_source_version', true ),
 			'scope_title' => get_post_meta( $post->ID, 'spp_scope_title', true ),
 			'scope'       => $this->ordered_items( get_post_meta( $post->ID, 'spp_scope', true ) ),
 			'process'     => $this->ordered_items( get_post_meta( $post->ID, 'spp_process', true ) ),
 			'why'         => get_post_meta( $post->ID, 'spp_why', true ),
 			'benefits'    => $this->ordered_items( get_post_meta( $post->ID, 'spp_benefits', true ) ),
+			'document_sections' => get_post_meta( $post->ID, 'spp_document_sections', true ),
 			'related'     => $related,
 			'gallery'     => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
 			'section_labels' => array(
@@ -624,6 +626,7 @@ class SPP_Content_REST {
 		$excerpt = $post->post_excerpt ? $post->post_excerpt : wp_trim_words( wp_strip_all_tags( $post->post_content ), 32 );
 		$data = array(
 			'id'           => (int) $post->ID,
+			'copy_version' => get_post_meta( $post->ID, 'spp_copy_source_version', true ),
 			'slug'         => $post->post_name,
 			'title'        => $this->plain_title( $post ),
 			'excerpt'      => wp_strip_all_tags( $excerpt ),
@@ -632,6 +635,8 @@ class SPP_Content_REST {
 			'eyebrow'      => get_post_meta( $post->ID, 'spp_article_eyebrow', true ),
 			'read_time'    => get_post_meta( $post->ID, 'spp_article_read_time', true ) ?: __( 'Practical guide', 'superior-plus-content' ),
 			'source_label' => get_post_meta( $post->ID, 'spp_article_source_label', true ) ?: __( 'Superior Plus guide', 'superior-plus-content' ),
+			'seo_keywords' => $this->text_values( get_post_meta( $post->ID, 'spp_article_seo_keywords', true ) ),
+			'outline_topics' => $this->text_values( get_post_meta( $post->ID, 'spp_article_outline_topics', true ) ),
 			'published'    => mysql2date( 'Y-m-d', $post->post_date ),
 			'modified'     => mysql2date( 'Y-m-d', $post->post_modified ),
 			'hero'         => $this->hero( $post ),

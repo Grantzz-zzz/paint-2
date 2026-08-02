@@ -3,13 +3,13 @@ import { newBatchProjectMedia } from './newBatchMedia.js'
 
 const root = 'client/projects'
 
-function photos(category,count,subject) {
+function photos(category,count,subject,excluded=[]) {
   return Array.from({length:count},(_,index)=>({
     type:'image',
     src:asset(`${root}/${category}/${category}-${String(index+1).padStart(2,'0')}.webp`),
     alt:`${subject} project by Superior Plus Painting`,
     fit:'contain',
-  }))
+  })).filter((_item,index)=>!excluded.includes(index+1))
 }
 
 function videos(category,count,subject) {
@@ -28,7 +28,7 @@ export const projectMedia = {
   commercial: {
     eyebrow:'Commercial portfolio', title:'Real work.', accent:'Real working spaces.',
     intro:'Completed commercial interiors, warehouses, floor coatings, hospitality spaces and active job sites from the Superior Plus project archive.',
-    items:[...photos('commercial',20,'Commercial painting'),...newBatchProjectMedia.commercial],
+    items:[...photos('commercial',20,'Commercial painting',[2]),...newBatchProjectMedia.commercial],
   },
   interior: {
     eyebrow:'Interior portfolio', title:'Fresh rooms.', accent:'Careful finishes.',

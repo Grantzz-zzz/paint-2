@@ -40,7 +40,7 @@ const trust = [
 const projects = [
   ['Warm modern interior', 'Interior project · Melbourne', 'projects/interior/interior-04.webp'],
   ['Exterior transformation', 'Residential project · Melbourne', 'projects/exterior/exterior-07.webp'],
-  ['Commercial precision', 'Commercial project · Melbourne', 'projects/commercial/commercial-02.webp'],
+  ['Commercial precision', 'Commercial project · Melbourne', 'projects/commercial/commercial-12.webp'],
 ]
 
 const testimonials = [

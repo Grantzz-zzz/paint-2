@@ -1,72 +1,69 @@
 import { readFile } from 'node:fs/promises'
 
-const sourceFiles = [
-  'src/App.jsx',
-  'src/data/siteData.js',
-  'src/data/serviceAreas.js',
-  'src/data/paintingGuides.js',
-  'src/data/expandedPaintingGuides.js',
-  'src/pages/ContentPages.jsx',
-  'src/pages/ServiceAreaPages.jsx',
-]
+const readJson=async path=>JSON.parse(await readFile(path,'utf8'))
+const appManifest=await readJson('src/data/clientApprovedContent.json')
+const pluginManifest=await readJson('wordpress-plugin/superior-plus-content/data/client-approved-content.json')
+const blogs=await readJson('src/data/clientApprovedBlogs.json')
+const pluginBlogs=await readJson('wordpress-plugin/superior-plus-content/data/blog-articles.json')
+const failures=[]
+const check=(condition,message)=>{if(!condition)failures.push(message)}
 
-const source = (await Promise.all(sourceFiles.map(path => readFile(path, 'utf8'))))
-  .join('\n')
-  .toLocaleLowerCase('en-AU')
+check(JSON.stringify(appManifest)===JSON.stringify(pluginManifest),'React and WordPress client-copy manifests differ')
+check(JSON.stringify(blogs)===JSON.stringify(pluginBlogs),'React and WordPress blog manifests differ')
+check(appManifest.policy.includes('verbatim'),'Manifest does not declare the verbatim-copy policy')
 
-const coverage = [
-  ['Homepage requirement', ['professional painters', 'eastern suburbs', 'get a free quote']],
-  ['Local service-area requirement', ['service-areas', 'chadstone', 'mount waverley', 'glen waverley', 'dandenong', 'berwick']],
-  ['About Superior Plus Painting', ['one of your most valuable investments', 'fully insured', 'free, no-obligation quotes']],
-  ['Additional Services', ['caulking & gap sealing', 'tiling services', 'timber restoration', 'property maintenance']],
-  ['Commercial Painting', ['aged care facilities', 'body corporate and strata', 'scheduled maintenance painting']],
-  ['Deck Painting & Staining', ['deck oiling', 'moisture and uv protection', 'entertaining areas']],
-  ['Exterior Painting', ['weatherboards', 'gutters and downpipes', 'reflective coating options']],
-  ['Fence Painting', ['timber paling fences', 'fence spraying', 'protect plants, paving and surroundings']],
-  ['Frequently Asked Questions', ['do you provide free quotes?', 'what type of paint do you use?', 'how do i book my project?']],
-  ['Get in Touch Form', ['garage floor coatings', 'driveway painting & coatings', 'property address', 'property type']],
-  ['Interior Painting', ['bathrooms and laundries', 'hallways and staircases', 'home offices and studies']],
-  ['Our Painting Process', ['transparent pricing', 'drop sheets', 'manufacturer drying guidance', 'final walkthrough']],
-  ['Plaster Repairs', ['water-damaged plaster', 'cornice repairs', 'investment properties']],
-  ['Residential Painting', ['new home painting', 'feature walls', 'garage and roof painting']],
-  ['Roof Painting', ['concrete tile roofs', 'suitable colorbond repainting', 'protective roof coatings']],
-  // The client later limited public testimonials to the verified Google set.
-  ['Official Google Reviews', ['chen yangyang', 'indigo jewel', 'shane mclachlan', 'timothy fagan']],
-  ['Wallpaper Removal', ['vinyl wallpaper removal', 'adhesive and glue removal', 'steam removal where appropriate']],
-  ['SEO Blog 1 — Preparing for painters', ['moving furniture', 'protecting floors', 'removing wall decorations', 'what homeowners should expect']],
-  ['SEO Blog 2 — Interior house painting', ['walls, ceilings, doors', 'choosing paint colours', 'how long interior painting takes']],
-  ['SEO Blog 3 — Exterior house painting', ['weather protection', 'timber protection', 'render and brick painting', 'preventing water damage']],
-  ['SEO Blog 4 — Commercial painting', ['office painting', 'retail shop painting', 'warehouse painting', 'reducing business disruption']],
-  ['SEO Blog 5 — Roof painting', ['roof cleaning', 'roof repairs', 'priming and roof coatings', 'tile and suitable metal roof painting']],
-  ['SEO Blog 6 — Crack repairs', ['hairline cracks', 'water-damaged plaster', 'caulking and gaps', 'preparation before the finish coats']],
-  ['SEO Blog 7 — 2026 colours', ['modern warm neutrals', 'expressive and earthy colour', 'soft greens, mauves and pastels', 'exterior colour trends']],
-  ['SEO Blog 8 — Dulux systems', ['paint durability', 'washable interior walls', 'exterior protection', 'professional application']],
-  ['SEO Blog 9 — New homes', ['new construction painting', 'builder and painter partnerships', 'final finishes', 'timelines and drying requirements']],
-  ['SEO Blog 10 — Before and after', ['renovation painting', 'refreshing older melbourne homes', 'property presentation', 'real project photography']],
-  ['SEO Blog 11 — Fence painting', ['timber and paling fences', 'fence spraying', 'weather protection and maintenance']],
-  ['SEO Blog 12 — Strata painting', ['apartment buildings', 'common areas', 'maintenance schedules', 'quoting large projects']],
-  ['SEO Blog 13 — Paint lifespan', ['interior painting lifespan', 'exterior painting lifespan', 'signs you may need repainting', 'maintenance tips']],
-  ['SEO Blog 14 — Insured contractors', ['insurance is part of responsible contracting', 'safety and property protection', 'professional standards', 'customer protection starts before work']],
-  ['SEO Blog 15 — Local painter', ['start with the actual project', 'use reviews carefully', 'confirm experience and communication', 'quality checks before handover']],
-]
+const serviceEntries=Object.entries(appManifest.services||{})
+check(serviceEntries.length===9,`Expected 9 dedicated service PDFs, found ${serviceEntries.length}`)
+for(const [slug,service] of serviceEntries){
+  check(Boolean(service.document_title&&service.headline&&service.intro),`${slug}: title, headline or introduction is missing`)
+  check(service.sections.some(section=>section.items?.length),`${slug}: supplied scope list is missing`)
+  check(service.sections.some(section=>section.steps?.length),`${slug}: supplied process is missing`)
+  check(service.sections.some(section=>section.heading==='Areas We Service'),`${slug}: exact Areas We Service section is missing`)
+  check(service.sections.at(-1)?.heading.toLowerCase().includes('quote'),`${slug}: supplied quote section is not last`)
+}
 
-const failures = []
+const documents=appManifest.documents||{}
+for(const key of ['about','additional_services','process','faqs','contact','testimonials']){
+  check(Boolean(documents[key]),`${key}: supplied document is missing from the manifest`)
+}
+check(documents.about?.sections?.length===6,'About PDF: expected 6 supplied sections')
+check(documents.additional_services?.sections?.length===11,'Additional Services PDF: expected 11 supplied sections')
+check(documents.process?.steps?.length===6,'Our Process PDF: expected 6 supplied steps')
+check(documents.faqs?.items?.length===10,'FAQ PDF: expected 10 supplied questions')
+check(documents.contact?.service_options?.length===12,'Contact PDF: expected 12 service options')
+check(documents.contact?.property_options?.length===8,'Contact PDF: expected 8 property options')
+check(documents.testimonials?.reviews?.length===4,'Testimonials PDF: expected 4 supplied testimonials in the archive')
 
-for (const [document, phrases] of coverage) {
-  for (const phrase of phrases) {
-    if (!source.includes(phrase.toLocaleLowerCase('en-AU'))) {
-      failures.push(`${document}: missing “${phrase}”`)
-    }
+check(blogs.length===19,'Website blogs PDF: expected 4 complete articles plus 15 expanded SEO briefs')
+for(const [index,article] of blogs.entries()){
+  check(article.copy_version==='pdf-verbatim-2026-08-01',`${article.slug}: approved-copy version is missing`)
+  if(index<4){
+    check(article.content.length>2500,`${article.slug}: complete supplied article is unexpectedly short`)
+  }else{
+    check(article.content.length>2200,`${article.slug}: expanded SEO-brief article is unexpectedly short`)
+    check(article.seo_keywords?.length>0,`${article.slug}: original SEO keywords are missing`)
+    check(article.outline_topics?.length>0,`${article.slug}: original outline topics are missing`)
+    check(article.source_label==='Client SEO brief · Expanded',`${article.slug}: expanded-source label is missing`)
   }
 }
 
-console.log(`PDF content documents checked: ${coverage.length}`)
-console.log(`Required content markers checked: ${coverage.reduce((total, [, phrases]) => total + phrases.length, 0)}`)
+const activeFiles=[
+  'src/pages/ServicePage.jsx','src/pages/ContentPages.jsx','src/pages/GuidePages.jsx',
+  'wordpress-theme/superior-plus/front-page.php','wordpress-theme/superior-plus/page-services.php',
+  'wordpress-theme/superior-plus/inc/default-content.php',
+  'wordpress-plugin/superior-plus-content/includes/class-spp-content-migration.php',
+]
+const activeSource=(await Promise.all(activeFiles.map(file=>readFile(file,'utf8')))).join('\n')
+check(!activeSource.includes('commercial-02.webp'),'Competitor-branded commercial-02.webp is still referenced by active code')
+check(activeSource.includes('pdf-verbatim-2026-08-01'),'Approved-copy migration marker is missing')
 
-if (failures.length) {
+console.log(`Client documents checked: ${serviceEntries.length+Object.keys(documents).length+1}`)
+console.log(`Service pages checked: ${serviceEntries.length}`)
+console.log(`Blog records checked: ${blogs.length}`)
+if(failures.length){
   console.error(`Failures: ${failures.length}`)
-  failures.forEach(failure => console.error(`- ${failure}`))
-  process.exitCode = 1
-} else {
-  console.log('Result: PASS')
+  failures.forEach(failure=>console.error(`- ${failure}`))
+  process.exitCode=1
+}else{
+  console.log('Result: PASS — approved wording, SEO keywords and expanded brief topics are synchronized')
 }

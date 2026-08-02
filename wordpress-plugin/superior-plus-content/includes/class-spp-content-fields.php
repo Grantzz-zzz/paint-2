@@ -110,6 +110,7 @@ class SPP_Content_Fields {
 					'spp_directory_excerpt'  => array( 'label' => 'Services-directory summary', 'type' => 'textarea', 'max' => 400 ),
 					'spp_scope_title'        => array( 'label' => 'Scope heading', 'type' => 'text', 'max' => 180 ),
 					'spp_scope'              => array( 'label' => 'Scope items — one per line', 'type' => 'list', 'max_items' => 30 ),
+					'spp_document_sections'  => array( 'label' => 'Client PDF sections — Heading | Verbatim body', 'type' => 'pairs', 'max_items' => 20 ),
 					'spp_why'                => array( 'label' => 'Process introduction', 'type' => 'textarea', 'max' => 1600 ),
 					'spp_process'            => array( 'label' => 'Process steps — one per line', 'type' => 'list', 'max_items' => 20 ),
 					'spp_benefits'           => array( 'label' => 'Benefits — one per line', 'type' => 'list', 'max_items' => 12 ),
@@ -138,6 +139,8 @@ class SPP_Content_Fields {
 					'spp_article_eyebrow'     => array( 'label' => 'Article eyebrow', 'type' => 'text', 'max' => 160 ),
 					'spp_article_read_time'   => array( 'label' => 'Read time (example: 8 min read)', 'type' => 'text', 'max' => 60 ),
 					'spp_article_source_label' => array( 'label' => 'Source label', 'type' => 'text', 'max' => 120 ),
+					'spp_article_seo_keywords' => array( 'label' => 'Client SEO keywords — one phrase per line', 'type' => 'list', 'max_items' => 20 ),
+					'spp_article_outline_topics' => array( 'label' => 'Client brief topics — one per line', 'type' => 'list', 'max_items' => 30 ),
 					'spp_article_takeaways'   => array( 'label' => 'Key takeaways — one per line', 'type' => 'list', 'max_items' => 20 ),
 					'spp_article_references'  => array( 'label' => 'Official references — Label | URL', 'type' => 'pairs', 'max_items' => 20 ),
 					'spp_related_service_ids' => array( 'label' => 'Related services', 'type' => 'relationships', 'post_type' => 'spp_service' ),
@@ -221,6 +224,7 @@ class SPP_Content_Fields {
 				break;
 			case 'about':
 				$fields += array(
+					'spp_content_sections'   => array( 'label' => 'Client-approved sections — Heading | Body', 'type' => 'pairs', 'max_items' => 20 ),
 					'spp_about_approach_title' => array( 'label' => 'Approach heading', 'type' => 'text', 'max' => 180 ),
 					'spp_about_approach_copy'  => array( 'label' => 'Approach paragraphs', 'type' => 'textarea', 'max' => 3000 ),
 					'spp_about_editorial_image_id' => array( 'label' => 'Editorial project image', 'type' => 'media', 'mime' => 'image' ),
@@ -250,6 +254,7 @@ class SPP_Content_Fields {
 				break;
 			case 'process':
 				$fields += array(
+					'spp_content_sections' => array( 'label' => 'Client-approved supporting sections — Heading | Body', 'type' => 'pairs', 'max_items' => 10 ),
 					'spp_master_process' => array( 'label' => 'Process steps — Heading | Description', 'type' => 'pairs', 'max_items' => 20 ),
 					'spp_process_proof'  => array( 'label' => 'Why-it-works points — one per line', 'type' => 'list', 'max_items' => 20 ),
 					'spp_process_proof_summaries' => array( 'label' => 'Why-it-works summaries — one per line', 'type' => 'list', 'max_items' => 20 ),

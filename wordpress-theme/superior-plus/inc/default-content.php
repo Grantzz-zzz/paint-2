@@ -22,7 +22,7 @@ function spp_default_services() {
 			'benefits' => array( 'A fresh, cohesive home', 'Protection from everyday wear', 'Improved property presentation', 'Careful, low-disruption delivery' ),
 		),
 		'commercial-painting-melbourne' => array(
-			'title' => 'Commercial Painting', 'eyebrow' => 'Commercial painting specialists', 'accent' => 'planned around business.', 'tone' => 'green', 'image' => 'projects/commercial/commercial-02.webp', 'gallery' => 'commercial',
+			'title' => 'Commercial Painting', 'eyebrow' => 'Commercial painting specialists', 'accent' => 'planned around business.', 'tone' => 'green', 'image' => 'projects/commercial/commercial-12.webp', 'gallery' => 'commercial',
 			'intro' => 'We deliver reliable commercial painting across Melbourne for businesses, builders, property managers, body corporates and industrial facilities. Every project is carefully planned to reduce disruption while achieving a professional, durable result.',
 			'scope_title' => 'Spaces and industries we paint',
 			'scope' => array( 'Offices and workplaces', 'Retail shops and shopping centres', 'Warehouses and factories', 'Medical centres and clinics', 'Schools and childcare centres', 'Restaurants and cafés', 'Apartment complexes', 'Body corporate and strata', 'Interior and exterior commercial painting', 'Scheduled maintenance painting' ),
@@ -98,27 +98,27 @@ function spp_default_services() {
 
 function spp_default_process() {
 	return array(
-		array( 'Free consultation & quote', 'We inspect the site, understand your goals, discuss colours and finishes, and provide a detailed no-obligation quotation.' ),
-		array( 'Surface preparation', 'We clean, scrape, sand, fill, repair, seal and prime as required to create the right foundation.' ),
-		array( 'Protecting your property', 'Furniture, floors, windows, gardens and surrounding areas are carefully covered and masked.' ),
-		array( 'Professional painting', 'Premium coatings are applied with brushes, rollers or spray equipment using proven techniques.' ),
-		array( 'Quality inspection', 'Every surface is checked and any required touch-ups are completed before sign-off.' ),
-		array( 'Clean-up & handover', 'We remove coverings, clean the work area and complete a final walkthrough with you.' ),
+		array( 'Step 1 – Free Consultation & Quote', 'We begin with an on-site inspection to understand your goals, assess the condition of the surfaces, discuss colours and finishes, and provide a detailed, no-obligation quotation with transparent pricing.' ),
+		array( 'Step 2 – Surface Preparation', 'Preparation is the key to a long-lasting paint job. Depending on the project, we clean surfaces, pressure wash, scrape loose paint, sand, fill cracks and holes, repair minor plaster or timber damage, apply gap filler and prime bare areas where required.' ),
+		array( 'Step 3 – Protecting Your Property', 'Before painting begins, we carefully protect furniture, floors, windows, landscaping and other surrounding areas using drop sheets, masking materials and protective coverings to keep your property clean and safe.' ),
+		array( 'Step 4 – Professional Painting', 'Our experienced painters apply premium-quality coatings using brushes, rollers and spray equipment where appropriate. We focus on even coverage, crisp lines and a flawless finish while following manufacturer recommendations for application and drying times.' ),
+		array( 'Step 5 – Quality Inspection', 'After painting is complete, we carry out a detailed inspection to ensure every surface meets our quality standards. Any required touch-ups are completed before the project is signed off.' ),
+		array( 'Step 6 – Clean-Up & Handover', "We remove all masking materials, clean the work area and leave your property neat and tidy. We then walk through the completed project with you to ensure you're completely satisfied with the result." ),
 	);
 }
 
 function spp_default_faqs() {
 	return array(
-		array( 'Do you provide free quotes?', 'Yes. We provide free, no-obligation quotes across Melbourne, including a project inspection, discussion of your requirements and a detailed written quotation.' ),
-		array( 'What areas do you service?', 'We service Melbourne and surrounding suburbs including Chadstone, Mount Waverley, Glen Waverley, Oakleigh, Mulgrave, Clayton, Dandenong, Berwick, Narre Warren and Endeavour Hills.' ),
+		array( 'Do you provide free quotes?', 'Yes. We offer free, no-obligation quotes across Melbourne. We inspect your project, discuss your requirements and provide a detailed written quotation.' ),
+		array( 'What areas do you service?', 'We service Melbourne and surrounding suburbs including Chadstone, Mount Waverley, Glen Waverley, Oakleigh, Mulgrave, Clayton, Dandenong, Berwick, Narre Warren, Endeavour Hills and many more.' ),
 		array( 'Are you fully insured?', 'Yes. Superior Plus Painting is fully insured, giving you confidence that your property is protected throughout the project.' ),
-		array( 'What painting services do you offer?', 'We provide residential, commercial, interior, exterior, roof and fence painting, deck painting and staining, plaster repairs, wallpaper removal and related preparation services.' ),
-		array( 'How long will my project take?', 'Timing depends on the property size and surface condition. Most residential projects take several days to two weeks. We provide an estimated schedule before work begins.' ),
-		array( 'Do I need to move my furniture?', 'We recommend removing smaller personal items. Our team carefully protects furniture, flooring and fixtures before painting begins.' ),
-		array( 'Can you repair walls before painting?', 'Yes. We repair suitable plaster damage, fill cracks and holes, sand surfaces and prepare walls for a smooth professional finish.' ),
-		array( 'What type of paint do you use?', 'We use high-quality paint systems from trusted manufacturers and recommend products based on the surface, expected wear and your budget.' ),
-		array( 'Do you clean up after the project?', 'Absolutely. We remove masking and coverings, leave the property tidy and complete a final inspection before handover.' ),
-		array( 'How do I book my project?', 'Contact us to arrange a free consultation. Once you approve the written quotation, we schedule the project for a suitable time.' ),
+		array( 'What painting services do you offer?', 'We provide residential painting, commercial painting, interior painting, exterior painting, roof painting, fence painting, deck painting and staining, plaster repairs and wallpaper removal.' ),
+		array( 'How long will my painting project take?', 'The timeframe depends on the size and condition of the property. Most residential projects are completed within a few days to two weeks. We provide an estimated schedule before work begins.' ),
+		array( 'Do I need to move my furniture?', 'We recommend removing small personal items. Our team carefully protects furniture, flooring and fixtures before painting starts.' ),
+		array( 'Can you repair walls before painting?', 'Yes. We complete plaster repairs, fill cracks and holes, sand surfaces and prepare walls to achieve a smooth, professional finish.' ),
+		array( 'What type of paint do you use?', 'We use high-quality paint systems from trusted manufacturers and recommend the most suitable products based on your project and budget.' ),
+		array( 'Do you clean up after the project?', 'Absolutely. We leave every property clean and tidy, remove masking materials and complete a final inspection before handover.' ),
+		array( 'How do I book my project?', "Simply contact Superior Plus Painting to arrange a free consultation. Once you approve the quotation, we'll schedule your project at a convenient time." ),
 	);
 }
 

@@ -7,6 +7,7 @@ import { faqs, masterProcess, serviceList, servicePages, suburbs } from '../data
 import { brandTeamArchive } from '../data/projectMedia'
 import { asset } from '../utils/assets'
 import { collectionFallbacks, mediaUrl, mergeContent, pairItems, textItems, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from '../content/ContentProvider'
+import approvedContent from '../data/clientApprovedContent.json'
 
 const images = {
   about: asset('stock-main/about.webp'),
@@ -49,6 +50,10 @@ function FlipFeatureGrid({items,className=''}) {
   })}</div>
 }
 
+function ApprovedSections({sections,eyebrow='Client-approved information'}) {
+  return <>{sections.map((section,index)=><section className={`inner-section approved-copy-section ${index%2?'cream':''}`} key={section.heading}><div className="container"><SectionIntro eyebrow={eyebrow} title={section.heading} accent=""/><Reveal className="approved-copy-body"><div>{section.body?<p>{section.body}</p>:null}</div>{section.items?.length?<ul>{section.items.map(item=><li key={item}><Check/>{item}</li>)}</ul>:null}</Reveal></div></section>)}</>
+}
+
 export function ServicesPage() {
   const navigate=useNavigate()
   const {services}=useSiteContent()
@@ -77,6 +82,21 @@ export function ServicesPage() {
 
 export function AdditionalServicesPage() {
   const navigate=useNavigate()
+  const approved=approvedContent.documents.additional_services
+  const approvedIntro=approved.sections[0]
+  const approvedImage=asset('stock-main/additional-services.webp')
+  const {fields:approvedFields,hero:approvedHero,seo:approvedSeo}=usePageContent('/additional-services',{eyebrow:approved.title,title:approved.headline,accent:'',intro:approvedIntro.body,image:approvedImage,tone:'terracotta'})
+  const approvedServices=pairItems(approvedFields.additional_services,approved.sections.slice(1,9).map(section=>[section.heading,section.body])).map(([heading,body])=>({heading,body}))
+  const approvedClosing=pairItems(approvedFields.content_sections,approved.sections.slice(9).map(section=>[section.heading,section.body])).map(([heading,body])=>({heading,body}))
+  return <PageLayout title={approvedSeo?.title||approved.title} description={approvedSeo?.description||approvedIntro.body} image={approvedHero.image} pageType="Service" mainClassName="additional-services-main">
+    <PageHero {...approvedHero} title={approvedHero.title||approved.headline} accent="" imageAlt="Painting and complementary property improvement services" tone="terracotta"/>
+    <TrustStrip/>
+    <section className="inner-section cream additional-services-directory"><div className="container"><SectionIntro eyebrow="Additional Services" title="Complete property improvement" accent="services in Melbourne."/><div className="additional-service-grid">{approvedServices.map((section,index)=>{const Icon=[SprayCan,Hammer,ShieldCheck,Palette,Trees,PaintRoller,ClipboardCheck][index%7];return <Reveal key={section.heading} delay={(index%3)*.04}><article><span>{String(index+1).padStart(2,'0')}</span><div className="additional-service-icon"><Icon/></div><h3>{section.heading}</h3><p>{section.body}</p></article></Reveal>})}</div></div></section>
+    <ApprovedSections sections={approvedClosing} eyebrow="Additional Services"/>
+    <ClosingCTA title="Request a Free Quote" text={approvedClosing.at(-1)?.body}/>
+  </PageLayout>
+  /* Legacy editable layout retained below as a rollback reference. */
+  /* eslint-disable no-unreachable */
   const {data:route}=useRouteContent('/additional-services')
   const fields=route?.content?.fields||{}
   const fallbackServices=[
@@ -106,6 +126,24 @@ export function AdditionalServicesPage() {
 }
 
 export function AboutPage() {
+  const approved=approvedContent.documents.about
+  const approvedIntro=approved.sections[0]
+  const approvedImage=images.about
+  const {fields:approvedFields,hero:approvedHero,seo:approvedSeo}=usePageContent('/about',{eyebrow:approved.title,title:approved.headline,accent:'',intro:approvedIntro.body,image:approvedImage,tone:'green'})
+  const approvedSections=pairItems(approvedFields.content_sections,approved.sections.slice(1).map(section=>[section.heading,[section.body,...(section.items||[])].filter(Boolean).join('\n')])).map(([heading,body])=>({heading,body}))
+  const approvedReasons=approved.sections.find(section=>section.heading==='Why Choose Superior Plus Painting?').items
+  const approvedQuality=approved.sections.find(section=>section.heading==='Our Commitment to Quality').body
+  const approvedStandardImages=['073','049','102','155','067','107','096','145'].map(number=>asset(`client/projects/new-batch/batch-${number}.webp`))
+  const approvedCards=approvedReasons.map((title,index)=>({title,brief:'Why Choose Superior Plus Painting?',detail:approvedQuality,image:approvedStandardImages[index],alt:`${title} during a Superior Plus Painting project`}))
+  return <PageLayout title={approvedSeo?.title||approved.title} description={approvedSeo?.description||approvedIntro.body} image={approvedHero.image} pageType="AboutPage" mainClassName="about-main">
+    <PageHero {...approvedHero} title={approvedHero.title||approved.headline} accent="" imageAlt="Superior Plus Painting team completing professional painting work" tone="green"/>
+    <TrustStrip/>
+    <ApprovedSections sections={approvedSections} eyebrow="About Superior Plus Painting"/>
+    <section className="inner-section cream about-standards"><div className="container"><SectionIntro eyebrow="Why Choose Superior Plus Painting?" title="Professional standards" accent="shown through our work."/><FlipFeatureGrid items={approvedCards} className="about-flip-grid"/></div></section>
+    <section className="inner-section about-certificate"><div className="container certificate-layout"><Reveal className="certificate-frame"><img src={asset('client/certificate-mpa-costing-estimating.png')} alt="Master Painters Australia Costing and Estimating workshop certificate supplied by Superior Plus Painting" loading="lazy" decoding="async"/></Reveal></div></section>
+    <ClosingCTA title="Let's Transform Your Property" text={approved.sections.at(-1)?.body}/>
+  </PageLayout>
+  /* Legacy editable layout retained below as a rollback reference. */
   const fallbackHero={eyebrow:'Your trusted Melbourne painters',title:'Care in every coat.',accent:'Pride in every detail.',intro:'Superior Plus Painting is a Melbourne-based team dedicated to high-quality residential and commercial painting with reliable service, honest communication and respect for every property.',image:images.about,tone:'green'}
   const {fields,hero,seo,cta}=usePageContent('/about',fallbackHero)
   const fallbackApproach=['From small residential touch-ups to complete home repaints and large commercial projects, we approach every job with professionalism, honesty and pride. We inspect and prepare each surface, protect surrounding areas and use professional application techniques for a smooth, durable finish.','We understand that your property is one of your most valuable investments. That is why clear communication, reliable scheduling and a clean handover matter just as much as the paint itself.']
@@ -149,6 +187,24 @@ export function AboutPage() {
 }
 
 export function ProcessPage() {
+  const approved=approvedContent.documents.process
+  const approvedIntro=approved.sections[0]
+  const {fields:approvedFields,hero:approvedHero,seo:approvedSeo}=usePageContent('/our-process',{eyebrow:approved.title,title:approved.headline,accent:'',intro:approvedIntro.body,image:images.process,imagePosition:'74% center',tone:'gold'})
+  const approvedSteps=pairItems(approvedFields.master_process,approved.steps.map(step=>[step.heading,step.body])).map(([title,text])=>({title,text}))
+  const approvedWhy=approved.sections.find(section=>section.heading==='Why Our Process Works')
+  const approvedReady=approved.sections.find(section=>section.heading==='Ready to Start?')
+  const approvedSupporting=pairItems(approvedFields.content_sections,[[approvedWhy.heading,[approvedWhy.body,...approvedWhy.items].filter(Boolean).join('\n')],[approvedReady.heading,approvedReady.body]]).map(([heading,body])=>({heading,body}))
+  const approvedProofImages=['155','100','049','067','145','102'].map(number=>asset(`client/projects/new-batch/batch-${number}.webp`))
+  const approvedProofCards=approvedWhy.items.map((title,index)=>({title,brief:approvedSteps[index].title,detail:approvedSteps[index].text,image:approvedProofImages[index],alt:`${title} during a Superior Plus Painting project`}))
+  return <PageLayout title={approvedSeo?.title||approved.title} description={approvedSeo?.description||approvedIntro.body} image={approvedHero.image} pageType="HowTo" schemaData={{step:approvedSteps.map((item,index)=>({'@type':'HowToStep',position:index+1,name:item.title,text:item.text}))}}>
+    <PageHero {...approvedHero} title={approvedHero.title||approved.headline} accent="" imagePosition={approvedHero.imagePosition||'74% center'} imageAlt="Professional painter applying a fresh exterior finish to a home" tone="gold"/>
+    <TrustStrip/>
+    <section className="inner-section"><div className="container"><SectionIntro eyebrow="Our Painting Process" title="A proven process" accent="for exceptional results."/><div className="master-process">{approvedSteps.map((step,i)=><Reveal key={step.title} delay={i*.05}><article><b>{String(i+1).padStart(2,'0')}</b><div><h3>{step.title}</h3><p>{step.text}</p></div></article></Reveal>)}</div></div></section>
+    <ApprovedSections sections={approvedSupporting.slice(0,1)} eyebrow="Our Painting Process"/>
+    <section className="process-proof"><div className="container"><SectionIntro eyebrow="Why Our Process Works" title="Preparation and communication" accent="at every step." light/><FlipFeatureGrid items={approvedProofCards} className="process-flip-grid"/></div><Divider color="#fff" variant="drip"/></section>
+    <ClosingCTA title={approvedSupporting[1]?.heading||approvedReady.heading} text={approvedSupporting[1]?.body||approvedReady.body}/>
+  </PageLayout>
+  /* Legacy editable layout retained below as a rollback reference. */
   const fallbackHero={eyebrow:'A proven path to a better finish',title:'Our painting process',accent:'planned down to the detail.',intro:'Outstanding painting starts with careful planning, detailed preparation and clear communication. Our six-step process keeps every residential and commercial project organised from quote to handover.',image:images.process,imagePosition:'74% center',imageAlt:'Professional painter applying a fresh exterior finish to a modern residential home',tone:'gold'}
   const {fields,hero,seo,cta}=usePageContent('/our-process',fallbackHero)
   const steps=pairItems(fields.master_process,masterProcess.map(item=>[item.title,item.text])).map(([title,text])=>({title,text}))
@@ -190,13 +246,14 @@ export function ProcessPage() {
 
 export function FAQsPage() {
   const [open,setOpen]=useState(0)
+  const approved=approvedContent.documents.faqs
+  const approvedTestimonials=approvedContent.documents.testimonials
   const fallbackHero={eyebrow:'Straight answers before we start',title:'Frequently asked questions',accent:'made easy.',intro:'Painting comes with practical questions. Here are clear answers about quoting, preparation, scheduling, products and what to expect from our team.',image:images.faq,tone:'cream'}
   const {fields,hero,seo,cta}=usePageContent('/faqs',fallbackHero)
   const {data:allFaqs}=useCollection('faqs',collectionFallbacks.faqs)
   const {data:reviewItems}=useCollection('testimonials',collectionFallbacks.testimonials)
   const {review_profile:reviewProfile}=useSiteContent()
-  const selectedIds=Array.isArray(fields.faq_ids)?fields.faq_ids.map(String):[]
-  const items=selectedIds.length?allFaqs.filter(item=>selectedIds.includes(String(item.id))):allFaqs
+  const items=approved.items
   const comparisonBoards=[
     ['Residential exterior refresh',asset('client/projects/residential/residential-02.webp')],
     ['Whole-home exterior repaint',asset('client/projects/residential/residential-04.webp')],
@@ -239,9 +296,11 @@ export function FAQsPage() {
     {title:'Detailed plaster finishing',before:asset('client/projects/plaster/plaster-05.webp'),after:asset('client/projects/plaster/plaster-06.webp')},
   ]
   return <PageLayout title={seo?.title||'Frequently Asked Questions'} description={seo?.description||'Answers about quotes, service areas, preparation, timing, paint systems and booking with Superior Plus Painting.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="FAQPage" schemaData={{mainEntity:items.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))}}>
-    <PageHero {...hero} intro={fields.faq_intro||hero.intro}/>
+    <PageHero {...hero} eyebrow={approved.title} title={approved.headline} accent="" intro=""/>
     <section className="inner-section"><div className="container faq-layout"><SectionIntro eyebrow="What clients ask us" title="Everything you need" accent="to move forward."/><div className="faq-list">{items.map((item,i)=><div className={`faq-item ${open===i?'open':''}`} key={item.id||item.question}><button onClick={()=>setOpen(open===i?-1:i)} aria-expanded={open===i}><span>{String(i+1).padStart(2,'0')}</span><b>{item.question}</b><ChevronDown/></button>{open===i&&<div className="faq-answer" dangerouslySetInnerHTML={{__html:item.answer}}/>}</div>)}</div></div></section>
     <Testimonials items={reviewItems} className="faq-google-reviews" profile={reviewProfile}/>
+    <section className="inner-section client-testimonial-archive"><div className="container"><SectionIntro eyebrow={approvedTestimonials.title} title={approvedTestimonials.headline} accent="" text={approvedTestimonials.sections[0].body}/><div className="client-testimonial-grid">{approvedTestimonials.reviews.map((review,index)=><Reveal key={review.heading} delay={(index%2)*.06}><article><span>★★★★★</span><h3>{review.heading.replace('★★★★★ ','')}</h3><p>“{review.body}”</p></article></Reveal>)}</div></div></section>
+    <ApprovedSections sections={approvedTestimonials.sections.slice(5)} eyebrow="Testimonials & Reviews"/>
     <section className="inner-section cream faq-transformations"><div className="container"><SectionIntro eyebrow="Before & after archive" title="The preparation." accent="The visible difference." text="A collection of client-supplied comparison boards showing exterior, fence, interior and repair work. Project results vary with the original surface, repairs and selected coating system."/><div className="comparison-board-grid">{comparisonBoards.map(([title,image],index)=><Reveal key={image} className={index===0||index===9?'comparison-board-featured':''} delay={(index%4)*.04}><figure><div><img src={image} alt={`${title} before and after comparison supplied by Superior Plus Painting`} loading="lazy" decoding="async"/><span>Comparison {String(index+1).padStart(2,'0')}</span></div><figcaption><Palette/><b>{title}</b><small>Client project archive</small></figcaption></figure></Reveal>)}</div><div className="plaster-comparison-grid">{plasterComparisons.map((comparison,index)=><Reveal key={comparison.title} delay={index*.08}><article><div className="plaster-pair"><figure><img src={comparison.before} alt={`${comparison.title} before repair`} loading="lazy" decoding="async"/><span>Before</span></figure><figure><img src={comparison.after} alt={`${comparison.title} after repair`} loading="lazy" decoding="async"/><span>After</span></figure></div><div><span>Repair sequence 0{index+1}</span><h3>{comparison.title}</h3><p>Preparation and finishing images retained together from the supplied plaster-repair archive.</p></div></article></Reveal>)}</div></div></section>
     <ClosingCTA title={cta?.title||'Still have a question?'} text={cta?.text||'Call our team or send an enquiry. We’ll talk through your property, surfaces and preferred timing before arranging a quote.'} label={cta?.link?.label} url={cta?.link?.url}/>
   </PageLayout>
@@ -250,18 +309,19 @@ export function FAQsPage() {
 export function ContactPage() {
   const {business}=useSiteContent()
   const enquiry=useEnquirySubmission()
+  const approved=approvedContent.documents.contact
   const fallbackHero={eyebrow:'Tell us what you’re planning',title:'Get in touch',accent:'and get a fresh start.',intro:'Share a few details about your property and the work you have in mind. We’ll follow up to arrange a free, no-obligation consultation and written quote.',image:images.contact,tone:'green'}
   const {fields,hero,seo}=usePageContent('/contact',fallbackHero)
-  const serviceOptions=textItems(fields.service_options,['Residential Painting','Commercial Painting','Interior Painting','Exterior Painting','Roof Painting','Fence Painting','Deck Painting & Staining','Garage Floor Coatings','Driveway Painting & Coatings','Plaster Repairs','Wallpaper Removal','Other'])
-  const propertyOptions=textItems(fields.property_options,['House','Unit','Apartment','Townhouse','Office','Retail','Warehouse','Other'])
-  const formFields=pairItems(fields.contact_form_fields,[['Name *','Your name'],['Phone number *','04xx xxx xxx'],['Email address *','you@email.com'],['Suburb *','Your suburb'],['Property address','Street address'],['Project details *','What would you like painted or repaired?']])
+  const serviceOptions=approved.service_options
+  const propertyOptions=approved.property_options
+  const formFields=[['Name','Your name'],['Phone Number','04xx xxx xxx'],['Email Address','you@email.com'],['Suburb','Your suburb'],['Property Address','Street address'],['Project Details','What would you like painted or repaired?']]
   const steps=pairItems(fields.contact_steps,[['We review your enquiry.','We’ll confirm the service, property and best way to reach you.'],['We arrange an inspection.','Our team assesses the surfaces and discusses colours, finishes and timing.'],['You receive a written quote.','Clear scope, preparation and pricing—with no obligation to proceed.']])
   const mapAddress=business.street_address||'20 Rae Street, Chadstone VIC 3148, Australia'
   const mapQuery=mapAddress
   const mapUrl=business.google_maps_url||`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`
   const mapEmbedUrl=business.google_maps_embed_url||'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1574.426042956306!2d145.0931577603448!3d-37.88714169706206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad66b1a91253ba3%3A0x5219727b7db56b2d!2sSuperior%20plus%20painting%20%26%20remodeling!5e0!3m2!1sen!2sph!4v1785206391867!5m2!1sen!2sph'
   return <PageLayout title={seo?.title||'Get a Free Quote'} description={seo?.description||'Contact Superior Plus Painting for a free residential, commercial or property-painting quote across Melbourne.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="ContactPage">
-    <PageHero {...hero}/>
+    <PageHero {...hero} eyebrow="" title={approved.title} accent="" intro=""/>
     <section className="quote-page"><div className="container quote-page-grid"><Reveal className="quote-side"><ShieldCheck/><h2>What happens next?</h2><ol>{steps.map(([title,text])=><li key={title}><b>{title}</b><span>{text}</span></li>)}</ol><a href={business.phone_href}><Phone/>{business.phone_display}</a><a href={`mailto:${business.email}`}><Mail/>{business.email}</a></Reveal><Reveal delay={.1}><form className="full-quote-form" onSubmit={enquiry.submit} aria-busy={enquiry.pending}>{enquiry.sent?<div className="form-success"><span><Check/></span><h3>Thanks — your project is ready for review.</h3><p>Your enquiry was delivered successfully. Our team will contact you about the next step.</p><button type="button" className="text-link" onClick={enquiry.reset}>Send another enquiry</button></div>:<><div className="form-heading"><span>Free quote request</span><small>* Required information</small></div><input className="spp-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true"/><input type="hidden" name="source" value="contact-page"/><div className="form-row"><label>{formFields[0][0]}<input name="name" required autoComplete="name" placeholder={formFields[0][1]}/></label><label>{formFields[1][0]}<input name="phone" required type="tel" autoComplete="tel" placeholder={formFields[1][1]}/></label></div><div className="form-row"><label>{formFields[2][0]}<input name="email" required type="email" autoComplete="email" placeholder={formFields[2][1]}/></label><label>{formFields[3][0]}<input name="suburb" required autoComplete="address-level2" placeholder={formFields[3][1]}/></label></div><label>{formFields[4][0]}<input name="address" autoComplete="street-address" placeholder={formFields[4][1]}/></label><div className="form-row"><label>Service required *<select name="service" required defaultValue=""><option value="" disabled>Select a service</option>{serviceOptions.map(s=><option key={s}>{s}</option>)}</select></label><label>Property type<select name="property_type" defaultValue={propertyOptions[0]}>{propertyOptions.map(option=><option key={option}>{option}</option>)}</select></label></div><label>{formFields[5][0]}<textarea name="details" required minLength="10" rows="5" placeholder={formFields[5][1]}/></label>{enquiry.privacyText&&<label className="form-consent"><input name="consent" value="yes" type="checkbox" required/><span>{enquiry.privacyText}</span></label>}{enquiry.error&&<p className="form-error" role="alert">{enquiry.error}</p>}<button className="btn btn-wide" disabled={enquiry.pending}>{enquiry.pending?'Sending…':<>Request my free quote<ArrowRight/></>}</button><p className="form-note"><ShieldCheck/>{fields.contact_form_note||'No obligation. Form delivery and privacy consent must be confirmed before launch.'}</p></>}</form></Reveal></div></section>
     <section className="contact-location"><div className="container contact-location-grid"><Reveal><div className="location-icon"><MapPin/></div><SectionIntro eyebrow="Our Melbourne location" title="Local to Chadstone." accent="Ready to come to you."/><address className="contact-street-address"><MapPin/>{mapAddress}</address><p>Superior Plus Painting services homes and businesses across Melbourne’s eastern and south-eastern suburbs from our Chadstone location.</p><a className="btn" href={mapUrl} target="_blank" rel="noreferrer">View address in Google Maps <ExternalLink size={17}/></a></Reveal><Reveal className="contact-map" delay={.1}><iframe src={mapEmbedUrl} title={`Superior Plus Painting at ${mapAddress}`} loading="lazy" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></Reveal></div></section>
     <TestimonialBand index={2}/><AreasBand/>
