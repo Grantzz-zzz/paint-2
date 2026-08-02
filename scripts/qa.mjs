@@ -2,7 +2,7 @@ import { createServer } from 'node:http'
 import { readFile, stat } from 'node:fs/promises'
 import { extname, join, normalize } from 'node:path'
 import { chromium } from 'playwright-core'
-import { serviceAreaRegions, serviceAreas } from '../src/data/serviceAreas.js'
+import { serviceAreas } from '../src/data/serviceAreas.js'
 import { paintingGuides } from '../src/data/paintingGuides.js'
 import { newBatchPhotoCount } from '../src/data/newBatchMedia.js'
 
@@ -10,9 +10,6 @@ const root = join(process.cwd(), 'dist')
 const port = 4188
 const origin = `http://127.0.0.1:${port}/`
 const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
-const navigationAreaCount=serviceAreaRegions
-  .filter(region=>['monash-east','greater-dandenong','casey'].includes(region.id))
-  .flatMap(region=>region.suburbs).length
 
 const routes = [
   ['/', 'Professional painting services in Melbourne'],
@@ -409,7 +406,7 @@ try {
   await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
   await page.locator('.menu-btn').click()
   await page.locator('.mobile-areas-head button[aria-controls="mobile-areas-menu"]').click()
-  check(await page.locator('#mobile-areas-menu button').count() === navigationAreaCount, `mobile areas menu: expected compact ${navigationAreaCount}-suburb navigation`)
+  check(await page.locator('#mobile-areas-menu button').count() === serviceAreas.length, `mobile areas menu: all ${serviceAreas.length} suburb pages are not visible`)
   await page.locator('#mobile-areas-menu button', { hasText: 'Chadstone' }).click()
   await page.waitForURL(/#\/service-areas\/chadstone$/)
   check(page.url().endsWith('#/service-areas/chadstone'), 'mobile areas menu: suburb navigation failed')
