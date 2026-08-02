@@ -1,7 +1,7 @@
 === Superior Plus Painting ===
 Requires at least: 6.4
 Requires PHP: 8.0
-Stable tag: 3.2.1
+Stable tag: 3.2.2
 
 Exact WordPress delivery of the approved Superior Plus Painting React frontend.
 

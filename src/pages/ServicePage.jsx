@@ -11,6 +11,7 @@ import approvedContent from '../data/clientApprovedContent.json'
 import { asset } from '../utils/assets'
 
 const scopeIcons=[PaintRoller,Brush,Palette,SprayCan,Hammer]
+const serviceAreaImage=asset('client/projects/exterior/exterior-07.webp')
 const serviceStoryImages={
   'residential-painting-melbourne':['client/projects/new-batch/batch-159.webp','client/projects/new-batch/batch-102.webp'],
   'commercial-painting-melbourne':['client/projects/commercial/commercial-12.webp','client/projects/new-batch/batch-100.webp'],
@@ -100,17 +101,17 @@ export default function ServicePage() {
     </div><Divider color="#fbf6ec" variant="slash"/></section>
 
     <section className="inner-section process-section"><div className="container">
-      <SectionIntro eyebrow={labels.process_eyebrow||"How it comes together"} title={stepSection?.heading||labels.process_title||"Our Process"} accent={labels.process_accent||"A lasting finish."} text={sectionText(whySection)||page.why}/>
+      <SectionIntro eyebrow={labels.process_eyebrow||"How it comes together"} title={stepSection?.heading||labels.process_title||"Our Process"} accent={labels.process_accent||"A lasting finish."} text={labels.process_intro||"A clear, practical sequence keeps preparation, application, communication and the final inspection organised from start to finish."}/>
       <div className="service-process">{page.process.map((item,i)=><Reveal key={item} delay={i*.06}><article><b>{String(i+1).padStart(2,'0')}</b><span>{item}</span>{i<page.process.length-1&&<i/>}</article></Reveal>)}</div>
     </div></section>
 
-    <ProjectGallery category={serviceMediaCategory[slug]} items={page.gallery}/>
+    <ProjectGallery category={serviceMediaCategory[slug]} items={page.gallery} heading={whySection?{eyebrow:"Why Superior Plus",title:whySection.heading,accent:"Proven through our work.",text:sectionText(whySection)}:undefined}/>
 
     {storySections.map((section,index)=><section className={`inner-section service-approved-story ${index%2?'cream':''}`} key={section.heading}><div className="container service-story-grid"><Reveal className="service-story-photo"><img src={storyImages[index%storyImages.length]||image} alt={`${section.heading} for ${page.title}`} loading="lazy" decoding="async"/><span>Superior Plus project</span></Reveal><Reveal className="service-story-copy" delay={.1}><span className="service-story-icon">{index%2?<Palette/>:<PaintRoller/>}</span><SectionIntro eyebrow="Approved service information" title={section.heading} accent=""/>{section.paragraphs?.map(paragraph=><p key={paragraph}>{paragraph}</p>)}</Reveal></div></section>)}
 
-    <section className={`benefit-section benefit-${page.tone}`}><div className="container benefit-grid"><Reveal><PaintRoller/><h2>{benefitSection?.heading||labels.benefits_title||"Why this work"}<br/><em>{labels.benefits_accent||"makes a difference."}</em></h2><p className="benefit-intro">{sectionText(benefitSection)||sectionText(whySection)||page.why}</p></Reveal><div className="benefit-list">{(page.benefits||[]).map((item,i)=><Reveal key={item} delay={i*.06}><div><span>0{i+1}</span><h3>{item}</h3></div></Reveal>)}</div></div><Divider color="#fff" variant="drip"/></section>
+    <section className={`benefit-section benefit-${page.tone}`}><div className="container benefit-grid"><Reveal><PaintRoller/><h2>{benefitSection?.heading||labels.benefits_title||"Why this work"}<br/><em>{labels.benefits_accent||"makes a difference."}</em></h2><p className="benefit-intro">{sectionText(benefitSection)||"Careful preparation and a coating system suited to the surface help deliver a cleaner, stronger and longer-lasting result."}</p></Reveal><div className="benefit-list">{(page.benefits||[]).map((item,i)=><Reveal key={item} delay={i*.06}><div><span>0{i+1}</span><h3>{item}</h3></div></Reveal>)}</div></div><Divider color="#fff" variant="drip"/></section>
 
-    {areasSection&&<section className="inner-section service-local-approved"><div className="container service-local-card"><Reveal><span className="service-story-icon"><Check/></span><SectionIntro eyebrow="Melbourne service coverage" title={areasSection.heading} accent=""/><p>{sectionText(areasSection)}</p></Reveal><Reveal className="service-local-photo" delay={.1}><img src={storyImages[1]||image} alt={`${page.title} project in the Melbourne service area`} loading="lazy" decoding="async"/></Reveal></div></section>}
+    {areasSection&&<section className="inner-section service-local-approved"><div className="container service-local-card"><Reveal><span className="service-story-icon"><Check/></span><SectionIntro eyebrow="Melbourne service coverage" title={areasSection.heading} accent=""/><p>{sectionText(areasSection)}</p></Reveal><Reveal className="service-local-photo" delay={.1}><img src={serviceAreaImage} alt="Completed Superior Plus Painting exterior project in Melbourne" loading="lazy" decoding="async"/><span>Painting across Melbourne</span></Reveal></div></section>}
 
     <section className="inner-section related-section"><div className="container"><SectionIntro eyebrow={labels.related_eyebrow||"Keep exploring"} title={labels.related_title||"Related services"} accent={labels.related_accent||"for the whole property."}/><div className="related-grid">{related.map(service=><button key={service.slug} className={`related-card tone-${service.tone}`} onClick={()=>navigate(`/services/${service.slug}`)}><span>Superior Plus</span><h3>{service.title}</h3><p>{service.short}</p><ArrowRight/></button>)}</div></div></section>
 

@@ -72,6 +72,14 @@ try {
         path: join(output, `${name}-${viewportName}.png`),
         fullPage: true,
       })
+      if (name === 'service') {
+        await page.locator('.service-why-gallery').screenshot({
+          path: join(output, `service-gallery-${viewportName}.png`),
+        })
+        await page.locator('.service-local-approved').screenshot({
+          path: join(output, `service-area-${viewportName}.png`),
+        })
+      }
     }
     await context.close()
   }

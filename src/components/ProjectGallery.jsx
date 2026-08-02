@@ -4,7 +4,7 @@ import { Reveal } from '../App'
 import { SectionIntro } from './PageLayout'
 import { projectMedia } from '../data/projectMedia'
 
-export default function ProjectGallery({category,items}) {
+export default function ProjectGallery({category,items,heading}) {
   const fallbackGallery=projectMedia[category]
   const cmsItems=Array.isArray(items)?items.map(item=>({
     type:item.type||'image',
@@ -28,8 +28,14 @@ export default function ProjectGallery({category,items}) {
     return()=>{document.body.style.overflow='';window.removeEventListener('keydown',close)}
   },[selected])
   if(!gallery)return null
-  return <section className="client-work"><div className="container">
-    <SectionIntro eyebrow={gallery.eyebrow} title={gallery.title} accent={gallery.accent} text={gallery.intro}/>
+  const intro={
+    eyebrow:heading?.eyebrow||gallery.eyebrow,
+    title:heading?.title||gallery.title,
+    accent:heading?.accent??gallery.accent,
+    text:heading?.text||gallery.intro,
+  }
+  return <section className={`client-work ${heading?'service-why-gallery':''}`}><div className="container">
+    <SectionIntro {...intro} light={Boolean(heading)}/>
     <div className="client-gallery-grid">{gallery.items.slice(0,visible).map((item,index)=><Reveal key={item.src} delay={(index%4)*.035}><button className={`client-media-card ${index===0?'featured':''} ${item.fit==='contain'?'fit-contain':''}`} onClick={()=>setSelected(item)} aria-label={`Open ${item.alt}`}>
       <img src={item.type==='video'?item.poster:item.src} alt={item.alt} style={{objectPosition:item.objectPosition||'center center'}} loading="lazy" decoding="async"/>
       <span className="client-media-badge">{item.type==='video'?<><Play/>Video</>:<><Images/>{item.placeholder?'Showcase image':'Project photo'}</>}</span>

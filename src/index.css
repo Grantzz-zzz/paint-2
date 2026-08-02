@@ -443,6 +443,15 @@ main .home-areas-copy>p{font-size:1.375rem!important;font-weight:700}
 .service-story-copy .inner-section-heading{display:block;margin-bottom:28px}
 .service-story-copy .inner-section-heading h2{max-width:760px}
 .service-story-copy>p{max-width:800px;margin:0 0 20px;color:var(--muted);font-size:1.3rem!important;font-weight:750;line-height:1.78}
+.service-why-gallery{position:relative;overflow:hidden;background:var(--green);color:#fff}
+.service-why-gallery:before{content:'';position:absolute;width:560px;height:560px;right:-180px;top:-280px;border:110px solid rgba(255,255,255,.035);border-radius:50%}
+.service-why-gallery>.container{position:relative}
+.service-why-gallery .inner-section-heading{margin-bottom:60px;padding:48px 52px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:4px 34px 4px 34px}
+.service-why-gallery .inner-section-heading h2{max-width:700px;color:#fff;font-size:clamp(2.9rem,4.4vw,5.2rem);line-height:1}
+.service-why-gallery .inner-section-heading h2 em{color:var(--gold)}
+.service-why-gallery .inner-section-heading>p{margin-top:42px!important;color:rgba(255,255,255,.9);font-size:1.4rem!important;font-weight:800;line-height:1.7}
+.service-why-gallery .client-media-card{box-shadow:0 14px 38px rgba(5,23,17,.22)}
+.service-why-gallery .gallery-more{background:var(--gold);border-color:var(--gold);color:var(--ink)}
 .service-story-icon{width:64px;height:64px;display:grid;place-items:center;margin-bottom:24px;background:var(--green);border-radius:50% 50% 50% 14%;color:#fff;box-shadow:0 9px 0 rgba(31,81,64,.14);transform:rotate(-5deg)}
 .service-story-icon svg{width:30px;height:30px;transform:rotate(5deg)}
 .benefit-intro{max-width:590px;margin:28px 0 0;color:rgba(255,255,255,.9);font-size:1.2rem!important;font-weight:750;line-height:1.72}
@@ -450,8 +459,11 @@ main .home-areas-copy>p{font-size:1.375rem!important;font-weight:700}
 .service-local-approved{background:#f5f1e8}
 .service-local-card{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(340px,.9fr);gap:60px;align-items:center;padding:55px;background:#fff;border:1px solid #dfe5e0;border-radius:5px 45px 5px 45px;box-shadow:0 20px 55px rgba(31,46,40,.1)}
 .service-local-card .inner-section-heading{display:block;margin-bottom:25px}
-.service-local-card p{margin:0;color:var(--muted);font-size:1.28rem!important;font-weight:750;line-height:1.75}
-.service-local-photo img{width:100%;height:360px;object-fit:cover;border-radius:4px 30px 4px 30px}
+.service-local-card .inner-section-heading h2{font-size:clamp(3rem,4.4vw,5.25rem);line-height:.98}
+main .service-local-card p{max-width:780px;margin:0;color:var(--muted);font-size:1.55rem!important;font-weight:800;line-height:1.62}
+.service-local-photo{position:relative}
+.service-local-photo img{width:100%;height:410px;object-fit:cover;object-position:center;border-radius:4px 30px 4px 30px;box-shadow:16px 16px 0 #dce9e2}
+.service-local-photo span{position:absolute;left:22px;bottom:22px;padding:11px 15px;background:var(--gold);border-radius:3px 13px 3px 13px;color:var(--ink);font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em}
 
 .additional-services-main .additional-services-intro p,
 .about-main .editorial-grid p,
@@ -473,8 +485,14 @@ main .home-areas-copy>p{font-size:1.375rem!important;font-weight:700}
   .about-service-range .scope-item{min-height:170px}
   .service-story-grid{gap:32px}
   .service-story-photo,.service-story-photo img{min-height:300px;height:300px}
-  .service-story-copy>p,.service-local-card p{font-size:1.12rem!important;line-height:1.68}
+  .service-story-copy>p{font-size:1.12rem!important;line-height:1.68}
+  .service-why-gallery .inner-section-heading{padding:30px 24px;margin-bottom:38px}
+  .service-why-gallery .inner-section-heading h2{font-size:clamp(2.5rem,11vw,3.5rem)}
+  .service-why-gallery .inner-section-heading>p{margin-top:0!important;font-size:1.375rem!important;line-height:1.65}
+  .service-local-card .inner-section-heading h2{font-size:clamp(2.65rem,12vw,4rem)}
+  main .service-local-card p{font-size:1.3rem!important;line-height:1.62}
   .service-local-card{padding:28px 22px;border-radius:4px 28px 4px 28px}
-  .service-local-photo img{height:280px}
+  .service-local-photo img{height:300px;box-shadow:10px 10px 0 #dce9e2}
+  .service-local-photo span{left:15px;bottom:15px;font-size:.66rem}
   .benefit-intro{font-size:1.1rem!important}
 }

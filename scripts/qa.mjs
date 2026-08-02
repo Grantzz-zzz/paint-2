@@ -221,7 +221,17 @@ try {
       if(route.startsWith('/services/')){
         check(await page.locator('.scope-section').count()===1&&await page.locator('.process-section').count()===1,`${label}: approved scope or process section is missing`)
         check(await page.locator('.benefit-section').count()===1,`${label}: designed approved benefits section is missing`)
+        check(await page.locator('.service-why-gallery').count()===1,`${label}: Why Choose copy is not paired with the project gallery`)
+        const whyCopy=(await page.locator('.service-why-gallery .inner-section-heading').innerText()).toLowerCase()
+        check(whyCopy.includes('why choose')||whyCopy.includes('why businesses'),`${label}: approved Why Choose heading is missing from the project gallery`)
+        check(!(await page.locator('.process-section .inner-section-heading').innerText()).toLowerCase().includes('why choose'),`${label}: Why Choose copy is still incorrectly attached to the process section`)
         check(await page.locator('.service-local-approved').count()===1,`${label}: approved service-area statement is missing`)
+        const localArea=await page.locator('.service-local-card').evaluate(element=>({
+          paragraphSize:Number.parseFloat(getComputedStyle(element.querySelector(':scope > div:first-child > p')).fontSize),
+          image:element.querySelector('img')?.getAttribute('src')||'',
+        }))
+        check(localArea.paragraphSize>=(viewportName==='mobile'?20:24),`${label}: service-area copy is below the prominent type target (${localArea.paragraphSize}px)`)
+        check(localArea.image.includes('exterior-07.webp'),`${label}: service-area feature image is not the approved completed-home photograph`)
         check((await page.locator('.closing-cta').innerText()).toLowerCase().includes('quote'),`${label}: client-approved quote section is missing`)
       }
       if(route==='/additional-services'){
