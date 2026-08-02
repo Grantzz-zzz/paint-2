@@ -33,6 +33,7 @@ const checks = [
   [projectGallery.includes('hasManagedItems?cmsItems:fallbackGallery.items'), 'empty service gallery stays empty'],
   [galleryPage.includes("projectsStatus==='ready'&&hasManagedRecord"), 'empty managed main gallery stays empty while missing groups recover'],
   [contentProvider.includes('Array.isArray(incoming) ? incoming : fallback'), 'empty repeatable sections stay empty'],
+  [migration.includes('refresh_approved_hero_once') && migration.includes('APPROVED_HERO_VERSION'), 'one-time aesthetic hero upgrade preserves later editor control'],
   ...aestheticHeroes.map(path => [migration.includes(`'hero_asset' => '${path}'`), `approved hero assignment: ${path}`]),
 ]
 const failures = checks.filter(([passed]) => !passed).map(([, name]) => name)

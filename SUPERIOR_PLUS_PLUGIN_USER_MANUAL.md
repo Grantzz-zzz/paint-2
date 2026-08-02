@@ -1,6 +1,6 @@
 # Superior Plus Content Plugin — User Manual
 
-This manual applies to **Superior Plus Content 2.3.2** and **Superior Plus Theme 3.3.1**.
+This manual applies to **Superior Plus Content 2.3.3** and **Superior Plus Theme 3.3.1**.
 
 The plugin lets an editor change website content and media while the theme keeps the approved layout and styling locked.
 
@@ -154,7 +154,7 @@ The existing card remains in the same position, but its image changes. You do no
 
 The image and its complete visual card disappear from the page. The original Media Library file is not permanently deleted, so it can be reused later.
 
-In version 2.3.2, removing every managed gallery image does not cause the bundled default images to return.
+In version 2.3.3, removing every managed gallery image does not cause the bundled default images to return.
 
 ## 7. Change the crop or visible part of an image
 

@@ -10,7 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.3.2';
+	const VERSION = '2.3.3';
+	const APPROVED_HERO_VERSION = 'aesthetic-main-heroes-2026-08-02';
 
 	private $types;
 	private $report = array();
@@ -285,6 +286,9 @@ class SPP_Content_Migration {
 				$meta['spp_about_archive_image_id'] = $this->import_asset( $data['archive_asset'], 'Superior Plus company archive' );
 			}
 			$this->write_meta( $post->ID, 'page:' . $slug, $meta, $is_new );
+			if ( ! empty( $meta['spp_hero_image_id'] ) && $this->is_primary_design_page( $slug ) ) {
+				$this->refresh_approved_hero_once( $post->ID, $meta['spp_hero_image_id'] );
+			}
 			if ( isset( $approved_documents[ $document_key ] ) ) {
 				foreach ( array( 'spp_copy_source_version', 'spp_eyebrow', 'spp_hero_title', 'spp_accent', 'spp_hero_intro', 'spp_content_sections', 'spp_additional_services', 'spp_master_process', 'spp_service_options', 'spp_property_options', 'spp_contact_form_fields', 'spp_about_approach_copy', 'spp_about_standards', 'spp_about_roots_copy', 'spp_process_proof', 'spp_faq_intro' ) as $approved_key ) {
 					if ( array_key_exists( $approved_key, $meta ) ) { update_post_meta( $post->ID, $approved_key, $meta[ $approved_key ] ); }
@@ -296,6 +300,38 @@ class SPP_Content_Migration {
 			update_option( 'page_on_front', $ids['home'] );
 		}
 		return $ids;
+	}
+
+	/**
+	 * Identify pages whose hero artwork is part of the approved visual system.
+	 *
+	 * @param string $slug Page slug.
+	 * @return bool
+	 */
+	private function is_primary_design_page( $slug ) {
+		return in_array(
+			$slug,
+			array( 'about', 'services', 'additional-services', 'our-process', 'faqs', 'contact', 'service-areas', 'gallery', 'painting-guides', 'blog' ),
+			true
+		);
+	}
+
+	/**
+	 * Apply a one-time hero-media design upgrade without unlocking or replacing
+	 * any client-edited text. Once applied, later Media Library changes remain
+	 * authoritative even when the approved-site importer is rerun.
+	 *
+	 * @param int $post_id Page ID.
+	 * @param int $image_id Approved attachment ID.
+	 */
+	private function refresh_approved_hero_once( $post_id, $image_id ) {
+		if ( self::APPROVED_HERO_VERSION === get_post_meta( $post_id, '_spp_approved_hero_version', true ) ) {
+			return;
+		}
+		update_post_meta( $post_id, 'spp_hero_image_id', absint( $image_id ) );
+		update_post_meta( $post_id, '_spp_approved_hero_version', self::APPROVED_HERO_VERSION );
+		set_post_thumbnail( $post_id, absint( $image_id ) );
+		$this->report['updated'][] = 'approved-hero:' . get_post_field( 'post_name', $post_id );
 	}
 
 	private function migrate_faqs() {
