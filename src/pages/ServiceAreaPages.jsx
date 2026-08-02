@@ -3,9 +3,9 @@ import { ArrowRight, Building2, Check, Home, MapPin, PaintRoller } from 'lucide-
 import { PageLayout, PageHero, TrustStrip, SectionIntro, ClosingCTA } from '../components/PageLayout'
 import { Divider, Reveal } from '../App'
 import { serviceList, servicePages } from '../data/siteData'
-import { serviceAreaBySlug, serviceAreaRegions, serviceAreas } from '../data/serviceAreas'
+import { groupManagedServiceAreas, normalizeServiceArea, serviceAreaBySlug, serviceAreas } from '../data/serviceAreas'
 import { asset } from '../utils/assets'
-import { mediaUrl, pairItems, useRouteContent } from '../content/ContentProvider'
+import { mediaUrl, pairItems, textItems, useCollection, useRouteContent } from '../content/ContentProvider'
 import NotFoundPage from './NotFoundPage'
 
 const regionImages = {
@@ -39,12 +39,14 @@ const easternServiceHighlights = [
 function AreaCard({area,index}) {
   const navigate=useNavigate()
   const globalIndex=serviceAreas.findIndex(item=>item.slug===area.slug)
-  const image=areaCardImages[Math.max(0,globalIndex)%areaCardImages.length]
+  const image=mediaUrl(area.cardImage,areaCardImages[Math.max(0,globalIndex<0?index:globalIndex)%areaCardImages.length])
   return <Reveal delay={(index%4)*.04}><button className="area-directory-card" onClick={()=>navigate(area.path)}><span className="area-directory-photo"><img src={image} alt={`Superior Plus Painting project representing service in ${area.name}`} loading="lazy" decoding="async"/><MapPin/></span><span className="area-directory-copy"><small>{area.region}</small><h3>Painters in {area.name}</h3><p>{area.propertyTypes.slice(0,3).join(' · ')}</p></span><ArrowRight/></button></Reveal>
 }
 
 export function ServiceAreasPage() {
   const navigate=useNavigate()
+  const {data:managedAreas}=useCollection('areas',serviceAreas)
+  const areaRegions=groupManagedServiceAreas(managedAreas)
   const {data:route}=useRouteContent('/service-areas')
   const image=mediaUrl(route?.hero?.image,asset('stock-main/areas.webp'))
   const imagePosition=route?.hero?.image?.object_position||'center center'
@@ -55,14 +57,13 @@ export function ServiceAreasPage() {
     {title:'Eastern Suburbs',text:'Vermont, Forest Hill, Blackburn, Nunawading, Mitcham, Ringwood, Heathmont, Bayswater, Boronia, Wantirna and Ferntree Gully.',image:regionImages['Eastern Suburbs']},
     {title:'Outer Eastern Suburbs',text:'Scoresby, Rowville, Lysterfield, The Basin, Croydon, Kilsyth, Montrose, Lilydale, Mooroolbark and Chirnside Park.',image:regionImages['Outer Eastern Suburbs']},
   ]
-  return <PageLayout title={seo?.title||'Service Areas — Melbourne’s Eastern Suburbs'} description={seo?.description||`Explore professional residential and commercial painting services across ${serviceAreas.length} named Melbourne suburbs.`} image={mediaUrl(seo?.social_image,image)} pageType="CollectionPage" schemaData={{mainEntity:serviceAreas.map(area=>({'@type':'Place',name:area.name,url:`/service-areas/${area.slug}`}))}}>
+  return <PageLayout title={seo?.title||'Service Areas — Melbourne’s Eastern Suburbs'} description={seo?.description||`Explore professional residential and commercial painting services across ${managedAreas.length} named Melbourne suburbs.`} image={mediaUrl(seo?.social_image,image)} pageType="CollectionPage" schemaData={{mainEntity:managedAreas.map(area=>({'@type':'Place',name:area.name,url:`/service-areas/${area.slug}`}))}}>
     <PageHero eyebrow={route?.hero?.eyebrow||'Melbourne service areas'} title={route?.hero?.title||'Professional painters servicing'} accent={route?.hero?.accent||'Melbourne’s Eastern Suburbs.'} intro={route?.hero?.intro||'Superior Plus Painting and Remodeling provides professional residential and commercial painting services throughout Melbourne’s Eastern Suburbs.'} image={image} imagePosition={imagePosition} imageAlt={route?.hero?.image?.alt||'Superior Plus Painting exterior project in Melbourne'} tone="green"/>
     <TrustStrip/>
     <section className="inner-section area-coverage-story"><div className="container"><SectionIntro eyebrow="Trusted painting contractors" title="Across Melbourne’s" accent="Eastern Suburbs." text="Our experienced painting team helps homeowners, builders, property managers and businesses transform and protect their properties with high-quality workmanship and attention to detail."/><p className="area-coverage-intro">Whether you need interior painting, exterior painting, roof painting, fence painting, commercial painting or property maintenance, our professional painters deliver reliable solutions designed to achieve long-lasting results.</p><div className="area-story-grid">{regionStories.map((story,index)=><Reveal key={story.title} delay={index*.07}><article><img src={story.image} alt={`Superior Plus Painting work across ${story.title}`} loading="lazy" decoding="async"/><div><span>Region {String(index+1).padStart(2,'0')}</span><h3>{story.title}</h3><p>{story.text}</p></div></article></Reveal>)}</div></div><Divider color="#fbf6ec" variant="wave"/></section>
     <section className="inner-section eastern-service-scope"><div className="container"><SectionIntro eyebrow="Professional painting services we offer" title="Complete painting solutions" accent="for every property." text="We focus on detailed preparation, clean workmanship and quality finishes across residential and commercial projects."/><div className="eastern-service-grid">{easternServiceHighlights.map(({title,text,items,Icon},index)=><Reveal key={title} delay={(index%2)*.06}><article><span><Icon/></span><h3>{title}</h3><p>{text}</p><div>{items.map(item=><small key={item}><Check/>{item}</small>)}</div></article></Reveal>)}</div><Reveal className="eastern-why-band"><div><span>Why choose Superior Plus Painting and Remodeling?</span><h2>Detailed solutions,<br/><em>from start to finish.</em></h2></div><div>{['Experienced professional painters','Local Eastern Suburbs service','Quality preparation and workmanship','Reliable communication','Residential and commercial expertise'].map(item=><p key={item}><Check/>{item}</p>)}<p>We understand every property is different, which is why we provide tailored painting solutions to meet your needs and achieve the best possible result.</p></div></Reveal></div><Divider color="#fff" variant="slash"/></section>
-    {serviceAreaRegions.map((region,index)=>{
-      const areas=region.suburbs.map(slug=>serviceAreaBySlug[slug]).filter(Boolean)
-      return <section className={`inner-section area-region ${index%2?'cream':''}`} key={region.id}><div className="container"><SectionIntro eyebrow={`Area ${String(index+1).padStart(2,'0')}`} title={region.title} accent="covered with care." text={region.description}/><div className="area-directory-grid">{areas.map((area,areaIndex)=><AreaCard area={area} index={areaIndex} key={area.slug}/>)}</div></div>{index<serviceAreaRegions.length-1&&<Divider color={index%2?'#fff':'#fbf6ec'} variant={index%2?'slash':'wave'}/>}</section>
+    {areaRegions.map((region,index)=>{
+      return <section className={`inner-section area-region ${index%2?'cream':''}`} key={region.id}><div className="container"><SectionIntro eyebrow={`Area ${String(index+1).padStart(2,'0')}`} title={region.title} accent="covered with care." text={region.description}/><div className="area-directory-grid">{region.areas.map((area,areaIndex)=><AreaCard area={area} index={areaIndex} key={area.slug}/>)}</div></div>{index<areaRegions.length-1&&<Divider color={index%2?'#fff':'#fbf6ec'} variant={index%2?'slash':'wave'}/>}</section>
     })}
     <section className="local-seo-note"><div className="container"><MapPin/><div><h2>Get your free painting quote today</h2><p>If you are looking for reliable painters in Melbourne’s Eastern Suburbs, Superior Plus Painting and Remodeling is ready to help. Contact our professional painting team and transform your home or business with quality painting services.</p></div><button className="btn" onClick={()=>navigate('/contact')}>Request a free quote <ArrowRight/></button></div></section>
   </PageLayout>
@@ -71,14 +72,30 @@ export function ServiceAreasPage() {
 export function ServiceAreaPage() {
   const {slug}=useParams()
   const navigate=useNavigate()
-  const area=serviceAreaBySlug[slug]
-  const {data:route}=useRouteContent(`/service-areas/${slug}`)
-  if(!area) return <NotFoundPage/>
+  const {data:managedAreas}=useCollection('areas',serviceAreas)
+  const managedAreaBySlug=Object.fromEntries(managedAreas.map(item=>[item.slug,normalizeServiceArea(item)]))
+  const {data:route,status:routeStatus}=useRouteContent(`/service-areas/${slug}`)
   const fields=route?.content?.fields||{}
+  const fallbackArea=managedAreaBySlug[slug]||serviceAreaBySlug[slug]
+  const routeArea=route?normalizeServiceArea({
+    slug,
+    name:fields.area_name||fallbackArea?.name||route.title?.replace(/^Painters in\s+/i,''),
+    region:fields.area_region||fallbackArea?.region,
+    region_description:fields.area_region_description||fallbackArea?.regionDescription,
+    property_types:textItems(fields.area_property_types,fallbackArea?.propertyTypes||[]),
+    service_slugs:textItems(fields.area_service_slugs,fallbackArea?.serviceSlugs||[]),
+    local_context:fields.area_local_context||fallbackArea?.localContext,
+    neighbours:textItems(fields.area_neighbour_slugs,fallbackArea?.neighbours||[]),
+    card_image:fields.area_card_image||fallbackArea?.cardImage,
+    path:`/service-areas/${slug}`,
+  }):null
+  const area=routeArea||fallbackArea
+  if(!area&&routeStatus==='loading') return null
+  if(!area) return <NotFoundPage/>
   const sections=pairItems(fields.content_sections,[])
   const editableContext=sections[0]?.[1]?.replace(/<[^>]*>/g,'').trim()
   const services=area.serviceSlugs.map(serviceSlug=>serviceList.find(service=>service.slug===serviceSlug)).filter(Boolean)
-  const neighbours=area.neighbours.map(neighbourSlug=>serviceAreaBySlug[neighbourSlug]).filter(Boolean)
+  const neighbours=area.neighbours.map(neighbourSlug=>managedAreaBySlug[neighbourSlug]||serviceAreaBySlug[neighbourSlug]).filter(Boolean)
   const image=mediaUrl(route?.hero?.image,regionImages[area.region]||asset('client/projects/residential/residential-01.webp'))
   const pageTitle=`Painters in ${area.name}`
   const description=`Professional residential and commercial painters in ${area.name}, Melbourne. Explore interior, exterior and related painting services from Superior Plus Painting.`

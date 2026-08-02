@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.3.3
+Stable tag: 2.3.4
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -38,6 +38,11 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.3.4 =
+* Adds a dedicated Areas dashboard and editable suburb, region, property, service, neighbour, hero and card-image fields.
+* Publishes managed service areas through the REST API so directory cards, dropdowns, homepage filters and suburb pages update together.
+* Prevents Areas from disappearing when a WordPress menu is incomplete and safely initializes all approved suburb records during import.
 
 = 2.3.3 =
 * Replaces stale WordPress hero attachment IDs with the approved aesthetic hero artwork once, even when the page copy is client-protected.

@@ -105,7 +105,7 @@ class SPP_Content_REST {
 				),
 			)
 		);
-		foreach ( array( 'articles', 'projects', 'faqs', 'testimonials' ) as $collection ) {
+		foreach ( array( 'articles', 'projects', 'faqs', 'testimonials', 'areas' ) as $collection ) {
 			register_rest_route(
 				'spp/v1',
 				'/' . $collection,
@@ -336,6 +336,47 @@ class SPP_Content_REST {
 			},
 			$this->published_posts( 'spp_service' )
 		);
+		return $this->response( $items );
+	}
+
+	/**
+	 * Published, plugin-editable service areas.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function areas() {
+		$posts = get_posts(
+			array(
+				'post_type'      => 'page',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'meta_key'       => 'spp_template_key',
+				'meta_value'     => 'service_areas',
+				'orderby'        => array( 'menu_order' => 'ASC', 'title' => 'ASC' ),
+			)
+		);
+		$items = array();
+		foreach ( $posts as $post ) {
+			if ( 'service-areas' === $post->post_name ) {
+				continue;
+			}
+			$name = get_post_meta( $post->ID, 'spp_area_name', true );
+			$items[] = array(
+				'id'                 => (int) $post->ID,
+				'slug'               => $post->post_name,
+				'name'               => $name ? $name : preg_replace( '/^Painters in\s+/i', '', $this->plain_title( $post ) ),
+				'region'             => get_post_meta( $post->ID, 'spp_area_region', true ),
+				'region_description' => get_post_meta( $post->ID, 'spp_area_region_description', true ),
+				'property_types'     => $this->text_values( get_post_meta( $post->ID, 'spp_area_property_types', true ) ),
+				'service_slugs'      => $this->text_values( get_post_meta( $post->ID, 'spp_area_service_slugs', true ) ),
+				'local_context'      => get_post_meta( $post->ID, 'spp_area_local_context', true ),
+				'neighbours'         => $this->text_values( get_post_meta( $post->ID, 'spp_area_neighbour_slugs', true ) ),
+				'path'               => '/service-areas/' . $post->post_name,
+				'url'                => get_permalink( $post ),
+				'card_image'         => $this->media( get_post_meta( $post->ID, 'spp_area_card_image_id', true ) ),
+				'hero'               => $this->hero( $post ),
+			);
+		}
 		return $this->response( $items );
 	}
 
@@ -1019,6 +1060,30 @@ class SPP_Content_REST {
 				);
 			}
 			$result[] = $entry;
+		}
+		$areas_url = untrailingslashit( home_url( '/service-areas' ) );
+		$has_areas = false;
+		foreach ( $result as $entry ) {
+			if ( untrailingslashit( $entry['url'] ) === $areas_url || false !== stripos( $entry['label'], 'area' ) ) {
+				$has_areas = true;
+				break;
+			}
+		}
+		if ( ! $has_areas ) {
+			$area_entry = array(
+				'id'       => 'spp-areas',
+				'label'    => __( 'Areas', 'superior-plus-content' ),
+				'url'      => home_url( '/service-areas' ),
+				'children' => array(),
+			);
+			$insert_at = min( 2, count( $result ) );
+			foreach ( $result as $index => $entry ) {
+				if ( untrailingslashit( $entry['url'] ) === untrailingslashit( home_url( '/services' ) ) ) {
+					$insert_at = $index + 1;
+					break;
+				}
+			}
+			array_splice( $result, $insert_at, 0, array( $area_entry ) );
 		}
 		return $result;
 	}

@@ -1,0 +1,1842 @@
+{
+  "schema_version": "1.0.0",
+  "generated_from": "src/data/serviceAreas.js",
+  "regions": [
+    {
+      "id": "inner-eastern",
+      "title": "Inner Eastern Suburbs",
+      "description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses."
+    },
+    {
+      "id": "south-eastern",
+      "title": "South Eastern Suburbs",
+      "description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs."
+    },
+    {
+      "id": "eastern",
+      "title": "Eastern Suburbs",
+      "description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east."
+    },
+    {
+      "id": "outer-eastern",
+      "title": "Outer Eastern Suburbs",
+      "description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east."
+    },
+    {
+      "id": "monash-east",
+      "title": "Monash & nearby eastern suburbs",
+      "description": "Painting services for established homes, townhouses, units, rentals, workplaces and managed properties across Melbourne’s east."
+    },
+    {
+      "id": "greater-dandenong",
+      "title": "Greater Dandenong",
+      "description": "Residential and commercial painting for homes, apartments, shops, workplaces, warehouses and managed properties."
+    },
+    {
+      "id": "casey",
+      "title": "Casey & the outer south-east",
+      "description": "Careful interior, exterior and outdoor painting for established homes, newer properties, rentals and local businesses."
+    }
+  ],
+  "areas": [
+    {
+      "slug": "chadstone",
+      "name": "Chadstone",
+      "region": "Monash & nearby eastern suburbs",
+      "region_description": "Painting services for established homes, townhouses, units, rentals, workplaces and managed properties across Melbourne’s east.",
+      "property_types": [
+        "Established homes",
+        "Units and townhouses",
+        "Rental properties",
+        "Retail and commercial spaces"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "plaster-repairs-melbourne"
+      ],
+      "local_context": "Chadstone includes a varied mix of established residential streets, units, rentals and busy commercial properties. We tailor preparation, access and scheduling to the property—whether the job is a lived-in home, a tenancy refresh or a workplace repaint.",
+      "neighbour_slugs": [
+        "mount-waverley",
+        "oakleigh",
+        "ashwood",
+        "burwood"
+      ]
+    },
+    {
+      "slug": "mount-waverley",
+      "name": "Mount Waverley",
+      "region": "Monash & nearby eastern suburbs",
+      "region_description": "Painting services for established homes, townhouses, units, rentals, workplaces and managed properties across Melbourne’s east.",
+      "property_types": [
+        "Family homes",
+        "Townhouses and units",
+        "Renovation projects",
+        "Rental properties"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "plaster-repairs-melbourne"
+      ],
+      "local_context": "Mount Waverley projects often range from individual room updates to full interior and exterior repaints. Our process accounts for occupied homes, renovation sequencing, careful protection and the surface repairs needed before a durable finish.",
+      "neighbour_slugs": [
+        "glen-waverley",
+        "chadstone",
+        "burwood",
+        "mulgrave"
+      ]
+    },
+    {
+      "slug": "glen-waverley",
+      "name": "Glen Waverley",
+      "region": "Monash & nearby eastern suburbs",
+      "region_description": "Painting services for established homes, townhouses, units, rentals, workplaces and managed properties across Melbourne’s east.",
+      "property_types": [
+        "Family homes",
+        "Townhouses",
+        "Investment properties",
+        "Local commercial spaces"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "From family homes and townhouses to investment and commercial properties, Glen Waverley painting work needs clear planning and consistent finishes. We can coordinate interiors, exteriors and suitable outdoor surfaces under one detailed quote.",
+      "neighbour_slugs": [
+        "mount-waverley",
+        "mulgrave",
+        "clayton"
+      ]
+    },
+    {
+      "slug": "oakleigh",
+      "name": "Oakleigh",
+      "region": "Monash & nearby eastern suburbs",
+      "region_description": "Painting services for established homes, townhouses, units, rentals, workplaces and managed properties across Melbourne’s east.",
+      "property_types": [
+        "Weatherboard and brick homes",
+        "Units and apartments",
+        "Shops and offices",
+        "Rental properties"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "wallpaper-removal-melbourne",
+        "plaster-repairs-melbourne"
+      ],
+      "local_context": "Oakleigh has residential and commercial properties with different access, preparation and coating requirements. We assess the existing surface first, then plan repairs, protection and application around the way the property is used.",
+      "neighbour_slugs": [
+        "chadstone",
+        "clayton",
+        "ashwood",
+        "mount-waverley"
+      ]
+    },
+    {
+      "slug": "mulgrave",
+      "name": "Mulgrave",
+      "region": "Monash & nearby eastern suburbs",
+      "region_description": "Painting services for established homes, townhouses, units, rentals, workplaces and managed properties across Melbourne’s east.",
+      "property_types": [
+        "Family homes",
+        "Townhouses",
+        "Offices and workplaces",
+        "Industrial and managed properties"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "commercial-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne"
+      ],
+      "local_context": "Mulgrave enquiries can involve family homes, townhouses, workplaces and larger managed sites. We scope the surfaces, access and operating requirements before recommending a practical painting schedule and coating system.",
+      "neighbour_slugs": [
+        "glen-waverley",
+        "clayton",
+        "dandenong",
+        "noble-park"
+      ]
+    },
+    {
+      "slug": "clayton",
+      "name": "Clayton",
+      "region": "Monash & nearby eastern suburbs",
+      "region_description": "Painting services for established homes, townhouses, units, rentals, workplaces and managed properties across Melbourne’s east.",
+      "property_types": [
+        "Homes and units",
+        "Apartments and rentals",
+        "Offices and clinics",
+        "Commercial properties"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "commercial-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "wallpaper-removal-melbourne",
+        "plaster-repairs-melbourne"
+      ],
+      "local_context": "Clayton includes homes, apartments, rentals and active workplaces. We plan protection, access and drying time around residents, tenants or business operations while keeping preparation and finish quality consistent.",
+      "neighbour_slugs": [
+        "oakleigh",
+        "mulgrave",
+        "glen-waverley",
+        "springvale"
+      ]
+    },
+    {
+      "slug": "burwood",
+      "name": "Burwood",
+      "region": "Monash & nearby eastern suburbs",
+      "region_description": "Painting services for established homes, townhouses, units, rentals, workplaces and managed properties across Melbourne’s east.",
+      "property_types": [
+        "Established homes",
+        "Units and townhouses",
+        "Rental properties",
+        "Renovation projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne",
+        "plaster-repairs-melbourne"
+      ],
+      "local_context": "Burwood painting projects commonly involve established homes, units, townhouses and renovation work. We pay particular attention to surface condition, old coatings, plaster repairs and protection before the first finish coat is applied.",
+      "neighbour_slugs": [
+        "ashwood",
+        "mount-waverley",
+        "chadstone"
+      ]
+    },
+    {
+      "slug": "ashwood",
+      "name": "Ashwood",
+      "region": "Monash & nearby eastern suburbs",
+      "region_description": "Painting services for established homes, townhouses, units, rentals, workplaces and managed properties across Melbourne’s east.",
+      "property_types": [
+        "Established homes",
+        "Townhouses and units",
+        "Rental properties",
+        "Pre-sale refreshes"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "wallpaper-removal-melbourne",
+        "plaster-repairs-melbourne",
+        "fence-painting-melbourne"
+      ],
+      "local_context": "Ashwood homeowners, landlords and property managers can use one team for painting and the preparation behind it. That can include wallpaper removal, minor plaster repairs, interior repainting and exterior or fence updates.",
+      "neighbour_slugs": [
+        "chadstone",
+        "burwood",
+        "oakleigh",
+        "mount-waverley"
+      ]
+    },
+    {
+      "slug": "dandenong",
+      "name": "Dandenong",
+      "region": "Greater Dandenong",
+      "region_description": "Residential and commercial painting for homes, apartments, shops, workplaces, warehouses and managed properties.",
+      "property_types": [
+        "Homes and apartments",
+        "Shops and offices",
+        "Warehouses and factories",
+        "Body corporate and managed properties"
+      ],
+      "service_slugs": [
+        "commercial-painting-melbourne",
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "plaster-repairs-melbourne"
+      ],
+      "local_context": "Dandenong projects range from homes and apartments to shops, offices, warehouses and managed sites. We plan commercial work to reduce disruption and residential work to protect occupied spaces throughout preparation and painting.",
+      "neighbour_slugs": [
+        "noble-park",
+        "keysborough",
+        "springvale",
+        "mulgrave"
+      ]
+    },
+    {
+      "slug": "noble-park",
+      "name": "Noble Park",
+      "region": "Greater Dandenong",
+      "region_description": "Residential and commercial painting for homes, apartments, shops, workplaces, warehouses and managed properties.",
+      "property_types": [
+        "Family homes",
+        "Units and rentals",
+        "Shops and offices",
+        "Managed properties"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "fence-painting-melbourne",
+        "plaster-repairs-melbourne"
+      ],
+      "local_context": "Noble Park painting services cover family homes, units, rentals and local commercial properties. We can combine surface repairs, interior and exterior painting, and suitable fence work into a clearly staged project.",
+      "neighbour_slugs": [
+        "dandenong",
+        "springvale",
+        "keysborough",
+        "mulgrave"
+      ]
+    },
+    {
+      "slug": "springvale",
+      "name": "Springvale",
+      "region": "Greater Dandenong",
+      "region_description": "Residential and commercial painting for homes, apartments, shops, workplaces, warehouses and managed properties.",
+      "property_types": [
+        "Homes and units",
+        "Rental properties",
+        "Retail spaces",
+        "Offices and workplaces"
+      ],
+      "service_slugs": [
+        "commercial-painting-melbourne",
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "wallpaper-removal-melbourne",
+        "plaster-repairs-melbourne"
+      ],
+      "local_context": "Springvale contains busy homes, rentals, shops and workplaces that benefit from careful staging and tidy work areas. We assess access and operating needs, then coordinate preparation and painting to minimise avoidable disruption.",
+      "neighbour_slugs": [
+        "noble-park",
+        "clayton",
+        "dandenong",
+        "keysborough"
+      ]
+    },
+    {
+      "slug": "keysborough",
+      "name": "Keysborough",
+      "region": "Greater Dandenong",
+      "region_description": "Residential and commercial painting for homes, apartments, shops, workplaces, warehouses and managed properties.",
+      "property_types": [
+        "Established and newer homes",
+        "Townhouses",
+        "Warehouses and workplaces",
+        "Investment properties"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "commercial-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne"
+      ],
+      "local_context": "Keysborough work can include established homes, newer residential properties, townhouses and commercial sites. We match the preparation and paint system to the surface rather than using one approach for every building.",
+      "neighbour_slugs": [
+        "dandenong",
+        "noble-park",
+        "springvale"
+      ]
+    },
+    {
+      "slug": "berwick",
+      "name": "Berwick",
+      "region": "Casey & the outer south-east",
+      "region_description": "Careful interior, exterior and outdoor painting for established homes, newer properties, rentals and local businesses.",
+      "property_types": [
+        "Established and newer homes",
+        "Townhouses",
+        "Rental properties",
+        "Local commercial spaces"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Berwick homeowners and property managers can coordinate complete interior and exterior painting as well as suitable roof, fence and deck coatings. Every quote considers the current surface condition, access and finish expected.",
+      "neighbour_slugs": [
+        "narre-warren",
+        "endeavour-hills"
+      ]
+    },
+    {
+      "slug": "narre-warren",
+      "name": "Narre Warren",
+      "region": "Casey & the outer south-east",
+      "region_description": "Careful interior, exterior and outdoor painting for established homes, newer properties, rentals and local businesses.",
+      "property_types": [
+        "Family homes",
+        "Townhouses and units",
+        "Rental properties",
+        "Shops and offices"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "commercial-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne"
+      ],
+      "local_context": "Narre Warren painting enquiries include homes, townhouses, rentals and commercial spaces. We provide written scope and preparation details so owners, landlords and businesses understand how the work will be staged.",
+      "neighbour_slugs": [
+        "berwick",
+        "endeavour-hills"
+      ]
+    },
+    {
+      "slug": "endeavour-hills",
+      "name": "Endeavour Hills",
+      "region": "Casey & the outer south-east",
+      "region_description": "Careful interior, exterior and outdoor painting for established homes, newer properties, rentals and local businesses.",
+      "property_types": [
+        "Established family homes",
+        "Rental properties",
+        "Interior renovations",
+        "Outdoor timber and fences"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Endeavour Hills projects often involve established homes where preparation makes the largest difference. We can assess worn coatings, minor plaster or timber defects, and suitable interior, exterior, roof, fence or deck finishes.",
+      "neighbour_slugs": [
+        "narre-warren",
+        "berwick",
+        "dandenong"
+      ]
+    },
+    {
+      "slug": "hawthorn",
+      "name": "Hawthorn",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Hawthorn. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "box-hill-south",
+        "hawthorn-east",
+        "kew"
+      ]
+    },
+    {
+      "slug": "hawthorn-east",
+      "name": "Hawthorn East",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Hawthorn East. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "hawthorn",
+        "kew",
+        "kew-east"
+      ]
+    },
+    {
+      "slug": "kew",
+      "name": "Kew",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Kew. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "hawthorn-east",
+        "kew-east",
+        "camberwell"
+      ]
+    },
+    {
+      "slug": "kew-east",
+      "name": "Kew East",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Kew East. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "kew",
+        "camberwell",
+        "canterbury"
+      ]
+    },
+    {
+      "slug": "camberwell",
+      "name": "Camberwell",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Camberwell. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "kew-east",
+        "canterbury",
+        "balwyn"
+      ]
+    },
+    {
+      "slug": "canterbury",
+      "name": "Canterbury",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Canterbury. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "camberwell",
+        "balwyn",
+        "balwyn-north"
+      ]
+    },
+    {
+      "slug": "balwyn",
+      "name": "Balwyn",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Balwyn. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "canterbury",
+        "balwyn-north",
+        "surrey-hills"
+      ]
+    },
+    {
+      "slug": "balwyn-north",
+      "name": "Balwyn North",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Balwyn North. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "balwyn",
+        "surrey-hills",
+        "mont-albert"
+      ]
+    },
+    {
+      "slug": "surrey-hills",
+      "name": "Surrey Hills",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Surrey Hills. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "balwyn-north",
+        "mont-albert",
+        "deepdene"
+      ]
+    },
+    {
+      "slug": "mont-albert",
+      "name": "Mont Albert",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Mont Albert. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "surrey-hills",
+        "deepdene",
+        "box-hill"
+      ]
+    },
+    {
+      "slug": "deepdene",
+      "name": "Deepdene",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Deepdene. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "mont-albert",
+        "box-hill",
+        "box-hill-north"
+      ]
+    },
+    {
+      "slug": "box-hill",
+      "name": "Box Hill",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Box Hill. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "deepdene",
+        "box-hill-north",
+        "box-hill-south"
+      ]
+    },
+    {
+      "slug": "box-hill-north",
+      "name": "Box Hill North",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Box Hill North. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "box-hill",
+        "box-hill-south",
+        "hawthorn"
+      ]
+    },
+    {
+      "slug": "box-hill-south",
+      "name": "Box Hill South",
+      "region": "Inner Eastern Suburbs",
+      "region_description": "Professional residential and commercial painting across Melbourne’s inner eastern homes, renovations, rentals and local businesses.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Box Hill South. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "box-hill-north",
+        "hawthorn",
+        "hawthorn-east"
+      ]
+    },
+    {
+      "slug": "malvern",
+      "name": "Malvern",
+      "region": "South Eastern Suburbs",
+      "region_description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Malvern. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "clayton-south",
+        "malvern-east",
+        "glen-iris"
+      ]
+    },
+    {
+      "slug": "malvern-east",
+      "name": "Malvern East",
+      "region": "South Eastern Suburbs",
+      "region_description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Malvern East. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "malvern",
+        "glen-iris",
+        "burwood-east"
+      ]
+    },
+    {
+      "slug": "glen-iris",
+      "name": "Glen Iris",
+      "region": "South Eastern Suburbs",
+      "region_description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Glen Iris. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "malvern-east",
+        "burwood-east",
+        "wheelers-hill"
+      ]
+    },
+    {
+      "slug": "burwood-east",
+      "name": "Burwood East",
+      "region": "South Eastern Suburbs",
+      "region_description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Burwood East. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "glen-iris",
+        "wheelers-hill",
+        "hughesdale"
+      ]
+    },
+    {
+      "slug": "wheelers-hill",
+      "name": "Wheelers Hill",
+      "region": "South Eastern Suburbs",
+      "region_description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Wheelers Hill. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "burwood-east",
+        "hughesdale",
+        "oakleigh-east"
+      ]
+    },
+    {
+      "slug": "hughesdale",
+      "name": "Hughesdale",
+      "region": "South Eastern Suburbs",
+      "region_description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Hughesdale. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "wheelers-hill",
+        "oakleigh-east",
+        "oakleigh-south"
+      ]
+    },
+    {
+      "slug": "oakleigh-east",
+      "name": "Oakleigh East",
+      "region": "South Eastern Suburbs",
+      "region_description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Oakleigh East. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "hughesdale",
+        "oakleigh-south",
+        "clayton-south"
+      ]
+    },
+    {
+      "slug": "oakleigh-south",
+      "name": "Oakleigh South",
+      "region": "South Eastern Suburbs",
+      "region_description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Oakleigh South. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "oakleigh-east",
+        "clayton-south",
+        "malvern"
+      ]
+    },
+    {
+      "slug": "clayton-south",
+      "name": "Clayton South",
+      "region": "South Eastern Suburbs",
+      "region_description": "Interior, exterior and property painting for Melbourne’s south-eastern suburbs.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Clayton South. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "oakleigh-south",
+        "malvern",
+        "malvern-east"
+      ]
+    },
+    {
+      "slug": "vermont",
+      "name": "Vermont",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Vermont. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "ferntree-gully",
+        "vermont-south",
+        "forest-hill"
+      ]
+    },
+    {
+      "slug": "vermont-south",
+      "name": "Vermont South",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Vermont South. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "vermont",
+        "forest-hill",
+        "blackburn"
+      ]
+    },
+    {
+      "slug": "forest-hill",
+      "name": "Forest Hill",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Forest Hill. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "vermont-south",
+        "blackburn",
+        "blackburn-north"
+      ]
+    },
+    {
+      "slug": "blackburn",
+      "name": "Blackburn",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Blackburn. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "forest-hill",
+        "blackburn-north",
+        "blackburn-south"
+      ]
+    },
+    {
+      "slug": "blackburn-north",
+      "name": "Blackburn North",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Blackburn North. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "blackburn",
+        "blackburn-south",
+        "nunawading"
+      ]
+    },
+    {
+      "slug": "blackburn-south",
+      "name": "Blackburn South",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Blackburn South. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "blackburn-north",
+        "nunawading",
+        "mitcham"
+      ]
+    },
+    {
+      "slug": "nunawading",
+      "name": "Nunawading",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Nunawading. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "blackburn-south",
+        "mitcham",
+        "ringwood"
+      ]
+    },
+    {
+      "slug": "mitcham",
+      "name": "Mitcham",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Mitcham. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "nunawading",
+        "ringwood",
+        "ringwood-east"
+      ]
+    },
+    {
+      "slug": "ringwood",
+      "name": "Ringwood",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Ringwood. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "mitcham",
+        "ringwood-east",
+        "ringwood-north"
+      ]
+    },
+    {
+      "slug": "ringwood-east",
+      "name": "Ringwood East",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Ringwood East. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "ringwood",
+        "ringwood-north",
+        "heathmont"
+      ]
+    },
+    {
+      "slug": "ringwood-north",
+      "name": "Ringwood North",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Ringwood North. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "ringwood-east",
+        "heathmont",
+        "bayswater"
+      ]
+    },
+    {
+      "slug": "heathmont",
+      "name": "Heathmont",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Heathmont. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "ringwood-north",
+        "bayswater",
+        "boronia"
+      ]
+    },
+    {
+      "slug": "bayswater",
+      "name": "Bayswater",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Bayswater. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "heathmont",
+        "boronia",
+        "wantirna"
+      ]
+    },
+    {
+      "slug": "boronia",
+      "name": "Boronia",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Boronia. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "bayswater",
+        "wantirna",
+        "wantirna-south"
+      ]
+    },
+    {
+      "slug": "wantirna",
+      "name": "Wantirna",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Wantirna. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "boronia",
+        "wantirna-south",
+        "knoxfield"
+      ]
+    },
+    {
+      "slug": "wantirna-south",
+      "name": "Wantirna South",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Wantirna South. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "wantirna",
+        "knoxfield",
+        "ferntree-gully"
+      ]
+    },
+    {
+      "slug": "knoxfield",
+      "name": "Knoxfield",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Knoxfield. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "wantirna-south",
+        "ferntree-gully",
+        "vermont"
+      ]
+    },
+    {
+      "slug": "ferntree-gully",
+      "name": "Ferntree Gully",
+      "region": "Eastern Suburbs",
+      "region_description": "Painting and preparation services for established homes, townhouses, investment properties and workplaces across Melbourne’s east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Ferntree Gully. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "knoxfield",
+        "vermont",
+        "vermont-south"
+      ]
+    },
+    {
+      "slug": "scoresby",
+      "name": "Scoresby",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Scoresby. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "chirnside-park",
+        "rowville",
+        "lysterfield"
+      ]
+    },
+    {
+      "slug": "rowville",
+      "name": "Rowville",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Rowville. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "scoresby",
+        "lysterfield",
+        "the-basin"
+      ]
+    },
+    {
+      "slug": "lysterfield",
+      "name": "Lysterfield",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Lysterfield. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "rowville",
+        "the-basin",
+        "croydon"
+      ]
+    },
+    {
+      "slug": "the-basin",
+      "name": "The Basin",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in The Basin. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "lysterfield",
+        "croydon",
+        "croydon-hills"
+      ]
+    },
+    {
+      "slug": "croydon",
+      "name": "Croydon",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Croydon. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "the-basin",
+        "croydon-hills",
+        "kilsyth"
+      ]
+    },
+    {
+      "slug": "croydon-hills",
+      "name": "Croydon Hills",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Croydon Hills. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "croydon",
+        "kilsyth",
+        "montrose"
+      ]
+    },
+    {
+      "slug": "kilsyth",
+      "name": "Kilsyth",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Kilsyth. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "croydon-hills",
+        "montrose",
+        "lilydale"
+      ]
+    },
+    {
+      "slug": "montrose",
+      "name": "Montrose",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Montrose. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "kilsyth",
+        "lilydale",
+        "mooroolbark"
+      ]
+    },
+    {
+      "slug": "lilydale",
+      "name": "Lilydale",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Lilydale. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "montrose",
+        "mooroolbark",
+        "chirnside-park"
+      ]
+    },
+    {
+      "slug": "mooroolbark",
+      "name": "Mooroolbark",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Mooroolbark. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "lilydale",
+        "chirnside-park",
+        "scoresby"
+      ]
+    },
+    {
+      "slug": "chirnside-park",
+      "name": "Chirnside Park",
+      "region": "Outer Eastern Suburbs",
+      "region_description": "Professional painting support for homes, renovations, rental properties and businesses throughout Melbourne’s outer east.",
+      "property_types": [
+        "Homes and apartments",
+        "Renovation and rental properties",
+        "Local businesses and managed properties",
+        "Interior and exterior projects"
+      ],
+      "service_slugs": [
+        "residential-painting-melbourne",
+        "interior-painting-melbourne",
+        "exterior-painting-melbourne",
+        "commercial-painting-melbourne",
+        "roof-painting-melbourne",
+        "fence-painting-melbourne",
+        "deck-painting-staining-melbourne"
+      ],
+      "local_context": "Superior Plus Painting and Remodeling provides professional residential and commercial painting services in Chirnside Park. The team can quote interior painting, exterior painting, roof painting, fence painting, suitable deck work and property preparation, with the final scope tailored to the actual surfaces and access.",
+      "neighbour_slugs": [
+        "mooroolbark",
+        "scoresby",
+        "rowville"
+      ]
+    }
+  ]
+}

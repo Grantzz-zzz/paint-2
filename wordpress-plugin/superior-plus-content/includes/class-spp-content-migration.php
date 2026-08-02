@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.3.3';
+	const VERSION = '2.3.4';
 	const APPROVED_HERO_VERSION = 'aesthetic-main-heroes-2026-08-02';
 
 	private $types;
@@ -286,6 +286,13 @@ class SPP_Content_Migration {
 				$meta['spp_about_archive_image_id'] = $this->import_asset( $data['archive_asset'], 'Superior Plus company archive' );
 			}
 			$this->write_meta( $post->ID, 'page:' . $slug, $meta, $is_new );
+			if ( 0 === strpos( $slug, 'service-areas/' ) ) {
+				foreach ( array( 'spp_area_name', 'spp_area_region', 'spp_area_region_description', 'spp_area_property_types', 'spp_area_service_slugs', 'spp_area_local_context', 'spp_area_neighbour_slugs' ) as $area_key ) {
+					if ( array_key_exists( $area_key, $meta ) && ! metadata_exists( 'post', $post->ID, $area_key ) ) {
+						update_post_meta( $post->ID, $area_key, $meta[ $area_key ] );
+					}
+				}
+			}
 			if ( ! empty( $meta['spp_hero_image_id'] ) && $this->is_primary_design_page( $slug ) ) {
 				$this->refresh_approved_hero_once( $post->ID, $meta['spp_hero_image_id'] );
 			}
@@ -1304,6 +1311,26 @@ class SPP_Content_Migration {
 					'spp_seo_description' => 'Professional residential, commercial, interior and exterior painters in ' . $area[0] . ', Melbourne. Request a free written quote.',
 				),
 			);
+		}
+		$area_file = SPP_CONTENT_PATH . 'data/service-areas.json';
+		if ( file_exists( $area_file ) ) {
+			$managed = json_decode( file_get_contents( $area_file ), true );
+			if ( ! empty( $managed['areas'] ) && is_array( $managed['areas'] ) ) {
+				foreach ( $managed['areas'] as $managed_area ) {
+					$slug = isset( $managed_area['slug'] ) ? sanitize_title( $managed_area['slug'] ) : '';
+					$key  = 'service-areas/' . $slug;
+					if ( ! $slug || ! isset( $pages[ $key ] ) ) {
+						continue;
+					}
+					$pages[ $key ]['meta']['spp_area_name']               = isset( $managed_area['name'] ) ? $managed_area['name'] : '';
+					$pages[ $key ]['meta']['spp_area_region']             = isset( $managed_area['region'] ) ? $managed_area['region'] : '';
+					$pages[ $key ]['meta']['spp_area_region_description'] = isset( $managed_area['region_description'] ) ? $managed_area['region_description'] : '';
+					$pages[ $key ]['meta']['spp_area_property_types']     = isset( $managed_area['property_types'] ) ? $managed_area['property_types'] : array();
+					$pages[ $key ]['meta']['spp_area_service_slugs']      = isset( $managed_area['service_slugs'] ) ? $managed_area['service_slugs'] : array();
+					$pages[ $key ]['meta']['spp_area_local_context']      = isset( $managed_area['local_context'] ) ? $managed_area['local_context'] : '';
+					$pages[ $key ]['meta']['spp_area_neighbour_slugs']    = isset( $managed_area['neighbour_slugs'] ) ? $managed_area['neighbour_slugs'] : array();
+				}
+			}
 		}
 		return $pages;
 	}

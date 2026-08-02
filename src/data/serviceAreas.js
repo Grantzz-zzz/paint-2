@@ -9,6 +9,35 @@ const area = (slug, name, region, propertyTypes, serviceSlugs, localContext, nei
   path: `/service-areas/${slug}`,
 })
 
+export const normalizeServiceArea = item => ({
+  ...item,
+  slug:item.slug,
+  name:item.name,
+  region:item.region||'Melbourne service area',
+  regionDescription:item.region_description||item.regionDescription||'Professional painting services across Melbourne, carefully planned for local properties.',
+  propertyTypes:item.property_types||item.propertyTypes||[],
+  serviceSlugs:item.service_slugs||item.serviceSlugs||[],
+  localContext:item.local_context||item.localContext||'',
+  neighbours:item.neighbours||[],
+  cardImage:item.card_image||item.cardImage||null,
+  path:item.path||`/service-areas/${item.slug}`,
+})
+
+export const groupManagedServiceAreas = items => {
+  const fallbackDescriptions=Object.fromEntries(serviceAreaRegions.map(region=>[region.title,region.description]))
+  return [...(items||[]).map(normalizeServiceArea).reduce((groups,item)=>{
+    if(!groups.has(item.region)) groups.set(item.region,[])
+    groups.get(item.region).push(item)
+    return groups
+  },new Map())].map(([title,areas])=>({
+    id:slugifyArea(title),
+    title,
+    description:areas.find(item=>item.regionDescription)?.regionDescription||fallbackDescriptions[title]||'Professional painting services across Melbourne.',
+    areas,
+    suburbs:areas.map(item=>item.slug),
+  }))
+}
+
 const slugifyArea = name => name.toLocaleLowerCase('en-AU').replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')
 const coreAreaNames = new Set(['Chadstone','Mount Waverley','Glen Waverley','Oakleigh','Mulgrave','Clayton','Burwood','Ashwood','Dandenong','Noble Park','Springvale','Keysborough','Berwick','Narre Warren','Endeavour Hills'])
 const pdfAreaGroups = [

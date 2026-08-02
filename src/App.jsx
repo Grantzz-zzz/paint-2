@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { googleReviewProfile, serviceList, servicePages, testimonials } from './data/siteData'
 import { roofHomepageCardImage } from './data/newBatchMedia'
-import { serviceAreaBySlug, serviceAreaRegions } from './data/serviceAreas'
+import { groupManagedServiceAreas, serviceAreaBySlug, serviceAreas } from './data/serviceAreas'
 import { paintingGuides } from './data/paintingGuides'
 import { asset, publicRouteUrl, siteUrl } from './utils/assets'
 import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
@@ -88,12 +88,20 @@ function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
   const {business,navigation,services:cmsServices}=useSiteContent()
+  const {data:managedAreas}=useCollection('areas',serviceAreas)
+  const areaRegions=groupManagedServiceAreas(managedAreas)
   const suppliedNav=navigation?.length?navigation:nav.map(([url,label],index)=>({id:index,label,url,children:[]}))
-  const galleryIndex=Math.max(1,suppliedNav.findIndex(item=>toAppPath(item.url)==='/services')+1)
-  const navWithGallery=suppliedNav.some(item=>toAppPath(item.url)==='/gallery')?suppliedNav:[
-    ...suppliedNav.slice(0,galleryIndex),
+  const areasIndex=Math.max(1,suppliedNav.findIndex(item=>toAppPath(item.url)==='/services')+1)
+  const navWithAreas=suppliedNav.some(item=>toAppPath(item.url)==='/service-areas')?suppliedNav:[
+    ...suppliedNav.slice(0,areasIndex),
+    {id:'areas',label:'Areas',url:'/service-areas',children:[]},
+    ...suppliedNav.slice(areasIndex),
+  ]
+  const galleryIndex=Math.max(1,navWithAreas.findIndex(item=>toAppPath(item.url)==='/service-areas')+1)
+  const navWithGallery=navWithAreas.some(item=>toAppPath(item.url)==='/gallery')?navWithAreas:[
+    ...navWithAreas.slice(0,galleryIndex),
     {id:'gallery',label:'Gallery',url:'/gallery',children:[]},
-    ...suppliedNav.slice(galleryIndex),
+    ...navWithAreas.slice(galleryIndex),
   ]
   const normalizedNav=navWithGallery.map(item=>toAppPath(item.url)==='/painting-guides'?{...item,label:'Blog',url:'/blog'}:item)
   const blogIndex=Math.max(1,normalizedNav.findIndex(item=>toAppPath(item.url)==='/gallery')+1)
@@ -137,7 +145,7 @@ function Navbar() {
             <button className="dropdown-trigger" onClick={()=>{setAreasOpen(value=>!value);setServicesOpen(false)}} aria-label="Show service areas" aria-expanded={areasOpen} aria-controls="desktop-areas-menu"><ChevronDown size={14}/></button>
             <AnimatePresence>{areasOpen&&<motion.div id="desktop-areas-menu" className="areas-dropdown" role="navigation" aria-label="Service areas" initial={{opacity:0,y:-8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-6}} transition={{duration:.16}}>
               <button className="areas-overview" onClick={()=>go('/service-areas')}><span><b>All service areas</b><small>Explore Melbourne’s eastern and south-eastern suburbs</small></span><ArrowRight size={17}/></button>
-              <div className="areas-dropdown-regions">{serviceAreaRegions.map(region=><section key={region.id}><h3>{region.title}</h3><div>{region.suburbs.map(slug=>{const area=serviceAreaBySlug[slug];return <button key={slug} className={location.pathname.endsWith(slug)?'current':''} onClick={()=>go(area.path)}><MapPin size={13}/><b>{area.name}</b></button>})}</div></section>)}</div>
+              <div className="areas-dropdown-regions">{areaRegions.map(region=><section key={region.id}><h3>{region.title}</h3><div>{region.areas.map(area=><button key={area.slug} className={location.pathname.endsWith(area.slug)?'current':''} onClick={()=>go(area.path)}><MapPin size={13}/><b>{area.name}</b></button>)}</div></section>)}</div>
             </motion.div>}</AnimatePresence>
           </div>
           return <button key={item.id} className={`nav-main-link ${location.pathname === item.path ? 'active' : ''}`} onClick={() => go(item.path)}>{item.label}</button>
@@ -157,7 +165,7 @@ function Navbar() {
       </div> : item.path==='/service-areas' ? <div className={`mobile-services mobile-areas ${areasOpen?'open':''}`} key={item.id}>
         <div className="mobile-services-head mobile-areas-head"><button onClick={()=>go(item.path)}>{item.label}</button><button onClick={()=>{setAreasOpen(value=>!value);setServicesOpen(false)}} aria-label="Toggle service areas" aria-expanded={areasOpen} aria-controls="mobile-areas-menu"><ChevronDown size={18}/></button></div>
         <AnimatePresence>{areasOpen&&<motion.div id="mobile-areas-menu" className="mobile-areas-pages" initial={{height:0,opacity:0}} animate={{height:'auto',opacity:1}} exit={{height:0,opacity:0}}>
-          {serviceAreaRegions.map(region=><section key={region.id}><strong>{region.title}</strong><div>{region.suburbs.map(slug=>{const area=serviceAreaBySlug[slug];return <button key={slug} className={location.pathname.endsWith(slug)?'current':''} onClick={()=>go(area.path)}>{area.name}<ArrowRight size={13}/></button>})}</div></section>)}
+          {areaRegions.map(region=><section key={region.id}><strong>{region.title}</strong><div>{region.areas.map(area=><button key={area.slug} className={location.pathname.endsWith(area.slug)?'current':''} onClick={()=>go(area.path)}>{area.name}<ArrowRight size={13}/></button>)}</div></section>)}
         </motion.div>}</AnimatePresence>
       </div> : <button key={item.id} onClick={() => go(item.path)}>{item.label}<ArrowRight size={16}/></button>)}
       <a className="btn" href={business.phone_href}><Phone size={17}/> {business.phone_display}</a>
@@ -312,15 +320,14 @@ function Areas({fields}) {
   const directoryRef=useRef(null)
   const [activeRegion,setActiveRegion]=useState('all')
   const [areasExpanded,setAreasExpanded]=useState(false)
-  const regions=serviceAreaRegions.map(region=>({
-    ...region,
-    areas:region.suburbs.map(slug=>serviceAreaBySlug[slug]).filter(Boolean),
-  }))
+  const {data:managedAreas}=useCollection('areas',serviceAreas)
+  const regions=groupManagedServiceAreas(managedAreas)
+  const managedAreaBySlug=Object.fromEntries(managedAreas.map(area=>[area.slug,area]))
   const visibleAreas=regions
     .filter(region=>activeRegion==='all'||region.id===activeRegion)
     .flatMap(region=>region.areas)
   const priorityAreaSlugs=['chadstone','mount-waverley','glen-waverley','oakleigh','burwood','ashwood','hawthorn','kew','camberwell','box-hill','ringwood','rowville']
-  const priorityAreas=priorityAreaSlugs.map(slug=>serviceAreaBySlug[slug]).filter(Boolean)
+  const priorityAreas=priorityAreaSlugs.map(slug=>managedAreaBySlug[slug]||serviceAreaBySlug[slug]).filter(Boolean)
   const compactAreas=activeRegion==='all'?priorityAreas:visibleAreas.slice(0,12)
   const displayedAreas=areasExpanded?visibleAreas:compactAreas
   const hiddenAreaCount=Math.max(0,visibleAreas.length-compactAreas.length)

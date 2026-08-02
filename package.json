@@ -12,11 +12,13 @@
     "qa:blogs": "node scripts/validate-public-blog-copy.mjs",
     "qa:plugin-customization": "node scripts/validate-plugin-customization.mjs",
     "qa:galleries": "node scripts/validate-project-galleries.mjs",
+    "qa:areas": "node scripts/validate-area-management.mjs",
     "qa:routes": "node scripts/validate-route-normalization.mjs",
     "qa:phase9": "node scripts/qa-phase9-lifecycle.mjs",
     "qa:phase9:uninstall": "node scripts/qa-phase9-lifecycle.mjs --uninstall",
     "media:process": "node scripts/process-client-media.mjs",
-    "media:process-new": "node scripts/process-new-client-batch.mjs"
+    "media:process-new": "node scripts/process-new-client-batch.mjs",
+    "areas:sync": "node scripts/generate-wordpress-area-data.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",

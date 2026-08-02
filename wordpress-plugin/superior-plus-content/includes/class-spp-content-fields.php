@@ -280,7 +280,6 @@ class SPP_Content_Fields {
 				break;
 			case 'landing':
 			case 'standard':
-			case 'service_areas':
 			case 'gallery':
 			case 'blog_hub':
 				$fields += array(
@@ -288,6 +287,25 @@ class SPP_Content_Fields {
 					'spp_secondary_image_id' => array( 'label' => 'Secondary image', 'type' => 'media', 'mime' => 'image' ),
 					'spp_related_page_ids'  => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
 				);
+				break;
+			case 'service_areas':
+				$fields += array(
+					'spp_content_sections'   => array( 'label' => 'Content sections - Heading | Body', 'type' => 'pairs', 'max_items' => 20 ),
+					'spp_secondary_image_id' => array( 'label' => 'Secondary image', 'type' => 'media', 'mime' => 'image' ),
+					'spp_related_page_ids'   => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
+				);
+				if ( 'service-areas' !== $post->post_name ) {
+					$fields += array(
+						'spp_area_name'               => array( 'label' => 'Suburb / area name', 'type' => 'text', 'max' => 120 ),
+						'spp_area_region'             => array( 'label' => 'Region group', 'type' => 'text', 'max' => 160 ),
+						'spp_area_region_description' => array( 'label' => 'Region introduction', 'type' => 'textarea', 'max' => 800 ),
+						'spp_area_property_types'     => array( 'label' => 'Property types - one per line', 'type' => 'list', 'max_items' => 30 ),
+						'spp_area_service_slugs'      => array( 'label' => 'Service slugs - one per line', 'type' => 'list', 'max_items' => 30 ),
+						'spp_area_local_context'      => array( 'label' => 'Local painting introduction', 'type' => 'textarea', 'max' => 1800 ),
+						'spp_area_neighbour_slugs'    => array( 'label' => 'Nearby area slugs - one per line', 'type' => 'list', 'max_items' => 30 ),
+						'spp_area_card_image_id'      => array( 'label' => 'Directory card image', 'type' => 'media', 'mime' => 'image' ),
+					);
+				}
 				break;
 		}
 

@@ -121,6 +121,14 @@ class SPP_Content_Workflow {
 	public function register_pages() {
 		add_submenu_page(
 			'spp-content',
+			__( 'Manage service areas', 'superior-plus-content' ),
+			__( 'Areas', 'superior-plus-content' ),
+			'manage_spp_content',
+			'spp-content-areas',
+			array( $this, 'render_areas_page' )
+		);
+		add_submenu_page(
+			'spp-content',
 			__( 'Create locked content', 'superior-plus-content' ),
 			__( 'Create new', 'superior-plus-content' ),
 			'manage_spp_content',
@@ -135,6 +143,62 @@ class SPP_Content_Workflow {
 			'spp-content-preview',
 			array( $this, 'render_preview_page' )
 		);
+	}
+
+	/**
+	 * Render a focused manager for every editable suburb page.
+	 */
+	public function render_areas_page() {
+		if ( ! current_user_can( 'manage_spp_content' ) ) {
+			wp_die( esc_html__( 'You do not have permission to manage service areas.', 'superior-plus-content' ) );
+		}
+		$directory = get_page_by_path( 'service-areas', OBJECT, 'page' );
+		$areas = get_posts(
+			array(
+				'post_type'      => 'page',
+				'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
+				'posts_per_page' => -1,
+				'meta_key'       => 'spp_template_key',
+				'meta_value'     => 'service_areas',
+				'orderby'        => array( 'menu_order' => 'ASC', 'title' => 'ASC' ),
+			)
+		);
+		$areas = array_values(
+			array_filter(
+				$areas,
+				function ( $area ) {
+					return 'service-areas' !== $area->post_name;
+				}
+			)
+		);
+		?>
+		<div class="wrap">
+			<h1 class="wp-heading-inline"><?php esc_html_e( 'Service Areas', 'superior-plus-content' ); ?></h1>
+			<a class="page-title-action" href="<?php echo esc_url( admin_url( 'admin.php?page=spp-content-create&template=service_areas' ) ); ?>"><?php esc_html_e( 'Add service area', 'superior-plus-content' ); ?></a>
+			<?php if ( $directory ) : ?>
+				<a class="page-title-action" href="<?php echo esc_url( get_edit_post_link( $directory->ID ) ); ?>"><?php esc_html_e( 'Edit directory page', 'superior-plus-content' ); ?></a>
+			<?php endif; ?>
+			<p><?php esc_html_e( 'Edit suburb names, regional groups, local copy, services, nearby areas, hero images and directory-card images without changing the approved layout.', 'superior-plus-content' ); ?></p>
+			<table class="wp-list-table widefat fixed striped">
+				<thead><tr><th><?php esc_html_e( 'Area', 'superior-plus-content' ); ?></th><th><?php esc_html_e( 'Region', 'superior-plus-content' ); ?></th><th><?php esc_html_e( 'Status', 'superior-plus-content' ); ?></th><th><?php esc_html_e( 'Actions', 'superior-plus-content' ); ?></th></tr></thead>
+				<tbody>
+				<?php foreach ( $areas as $area ) : ?>
+					<?php
+					$name = get_post_meta( $area->ID, 'spp_area_name', true );
+					$name = $name ? $name : preg_replace( '/^Painters in\s+/i', '', $area->post_title );
+					?>
+					<tr>
+						<td><strong><?php echo esc_html( $name ); ?></strong><br><code>/service-areas/<?php echo esc_html( $area->post_name ); ?></code></td>
+						<td><?php echo esc_html( get_post_meta( $area->ID, 'spp_area_region', true ) ); ?></td>
+						<td><?php echo esc_html( ucfirst( $area->post_status ) ); ?></td>
+						<td><a href="<?php echo esc_url( get_edit_post_link( $area->ID ) ); ?>"><?php esc_html_e( 'Edit all content & images', 'superior-plus-content' ); ?></a><?php if ( 'publish' === $area->post_status ) : ?> | <a target="_blank" rel="noopener" href="<?php echo esc_url( get_permalink( $area ) ); ?>"><?php esc_html_e( 'View', 'superior-plus-content' ); ?></a><?php endif; ?></td>
+					</tr>
+				<?php endforeach; ?>
+				<?php if ( ! $areas ) : ?><tr><td colspan="4"><?php esc_html_e( 'No managed service areas found. Run the Superior Plus content importer once.', 'superior-plus-content' ); ?></td></tr><?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php
 	}
 
 	/**
@@ -225,13 +289,22 @@ class SPP_Content_Workflow {
 			wp_die( esc_html__( 'Enter a working title.', 'superior-plus-content' ) );
 		}
 
-		$post_id = wp_insert_post(
-			array(
+		$post_args = array(
 				'post_type'   => $post_type,
 				'post_status' => 'draft',
 				'post_title'  => $title,
 				'post_name'   => sanitize_title( $title ),
-			),
+			);
+		$area_name = '';
+		if ( 'service_areas' === $template_key ) {
+			$area_name = trim( preg_replace( '/^Painters in\s+/i', '', $title ) );
+			$parent = get_page_by_path( 'service-areas', OBJECT, 'page' );
+			$post_args['post_title']  = 'Painters in ' . $area_name;
+			$post_args['post_name']   = sanitize_title( $area_name );
+			$post_args['post_parent'] = $parent ? (int) $parent->ID : 0;
+		}
+		$post_id = wp_insert_post(
+			$post_args,
 			true
 		);
 		if ( is_wp_error( $post_id ) ) {
@@ -244,6 +317,21 @@ class SPP_Content_Workflow {
 		update_post_meta( $post_id, '_spp_source_key', $post_type . ':' . $source_key );
 		update_post_meta( $post_id, '_spp_design_variant', $this->design_variant( $source_key ) );
 		update_post_meta( $post_id, '_spp_created_at', gmdate( 'c' ) );
+		if ( 'service_areas' === $template_key ) {
+			update_post_meta( $post_id, 'spp_area_name', $area_name );
+			update_post_meta( $post_id, 'spp_area_region', 'Melbourne service area' );
+			update_post_meta( $post_id, 'spp_area_region_description', 'Professional painting services across Melbourne, carefully planned for local homes and properties.' );
+			update_post_meta( $post_id, 'spp_area_property_types', array( 'Homes', 'Townhouses', 'Apartments', 'Commercial properties' ) );
+			update_post_meta( $post_id, 'spp_area_service_slugs', array( 'residential-painting-melbourne', 'interior-painting-melbourne', 'exterior-painting-melbourne', 'commercial-painting-melbourne' ) );
+			update_post_meta( $post_id, 'spp_area_local_context', 'Superior Plus Painting and Remodeling provides professional painting services in ' . $area_name . ', with careful preparation, clear communication and a clean handover.' );
+			update_post_meta( $post_id, 'spp_area_neighbour_slugs', array() );
+			update_post_meta( $post_id, 'spp_eyebrow', $area_name . ' service area' );
+			update_post_meta( $post_id, 'spp_hero_title', 'Painters in ' . $area_name );
+			update_post_meta( $post_id, 'spp_accent', 'careful work, clearly planned.' );
+			update_post_meta( $post_id, 'spp_hero_intro', 'Professional residential and commercial painting services in ' . $area_name . ', Melbourne.' );
+			update_post_meta( $post_id, 'spp_seo_title', 'Painters ' . $area_name . ' | Superior Plus Painting' );
+			update_post_meta( $post_id, 'spp_seo_description', 'Professional residential, commercial, interior and exterior painters in ' . $area_name . ', Melbourne. Request a free written quote.' );
+		}
 
 		wp_safe_redirect( add_query_arg( 'spp_created', '1', get_edit_post_link( $post_id, 'url' ) ) );
 		exit;
