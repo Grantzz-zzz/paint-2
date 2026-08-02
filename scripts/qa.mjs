@@ -219,7 +219,9 @@ try {
         check(Math.min(...descriptionSizes)>=22, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
       }
       if(route.startsWith('/services/')){
-        check((await page.locator('.approved-copy-section').count())>=2,`${label}: client-approved PDF sections are incomplete`)
+        check(await page.locator('.scope-section').count()===1&&await page.locator('.process-section').count()===1,`${label}: approved scope or process section is missing`)
+        check(await page.locator('.benefit-section').count()===1,`${label}: designed approved benefits section is missing`)
+        check(await page.locator('.service-local-approved').count()===1,`${label}: approved service-area statement is missing`)
         check((await page.locator('.closing-cta').innerText()).toLowerCase().includes('quote'),`${label}: client-approved quote section is missing`)
       }
       if(route==='/additional-services'){

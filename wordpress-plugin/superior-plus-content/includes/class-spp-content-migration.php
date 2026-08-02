@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.2.0';
+	const VERSION = '2.2.1';
 
 	private $types;
 	private $report = array();
@@ -211,34 +211,52 @@ class SPP_Content_Migration {
 				$meta['spp_copy_source_version'] = 'pdf-verbatim-2026-08-01';
 			}
 			if ( 'about' === $slug && isset( $approved_documents['about'] ) ) {
-				$sections = array_slice( $approved_documents['about']['sections'], 1 );
+				$about_document = $approved_documents['about'];
+				$sections = array_slice( $about_document['sections'], 1 );
 				$meta['spp_content_sections'] = array_map( function ( $section ) {
 					$body = isset( $section['body'] ) ? $section['body'] : '';
 					if ( ! empty( $section['items'] ) ) { $body .= ( $body ? "\n" : '' ) . implode( "\n", $section['items'] ); }
 					return array( 'title' => $section['heading'], 'text' => $body );
 				}, $sections );
+				$meta['spp_hero_title'] = $about_document['headline'];
+				$meta['spp_accent'] = 'Care in every detail.';
+				$meta['spp_about_approach_copy'] = $about_document['sections'][2]['body'];
+				$meta['spp_about_standards'] = $about_document['sections'][3]['items'];
+				$meta['spp_about_roots_copy'] = $about_document['sections'][4]['body'];
 			}
 			if ( 'additional-services' === $slug && isset( $approved_documents['additional_services'] ) ) {
 				$sections = $approved_documents['additional_services']['sections'];
+				$meta['spp_hero_title'] = $approved_documents['additional_services']['headline'];
+				$meta['spp_accent'] = 'Coordinated with care.';
 				$meta['spp_additional_services'] = array_map( function ( $section ) { return array( 'title' => $section['heading'], 'text' => $section['body'] ); }, array_slice( $sections, 1, 8 ) );
 				$meta['spp_content_sections'] = array_map( function ( $section ) { return array( 'title' => $section['heading'], 'text' => $section['body'] ); }, array_slice( $sections, 9 ) );
 			}
 			if ( 'our-process' === $slug && isset( $approved_documents['process'] ) ) {
 				$document = $approved_documents['process'];
+				$meta['spp_hero_title'] = $document['headline'];
+				$meta['spp_accent'] = 'Clear from quote to handover.';
 				$meta['spp_master_process'] = array_map( function ( $step ) { return array( 'title' => $step['heading'], 'text' => $step['body'] ); }, $document['steps'] );
 				$why = $document['sections'][7];
 				$ready = $document['sections'][8];
+				$meta['spp_process_proof'] = $why['items'];
 				$meta['spp_content_sections'] = array(
 					array( 'title' => $why['heading'], 'text' => implode( "\n", $why['items'] ) ),
 					array( 'title' => $ready['heading'], 'text' => $ready['body'] ),
 				);
 			}
+			if ( 'faqs' === $slug && isset( $approved_documents['faqs'] ) ) {
+				$meta['spp_eyebrow'] = 'Straight answers before we start';
+				$meta['spp_hero_title'] = 'Frequently asked questions';
+				$meta['spp_accent'] = 'made easy.';
+				$meta['spp_hero_intro'] = 'Painting comes with practical questions. Here are clear answers about quoting, preparation, scheduling, products and what to expect from our team.';
+				$meta['spp_faq_intro'] = $meta['spp_hero_intro'];
+			}
 			if ( 'contact' === $slug && isset( $approved_documents['contact'] ) ) {
 				$document = $approved_documents['contact'];
-				$meta['spp_eyebrow'] = '';
+				$meta['spp_eyebrow'] = 'Tell us what you’re planning';
 				$meta['spp_hero_title'] = $document['title'];
-				$meta['spp_accent'] = '';
-				$meta['spp_hero_intro'] = '';
+				$meta['spp_accent'] = 'and get a fresh start.';
+				$meta['spp_hero_intro'] = 'Share a few details about your property and the work you have in mind. We’ll follow up to arrange a free, no-obligation consultation and written quote.';
 				$meta['spp_service_options'] = $document['service_options'];
 				$meta['spp_property_options'] = $document['property_options'];
 				$meta['spp_contact_form_fields'] = array(
@@ -258,7 +276,7 @@ class SPP_Content_Migration {
 			}
 			$this->write_meta( $post->ID, 'page:' . $slug, $meta, $is_new );
 			if ( isset( $approved_documents[ $document_key ] ) ) {
-				foreach ( array( 'spp_copy_source_version', 'spp_eyebrow', 'spp_hero_title', 'spp_accent', 'spp_hero_intro', 'spp_content_sections', 'spp_additional_services', 'spp_master_process', 'spp_service_options', 'spp_property_options', 'spp_contact_form_fields' ) as $approved_key ) {
+				foreach ( array( 'spp_copy_source_version', 'spp_eyebrow', 'spp_hero_title', 'spp_accent', 'spp_hero_intro', 'spp_content_sections', 'spp_additional_services', 'spp_master_process', 'spp_service_options', 'spp_property_options', 'spp_contact_form_fields', 'spp_about_approach_copy', 'spp_about_standards', 'spp_about_roots_copy', 'spp_process_proof', 'spp_faq_intro' ) as $approved_key ) {
 					if ( array_key_exists( $approved_key, $meta ) ) { update_post_meta( $post->ID, $approved_key, $meta[ $approved_key ] ); }
 				}
 			}

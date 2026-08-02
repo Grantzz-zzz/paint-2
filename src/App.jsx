@@ -59,7 +59,7 @@ function scrollTo(id) {
 }
 
 function Reveal({ children, className = '', delay = 0 }) {
-  return <motion.div className={className} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .18 }} transition={{ duration: .65, delay, ease: [.2,.8,.2,1] }}>{children}</motion.div>
+  return <motion.div className={className} initial={{ opacity: 1, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .08, margin: '0px 0px 120px 0px' }} transition={{ duration: .65, delay, ease: [.2,.8,.2,1] }}>{children}</motion.div>
 }
 
 function Eyebrow({ children, light = false }) {
