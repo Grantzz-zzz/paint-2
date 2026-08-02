@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import process from 'node:process'
+import { groupManagedServiceAreas, serviceAreaRegions, serviceAreas } from '../src/data/serviceAreas.js'
 
 const root=process.cwd()
 const read=path=>readFile(join(root,path),'utf8')
@@ -12,6 +13,8 @@ const [dataset,fields,workflow,rest,app,pages]=await Promise.all([
   read('src/App.jsx'),
   read('src/pages/ServiceAreaPages.jsx'),
 ])
+const alphabeticApiRecords=[...serviceAreas].sort((a,b)=>a.name.localeCompare(b.name,'en-AU'))
+const orderedApiGroups=groupManagedServiceAreas(alphabeticApiRecords)
 
 const checks=[
   ['67 managed suburb records',dataset.areas?.length===67],
@@ -27,6 +30,8 @@ const checks=[
   ['homepage consumes managed areas',app.includes("useCollection('areas',serviceAreas)")],
   ['directory consumes managed areas',pages.includes("useCollection('areas',serviceAreas)")],
   ['new managed suburb routes resolve',pages.includes('routeArea||fallbackArea')],
+  ['WordPress records preserve approved region order',orderedApiGroups.map(region=>region.title).join('|')===serviceAreaRegions.map(region=>region.title).join('|')],
+  ['WordPress records preserve approved suburb order',orderedApiGroups.every((region,index)=>region.suburbs.join('|')===serviceAreaRegions[index].suburbs.join('|'))],
 ]
 
 const failed=checks.filter(([,ok])=>!ok)

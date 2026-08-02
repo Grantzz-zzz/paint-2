@@ -25,16 +25,20 @@ export const normalizeServiceArea = item => ({
 
 export const groupManagedServiceAreas = items => {
   const fallbackDescriptions=Object.fromEntries(serviceAreaRegions.map(region=>[region.title,region.description]))
+  const regionOrder=new Map(serviceAreaRegions.map((region,index)=>[region.title,index]))
+  const areaOrder=new Map(serviceAreaRegions.flatMap(region=>region.suburbs).map((slug,index)=>[slug,index]))
   return [...(items||[]).map(normalizeServiceArea).reduce((groups,item)=>{
     if(!groups.has(item.region)) groups.set(item.region,[])
     groups.get(item.region).push(item)
     return groups
-  },new Map())].map(([title,areas])=>({
+  },new Map())]
+    .sort(([a],[b])=>(regionOrder.get(a)??Number.MAX_SAFE_INTEGER)-(regionOrder.get(b)??Number.MAX_SAFE_INTEGER)||a.localeCompare(b,'en-AU'))
+    .map(([title,areas])=>({
     id:slugifyArea(title),
     title,
     description:areas.find(item=>item.regionDescription)?.regionDescription||fallbackDescriptions[title]||'Professional painting services across Melbourne.',
-    areas,
-    suburbs:areas.map(item=>item.slug),
+    areas:[...areas].sort((a,b)=>(areaOrder.get(a.slug)??Number.MAX_SAFE_INTEGER)-(areaOrder.get(b.slug)??Number.MAX_SAFE_INTEGER)||a.name.localeCompare(b.name,'en-AU')),
+    suburbs:[...areas].sort((a,b)=>(areaOrder.get(a.slug)??Number.MAX_SAFE_INTEGER)-(areaOrder.get(b.slug)??Number.MAX_SAFE_INTEGER)||a.name.localeCompare(b.name,'en-AU')).map(item=>item.slug),
   }))
 }
 
