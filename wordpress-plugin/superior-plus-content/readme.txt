@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -38,6 +38,11 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.3.1 =
+* Restores the approved aesthetic hero artwork for About, Services, Additional Services, Service Areas, Gallery, FAQs and Contact.
+* Keeps the supplied house-painting artwork for Our Process and Blog.
+* Preserves editable page copy, media controls and client-modified record protection.
 
 = 2.1.2 =
 * Adds a non-cacheable public quote-form token endpoint so cached pages cannot expire the form session.

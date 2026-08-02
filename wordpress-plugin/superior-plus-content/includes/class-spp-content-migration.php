@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.3.0';
+	const VERSION = '2.3.1';
 
 	private $types;
 	private $report = array();
@@ -890,7 +890,7 @@ class SPP_Content_Migration {
 			),
 			'about' => array(
 				'title' => 'About', 'template' => 'about', 'excerpt' => 'Melbourne painters committed to careful preparation and quality workmanship.',
-				'hero_asset' => 'client/projects/fence/fence-03.webp', 'editorial_asset' => 'client/projects/fence/fence-03.webp', 'archive_asset' => 'client/projects/brand/brand-01.webp',
+				'hero_asset' => 'stock-main/about.webp', 'editorial_asset' => 'client/projects/fence/fence-03.webp', 'archive_asset' => 'client/projects/brand/brand-01.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Your trusted Melbourne painters', 'spp_hero_title' => 'Care in every coat.', 'spp_accent' => 'Pride in every detail.',
 					'spp_hero_intro' => 'Superior Plus Painting is a Melbourne-based team dedicated to high-quality residential and commercial painting with reliable service, honest communication and respect for every property.',
@@ -903,7 +903,7 @@ class SPP_Content_Migration {
 			),
 			'services' => array(
 				'title' => 'Services', 'template' => 'services_directory', 'excerpt' => 'Painting, preparation, repair and property improvement services.',
-				'hero_asset' => 'client/projects/commercial/commercial-12.webp',
+				'hero_asset' => 'stock-main/services.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Everything under one careful eye', 'spp_hero_title' => 'Painting & property services', 'spp_accent' => 'made beautifully simple.',
 					'spp_hero_intro' => 'From complete residential and commercial painting to the preparation and repairs behind a lasting finish, our team can coordinate more of your project from one place.',
@@ -932,7 +932,7 @@ class SPP_Content_Migration {
 			),
 			'faqs' => array(
 				'title' => 'FAQs', 'template' => 'faqs', 'excerpt' => 'Answers about quotes, preparation, timing and booking.',
-				'hero_asset' => 'client/projects/interior/interior-04.webp',
+				'hero_asset' => 'stock-main/faq.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Straight answers before we start', 'spp_hero_title' => 'Frequently asked questions', 'spp_accent' => 'made easy.',
 					'spp_hero_intro' => 'Painting comes with practical questions. Here are clear answers about quoting, preparation, scheduling, products and what to expect from our team.',
@@ -942,7 +942,7 @@ class SPP_Content_Migration {
 			),
 			'contact' => array(
 				'title' => 'Contact', 'template' => 'contact', 'excerpt' => 'Arrange a free painting consultation and written quote.',
-				'hero_asset' => 'client/projects/exterior/exterior-07.webp',
+				'hero_asset' => 'stock-main/contact.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Tell us what you’re planning', 'spp_hero_title' => 'Get in touch', 'spp_accent' => 'and get a fresh start.',
 					'spp_hero_intro' => 'Share a few details about your property and the work you have in mind. We’ll follow up to arrange a free, no-obligation consultation and written quote.',
@@ -970,7 +970,7 @@ class SPP_Content_Migration {
 		$pages = array(
 			'service-areas' => array(
 				'title' => 'Service Areas', 'template' => 'service_areas', 'excerpt' => 'Professional painters across Melbourne’s eastern and south-eastern suburbs.',
-				'hero_asset' => 'client/projects/new-batch/batch-010.webp',
+				'hero_asset' => 'stock-main/areas.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Melbourne service areas', 'spp_hero_title' => 'Painters across Melbourne’s', 'spp_accent' => 'eastern & south-eastern suburbs.',
 					'spp_hero_intro' => 'Superior Plus Painting provides residential, commercial and specialist painting services across Melbourne’s east and south-east. Choose your suburb for relevant services, property types and a direct quote path.',
@@ -983,7 +983,7 @@ class SPP_Content_Migration {
 			),
 			'additional-services' => array(
 				'title' => 'Additional Services', 'template' => 'additional_services', 'excerpt' => 'Preparation, repairs and complementary property improvement services across Melbourne.',
-				'hero_asset' => 'client/projects/plaster/plaster-11.webp',
+				'hero_asset' => 'stock-main/additional-services.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'More than the final coat', 'spp_hero_title' => 'Additional property services', 'spp_accent' => 'coordinated with care.',
 					'spp_hero_intro' => 'Selected preparation, repair and improvement services can be coordinated alongside residential and commercial painting.',
@@ -1010,7 +1010,7 @@ class SPP_Content_Migration {
 			),
 			'gallery' => array(
 				'title' => 'Gallery', 'template' => 'gallery', 'excerpt' => 'Real Superior Plus Painting projects across Melbourne.',
-				'hero_asset' => 'client/projects/new-batch/batch-089.webp',
+				'hero_asset' => 'stock-main/gallery.webp',
 				'meta' => array(
 					'spp_eyebrow' => 'Real Melbourne projects', 'spp_hero_title' => 'Every project,', 'spp_accent' => 'all in one place.',
 					'spp_hero_intro' => 'Scroll through our complete project archive. Every photograph is from supplied Superior Plus Painting work and is organised by service so you can quickly find the finish that suits your property.',
