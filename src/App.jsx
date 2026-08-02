@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { googleReviewProfile, serviceList, servicePages, testimonials } from './data/siteData'
 import { roofHomepageCardImage } from './data/newBatchMedia'
-import { groupManagedServiceAreas, serviceAreaBySlug, serviceAreas } from './data/serviceAreas'
+import { groupManagedServiceAreas, serviceAreaBySlug, serviceAreaRegions, serviceAreas } from './data/serviceAreas'
 import { paintingGuides } from './data/paintingGuides'
 import { asset, publicRouteUrl, siteUrl } from './utils/assets'
 import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
@@ -90,6 +90,10 @@ function Navbar() {
   const {business,navigation,services:cmsServices}=useSiteContent()
   const {data:managedAreas}=useCollection('areas',serviceAreas)
   const areaRegions=groupManagedServiceAreas(managedAreas)
+  const managedAreaBySlug=Object.fromEntries(areaRegions.flatMap(region=>region.areas).map(area=>[area.slug,area]))
+  const dropdownRegions=serviceAreaRegions
+    .filter(region=>['monash-east','greater-dandenong','casey'].includes(region.id))
+    .map(region=>({...region,areas:region.suburbs.map(slug=>managedAreaBySlug[slug]||serviceAreaBySlug[slug]).filter(Boolean)}))
   const suppliedNav=navigation?.length?navigation:nav.map(([url,label],index)=>({id:index,label,url,children:[]}))
   const areasIndex=Math.max(1,suppliedNav.findIndex(item=>toAppPath(item.url)==='/services')+1)
   const navWithAreas=suppliedNav.some(item=>toAppPath(item.url)==='/service-areas')?suppliedNav:[
@@ -145,7 +149,7 @@ function Navbar() {
             <button className="dropdown-trigger" onClick={()=>{setAreasOpen(value=>!value);setServicesOpen(false)}} aria-label="Show service areas" aria-expanded={areasOpen} aria-controls="desktop-areas-menu"><ChevronDown size={14}/></button>
             <AnimatePresence>{areasOpen&&<motion.div id="desktop-areas-menu" className="areas-dropdown" role="navigation" aria-label="Service areas" initial={{opacity:0,y:-8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-6}} transition={{duration:.16}}>
               <button className="areas-overview" onClick={()=>go('/service-areas')}><span><b>All service areas</b><small>Explore Melbourne’s eastern and south-eastern suburbs</small></span><ArrowRight size={17}/></button>
-              <div className="areas-dropdown-regions">{areaRegions.map(region=><section key={region.id}><h3>{region.title}</h3><div>{region.areas.map(area=><button key={area.slug} className={location.pathname.endsWith(area.slug)?'current':''} onClick={()=>go(area.path)}><MapPin size={13}/><b>{area.name}</b></button>)}</div></section>)}</div>
+              <div className="areas-dropdown-regions">{dropdownRegions.map(region=><section key={region.id}><h3>{region.title}</h3><div>{region.areas.map(area=><button key={area.slug} className={location.pathname.endsWith(area.slug)?'current':''} onClick={()=>go(area.path)}><MapPin size={13}/><b>{area.name}</b></button>)}</div></section>)}</div>
             </motion.div>}</AnimatePresence>
           </div>
           return <button key={item.id} className={`nav-main-link ${location.pathname === item.path ? 'active' : ''}`} onClick={() => go(item.path)}>{item.label}</button>
@@ -165,7 +169,7 @@ function Navbar() {
       </div> : item.path==='/service-areas' ? <div className={`mobile-services mobile-areas ${areasOpen?'open':''}`} key={item.id}>
         <div className="mobile-services-head mobile-areas-head"><button onClick={()=>go(item.path)}>{item.label}</button><button onClick={()=>{setAreasOpen(value=>!value);setServicesOpen(false)}} aria-label="Toggle service areas" aria-expanded={areasOpen} aria-controls="mobile-areas-menu"><ChevronDown size={18}/></button></div>
         <AnimatePresence>{areasOpen&&<motion.div id="mobile-areas-menu" className="mobile-areas-pages" initial={{height:0,opacity:0}} animate={{height:'auto',opacity:1}} exit={{height:0,opacity:0}}>
-          {areaRegions.map(region=><section key={region.id}><strong>{region.title}</strong><div>{region.areas.map(area=><button key={area.slug} className={location.pathname.endsWith(area.slug)?'current':''} onClick={()=>go(area.path)}>{area.name}<ArrowRight size={13}/></button>)}</div></section>)}
+          {dropdownRegions.map(region=><section key={region.id}><strong>{region.title}</strong><div>{region.areas.map(area=><button key={area.slug} className={location.pathname.endsWith(area.slug)?'current':''} onClick={()=>go(area.path)}>{area.name}<ArrowRight size={13}/></button>)}</div></section>)}
         </motion.div>}</AnimatePresence>
       </div> : <button key={item.id} onClick={() => go(item.path)}>{item.label}<ArrowRight size={16}/></button>)}
       <a className="btn" href={business.phone_href}><Phone size={17}/> {business.phone_display}</a>
