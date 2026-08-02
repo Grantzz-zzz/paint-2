@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -38,6 +38,12 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.3.2 =
+* Creates all nine editable Project gallery records before processing their media, preventing constrained first imports from stopping after four galleries.
+* Automatically clears stale import locks and raises the available import execution budget on managed WordPress hosting.
+* Keeps every approved gallery section visible when an older import is incomplete while respecting intentionally emptied managed galleries.
+* Synchronises the companion theme bundle and importer media paths.
 
 = 2.3.1 =
 * Restores the approved aesthetic hero artwork for About, Services, Additional Services, Service Areas, Gallery, FAQs and Contact.

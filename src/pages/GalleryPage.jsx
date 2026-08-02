@@ -22,15 +22,23 @@ export default function GalleryPage() {
   const {data:projects,status:projectsStatus}=useCollection('projects',emptyProjects,{preserveEmpty:true})
   const {data:route}=useRouteContent('/gallery')
   const sections=useMemo(()=>gallerySections.map(([key,label])=>{
-    const managed=(projects||[]).filter(project=>{
+    const matchingProjects=(projects||[]).filter(project=>{
       const slugs=(project.categories||[]).map(category=>category.slug)
       return slugs.includes(key)||String(project.project_type||'').toLowerCase().includes(key)
-    }).flatMap(project=>{
+    })
+    const managed=matchingProjects.flatMap(project=>{
       const gallery=(project.gallery||[]).filter(item=>item.type==='image').map(item=>({src:mediaUrl(item.media),type:'image',position:item.object_position,alt:item.alt||item.media?.alt,caption:item.caption}))
       const featured=mediaUrl(project.featured_media)
       return featured?[{src:featured,type:'image',position:project.object_position,alt:project.featured_media?.alt,caption:project.title},...gallery]:gallery
     }).filter(item=>item.src)
-    const combined=projectsStatus==='ready'?managed:[...managed,...projectMedia[key].items.filter(item=>item.type==='image')]
+    // If an older or interrupted import omitted a whole Project record, keep
+    // that gallery section visible from the approved bundled archive. Once a
+    // managed record exists—even if the editor intentionally empties it—the
+    // WordPress value remains authoritative.
+    const hasManagedRecord=matchingProjects.length>0
+    const combined=projectsStatus==='ready'&&hasManagedRecord
+      ? managed
+      : [...managed,...projectMedia[key].items.filter(item=>item.type==='image')]
     const unique=combined.filter((item,index,items)=>items.findIndex(candidate=>candidate.src===item.src)===index)
     return {key,label,...projectMedia[key],items:unique}
   }),[projects,projectsStatus])

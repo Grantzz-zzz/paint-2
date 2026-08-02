@@ -11,6 +11,7 @@
     "qa:content": "node scripts/validate-pdf-content.mjs",
     "qa:blogs": "node scripts/validate-public-blog-copy.mjs",
     "qa:plugin-customization": "node scripts/validate-plugin-customization.mjs",
+    "qa:galleries": "node scripts/validate-project-galleries.mjs",
     "qa:routes": "node scripts/validate-route-normalization.mjs",
     "qa:phase9": "node scripts/qa-phase9-lifecycle.mjs",
     "qa:phase9:uninstall": "node scripts/qa-phase9-lifecycle.mjs --uninstall",

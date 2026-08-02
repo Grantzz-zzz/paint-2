@@ -10,10 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.3.1';
+	const VERSION = '2.3.2';
 
 	private $types;
 	private $report = array();
+	private $gallery_cache = array();
 
 	public function __construct( $types ) {
 		$this->types = $types;
@@ -62,10 +63,19 @@ class SPP_Content_Migration {
 			wp_die( esc_html__( 'You do not have permission to run the migration.', 'superior-plus-content' ) );
 		}
 		check_admin_referer( 'spp_migrate_approved_site' );
-		if ( ! add_option( 'spp_content_migration_lock', gmdate( 'c' ), '', false ) ) {
-			wp_die( esc_html__( 'An approved-site import is already running. Wait for it to finish before trying again.', 'superior-plus-content' ) );
+		$lock = get_option( 'spp_content_migration_lock', '' );
+		$lock_time = is_numeric( $lock ) ? (int) $lock : strtotime( (string) $lock );
+		if ( $lock && $lock_time && ( time() - $lock_time ) > 15 * MINUTE_IN_SECONDS ) {
+			delete_option( 'spp_content_migration_lock' );
+		}
+		if ( ! add_option( 'spp_content_migration_lock', time(), '', false ) ) {
+			wp_die( esc_html__( 'An approved-site import is already running. Wait for it to finish before trying again. Locks older than 15 minutes are cleared automatically.', 'superior-plus-content' ) );
 		}
 		try {
+			wp_raise_memory_limit( 'admin' );
+			if ( function_exists( 'set_time_limit' ) ) {
+				@set_time_limit( 0 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			}
 			$this->run();
 		} finally {
 			delete_option( 'spp_content_migration_lock' );
@@ -350,6 +360,14 @@ class SPP_Content_Migration {
 			'plaster' => 'Plaster Repairs Showcase',
 		);
 		$ids = array();
+		$new_records = array();
+
+		/*
+		 * Create every gallery shell before importing any media. Image metadata
+		 * generation is the slowest part of a first import on managed hosting.
+		 * Creating all nine records up front means a constrained request can be
+		 * safely rerun without leaving the Projects screen stuck at four items.
+		 */
 		foreach ( $labels as $category => $title ) {
 			$key = 'project:' . $category;
 			$post = $this->find_source( $key, 'spp_project' );
@@ -363,17 +381,37 @@ class SPP_Content_Migration {
 				$post = get_post( $id );
 				$this->report['created'][] = $key;
 			}
+			$this->write_meta( $post->ID, $key, array(
+				'spp_template_key' => 'project',
+				'spp_project_type' => $title . ' · Melbourne',
+				'spp_object_position' => '50% 50%',
+			), $is_new );
+			wp_set_object_terms( $post->ID, $category, 'spp_project_category', false );
+			$ids[ $category ] = (int) $post->ID;
+			$new_records[ $category ] = $is_new;
+		}
+
+		foreach ( $labels as $category => $title ) {
+			$key = 'project:' . $category;
+			$post = get_post( $ids[ $category ] );
+			if ( ! $post ) {
+				$this->report['errors'][] = $key . ':missing-shell';
+				continue;
+			}
+			if ( get_post_meta( $post->ID, '_spp_client_modified_at', true ) ) {
+				$this->report['protected'][] = $key;
+				continue;
+			}
 			$gallery = $this->category_gallery( $category );
 			$featured = ! empty( $gallery[0]['attachment_id'] ) ? $gallery[0]['attachment_id'] : 0;
 			$this->write_meta( $post->ID, $key, array(
 				'spp_template_key' => 'project', 'spp_project_type' => $title . ' · Melbourne',
 				'spp_featured_media_id' => $featured, 'spp_object_position' => '50% 50%', 'spp_gallery_items' => $gallery,
-			), $is_new );
+			), $new_records[ $category ] );
 			if ( $featured ) {
 				set_post_thumbnail( $post->ID, $featured );
 			}
 			wp_set_object_terms( $post->ID, $category, 'spp_project_category', false );
-			$ids[ $category ] = (int) $post->ID;
 		}
 		return $ids;
 	}
@@ -744,6 +782,9 @@ class SPP_Content_Migration {
 	}
 
 	private function category_gallery( $category ) {
+		if ( isset( $this->gallery_cache[ $category ] ) ) {
+			return $this->gallery_cache[ $category ];
+		}
 		$subjects = array(
 			'residential' => 'Residential painting',
 			'commercial' => 'Commercial painting',
@@ -832,6 +873,7 @@ class SPP_Content_Migration {
 				);
 			}
 		}
+		$this->gallery_cache[ $category ] = $items;
 		return $items;
 	}
 
