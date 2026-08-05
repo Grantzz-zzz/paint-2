@@ -167,7 +167,9 @@ class SPP_Content_REST {
 			if ( ! $config_id || ! metadata_exists( 'post', $config_id, $key ) ) {
 				return $fallback;
 			}
-			return get_post_meta( $config_id, $key, true );
+			$value           = get_post_meta( $config_id, $key, true );
+			$explicit_blanks = (array) get_post_meta( $config_id, 'spp_explicit_blank_fields', true );
+			return '' === $value && ! in_array( $key, $explicit_blanks, true ) ? $fallback : $value;
 		};
 		$logo_id = absint( $get( 'spp_logo_id', 0 ) );
 
@@ -797,14 +799,25 @@ class SPP_Content_REST {
 	 * @return array
 	 */
 	private function cta( $post ) {
-		return array(
-			'title' => get_post_meta( $post->ID, 'spp_closing_cta_title', true ),
-			'text'  => get_post_meta( $post->ID, 'spp_closing_cta_text', true ),
-			'link'  => array(
-				'label' => get_post_meta( $post->ID, 'spp_closing_cta_label', true ),
-				'url'   => get_post_meta( $post->ID, 'spp_closing_cta_url', true ),
-			),
-		);
+		$explicit_blanks = (array) get_post_meta( $post->ID, 'spp_explicit_blank_fields', true );
+		$cta             = array();
+		$link            = array();
+		foreach ( array( 'spp_closing_cta_title' => 'title', 'spp_closing_cta_text' => 'text' ) as $key => $public_key ) {
+			$value = get_post_meta( $post->ID, $key, true );
+			if ( '' !== $value || in_array( $key, $explicit_blanks, true ) ) {
+				$cta[ $public_key ] = $value;
+			}
+		}
+		foreach ( array( 'spp_closing_cta_label' => 'label', 'spp_closing_cta_url' => 'url' ) as $key => $public_key ) {
+			$value = get_post_meta( $post->ID, $key, true );
+			if ( '' !== $value || in_array( $key, $explicit_blanks, true ) ) {
+				$link[ $public_key ] = $value;
+			}
+		}
+		if ( $link ) {
+			$cta['link'] = $link;
+		}
+		return $cta;
 	}
 
 	/**

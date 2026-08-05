@@ -650,6 +650,7 @@ class SPP_Content_Fields {
 		}
 
 		$definitions = $this->definitions_for_post( $post );
+		$explicit_blanks = (array) get_post_meta( $post_id, 'spp_explicit_blank_fields', true );
 		foreach ( $definitions as $key => $definition ) {
 			if ( 'system_email' === $definition['type'] && ! current_user_can( 'manage_spp_system' ) ) {
 				continue;
@@ -673,10 +674,17 @@ class SPP_Content_Fields {
 			if ( ! isset( $_POST[ $key ] ) ) {
 				continue;
 			}
-			$raw = wp_unslash( $_POST[ $key ] );
-			$value = $this->sanitize_value( $raw, $definition, get_post_meta( $post_id, $key, true ) );
+			$raw      = wp_unslash( $_POST[ $key ] );
+			$existing = get_post_meta( $post_id, $key, true );
+			$value    = $this->sanitize_value( $raw, $definition, $existing );
+			if ( '' === $value && '' !== $existing ) {
+				$explicit_blanks[] = $key;
+			} elseif ( '' !== $value ) {
+				$explicit_blanks = array_values( array_diff( $explicit_blanks, array( $key ) ) );
+			}
 			update_post_meta( $post_id, $key, $value );
 		}
+		update_post_meta( $post_id, 'spp_explicit_blank_fields', array_values( array_unique( $explicit_blanks ) ) );
 		update_post_meta( $post_id, '_spp_client_modified_at', gmdate( 'c' ) );
 	}
 

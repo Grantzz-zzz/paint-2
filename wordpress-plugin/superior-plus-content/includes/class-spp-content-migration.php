@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.5.6';
+	const VERSION = '2.5.7';
 	const APPROVED_HERO_VERSION = 'aesthetic-main-heroes-2026-08-02';
 	const STRUCTURAL_DEFAULTS_VERSION = 'restore-card-content-2026-08-05';
 

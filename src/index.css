@@ -242,6 +242,8 @@ main .section-heading{grid-template-columns:1.15fr .85fr;gap:70px}main .why-layo
 .faqs-main .faq-followup-why .approved-copy-body li{min-height:92px;align-items:center;padding:24px 26px;border:1px solid #ddd5c8;border-left:5px solid var(--green);border-radius:4px 22px 4px 22px;font-size:1.14rem;box-shadow:0 12px 28px rgba(31,46,40,.06)}
 .faqs-main .faq-followup-why .approved-copy-body li:last-child{grid-column:1/-1}
 .faqs-main .faq-followup-share{background:#fff}
+.faqs-main .faq-followup-share .inner-section-heading{display:block;max-width:940px;margin-right:0;margin-left:auto}
+.faqs-main .faq-followup-share .inner-section-heading h2{max-width:none}
 .faqs-main .faq-followup-share .approved-copy-body,.faqs-main .faq-followup-quote .approved-copy-body{display:block;max-width:940px;padding:clamp(30px,5vw,58px);border-radius:5px 34px 5px 34px}
 .faqs-main .faq-followup-share .approved-copy-body{margin-left:auto;background:#eef5f1;border:1px solid #d5e3db;border-top:6px solid var(--green)}
 .faqs-main .faq-followup-share .approved-copy-body p,.faqs-main .faq-followup-quote .approved-copy-body p{max-width:820px;margin:0;font-size:clamp(1.18rem,2vw,1.45rem)!important;line-height:1.75}
