@@ -228,6 +228,30 @@ main .section-heading{grid-template-columns:1.15fr .85fr;gap:70px}main .why-layo
 .faqs-main .faq-answer p{max-width:760px;margin:0;color:#53605a;font-size:1.125rem!important;line-height:1.75!important}
 @media(max-width:820px){.faqs-main .faq-layout{grid-template-columns:1fr;gap:38px}.faqs-main .faq-layout .inner-section-heading{position:static}.faqs-main .faq-item>button{min-height:100px}}
 @media(max-width:560px){.faqs-main .faq-list{border-radius:4px 24px 4px 24px}.faqs-main .faq-item>button{grid-template-columns:42px minmax(0,1fr) 28px;gap:13px;min-height:94px;padding:21px 18px}.faqs-main .faq-item>button span{width:36px;height:36px}.faqs-main .faq-item>button b{font-size:1.08rem}.faqs-main .faq-answer{padding:0 20px 28px 73px}.faqs-main .faq-answer p{font-size:1.02rem!important;line-height:1.7!important}}
+
+/* FAQ follow-up panels: checklist and final actions share the page's editorial scale. */
+.faqs-main .faq-followup-section{position:relative;overflow:hidden}
+.faqs-main .faq-followup-section>.container{position:relative;z-index:1}
+.faqs-main .faq-followup-section .inner-section-heading{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(40px,7vw,96px);margin-bottom:46px}
+.faqs-main .faq-followup-section .inner-section-heading h2{max-width:760px;font-size:clamp(2.55rem,5vw,5rem);line-height:.98}
+.faqs-main .faq-followup-section .approved-copy-body{max-width:none}
+.faqs-main .faq-followup-why{background:var(--cream)}
+.faqs-main .faq-followup-why .approved-copy-body{display:block}
+.faqs-main .faq-followup-why .approved-copy-body>div:empty{display:none}
+.faqs-main .faq-followup-why .approved-copy-body ul{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.faqs-main .faq-followup-why .approved-copy-body li{min-height:92px;align-items:center;padding:24px 26px;border:1px solid #ddd5c8;border-left:5px solid var(--green);border-radius:4px 22px 4px 22px;font-size:1.14rem;box-shadow:0 12px 28px rgba(31,46,40,.06)}
+.faqs-main .faq-followup-why .approved-copy-body li:last-child{grid-column:1/-1}
+.faqs-main .faq-followup-share{background:#fff}
+.faqs-main .faq-followup-share .approved-copy-body,.faqs-main .faq-followup-quote .approved-copy-body{display:block;max-width:940px;padding:clamp(30px,5vw,58px);border-radius:5px 34px 5px 34px}
+.faqs-main .faq-followup-share .approved-copy-body{margin-left:auto;background:#eef5f1;border:1px solid #d5e3db;border-top:6px solid var(--green)}
+.faqs-main .faq-followup-share .approved-copy-body p,.faqs-main .faq-followup-quote .approved-copy-body p{max-width:820px;margin:0;font-size:clamp(1.18rem,2vw,1.45rem)!important;line-height:1.75}
+.faqs-main .faq-followup-quote{background:var(--green);color:#fff}
+.faqs-main .faq-followup-quote:after{content:'';position:absolute;right:-90px;bottom:-120px;width:360px;height:360px;border:70px solid rgba(255,255,255,.055);border-radius:50%}
+.faqs-main .faq-followup-quote .eyebrow,.faqs-main .faq-followup-quote .inner-section-heading h2{color:#fff}
+.faqs-main .faq-followup-quote .approved-copy-body{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-top:6px solid var(--gold)}
+.faqs-main .faq-followup-quote .approved-copy-body p{color:rgba(255,255,255,.9)}
+@media(max-width:820px){.faqs-main .faq-followup-section .inner-section-heading{grid-template-columns:1fr;gap:22px;margin-bottom:32px}.faqs-main .faq-followup-why .approved-copy-body ul{grid-template-columns:1fr}.faqs-main .faq-followup-why .approved-copy-body li:last-child{grid-column:auto}.faqs-main .faq-followup-share .approved-copy-body{margin-left:0}}
+@media(max-width:560px){.faqs-main .faq-followup-section .inner-section-heading h2{font-size:2.45rem}.faqs-main .faq-followup-why .approved-copy-body li{min-height:78px;padding:20px 18px;font-size:1.04rem}.faqs-main .faq-followup-share .approved-copy-body,.faqs-main .faq-followup-quote .approved-copy-body{padding:27px 22px;border-radius:4px 24px 4px 24px}}
 @media(max-width:820px){.section-heading>p,.inner-section-heading>p{margin-top:0!important}}
 
 /* Senior-readable quote forms and homepage location */

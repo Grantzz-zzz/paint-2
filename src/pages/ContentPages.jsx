@@ -51,7 +51,14 @@ function FlipFeatureGrid({items,className=''}) {
 }
 
 function ApprovedSections({sections,eyebrow='Helpful information'}) {
-  return <>{sections.map((section,index)=><section className={`inner-section approved-copy-section ${index%2?'cream':''}`} key={section.heading}><div className="container"><SectionIntro eyebrow={eyebrow} title={section.heading} accent=""/><Reveal className="approved-copy-body"><div>{section.body?<p>{section.body}</p>:null}</div>{section.items?.length?<ul>{section.items.map(item=><li key={item}><Check/>{item}</li>)}</ul>:null}</Reveal></div></section>)}</>
+  return <>{sections.map((section,index)=>{
+    const faqFollowup={
+      'Why Clients Choose Us':'faq-followup-why',
+      'Share Your Experience':'faq-followup-share',
+      'Request a Free Quote':'faq-followup-quote',
+    }[section.heading]
+    return <section className={`inner-section approved-copy-section ${faqFollowup??(index%2?'cream':'')} ${faqFollowup?'faq-followup-section':''}`} key={section.heading}><div className="container"><SectionIntro eyebrow={eyebrow} title={section.heading} accent=""/><Reveal className="approved-copy-body"><div>{section.body?<p>{section.body}</p>:null}</div>{section.items?.length?<ul>{section.items.map(item=><li key={item}><Check/>{item}</li>)}</ul>:null}</Reveal></div></section>
+  })}</>
 }
 
 export function ServicesPage() {

@@ -5,7 +5,7 @@
 
 define( 'ABSPATH', __DIR__ );
 define( 'OBJECT', 'OBJECT' );
-define( 'SPP_CONTENT_VERSION', '2.5.5' );
+define( 'SPP_CONTENT_VERSION', '2.5.6' );
 define( 'SPP_CONTENT_PATH', dirname( __DIR__ ) . '/wordpress-plugin/superior-plus-content/' );
 
 $records = array(
@@ -101,7 +101,7 @@ if ( 'draft' !== $records['exterior-painting-melbourne']->post_status ) {
 if ( 'draft' !== $records['roof-painting-melbourne']->post_status ) {
 	$failures[] = 'A record with a noncanonical source key was unexpectedly published.';
 }
-if ( '2.5.5' !== get_post_meta( 101, '_spp_recovered_by_version', true ) ) {
+if ( '2.5.6' !== get_post_meta( 101, '_spp_recovered_by_version', true ) ) {
 	$failures[] = 'The recovered service was not marked with the recovery version.';
 }
 
