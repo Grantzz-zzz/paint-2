@@ -611,11 +611,23 @@ class SPP_Content_REST {
 	 */
 	private function service_data( $post, $full ) {
 		$short = $this->meta_or_default( $post, 'spp_directory_excerpt', $post->post_excerpt );
+		$default_tones = array(
+			'residential-painting-melbourne' => 'maroon', 'commercial-painting-melbourne' => 'green',
+			'interior-painting-melbourne' => 'teal', 'exterior-painting-melbourne' => 'terracotta',
+			'roof-painting-melbourne' => 'maroon', 'fence-painting-melbourne' => 'terracotta',
+			'deck-painting-staining-melbourne' => 'gold', 'wallpaper-removal-melbourne' => 'teal',
+			'plaster-repairs-melbourne' => 'cream',
+		);
+		$tone = sanitize_key( get_post_meta( $post->ID, '_spp_design_variant', true ) );
+		if ( ! in_array( $tone, array( 'maroon', 'green', 'gold', 'teal', 'terracotta', 'navy', 'cream' ), true ) ) {
+			$tone = isset( $default_tones[ $post->post_name ] ) ? $default_tones[ $post->post_name ] : 'cream';
+		}
 		$data = array(
 			'id'    => (int) $post->ID,
 			'slug'  => $post->post_name,
 			'title' => $this->plain_title( $post ),
 			'short' => wp_strip_all_tags( $short ),
+			'tone'  => $tone,
 			'url'   => get_permalink( $post ),
 			'hero'  => $this->hero( $post ),
 		);

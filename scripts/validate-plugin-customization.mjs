@@ -49,6 +49,7 @@ const checks = [
   [rest.includes("metadata_exists( 'post', $post->ID, $key )") && rest.includes("$meta['__configured']"), 'REST distinguishes missing values from intentionally blank values'],
   [rest.includes("$configured[ $configured_index ] = $resolved_key"), 'resolved media fields retain configured-state authority'],
   [servicePage.includes('const heroTitle=page.title === undefined') && !servicePage.includes('approved?.headline||'), 'editable service hero title controls the live heading'],
+  [servicePage.includes("service.tone||serviceList.find(item=>item.slug===service.slug)?.tone||'cream'") && rest.includes("'tone'  => $tone"), 'related service cards retain canonical colour tones when live metadata is missing'],
   [pageLayout.includes('title===undefined?defaults.title:title') && pageLayout.includes('resolvedLabel&&destination'), 'blank page CTA fields do not restore hardcoded defaults'],
   [fields.includes("'spp_explicit_blank_fields'") && fields.includes("'' === $value && '' !== $existing"), 'only fields deliberately cleared by an editor receive an explicit-blank marker'],
   [rest.includes('$explicit_blanks') && rest.includes("in_array( $key, $explicit_blanks, true )"), 'importer blanks fall back while explicitly cleared CTA fields remain removed'],
