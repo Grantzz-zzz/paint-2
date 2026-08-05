@@ -245,15 +245,34 @@ export function toAppPath(url, fallback = '/') {
   return toInternalAppPath(url, fallback)
 }
 
-function normalizeServices(incoming) {
+export function normalizeServices(incoming) {
   if (!Array.isArray(incoming) || !incoming.length) return fallbackServices
-  return incoming.map((service, index) => {
-    const matchingFallback = fallbackServices.find(item => item.slug === service.slug) || fallbackServices[index % fallbackServices.length]
-    return mergeContent(matchingFallback, {
-      ...service,
-      url: toAppPath(service.url, `/services/${service.slug}`),
+  const managedBySlug = new Map(
+    incoming
+      .filter(service => service?.slug)
+      .map(service => [service.slug, service]),
+  )
+  const canonical = fallbackServices.map(service => mergeContent(service, {
+    ...managedBySlug.get(service.slug),
+    url: toAppPath(managedBySlug.get(service.slug)?.url, `/services/${service.slug}`),
+  }))
+  const additions = incoming
+    .filter(service => service?.slug && !fallbackServices.some(item => item.slug === service.slug))
+    .map((service, index) => {
+      const safeFallback = {
+        id: service.slug,
+        slug: service.slug,
+        title: service.title || service.slug.replace(/-/g, ' '),
+        short: '',
+        tone: fallbackServices[index % fallbackServices.length].tone,
+        url: `/services/${service.slug}`,
+      }
+      return mergeContent(safeFallback, {
+        ...service,
+        url: toAppPath(service.url, `/services/${service.slug}`),
+      })
     })
-  })
+  return [...canonical, ...additions]
 }
 
 export function ContentProvider({ children }) {

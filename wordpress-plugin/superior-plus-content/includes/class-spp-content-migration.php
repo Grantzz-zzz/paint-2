@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.3.4';
+	const VERSION = '2.3.5';
 	const APPROVED_HERO_VERSION = 'aesthetic-main-heroes-2026-08-02';
 
 	private $types;

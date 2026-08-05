@@ -84,8 +84,8 @@ export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon'
         animate={{opacity:1, x:0}}
         transition={{duration:.75, ease:[.2,.8,.2,1]}}
       >
-        <Eyebrow>{eyebrow}</Eyebrow>
-        <h1>{title}<br/><em>{accent}</em></h1>
+        {eyebrow&&<Eyebrow>{eyebrow}</Eyebrow>}
+        <h1>{title}{accent&&<><br/><em>{accent}</em></>}</h1>
         <p>{intro}</p>
         <div className="page-hero-actions">
           <QuoteButton/>

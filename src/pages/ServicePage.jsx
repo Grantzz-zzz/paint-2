@@ -74,6 +74,8 @@ export default function ServicePage() {
   }):approvedPage
   const page=cms?.copy_version==='pdf-verbatim-2026-08-01'?{
     ...mergedPage,
+    eyebrow:Object.hasOwn(cms.hero||{},'eyebrow')?cms.hero.eyebrow:mergedPage.eyebrow,
+    accent:Object.hasOwn(cms.hero||{},'accent')?cms.hero.accent:mergedPage.accent,
     scope:Array.isArray(cms.scope)?cms.scope.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.scope,
     process:Array.isArray(cms.process)?cms.process.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.process,
     benefits:Array.isArray(cms.benefits)?cms.benefits.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.benefits,

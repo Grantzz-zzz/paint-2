@@ -1,14 +1,18 @@
 import { readFile } from 'node:fs/promises'
 
 const read = path => readFile(path, 'utf8')
-const [fields, admin, projectGallery, galleryPage, contentProvider, migration] = await Promise.all([
+const [fields, admin, projectGallery, galleryPage, contentProvider, migration, workflow, plugin] = await Promise.all([
   read('wordpress-plugin/superior-plus-content/includes/class-spp-content-fields.php'),
   read('wordpress-plugin/superior-plus-content/assets/admin.js'),
   read('src/components/ProjectGallery.jsx'),
   read('src/pages/GalleryPage.jsx'),
   read('src/content/ContentProvider.jsx'),
   read('wordpress-plugin/superior-plus-content/includes/class-spp-content-migration.php'),
+  read('wordpress-plugin/superior-plus-content/includes/class-spp-content-workflow.php'),
+  read('wordpress-plugin/superior-plus-content/includes/class-spp-content-plugin.php'),
 ])
+const requiredWorkflow = workflow.slice(workflow.indexOf('private function missing_required_fields'))
+const serviceRequiredBlock = requiredWorkflow.match(/'service'\s*=>\s*array\(([\s\S]*?)\n\s*\),\n\s*'project'/)?.[1] || ''
 const aestheticHeroes = [
   'stock-main/about.webp',
   'stock-main/services.webp',
@@ -33,6 +37,9 @@ const checks = [
   [projectGallery.includes('hasManagedItems?cmsItems:fallbackGallery.items'), 'empty service gallery stays empty'],
   [galleryPage.includes("projectsStatus==='ready'&&hasManagedRecord"), 'empty managed main gallery stays empty while missing groups recover'],
   [contentProvider.includes('Array.isArray(incoming) ? incoming : fallback'), 'empty repeatable sections stay empty'],
+  [contentProvider.includes('const canonical = fallbackServices.map'), 'canonical service navigation survives a partial WordPress response'],
+  [serviceRequiredBlock.includes("'post_title' => 'Title'") && !serviceRequiredBlock.includes('spp_eyebrow') && !serviceRequiredBlock.includes('spp_accent'), 'optional service subheaders cannot force a published service into draft'],
+  [plugin.includes('restore_canonical_services') && plugin.includes('_spp_recovered_by_version'), 'canonical services auto-drafted by the previous validator are safely restored'],
   [migration.includes('refresh_approved_hero_once') && migration.includes('APPROVED_HERO_VERSION'), 'one-time aesthetic hero upgrade preserves later editor control'],
   ...aestheticHeroes.map(path => [migration.includes(`'hero_asset' => '${path}'`), `approved hero assignment: ${path}`]),
 ]

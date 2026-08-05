@@ -253,6 +253,14 @@ async function capture(page, url) {
   }
   page.on('pageerror', onError)
   page.on('requestfailed', onFailure)
+  await page.addInitScript(() => {
+    const nativeSetTimeout = window.setTimeout
+    window.setTimeout = (callback, delay, ...args) => Number(delay) === 3000
+      ? 0
+      : nativeSetTimeout(callback, delay, ...args)
+    window.setInterval = () => 0
+    window.clearInterval = () => {}
+  })
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 })
   await page.locator('#root h1').first().waitFor({ timeout: 30000 })
   await page.locator('.content-status[data-content-state="ready"], .content-status[data-content-state="fallback"]').waitFor()
@@ -428,7 +436,7 @@ try {
   await interaction.goto(`${targetOrigin}/`, { waitUntil: 'domcontentloaded' })
   await interaction.locator('#root h1').first().waitFor()
   await interaction.locator('.nav-dropdown').first().hover()
-  check(await interaction.locator('#desktop-services-menu button').count() === 10, 'desktop menu: overview plus nine service links expected')
+  check(await interaction.locator('#desktop-services-menu .services-dropdown-grid button').count() === 9, 'desktop menu: nine canonical service links expected')
   await interaction.goto(`${targetOrigin}/faqs`, { waitUntil: 'domcontentloaded' })
   const faq = interaction.locator('.faq-item').nth(1)
   await faq.locator('button').click()
@@ -475,6 +483,40 @@ try {
   check(motion.reduced && zeroDuration(motion.transition) && zeroDuration(motion.animation), `reduced-motion styles are not disabled (${JSON.stringify(motion)})`)
   check(motion.scrollBehavior === 'auto', 'reduced motion did not disable smooth scrolling')
   await interactionContext.close()
+
+  const partialServicesContext = await browser.newContext({ viewport: viewports.desktop, reducedMotion: 'reduce' })
+  const partialServicesPage = await partialServicesContext.newPage()
+  await partialServicesPage.route('**/wp-json/spp/v1/services', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({
+      schema_version: '1.0.0',
+      data: [
+        { slug: 'commercial-painting-melbourne', title: 'Commercial Painting', short: 'Managed commercial summary.' },
+        { slug: 'deck-painting-staining-melbourne', title: 'Deck Painting & Staining', short: 'Managed deck summary.' },
+      ],
+    }),
+  }))
+  await partialServicesPage.goto(`${targetOrigin}/`, { waitUntil: 'domcontentloaded' })
+  await partialServicesPage.locator('[data-content-state="ready"]').waitFor()
+  await partialServicesPage.locator('.nav-dropdown').first().hover()
+  check(
+    await partialServicesPage.locator('#desktop-services-menu .services-dropdown-grid button').count() === 9,
+    'partial services API response removed canonical service links from desktop navigation',
+  )
+  check(
+    await partialServicesPage.locator('#desktop-services-menu').getByText('Residential Painting', { exact: true }).count() === 1,
+    'partial services API response did not recover a missing canonical service',
+  )
+  await partialServicesPage.setViewportSize(viewports.mobile)
+  await partialServicesPage.reload({ waitUntil: 'domcontentloaded' })
+  await partialServicesPage.locator('[data-content-state="ready"]').waitFor()
+  await partialServicesPage.getByRole('button', { name: 'Toggle menu' }).click()
+  check(
+    await partialServicesPage.locator('#mobile-services-menu > button:not(.mobile-additional-services)').count() === 9,
+    'partial services API response removed canonical service links from mobile navigation',
+  )
+  await partialServicesContext.close()
 
   const fallbackContext = await browser.newContext({ viewport: viewports.desktop, reducedMotion: 'reduce' })
   const fallbackPage = await fallbackContext.newPage()

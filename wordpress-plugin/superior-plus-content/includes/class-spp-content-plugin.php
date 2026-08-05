@@ -155,7 +155,45 @@ final class SPP_Content_Plugin {
 			return;
 		}
 		self::add_capabilities();
+		self::restore_canonical_services();
 		update_option( 'spp_content_db_version', SPP_CONTENT_VERSION, false );
+	}
+
+	/**
+	 * Restore original managed services hidden by the pre-2.3.5 validator.
+	 *
+	 * Earlier versions silently changed a published service to draft when an
+	 * editor intentionally cleared a decorative hero subheader. The canonical
+	 * nine localhost services are structural routes, so a content-only edit
+	 * must never remove them from navigation. Custom service drafts are left
+	 * untouched.
+	 */
+	private static function restore_canonical_services() {
+		$manifest_path = SPP_CONTENT_PATH . 'data/client-approved-content.json';
+		if ( ! file_exists( $manifest_path ) ) {
+			return;
+		}
+		$manifest = json_decode( file_get_contents( $manifest_path ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$services = isset( $manifest['services'] ) && is_array( $manifest['services'] ) ? array_keys( $manifest['services'] ) : array();
+		foreach ( $services as $slug ) {
+			$post = get_page_by_path( sanitize_title( $slug ), OBJECT, 'spp_service' );
+			if (
+				! $post ||
+				'draft' !== $post->post_status ||
+				! trim( $post->post_title ) ||
+				'service:' . $slug !== get_post_meta( $post->ID, '_spp_source_key', true ) ||
+				! get_post_meta( $post->ID, '_spp_managed_content', true )
+			) {
+				continue;
+			}
+			wp_update_post(
+				array(
+					'ID'          => $post->ID,
+					'post_status' => 'publish',
+				)
+			);
+			update_post_meta( $post->ID, '_spp_recovered_by_version', SPP_CONTENT_VERSION );
+		}
 	}
 
 	/**
@@ -168,6 +206,7 @@ final class SPP_Content_Plugin {
 		$routing->register_rewrites();
 		self::add_capabilities();
 		$types->ensure_site_config();
+		self::restore_canonical_services();
 		update_option( 'spp_content_db_version', SPP_CONTENT_VERSION, false );
 		if ( 'superior-plus' === get_stylesheet() ) {
 			update_option( 'spp_content_routes_version', SPP_CONTENT_VERSION, false );

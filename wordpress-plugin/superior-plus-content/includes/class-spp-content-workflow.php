@@ -540,17 +540,10 @@ class SPP_Content_Workflow {
 				'spp_hero_image_id' => 'Hero image',
 			),
 			'service'  => array(
-				'post_title'             => 'Title',
-				'spp_directory_excerpt'  => 'Directory summary',
-				'spp_eyebrow'            => 'Hero eyebrow',
-				'spp_accent'             => 'Hero accent',
-				'spp_hero_intro'         => 'Hero introduction',
-				'spp_hero_image_id'      => 'Hero image',
-				'spp_scope_title'        => 'Scope heading',
-				'spp_scope'              => 'Scope items',
-				'spp_why'                => 'Process introduction',
-				'spp_process'            => 'Process steps',
-				'spp_benefits'           => 'Benefits',
+				// Every decorative/content field is optional. The locked React
+				// source supplies a safe presentation fallback when an editor
+				// intentionally clears a hero subheader or section field.
+				'post_title' => 'Title',
 			),
 			'project'  => array(
 				'post_title'              => 'Title',
