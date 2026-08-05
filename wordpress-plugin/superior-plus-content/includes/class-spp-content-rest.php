@@ -628,6 +628,16 @@ class SPP_Content_REST {
 				$related[] = $this->service_data( $related_post, false );
 			}
 		}
+		$section_labels = array();
+		foreach ( array(
+			'scope_eyebrow', 'scope_accent', 'scope_intro', 'process_eyebrow', 'process_title', 'process_accent',
+			'benefits_title', 'benefits_accent', 'related_eyebrow', 'related_title', 'related_accent',
+		) as $label_key ) {
+			$meta_key = 'spp_' . $label_key;
+			if ( metadata_exists( 'post', $post->ID, $meta_key ) ) {
+				$section_labels[ $label_key ] = get_post_meta( $post->ID, $meta_key, true );
+			}
+		}
 
 		$data += array(
 			'copy_version' => get_post_meta( $post->ID, 'spp_copy_source_version', true ),
@@ -639,19 +649,7 @@ class SPP_Content_REST {
 			'document_sections' => get_post_meta( $post->ID, 'spp_document_sections', true ),
 			'related'     => $related,
 			'gallery'     => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
-			'section_labels' => array(
-				'scope_eyebrow'   => get_post_meta( $post->ID, 'spp_scope_eyebrow', true ),
-				'scope_accent'    => get_post_meta( $post->ID, 'spp_scope_accent', true ),
-				'scope_intro'     => get_post_meta( $post->ID, 'spp_scope_intro', true ),
-				'process_eyebrow' => get_post_meta( $post->ID, 'spp_process_eyebrow', true ),
-				'process_title'   => get_post_meta( $post->ID, 'spp_process_title', true ),
-				'process_accent'  => get_post_meta( $post->ID, 'spp_process_accent', true ),
-				'benefits_title'  => get_post_meta( $post->ID, 'spp_benefits_title', true ),
-				'benefits_accent' => get_post_meta( $post->ID, 'spp_benefits_accent', true ),
-				'related_eyebrow' => get_post_meta( $post->ID, 'spp_related_eyebrow', true ),
-				'related_title'   => get_post_meta( $post->ID, 'spp_related_title', true ),
-				'related_accent'  => get_post_meta( $post->ID, 'spp_related_accent', true ),
-			),
+			'section_labels' => $section_labels,
 		);
 		return $data;
 	}
