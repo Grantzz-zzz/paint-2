@@ -23,10 +23,10 @@ export function DynamicContentPage() {
   const hero={...route.hero,image:mediaUrl(route.hero?.image,asset('client/projects/residential/residential-01.webp')),tone:'green'}
   const sections=pairItems(fields.content_sections,route.content?.body?[['Our story',route.content.body]]:[])
   const cta=route.closing_cta
-  return <PageLayout title={route.seo?.title||route.title} description={route.seo?.description||hero.intro} image={mediaUrl(route.seo?.social_image,hero.image)}>
+  return <PageLayout title={route.seo?.title??route.title} description={route.seo?.description??hero.intro} image={mediaUrl(route.seo?.social_image,hero.image)}>
     <PageHero {...hero}/>
     <TrustStrip/>
-    {sections.map(([title,body],index)=><section className={`inner-section ${index%2?'cream':''}`} key={`${title}-${index}`}><div className="container editorial-grid"><Reveal><SectionIntro eyebrow="Superior Plus" title={title} accent="handled with care."/><div dangerouslySetInnerHTML={{__html:body}}/></Reveal>{index===0&&fields.secondary_image&&<Reveal className="editorial-image" delay={.1}><img src={fields.secondary_image.url} alt={fields.secondary_image.alt||title}/></Reveal>}</div>{!index&&<Divider color="#fbf6ec" variant="wave"/>}</section>)}
+    {sections.map(([title,body],index)=><section className={`inner-section ${index%2?'cream':''}`} key={`${title}-${index}`}><div className="container editorial-grid"><Reveal><SectionIntro eyebrow="Superior Plus" title={title} accent="handled with care."/>{body&&<div dangerouslySetInnerHTML={{__html:body}}/>}</Reveal>{index===0&&fields.secondary_image?.url&&<Reveal className="editorial-image" delay={.1}><img src={fields.secondary_image.url} alt={fields.secondary_image.alt??title}/></Reveal>}</div>{!index&&<Divider color="#fbf6ec" variant="wave"/>}</section>)}
     {fields.related_pages?.length>0&&<section className="inner-section"><div className="container"><SectionIntro eyebrow="Keep exploring" title="Related pages" accent="from Superior Plus."/><div className="related-grid">{fields.related_pages.map(page=><button className="related-card tone-cream" key={page.id} onClick={()=>navigate(page.path)}><span>Superior Plus</span><h3>{page.title}</h3><ArrowRight/></button>)}</div></div></section>}
     <ClosingCTA title={cta?.title} text={cta?.text} label={cta?.link?.label} url={cta?.link?.url}/>
   </PageLayout>
@@ -41,7 +41,7 @@ export function ProjectPage() {
   const project=route.content||{}
   const hero={...route.hero,image:mediaUrl(route.hero?.image,mediaUrl(project.featured_media,asset('client/projects/residential/residential-01.webp'))),tone:'terracotta'}
   const cta=route.closing_cta
-  return <PageLayout title={route.seo?.title||route.title} description={route.seo?.description||hero.intro||project.project_type} image={mediaUrl(route.seo?.social_image,hero.image)}>
+  return <PageLayout title={route.seo?.title??route.title} description={route.seo?.description??hero.intro??project.project_type} image={mediaUrl(route.seo?.social_image,hero.image)}>
     <PageHero {...hero}/>
     <TrustStrip/>
     <ProjectGallery items={project.gallery}/>

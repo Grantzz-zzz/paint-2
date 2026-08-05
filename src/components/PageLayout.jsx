@@ -67,14 +67,14 @@ export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon'
   const trust=(trustItems?.length ? trustItems : ['Fully insured', 'Free colour advice', 'Melbourne-wide']).slice(0, 3)
   const longTitle=((title?.length || 0) + (accent?.length || 0)) > 42
   return <section className={`page-hero page-hero-${tone} ${longTitle ? 'page-hero-long-title' : ''}`}>
-    <motion.div
+    {image&&<motion.div
       className="page-hero-visual"
       initial={{opacity:0, scale:1.035}}
       animate={{opacity:1, scale:1}}
       transition={{duration:.9, ease:[.2,.8,.2,1]}}
     >
-      <img src={image} alt={imageAlt || title} style={{objectPosition:imagePosition}} loading="eager" decoding="async" fetchPriority="high" />
-    </motion.div>
+      <img src={image} alt={imageAlt ?? title} style={{objectPosition:imagePosition}} loading="eager" decoding="async" fetchPriority="high" />
+    </motion.div>}
     <motion.div className="page-hero-paint paint-one" initial={{scaleX:0}} animate={{scaleX:1}} transition={{duration:.7, delay:.35}}/>
     <motion.div className="page-hero-paint paint-two" initial={{scaleX:0}} animate={{scaleX:1}} transition={{duration:.7, delay:.5}}/>
     <div className="container page-hero-grid">
@@ -85,8 +85,8 @@ export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon'
         transition={{duration:.75, ease:[.2,.8,.2,1]}}
       >
         {eyebrow&&<Eyebrow>{eyebrow}</Eyebrow>}
-        <h1>{title}{accent&&<><br/><em>{accent}</em></>}</h1>
-        <p>{intro}</p>
+        {title&&<h1>{title}{accent&&<><br/><em>{accent}</em></>}</h1>}
+        {intro&&<p>{intro}</p>}
         <div className="page-hero-actions">
           <QuoteButton/>
           <button type="button" className="text-link" onClick={()=>navigate('/gallery')}>See our work <span aria-hidden="true">↘</span></button>
@@ -114,11 +114,13 @@ export function TrustStrip() {
 }
 
 export function SectionIntro({ eyebrow, title, accent, text, light = false }) {
-  return <Reveal className="inner-section-heading"><div><Eyebrow light={light}>{eyebrow}</Eyebrow><h2>{title}<br/><em>{accent}</em></h2></div>{text&&<p>{text}</p>}</Reveal>
+  if(!eyebrow&&!title&&!accent&&!text)return null
+  return <Reveal className="inner-section-heading"><div>{eyebrow&&<Eyebrow light={light}>{eyebrow}</Eyebrow>}{(title||accent)&&<h2>{title}{title&&accent&&<br/>}{accent&&<em>{accent}</em>}</h2>}</div>{text&&<p>{text}</p>}</Reveal>
 }
 
 export function TestimonialBand({ index = 0 }) {
-  const {data:items}=useCollection('testimonials',collectionFallbacks.testimonials)
+  const {data:items}=useCollection('testimonials',collectionFallbacks.testimonials,{preserveEmpty:true})
+  if(!items.length)return null
   const item = items[index % items.length]
   return <section className="testimonial-band"><div className="container testimonial-band-grid"><Reveal><Eyebrow light>Client feedback</Eyebrow><h2>Work people feel<br/><em>good about.</em></h2>{item.is_placeholder&&<p className="placeholder-disclosure">Placeholder testimonial — replace with a verified client review before launch.</p>}</Reveal><Reveal className="testimonial-band-card" delay={.1}><div>{Array.from({length:item.rating||5},(_,n)=><Star key={n} fill="currentColor"/>)}</div><blockquote>“{item.quote}”</blockquote><b>{item.label||item.name}</b></Reveal></div><Divider color="#fff" variant="slash"/></section>
 }
@@ -140,9 +142,13 @@ export function AreasBand({seed=''}) {
 export function ClosingCTA({ title, text, label, url }) {
   const {business,default_cta:defaults}=useSiteContent()
   const navigate=useNavigate()
-  const destination=url||defaults.link.url||'/contact'
+  const resolvedTitle=title===undefined?defaults.title:title
+  const resolvedText=text===undefined?defaults.text:text
+  const resolvedLabel=label===undefined?defaults.link.label:label
+  const destination=url===undefined?(defaults.link.url||'/contact'):url
   const action=()=>destination.startsWith('/')?navigate(destination):window.location.assign(destination)
-  return <section className="closing-cta"><div className="closing-splash"/><div className="container closing-cta-grid"><Reveal><Eyebrow light>Let’s talk colour</Eyebrow><h2>{title||defaults.title}</h2><p>{text||defaults.text}</p></Reveal><Reveal className="closing-actions" delay={.1}><button className="btn" onClick={action}>{label||defaults.link.label}<ArrowRight size={17}/></button><a href={business.phone_href}><Phone/>{business.phone_display}</a></Reveal></div></section>
+  if(!resolvedTitle&&!resolvedText&&!resolvedLabel&&!business.phone_display)return null
+  return <section className="closing-cta"><div className="closing-splash"/><div className="container closing-cta-grid"><Reveal><Eyebrow light>Let’s talk colour</Eyebrow>{resolvedTitle&&<h2>{resolvedTitle}</h2>}{resolvedText&&<p>{resolvedText}</p>}</Reveal><Reveal className="closing-actions" delay={.1}>{resolvedLabel&&destination&&<button className="btn" onClick={action}>{resolvedLabel}<ArrowRight size={17}/></button>}{business.phone_display&&<a href={business.phone_href}><Phone/>{business.phone_display}</a>}</Reveal></div></section>
 }
 
 export function QualityGrid({ items }) {

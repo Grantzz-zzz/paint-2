@@ -13,7 +13,7 @@ import { roofHomepageCardImage } from './data/newBatchMedia'
 import { groupManagedServiceAreas, serviceAreaBySlug, serviceAreas } from './data/serviceAreas'
 import { paintingGuides } from './data/paintingGuides'
 import { asset, publicRouteUrl, siteUrl } from './utils/assets'
-import { mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
+import { fieldValue, mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
 
 const emptyArticles=[]
 
@@ -78,7 +78,9 @@ function Divider({ color = '#fff', variant = 'wave' }) {
 function Logo() {
   const navigate = useNavigate()
   const {business}=useSiteContent()
-  return <button onClick={() => navigate('/')} className="logo-wrap" aria-label="Go to home page"><img src={mediaUrl(business.logo,asset('logo.webp'))} alt={business.logo?.alt||business.name} /></button>
+  const logo=mediaUrl(business.logo,asset('logo.webp'))
+  if(!logo)return null
+  return <button onClick={() => navigate('/')} className="logo-wrap" aria-label="Go to home page"><img src={logo} alt={business.logo?.alt??business.name} /></button>
 }
 
 function Navbar() {
@@ -176,18 +178,18 @@ function Navbar() {
 function Hero({hero,fields}) {
   const navigate = useNavigate()
   const image=mediaUrl(hero?.image,asset('client/projects/brand/home-hero-ai-v2.webp'))
-  const trustPoints=textItems(fields?.home_trust_points,['Fully insured','Free colour advice','Melbourne-wide'])
-  const title=hero?.title||'Professional painting services'
-  const accent=hero?.accent||'in Melbourne'
-  const closing=fields?.home_hero_closing||''
+  const trustPoints=textItems(fieldValue(fields,'home_trust_points',undefined),['Fully insured','Free colour advice','Melbourne-wide'])
+  const title=hero?.title??'Professional painting services'
+  const accent=hero?.accent??'in Melbourne'
+  const closing=fieldValue(fields,'home_hero_closing','')
   return <section id="home" className="hero section-track">
-    <div className="hero-bg"><img src={image} alt={hero?.image?.alt||'Superior Plus painters transforming a premium Melbourne home exterior'} loading="eager" decoding="async" fetchPriority="high" /></div>
+    {image&&<div className="hero-bg"><img src={image} alt={hero?.image?.alt??'Superior Plus painters transforming a premium Melbourne home exterior'} loading="eager" decoding="async" fetchPriority="high" /></div>}
     <div className="paint-ribbon ribbon-green"/><div className="paint-ribbon ribbon-gold"/>
     <div className="container hero-content">
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">
-        <Eyebrow>{hero?.eyebrow||'Melbourne painting team'}</Eyebrow>
+        {hero?.eyebrow!==''&&<Eyebrow>{hero?.eyebrow??'Melbourne painting team'}</Eyebrow>}
         <h1 className="hero-title-seo">{title}<br/>{' '}<em>{accent}</em>{closing&&<><br/>{' '}{closing}</>}</h1>
-        <p>{hero?.intro||'Professional residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and a finish made to last.'}</p>
+        {hero?.intro!==''&&<p>{hero?.intro??'Professional residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and a finish made to last.'}</p>}
         <div className="hero-buttons"><button className="btn" onClick={() => navigate('/contact')}>Get a free quote <ArrowRight size={18}/></button><button className="text-link" onClick={() => scrollTo('projects')}>See our work <span>↘</span></button></div>
         <div className="hero-trust">{trustPoints.map(item=><span key={item}><Check/> {item}</span>)}</div>
       </motion.div>
@@ -206,20 +208,20 @@ function Services({fields,serviceItems}) {
     ...item,
     text:serviceList.find(service=>service.slug===item.slug)?.short||item.text,
   }))
-  const cards=selected.length?selected.map((item,index)=>{
+  const cards=Array.isArray(fields?.home_service_ids)?selected.map((item,index)=>{
     const fallback=services.find(service=>service.slug===item.slug)||services[index%services.length]
     return {
       ...item,
       icon:fallback.icon,
       text:item.short,
-      tone:item.tone||fallback.tone,
+      tone:item.tone??fallback.tone,
       image:item.slug==='roof-painting-melbourne'?roofHomepageCardImage.src:(servicePages[item.slug]?.image||fallback.image),
-      imagePosition:fallback.imagePosition||'center',
+      imagePosition:fallback.imagePosition??'center',
     }
   }):fallbackCards
   return <section id="services" className="section section-track services-section">
     <div className="container">
-      <Reveal className="section-heading"><div><Eyebrow>{fields?.home_services_eyebrow||'What we paint'}</Eyebrow><h2>{fields?.home_services_title||'Every surface deserves'}<br/><em>{fields?.home_services_accent||'the right finish.'}</em></h2></div><p>{fields?.home_services_intro||'From one carefully refreshed room to a complete commercial transformation, our experienced team brings the same care to every job.'}</p></Reveal>
+      <Reveal className="section-heading"><div>{fields?.home_services_eyebrow!==''&&<Eyebrow>{fields?.home_services_eyebrow??'What we paint'}</Eyebrow>}<h2>{fields?.home_services_title??'Every surface deserves'}{(fields?.home_services_accent??'the right finish.')&&<><br/><em>{fields?.home_services_accent??'the right finish.'}</em></>}</h2></div>{fields?.home_services_intro!==''&&<p>{fields?.home_services_intro??'From one carefully refreshed room to a complete commercial transformation, our experienced team brings the same care to every job.'}</p>}</Reveal>
       <div className="services-grid home-service-flip-grid">{cards.map((service, i) => {
         const Icon=service.icon
         const cardKey=`${service.slug||service.title}-${i}`
@@ -261,9 +263,11 @@ function Services({fields,serviceItems}) {
 }
 
 function Commercial({fields}) {
+  const commercialTags=textItems(fieldValue(fields,'home_commercial_tags',undefined),['Offices','Retail','Warehouses','Medical','Education','Hospitality','Strata'])
+  const commercialImage=mediaUrl(fieldValue(fields,'home_commercial_image',undefined))
   return <section id="commercial" className="commercial section-track">
-    <div className="texture"/><div className="container">
-      <div className="commercial-top"><Reveal><Eyebrow light>Commercial specialists</Eyebrow><h2>{fields?.home_commercial_title||'We keep your business'}<br/><em>{fields?.home_commercial_accent||'looking its best.'}</em></h2></Reveal><Reveal delay={.15}><p>{fields?.home_commercial_text||'Professional finishes, clear communication and scheduling built around your operation—from a single office to multi-site projects.'}</p><div className="business-tags">{['Offices','Retail','Warehouses','Medical','Education','Hospitality','Strata'].map(x=><span key={x}>{x}</span>)}</div></Reveal></div>
+    <div className="texture"/>{commercialImage&&<div className="commercial-feature-image" aria-hidden="true"><img src={commercialImage} alt="" loading="lazy" decoding="async"/></div>}<div className="container">
+      <div className="commercial-top"><Reveal><Eyebrow light>Commercial specialists</Eyebrow><h2>{fields?.home_commercial_title??'We keep your business'}{(fields?.home_commercial_accent??'looking its best.')&&<><br/><em>{fields?.home_commercial_accent??'looking its best.'}</em></>}</h2></Reveal><Reveal delay={.15}>{fields?.home_commercial_text!==''&&<p>{fields?.home_commercial_text??'Professional finishes, clear communication and scheduling built around your operation—from a single office to multi-site projects.'}</p>}<div className="business-tags">{commercialTags.map(x=><span key={x}>{x}</span>)}</div></Reveal></div>
       <Reveal className="process-wrap"><div className="process-label"><span>Our process</span><p>Simple, transparent, stress-free.</p></div><div className="process-grid">{process.map(([n,title],i)=><div className="process-step" key={n}><b>{n}</b><span>{title}</span>{i<4&&<i/>}</div>)}</div></Reveal>
     </div>
     <Divider color="#fbf6ec" variant="drip" />
@@ -274,19 +278,19 @@ function Projects({fields,projectItems}) {
   const navigate=useNavigate()
   const selectedIds=Array.isArray(fields?.home_project_ids)?fields.home_project_ids.map(String):[]
   const selected=selectedIds.length?projectItems.filter(item=>selectedIds.includes(String(item.id))):[]
-  const cards=selected.length?selected.slice(0,3).map((project,index)=>({
+  const cards=Array.isArray(fields?.home_project_ids)?selected.slice(0,3).map((project,index)=>({
     title:project.title,
     type:project.project_type||'Superior Plus project · Melbourne',
     image:mediaUrl(project.featured_media,projects[index%projects.length].image),
     pos:project.object_position||'50% 50%',
     color:projects[index%projects.length].color,
   })):projects
-  const heading=fields?.home_projects_heading||'Colour changes'
-  const accent=fields?.home_projects_accent||'everything.'
-  const intro=fields?.home_projects_intro||'Explore the care behind every edge, every surface and every final coat. Hover a project to reveal the colour beneath.'
+  const heading=fields?.home_projects_heading??'Colour changes'
+  const accent=fields?.home_projects_accent??'everything.'
+  const intro=fields?.home_projects_intro??'Explore the care behind every edge, every surface and every final coat. Hover a project to reveal the colour beneath.'
   return <section id="projects" className="section cream section-track">
     <div className="container">
-      <Reveal className="section-heading"><div><Eyebrow>Selected work</Eyebrow><h2>{heading}<br/><em>{accent}</em></h2></div><p>{intro}</p></Reveal>
+      <Reveal className="section-heading"><div><Eyebrow>Selected work</Eyebrow><h2>{heading}{accent&&<><br/><em>{accent}</em></>}</h2></div>{intro&&<p>{intro}</p>}</Reveal>
       <div className="projects-grid">{cards.map((project,i)=><Reveal key={project.title} delay={i*.1} className={`project project-${i+1}`}><div className="splash" style={{background:project.color}}/><div className="project-image"><img src={project.image} style={{objectPosition:project.pos}} alt={project.title}/><div className="project-wipe" style={{background:project.color}}/></div><div className="project-meta"><div><h3>{project.title}</h3><p>{project.type}</p></div><span>↗</span></div></Reveal>)}</div>
       <div className="section-action"><button className="btn" onClick={()=>navigate('/gallery')}>View the complete gallery <ArrowRight/></button></div>
     </div>
@@ -299,7 +303,7 @@ function WhyUs({fields,business}) {
   const cards=trustPairs.map(([title,text],index)=>({title,text,icon:trust[index%trust.length].icon}))
   return <section id="about" className="section section-track why-section">
     <div className="container why-layout">
-      <Reveal className="why-copy"><Eyebrow>The Superior difference</Eyebrow><h2>{fields?.home_why_title||'Good painting starts'}<br/><em>{fields?.home_why_accent||'before the first coat.'}</em></h2><p>{fields?.home_why_text||'We listen, prepare properly and communicate clearly. It’s how we deliver polished, durable work—without turning your home or workplace upside down.'}</p><a href={business.phone_href} className="text-link">Talk to our team <span>↗</span></a></Reveal>
+      <Reveal className="why-copy"><Eyebrow>The Superior difference</Eyebrow><h2>{fields?.home_why_title??'Good painting starts'}{(fields?.home_why_accent??'before the first coat.')&&<><br/><em>{fields?.home_why_accent??'before the first coat.'}</em></>}</h2>{fields?.home_why_text!==''&&<p>{fields?.home_why_text??'We listen, prepare properly and communicate clearly. It’s how we deliver polished, durable work—without turning your home or workplace upside down.'}</p>}<a href={business.phone_href} className="text-link">Talk to our team <span>↗</span></a></Reveal>
       <div className="trust-grid">{cards.map(({icon:Icon,title,text},i)=><Reveal key={title} delay={i*.08}><article><span><Icon/></span><h3>{title}</h3><p>{text}</p></article></Reveal>)}</div>
     </div>
   </section>
@@ -310,9 +314,9 @@ function GuidesPreview({fields,items}) {
   const selectedIds=Array.isArray(fields?.home_article_ids)?fields.home_article_ids.map(String):[]
   const cms=(items||[]).map(item=>({...item,image:mediaUrl(item.hero?.image,item.image),imageAlt:item.hero?.image?.alt||item.imageAlt,readTime:item.read_time||item.readTime||'Practical guide'}))
   const available=cms.length?cms:paintingGuides
-  const selected=selectedIds.length?available.filter(item=>selectedIds.includes(String(item.id))):available
+  const selected=Array.isArray(fields?.home_article_ids)?available.filter(item=>selectedIds.includes(String(item.id))):available
   const guides=selected.slice(0,3)
-  return <section className="section home-guides"><div className="container"><Reveal className="section-heading"><div><Eyebrow>{fields?.home_blog_eyebrow||'From the blog'}</Eyebrow><h2>{fields?.home_blog_title||'Plan with more'}<br/><em>{fields?.home_blog_accent||'confidence.'}</em></h2></div><p>{fields?.home_blog_intro||'Client-approved articles about repainting cycles, preparation, coating systems and choosing the right professional team for your property.'}</p></Reveal><div className="home-guide-grid">{guides.map((guide,index)=><Reveal key={guide.slug} delay={index*.07}><article><button onClick={()=>navigate(`/blog/${guide.slug}`)}><img src={guide.image} alt={guide.imageAlt} loading="lazy" decoding="async"/><span><Clock3/>{guide.readTime}</span></button><small>{guide.category}</small><h3>{guide.title}</h3><p>{guide.excerpt}</p><button className="guide-link" onClick={()=>navigate(`/blog/${guide.slug}`)}>Read article <ArrowRight/></button></article></Reveal>)}</div><div className="section-action"><button className="btn" onClick={()=>navigate('/blog')}>Explore the painting blog <ArrowRight/></button></div></div><Divider color="#fbf6ec" variant="wave"/></section>
+  return <section className="section home-guides"><div className="container"><Reveal className="section-heading"><div>{fields?.home_blog_eyebrow!==''&&<Eyebrow>{fields?.home_blog_eyebrow??'From the blog'}</Eyebrow>}<h2>{fields?.home_blog_title??'Plan with more'}{(fields?.home_blog_accent??'confidence.')&&<><br/><em>{fields?.home_blog_accent??'confidence.'}</em></>}</h2></div>{fields?.home_blog_intro!==''&&<p>{fields?.home_blog_intro??'Client-approved articles about repainting cycles, preparation, coating systems and choosing the right professional team for your property.'}</p>}</Reveal><div className="home-guide-grid">{guides.map((guide,index)=><Reveal key={guide.slug} delay={index*.07}><article><button onClick={()=>navigate(`/blog/${guide.slug}`)}><img src={guide.image} alt={guide.imageAlt} loading="lazy" decoding="async"/><span><Clock3/>{guide.readTime}</span></button><small>{guide.category}</small><h3>{guide.title}</h3><p>{guide.excerpt}</p><button className="guide-link" onClick={()=>navigate(`/blog/${guide.slug}`)}>Read article <ArrowRight/></button></article></Reveal>)}</div><div className="section-action"><button className="btn" onClick={()=>navigate('/blog')}>Explore the painting blog <ArrowRight/></button></div></div><Divider color="#fbf6ec" variant="wave"/></section>
 }
 
 function Areas({fields}) {
@@ -344,8 +348,8 @@ function Areas({fields}) {
       <div className="container home-areas-overview-grid">
         <Reveal className="home-areas-copy">
           <Eyebrow>Areas we service</Eyebrow>
-          <h2>{fields?.home_areas_title||'Local painting across'}<br/><em>Melbourne’s east.</em></h2>
-          <p>{fields?.home_areas_text||'Based in Melbourne and proudly servicing homes and businesses across the eastern and south-eastern suburbs.'}</p>
+          <h2>{fields?.home_areas_title??'Local painting across'}{fieldValue(fields,'home_areas_accent','Melbourne’s east.')&&<><br/><em>{fieldValue(fields,'home_areas_accent','Melbourne’s east.')}</em></>}</h2>
+          {fields?.home_areas_text!==''&&<p>{fields?.home_areas_text??'Based in Melbourne and proudly servicing homes and businesses across the eastern and south-eastern suburbs.'}</p>}
           <div className="home-area-regions" aria-label="Filter service areas by region">
             {regions.map((region,index)=><button type="button" key={region.id} className={activeRegion===region.id?'active':''} aria-pressed={activeRegion===region.id} onClick={()=>selectRegion(region.id)}>
               <span><MapPin size={20}/></span>
@@ -394,9 +398,10 @@ export function Testimonials({items,className='',profile=googleReviewProfile}) {
   const [pageVisible,setPageVisible]=useState(true)
   const swipeStart=useRef(null)
   const googleItems=(items||[]).filter(item=>item.name&&item.quote&&!item.is_placeholder&&String(item.source||'').toLowerCase()==='google')
-  const safeItems=(googleItems.length?googleItems:testimonials).filter(item=>String(item.source||'').toLowerCase()==='google')
-  const activeIndex=index%safeItems.length
-  const item=safeItems[activeIndex]
+  const suppliedItems=Array.isArray(items)?googleItems:testimonials
+  const safeItems=suppliedItems.filter(item=>String(item.source||'').toLowerCase()==='google')
+  const activeIndex=safeItems.length?index%safeItems.length:0
+  const item=safeItems[activeIndex]||{}
   useEffect(()=>{
     const handleVisibility=()=>setPageVisible(!document.hidden)
     document.addEventListener('visibilitychange',handleVisibility)
@@ -407,7 +412,7 @@ export function Testimonials({items,className='',profile=googleReviewProfile}) {
     const timer=window.setTimeout(()=>setIndex(value=>(value+1)%safeItems.length),3000)
     return ()=>window.clearTimeout(timer)
   },[index,paused,pageVisible,safeItems.length])
-  useEffect(()=>setIndex(value=>value%safeItems.length),[safeItems.length])
+  useEffect(()=>setIndex(value=>safeItems.length?value%safeItems.length:0),[safeItems.length])
   const previous=()=>setIndex(value=>(value-1+safeItems.length)%safeItems.length)
   const next=()=>setIndex(value=>(value+1)%safeItems.length)
   const beginSwipe=event=>{
@@ -429,20 +434,25 @@ export function Testimonials({items,className='',profile=googleReviewProfile}) {
   const reviewCount=Number(reviewProfile.count)||googleReviewProfile.count
   const sourceUrl=item.source_url||reviewProfile.url
   const initials=(item.name||'Verified reviewer').split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase()
+  if(!safeItems.length)return null
   return <section className={`section testimonials google-reviews ${className}`}><div className="container testimonial-layout"><Reveal className="google-review-summary"><Eyebrow>Verified client feedback</Eyebrow><h2>Excellent</h2><strong>{rating.toFixed(1)}</strong><div className="google-summary-stars" aria-label={`${rating} out of 5 stars`}>{Array.from({length:5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><p>Based on <b>{reviewCount} reviews</b></p><GoogleWordmark/><a href={reviewProfile.url} target="_blank" rel="noreferrer">View all reviews on Google <ArrowRight size={17}/></a></Reveal><div><div className="quote-card google-review-card" aria-live="polite" aria-atomic="true" onPointerDown={beginSwipe} onPointerUp={finishSwipe} onPointerCancel={()=>{swipeStart.current=null}}><AnimatePresence mode="wait"><motion.article key={`${item.id||item.name}-${activeIndex}`} initial={{opacity:0,x:24}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-24}}><header><span className="review-avatar" aria-hidden="true">{initials}</span><div><b>{item.name}</b><small>{item.date||'Verified review'} · {source}</small></div><span className="google-g" aria-label="Google review">G</span></header><div className="stars" aria-label={`${item.rating||5} out of 5 stars`}>{Array.from({length:item.rating||5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><blockquote>“{item.quote}”</blockquote><a href={sourceUrl} target="_blank" rel="noreferrer">Read on Google</a></motion.article></AnimatePresence></div><div className="review-controls-row"><div className="slider-controls"><button onClick={previous} aria-label="Previous review"><ChevronLeft/></button><span aria-live="off">{String(activeIndex+1).padStart(2,'0')} / {String(safeItems.length).padStart(2,'0')}</span><button onClick={next} aria-label="Next review"><ChevronRight/></button><button className="review-playback" onClick={()=>setPaused(value=>!value)} aria-label={paused?'Resume automatic reviews':'Pause automatic reviews'} aria-pressed={paused}>{paused?<Play/>:<Pause/>}</button></div><p className="review-autoplay-status">{paused?'Automatic rotation paused':'Reviews change automatically'}<span> · Swipe to browse</span></p></div></div></div></section>
 }
 
 function Contact({fields,business}) {
   const enquiry=useEnquirySubmission()
-  const formFields=pairItems(fields?.home_form_fields,[['Name','Your name'],['Phone','04xx xxx xxx'],['Email','you@email.com'],['Suburb','Your suburb'],['Tell us about your project','What would you like painted?']])
-  return <section id="contact" className="contact section-track"><div className="contact-blob"/><div className="container contact-layout"><Reveal className="contact-copy"><Eyebrow light>Let’s talk colour</Eyebrow><h2>{fields?.home_quote_title||'Ready for a'}<br/><em>fresh start?</em></h2><p>{fields?.home_quote_text||'Tell us what you’re planning. We’ll arrange a free, no-obligation quote and help you choose the right way forward.'}</p><div className="contact-direct"><a href={business.phone_href}><span><Phone/></span><div><small>Call us</small><b>{business.phone_display}</b></div></a><a href={`mailto:${business.email}`}><span><Mail/></span><div><small>Email us</small><b>{business.email}</b></div></a></div></Reveal><Reveal delay={.15}><form className="quote-form" onSubmit={enquiry.submit} aria-busy={enquiry.pending}>{enquiry.sent ? <motion.div initial={{opacity:0,scale:.95}} animate={{opacity:1,scale:1}} className="form-success"><span><Check/></span><h3>Thanks — we’ll be in touch.</h3><p>Your enquiry was delivered successfully. Our team will review the details and contact you.</p><button type="button" className="text-link" onClick={enquiry.reset}>Send another enquiry</button></motion.div> : <><div className="form-title"><span>Free quote request</span><small>{fields?.home_response_label||'Usually replies within 2 hours'}</small></div><input className="spp-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true"/><input type="hidden" name="source" value="homepage"/><div className="form-row"><label>{formFields[0][0]}<input name="name" required autoComplete="name" placeholder={formFields[0][1]}/></label><label>{formFields[1][0]}<input name="phone" required type="tel" autoComplete="tel" placeholder={formFields[1][1]}/></label></div><div className="form-row"><label>{formFields[2][0]}<input name="email" required type="email" autoComplete="email" placeholder={formFields[2][1]}/></label><label>{formFields[3][0]}<input name="suburb" required autoComplete="address-level2" placeholder={formFields[3][1]}/></label></div><label>{formFields[4][0]}<textarea name="details" required minLength="10" rows="4" placeholder={formFields[4][1]}/></label>{enquiry.privacyText&&<label className="form-consent"><input name="consent" value="yes" type="checkbox" required/><span>{enquiry.privacyText}</span></label>}{enquiry.error&&<p className="form-error" role="alert">{enquiry.error}</p>}<button className="btn btn-wide" type="submit" disabled={enquiry.pending}>{enquiry.pending?'Sending…':<>Request my free quote <ArrowRight/></>}</button><p className="form-note"><ShieldCheck/> No obligation. Your details stay private.</p></>}</form></Reveal></div></section>
+  const defaultFormFields=[['Name','Your name'],['Phone','04xx xxx xxx'],['Email','you@email.com'],['Suburb','Your suburb'],['Tell us about your project','What would you like painted?']]
+  const formFields=pairItems(fields?.home_form_fields,defaultFormFields)
+  const fieldAt=index=>formFields[index]??defaultFormFields[index]
+  const quoteAccent=fieldValue(fields,'home_quote_accent','fresh start?')
+  return <section id="contact" className="contact section-track"><div className="contact-blob"/><div className="container contact-layout"><Reveal className="contact-copy"><Eyebrow light>Let’s talk colour</Eyebrow><h2>{fields?.home_quote_title??'Ready for a'}{quoteAccent&&<><br/><em>{quoteAccent}</em></>}</h2>{fields?.home_quote_text!==''&&<p>{fields?.home_quote_text??'Tell us what you’re planning. We’ll arrange a free, no-obligation quote and help you choose the right way forward.'}</p>}<div className="contact-direct">{business.phone_display&&<a href={business.phone_href}><span><Phone/></span><div><small>Call us</small><b>{business.phone_display}</b></div></a>}{business.email&&<a href={`mailto:${business.email}`}><span><Mail/></span><div><small>Email us</small><b>{business.email}</b></div></a>}</div></Reveal><Reveal delay={.15}><form className="quote-form" onSubmit={enquiry.submit} aria-busy={enquiry.pending}>{enquiry.sent ? <motion.div initial={{opacity:0,scale:.95}} animate={{opacity:1,scale:1}} className="form-success"><span><Check/></span><h3>Thanks — we’ll be in touch.</h3><p>Your enquiry was delivered successfully. Our team will review the details and contact you.</p><button type="button" className="text-link" onClick={enquiry.reset}>Send another enquiry</button></motion.div> : <><div className="form-title"><span>Free quote request</span>{fields?.home_response_label!==''&&<small>{fields?.home_response_label??'Usually replies within 2 hours'}</small>}</div><input className="spp-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true"/><input type="hidden" name="source" value="homepage"/><div className="form-row"><label>{fieldAt(0)[0]}<input name="name" required autoComplete="name" placeholder={fieldAt(0)[1]}/></label><label>{fieldAt(1)[0]}<input name="phone" required type="tel" autoComplete="tel" placeholder={fieldAt(1)[1]}/></label></div><div className="form-row"><label>{fieldAt(2)[0]}<input name="email" required type="email" autoComplete="email" placeholder={fieldAt(2)[1]}/></label><label>{fieldAt(3)[0]}<input name="suburb" required autoComplete="address-level2" placeholder={fieldAt(3)[1]}/></label></div><label>{fieldAt(4)[0]}<textarea name="details" required minLength="10" rows="4" placeholder={fieldAt(4)[1]}/></label>{enquiry.privacyText&&<label className="form-consent"><input name="consent" value="yes" type="checkbox" required/><span>{enquiry.privacyText}</span></label>}{enquiry.error&&<p className="form-error" role="alert">{enquiry.error}</p>}<button className="btn btn-wide" type="submit" disabled={enquiry.pending}>{enquiry.pending?'Sending…':<>Request my free quote <ArrowRight/></>}</button><p className="form-note"><ShieldCheck/> No obligation. Your details stay private.</p></>}</form></Reveal></div></section>
 }
 
 function HomeLocation({business}) {
-  const mapAddress=business.street_address||'20 Rae Street, Chadstone VIC 3148, Australia'
-  const mapUrl=business.google_maps_url||`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapAddress)}`
-  const mapEmbedUrl=business.google_maps_embed_url||'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1574.426042956306!2d145.0931577603448!3d-37.88714169706206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad66b1a91253ba3%3A0x5219727b7db56b2d!2sSuperior%20plus%20painting%20%26%20remodeling!5e0!3m2!1sen!2sph!4v1785206391867!5m2!1sen!2sph'
-  return <section className="contact-location home-location"><div className="container contact-location-grid"><Reveal className="home-location-copy"><div className="location-icon"><MapPin/></div><Eyebrow>Our Melbourne location</Eyebrow><h2>Local to Chadstone.<br/><em>Ready to come to you.</em></h2><address className="contact-street-address"><MapPin/>{mapAddress}</address><p>Superior Plus Painting services homes and businesses across Melbourne’s eastern and south-eastern suburbs from our Chadstone location.</p><a className="btn" href={mapUrl} target="_blank" rel="noreferrer">View address in Google Maps <ArrowRight size={17}/></a></Reveal><Reveal className="contact-map" delay={.1}><iframe src={mapEmbedUrl} title={`Superior Plus Painting at ${mapAddress}`} loading="lazy" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></Reveal></div></section>
+  const mapAddress=business.street_address??'20 Rae Street, Chadstone VIC 3148, Australia'
+  const mapUrl=business.google_maps_url??`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapAddress)}`
+  const mapEmbedUrl=business.google_maps_embed_url??'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1574.426042956306!2d145.0931577603448!3d-37.88714169706206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad66b1a91253ba3%3A0x5219727b7db56b2d!2sSuperior%20plus%20painting%20%26%20remodeling!5e0!3m2!1sen!2sph!4v1785206391867!5m2!1sen!2sph'
+  if(!mapAddress&&!mapUrl&&!mapEmbedUrl)return null
+  return <section className="contact-location home-location"><div className="container contact-location-grid"><Reveal className="home-location-copy"><div className="location-icon"><MapPin/></div><Eyebrow>Our Melbourne location</Eyebrow><h2>Local to Chadstone.<br/><em>Ready to come to you.</em></h2>{mapAddress&&<address className="contact-street-address"><MapPin/>{mapAddress}</address>}<p>Superior Plus Painting services homes and businesses across Melbourne’s eastern and south-eastern suburbs from our Chadstone location.</p>{mapUrl&&<a className="btn" href={mapUrl} target="_blank" rel="noreferrer">View address in Google Maps <ArrowRight size={17}/></a>}</Reveal>{mapEmbedUrl&&<Reveal className="contact-map" delay={.1}><iframe src={mapEmbedUrl} title={`Superior Plus Painting at ${mapAddress}`} loading="lazy" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></Reveal>}</div></section>
 }
 
 function FacebookMark() {
@@ -504,14 +514,14 @@ const projectTrustBadges=[
   ['word-of-mouth','Word of Mouth'],
 ]
 
-function ProjectStats({stats: suppliedStats,className='',showTrustBadges=false}) {
-  const stats=Array.isArray(suppliedStats)&&suppliedStats.length===3?suppliedStats:fallbackProjectStats
+function ProjectStats({stats: suppliedStats,badge: suppliedBadge,className='',showTrustBadges=false}) {
+  const stats=Array.isArray(suppliedStats)?suppliedStats:fallbackProjectStats
   const statIcons=[Home,Brush,PaintRoller]
-  const badgeImage=asset('client/trust-platform-badges.png')
+  const badgeImage=mediaUrl(suppliedBadge,asset('client/trust-platform-badges.png'))
   return <div className={`container footer-stats ${className}`.trim()} aria-label="Superior Plus Painting project statistics">{stats.map((stat,index)=>{
-    const Icon=statIcons[index]
-    const [badgeName,badgeLabel]=projectTrustBadges[index]
-    return <div key={`${stat.label}-${index}`}><Icon aria-hidden="true"/><CountUpValue value={stat.value}/><span>{stat.label}</span>{showTrustBadges&&<div className={`footer-trust-image ${badgeName}`}><img src={badgeImage} alt={badgeLabel} width="523" height="465" loading="lazy" decoding="async"/></div>}</div>
+    const Icon=statIcons[index%statIcons.length]
+    const badge=projectTrustBadges[index]
+    return <div key={`${stat.label}-${index}`}><Icon aria-hidden="true"/><CountUpValue value={stat.value}/>{stat.label&&<span>{stat.label}</span>}{showTrustBadges&&badge&&badgeImage&&<div className={`footer-trust-image ${badge[0]}`}><img src={badgeImage} alt={badge[1]} width="523" height="465" loading="lazy" decoding="async"/></div>}</div>
   })}</div>
 }
 
@@ -528,47 +538,51 @@ function Footer() {
   const hasGuides=explore.some(item=>['/painting-guides','/blog'].includes(toAppPath(item.url)))
   return <footer>
     <div className="container footer-grid">
-      <div><Logo dark/><p>{footer.intro}</p></div>
+      <div><Logo dark/>{footer.intro&&<p>{footer.intro}</p>}</div>
       <div>
-        <h4>{footer.columns?.[0]?.heading||'Explore'}</h4>
+        {(footer.columns?.[0]?.heading??'Explore')&&<h4>{footer.columns?.[0]?.heading??'Explore'}</h4>}
         {explore.map(item=><button key={item.id} onClick={()=>go(toAppPath(item.url)==='/painting-guides'?'/blog':toAppPath(item.url))}>{toAppPath(item.url)==='/painting-guides'?'Blog':item.label}</button>)}
         {!hasGuides&&<button onClick={()=>go('/blog')}>Blog</button>}
       </div>
       <div className="footer-services">
-        <h4>{footer.columns?.[1]?.heading||'Services'}</h4>
-        {cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url||`/services/${service.slug}`)}>{service.title}</button>)}
+        {(footer.columns?.[1]?.heading??'Services')&&<h4>{footer.columns?.[1]?.heading??'Services'}</h4>}
+        {cmsServices.map(service=><button key={service.slug} onClick={()=>go(service.url??`/services/${service.slug}`)}>{service.title}</button>)}
         <button onClick={()=>go('/additional-services')}>Additional property services</button>
       </div>
       <div>
-        <h4>{footer.columns?.[2]?.heading||'Get in touch'}</h4>
-        <a href={business.phone_href}>{business.phone_display}</a>
-        <a href={`mailto:${business.email}`}>{business.email}</a>
-        <span>{business.location}</span>
+        {(footer.columns?.[2]?.heading??'Get in touch')&&<h4>{footer.columns?.[2]?.heading??'Get in touch'}</h4>}
+        {business.phone_display&&<a href={business.phone_href}>{business.phone_display}</a>}
+        {business.email&&<a href={`mailto:${business.email}`}>{business.email}</a>}
+        {business.location&&<span>{business.location}</span>}
         <div className="footer-socials" aria-label="Follow Superior Plus Painting">
           {business.facebook_url&&<a className="footer-social-badge facebook" href={business.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Facebook"><FacebookMark/><b>Facebook</b></a>}
           {business.instagram_url&&<a className="footer-social-badge instagram" href={business.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Visit Superior Plus Painting on Instagram"><Instagram aria-hidden="true"/><b>Instagram</b></a>}
         </div>
       </div>
     </div>
-    <div className="container footer-bottom"><span>{footer.copyright}</span><span>{footer.closing_line}</span></div>
+    <div className="container footer-bottom">{footer.copyright&&<span>{footer.copyright}</span>}{footer.closing_line&&<span>{footer.closing_line}</span>}</div>
   </footer>
 }
 
 export default function App() {
   const {business,footer,services:cmsServices,review_profile:reviewProfile}=useSiteContent()
   const {data:homeRoute}=useRouteContent('/')
-  const {data:projectItems}=useCollection('projects',projects)
-  const {data:testimonialItems}=useCollection('testimonials',testimonials)
-  const {data:articleItems}=useCollection('articles',emptyArticles)
+  const {data:projectItems}=useCollection('projects',projects,{preserveEmpty:true})
+  const {data:testimonialItems}=useCollection('testimonials',testimonials,{preserveEmpty:true})
+  const {data:articleItems}=useCollection('articles',emptyArticles,{preserveEmpty:true})
   const fields=homeRoute?.content?.fields||{}
   const seo=homeRoute?.seo
   const homeHero=homeRoute?{
-    eyebrow:fields.eyebrow,
-    title:fields.hero_title,
-    accent:fields.accent,
-    intro:fields.hero_intro,
-    image:fields.hero_image||homeRoute.hero?.image,
+    eyebrow:fieldValue(fields,'eyebrow','Melbourne painting team'),
+    title:fieldValue(fields,'hero_title','Professional painting services'),
+    accent:fieldValue(fields,'accent','in Melbourne'),
+    intro:fieldValue(fields,'hero_intro','Professional residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and a finish made to last.'),
+    image:fieldValue(fields,'hero_image',homeRoute.hero?.image),
   }:null
+  const selectedTestimonialIds=Array.isArray(fields.home_testimonial_ids)?fields.home_testimonial_ids.map(String):null
+  const displayedTestimonials=selectedTestimonialIds
+    ?testimonialItems.filter(item=>selectedTestimonialIds.includes(String(item.id)))
+    :testimonialItems
   useEffect(()=>{
     const description=seo?.description||'Professional residential and commercial painters across Melbourne, delivering careful preparation and quality workmanship.'
     const canonical=publicRouteUrl('/')
@@ -581,7 +595,7 @@ export default function App() {
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
     return()=>ctx.revert()
   },[seo?.description,seo?.canonical_url,seo?.title,business])
-  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview fields={fields} items={articleItems}/><Areas fields={fields}/><Testimonials items={testimonialItems} profile={reviewProfile}/><Contact fields={fields} business={business}/><HomeLocation business={business}/></main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} badge={footer.trust_badge} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview fields={fields} items={articleItems}/><Areas fields={fields}/><Testimonials items={displayedTestimonials} profile={reviewProfile}/><Contact fields={fields} business={business}/><HomeLocation business={business}/></main><Footer/></>
 }
 
 export { Navbar, Footer, Reveal, Eyebrow, Divider }

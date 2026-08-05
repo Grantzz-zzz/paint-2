@@ -83,9 +83,7 @@ export const fallbackBootstrap = {
 }
 
 const ContentContext = createContext(null)
-const memoryCache = new Map()
 const inflight = new Map()
-const CACHE_TTL = 5 * 60 * 1000
 
 function configuredApiBase() {
   const configured = typeof window !== 'undefined' ? window.__SPP_CONTENT_API__ : ''
@@ -93,42 +91,14 @@ function configuredApiBase() {
   return String(configured || environment).replace(/\/+$/, '')
 }
 
-function cacheKey(endpoint) {
-  return `spp-content:${endpoint}`
-}
-
-function readSession(endpoint) {
-  try {
-    const cached = JSON.parse(sessionStorage.getItem(cacheKey(endpoint)))
-    if (cached && Date.now() - cached.savedAt < CACHE_TTL) return cached.data
-  } catch {
-    // Storage may be unavailable in privacy modes; memory caching still works.
-  }
-  return null
-}
-
-function writeSession(endpoint, data) {
-  try {
-    sessionStorage.setItem(cacheKey(endpoint), JSON.stringify({ savedAt: Date.now(), data }))
-  } catch {
-    // A full or disabled session store must never prevent content rendering.
-  }
-}
-
 async function request(endpoint) {
   const base = configuredApiBase()
   const isPreview = endpoint.startsWith('/preview/')
   if (!base) throw new Error('WordPress content API is not configured')
-  if (!isPreview && memoryCache.has(endpoint)) return memoryCache.get(endpoint)
-  const stored = isPreview ? null : readSession(endpoint)
-  if (stored) {
-    memoryCache.set(endpoint, stored)
-    return stored
-  }
   if (inflight.has(endpoint)) return inflight.get(endpoint)
   const pending = fetch(`${base}${endpoint}`, {
     credentials: 'same-origin',
-    cache: isPreview ? 'no-store' : 'default',
+    cache: 'no-store',
     headers: {
       Accept: 'application/json',
       ...(isPreview && window.__SPP_REST_NONCE__ ? { 'X-WP-Nonce': window.__SPP_REST_NONCE__ } : {}),
@@ -138,10 +108,6 @@ async function request(endpoint) {
     const payload = await response.json()
     if (payload?.schema_version !== '1.0.0' || !Object.hasOwn(payload, 'data')) {
       throw new Error('Unsupported Superior Plus content response')
-    }
-    if (!isPreview) {
-      memoryCache.set(endpoint, payload.data)
-      writeSession(endpoint, payload.data)
     }
     return payload.data
   }).finally(() => inflight.delete(endpoint))
@@ -199,21 +165,22 @@ async function submitEnquiry(payload) {
   return result.data
 }
 
-function hasContent(value) {
-  if (value === null || value === undefined || value === '') return false
-  if (Array.isArray(value)) return value.length > 0
-  return true
-}
-
 /**
- * Merge CMS data into a complete local object. Explicit arrays are authoritative,
- * including an intentionally empty array created by deleting every managed card.
+ * Merge CMS data into a complete local object.
+ *
+ * Only an absent value (`undefined`) may use the local fallback. Every value that
+ * WordPress explicitly returns is authoritative, including an empty string, null,
+ * an empty array, or false. This distinction lets an editor deliberately remove
+ * optional text, media, cards, and relationships without the React theme silently
+ * restoring bundled copy.
  */
 export function mergeContent(fallback, incoming) {
+  if (incoming === undefined) return fallback
+  if (incoming === null) return null
   if (Array.isArray(fallback)) return Array.isArray(incoming) ? incoming : fallback
-  if (!hasContent(incoming)) return fallback
   if (fallback && typeof fallback === 'object' && !Array.isArray(fallback)) {
-    const source = incoming && typeof incoming === 'object' ? incoming : {}
+    if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) return incoming
+    const source = incoming
     return Object.keys({ ...fallback, ...source }).reduce((result, key) => {
       result[key] = mergeContent(fallback[key], source[key])
       return result
@@ -223,22 +190,38 @@ export function mergeContent(fallback, incoming) {
 }
 
 export function mediaUrl(media, fallback = '') {
-  return typeof media === 'string' ? media : media?.url || fallback
+  if (media === undefined) return fallback
+  if (media === null || media === '') return ''
+  return typeof media === 'string' ? media : media?.url ?? fallback
+}
+
+/**
+ * Read a generic page field without confusing an unsaved field with one the
+ * editor intentionally cleared. Newer plugin responses expose `__configured`;
+ * older responses remain compatible by treating an existing key as configured.
+ */
+export function fieldValue(fields, key, fallback) {
+  if (!fields || !Object.hasOwn(fields, key)) return fallback
+  const configured = fields.__configured
+  if (Array.isArray(configured) && !configured.includes(key)) return fallback
+  return fields[key]
 }
 
 export function textItems(items, fallback = []) {
-  if (!Array.isArray(items) || !items.length) return fallback
+  if (items === undefined) return fallback
+  if (!Array.isArray(items)) return fallback
   const values = items.map(item => typeof item === 'string' ? item : item?.text).filter(Boolean)
-  return values.length ? values : fallback
+  return values
 }
 
 export function pairItems(items, fallback = []) {
-  if (!Array.isArray(items) || !items.length) return fallback
+  if (items === undefined) return fallback
+  if (!Array.isArray(items)) return fallback
   const values = items.map(item => {
     if (Array.isArray(item)) return item
     return [item?.title || item?.heading || item?.label || '', item?.text || item?.description || item?.body || '']
   }).filter(item => item[0] || item[1])
-  return values.length ? values : fallback
+  return values
 }
 
 export function toAppPath(url, fallback = '/') {

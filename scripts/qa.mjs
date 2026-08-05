@@ -88,7 +88,12 @@ try {
       runtimeErrors.length = 0
       await page.goto(`${origin}#${route}`, { waitUntil: 'domcontentloaded' })
       await page.locator('#main-content').waitFor({ state: 'attached' })
-      await page.locator('h1').first().waitFor({ state: 'visible' })
+      try {
+        await page.locator('h1:visible').first().waitFor({ state: 'visible', timeout: 5000 })
+      } catch (error) {
+        const diagnostic=await page.locator('#main-content').innerText().catch(()=>'(main unavailable)')
+        throw new Error(`${viewportName} ${route}: no visible H1; runtime=${runtimeErrors.join(' | ')||'none'}; main=${diagnostic.slice(0,500)}`,{cause:error})
+      }
       await page.waitForTimeout(120)
 
       const result = await page.evaluate(async () => {
@@ -112,7 +117,7 @@ try {
         try { JSON.parse(document.querySelector('#page-structured-data')?.textContent || '{}') } catch { schemaValid = false }
         return {
           h1Count: document.querySelectorAll('h1').length,
-          h1: document.querySelector('h1')?.textContent || '',
+          h1: [...document.querySelectorAll('h1')].find(element=>element.getClientRects().length)?.textContent || '',
           title: document.title,
           description: document.querySelector('meta[name="description"]')?.content || '',
           canonical: document.querySelector('link[rel="canonical"]')?.href || '',
@@ -565,6 +570,67 @@ try {
         body: JSON.stringify({ schema_version: '1.0.0', data: [] }),
       })
     }
+    if (endpoint === '/routes/services/residential-painting-melbourne') {
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          schema_version: '1.0.0',
+          data: {
+            template_key: 'service',
+            title: 'Residential Painting',
+            seo: { title: 'Editable residential page', description: '', social_image: null },
+            closing_cta: { title: '', text: '', link: { label: '', url: '' } },
+            content: {
+              id: 501,
+              slug: 'residential-painting-melbourne',
+              title: 'Residential Painting',
+              short: '',
+              copy_version: 'pdf-verbatim-2026-08-01',
+              hero: { eyebrow: '', title: 'Editable Residential Hero', accent: '', intro: '', image: null },
+              scope_title: '',
+              scope: [],
+              document_sections: [],
+              why: '',
+              process: [],
+              benefits: [],
+              related: [],
+              gallery: [],
+              section_labels: {
+                scope_eyebrow: '', scope_accent: '', scope_intro: '',
+                process_eyebrow: '', process_title: '', process_accent: '',
+                benefits_title: '', benefits_accent: '',
+                related_eyebrow: '', related_title: '', related_accent: '',
+              },
+            },
+          },
+        }),
+      })
+    }
+    if (endpoint === '/routes/gallery') {
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          schema_version: '1.0.0',
+          data: {
+            template_key: 'gallery',
+            title: 'Gallery',
+            seo: { title: 'Editable gallery', description: '', social_image: null },
+            hero: { eyebrow: '', title: 'Editable Gallery Hero', accent: '', intro: '', image: null },
+            closing_cta: { title: '', text: '', link: { label: '', url: '' } },
+            content: {
+              fields: {
+                __configured: ['content_sections', 'secondary_image', 'related_pages'],
+                content_sections: [{ title: 'Editable gallery section', text: '<p>Visible editor-managed gallery copy.</p>' }],
+                secondary_image: null,
+                related_pages: [{ id: 901, title: 'Editable related page', path: '/contact' }],
+              },
+            },
+          },
+        }),
+      })
+    }
     if (endpoint === '/quote') {
       quoteAttempts += 1
       return route.fulfill({
@@ -596,6 +662,23 @@ try {
   await apiForm.locator('.form-success').waitFor()
   check(quoteAttempts === 2, 'contact form: failed submission was not retryable')
   check(await apiForm.locator('.form-success').isVisible(), 'contact form: confirmed retry did not show success')
+
+  await apiPage.goto(`${origin}#/services/residential-painting-melbourne`, { waitUntil: 'domcontentloaded' })
+  await apiPage.locator('[data-content-state="ready"]').waitFor()
+  await apiPage.locator('.page-hero-copy h1').waitFor()
+  check((await apiPage.locator('.page-hero-copy h1').innerText()).trim()==='Editable Residential Hero', 'editor authority: service hero title was replaced by hardcoded approved copy')
+  check(!(await apiPage.locator('.page-hero-copy .eyebrow').count()), 'editor authority: intentionally blank hero eyebrow reappeared')
+  check(!(await apiPage.locator('.page-hero-copy>p').count()), 'editor authority: intentionally blank hero introduction reappeared')
+  check((await apiPage.locator('.scope-grid .scope-item').count())===0, 'editor authority: deleted service scope cards reappeared')
+  check((await apiPage.locator('.service-process article').count())===0, 'editor authority: deleted service process steps reappeared')
+  check((await apiPage.locator('.related-grid .related-card').count())===0, 'editor authority: deleted related services reappeared')
+
+  await apiPage.goto(`${origin}#/gallery`, { waitUntil: 'domcontentloaded' })
+  await apiPage.locator('[data-content-state="ready"]').waitFor()
+  await apiPage.getByRole('heading', { name: 'Editable gallery section' }).waitFor()
+  check(await apiPage.getByText('Visible editor-managed gallery copy.').isVisible(), 'editor authority: shared content section did not render on gallery template')
+  check(await apiPage.getByRole('heading', { name: 'Editable related page' }).isVisible(), 'editor authority: related-page selection did not render on gallery template')
+  check((await apiPage.locator('.managed-page-extra .editorial-image').count())===0, 'editor authority: intentionally removed secondary image reappeared')
 
   await interactionContext.close()
 } finally {

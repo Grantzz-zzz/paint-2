@@ -164,8 +164,10 @@ class SPP_Content_REST {
 	public function bootstrap() {
 		$config_id = $this->types->get_site_config_id();
 		$get       = function ( $key, $fallback = '' ) use ( $config_id ) {
-			$value = $config_id ? get_post_meta( $config_id, $key, true ) : '';
-			return '' === $value || null === $value ? $fallback : $value;
+			if ( ! $config_id || ! metadata_exists( 'post', $config_id, $key ) ) {
+				return $fallback;
+			}
+			return get_post_meta( $config_id, $key, true );
 		};
 		$logo_id = absint( $get( 'spp_logo_id', 0 ) );
 
@@ -360,11 +362,11 @@ class SPP_Content_REST {
 			if ( 'service-areas' === $post->post_name ) {
 				continue;
 			}
-			$name = get_post_meta( $post->ID, 'spp_area_name', true );
+			$name = $this->meta_or_default( $post, 'spp_area_name', preg_replace( '/^Painters in\s+/i', '', $this->plain_title( $post ) ) );
 			$items[] = array(
 				'id'                 => (int) $post->ID,
 				'slug'               => $post->post_name,
-				'name'               => $name ? $name : preg_replace( '/^Painters in\s+/i', '', $this->plain_title( $post ) ),
+				'name'               => $name,
 				'region'             => get_post_meta( $post->ID, 'spp_area_region', true ),
 				'region_description' => get_post_meta( $post->ID, 'spp_area_region_description', true ),
 				'property_types'     => $this->text_values( get_post_meta( $post->ID, 'spp_area_property_types', true ) ),
@@ -605,10 +607,7 @@ class SPP_Content_REST {
 	 * @return array
 	 */
 	private function service_data( $post, $full ) {
-		$short = get_post_meta( $post->ID, 'spp_directory_excerpt', true );
-		if ( ! $short ) {
-			$short = $post->post_excerpt;
-		}
+		$short = $this->meta_or_default( $post, 'spp_directory_excerpt', $post->post_excerpt );
 		$data = array(
 			'id'    => (int) $post->ID,
 			'slug'  => $post->post_name,
@@ -672,10 +671,10 @@ class SPP_Content_REST {
 			'title'        => $this->plain_title( $post ),
 			'excerpt'      => wp_strip_all_tags( $excerpt ),
 			'url'          => get_permalink( $post ),
-			'category'     => get_post_meta( $post->ID, 'spp_article_category', true ) ?: __( 'Painting advice', 'superior-plus-content' ),
+			'category'     => $this->meta_or_default( $post, 'spp_article_category', __( 'Painting advice', 'superior-plus-content' ) ),
 			'eyebrow'      => get_post_meta( $post->ID, 'spp_article_eyebrow', true ),
-			'read_time'    => get_post_meta( $post->ID, 'spp_article_read_time', true ) ?: __( 'Practical guide', 'superior-plus-content' ),
-			'source_label' => get_post_meta( $post->ID, 'spp_article_source_label', true ) ?: __( 'Superior Plus guide', 'superior-plus-content' ),
+			'read_time'    => $this->meta_or_default( $post, 'spp_article_read_time', __( 'Practical guide', 'superior-plus-content' ) ),
+			'source_label' => $this->meta_or_default( $post, 'spp_article_source_label', __( 'Superior Plus guide', 'superior-plus-content' ) ),
 			'seo_keywords' => $this->text_values( get_post_meta( $post->ID, 'spp_article_seo_keywords', true ) ),
 			'outline_topics' => $this->text_values( get_post_meta( $post->ID, 'spp_article_outline_topics', true ) ),
 			'published'    => mysql2date( 'Y-m-d', $post->post_date ),
@@ -719,7 +718,7 @@ class SPP_Content_REST {
 			'title'            => $this->plain_title( $post ),
 			'project_type'     => get_post_meta( $post->ID, 'spp_project_type', true ),
 			'featured_media'   => $this->media( $featured_id ),
-			'object_position'  => get_post_meta( $post->ID, 'spp_object_position', true ) ?: '50% 50%',
+			'object_position'  => $this->meta_or_default( $post, 'spp_object_position', '50% 50%' ),
 			'gallery'          => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
 			'excerpt'          => wp_strip_all_tags( $post->post_excerpt ),
 			'categories'       => is_wp_error( $terms ) ? array() : array_map(
@@ -740,18 +739,19 @@ class SPP_Content_REST {
 	 * @return array
 	 */
 	private function hero( $post ) {
-		$image_id = absint( get_post_meta( $post->ID, 'spp_hero_image_id', true ) );
-		if ( ! $image_id && 'spp_project' === $post->post_type ) {
+		$hero_image_is_configured = metadata_exists( 'post', $post->ID, 'spp_hero_image_id' );
+		$image_id = $hero_image_is_configured ? absint( get_post_meta( $post->ID, 'spp_hero_image_id', true ) ) : 0;
+		if ( ! $hero_image_is_configured && 'spp_project' === $post->post_type ) {
 			$image_id = absint( get_post_meta( $post->ID, 'spp_featured_media_id', true ) );
 		}
-		if ( ! $image_id ) {
+		if ( ! $hero_image_is_configured && ! $image_id ) {
 			$image_id = get_post_thumbnail_id( $post );
 		}
 		return array(
 			'eyebrow' => get_post_meta( $post->ID, 'spp_eyebrow', true ),
-			'title'    => get_post_meta( $post->ID, 'spp_hero_title', true ) ?: $this->plain_title( $post ),
+			'title'    => $this->meta_or_default( $post, 'spp_hero_title', $this->plain_title( $post ) ),
 			'accent'   => get_post_meta( $post->ID, 'spp_accent', true ),
-			'intro'    => get_post_meta( $post->ID, 'spp_hero_intro', true ) ?: wp_strip_all_tags( $post->post_excerpt ?: $post->post_content ),
+			'intro'    => $this->meta_or_default( $post, 'spp_hero_intro', wp_strip_all_tags( $post->post_excerpt ?: $post->post_content ) ),
 			'image'    => $this->media( $image_id, get_post_meta( $post->ID, 'spp_hero_image_alt', true ) ),
 		);
 	}
@@ -765,11 +765,30 @@ class SPP_Content_REST {
 	private function seo( $post ) {
 		$social_id = absint( get_post_meta( $post->ID, 'spp_social_image_id', true ) );
 		return array(
-			'title'         => get_post_meta( $post->ID, 'spp_seo_title', true ) ?: $this->plain_title( $post ),
-			'description'   => get_post_meta( $post->ID, 'spp_seo_description', true ) ?: wp_strip_all_tags( $post->post_excerpt ),
-			'canonical_url' => get_post_meta( $post->ID, 'spp_canonical_url', true ) ?: get_permalink( $post ),
+			'title'         => $this->meta_or_default( $post, 'spp_seo_title', $this->plain_title( $post ) ),
+			'description'   => $this->meta_or_default( $post, 'spp_seo_description', wp_strip_all_tags( $post->post_excerpt ) ),
+			'canonical_url' => $this->meta_or_default( $post, 'spp_canonical_url', get_permalink( $post ) ),
 			'social_image'  => $this->media( $social_id ),
 		);
+	}
+
+	/**
+	 * Return a saved meta value verbatim, including an intentional empty value.
+	 *
+	 * Defaults are only for records that pre-date the field and genuinely have no
+	 * corresponding metadata. This prevents the REST API from undoing deletions
+	 * made through the Superior Plus editor.
+	 *
+	 * @param WP_Post $post Post record.
+	 * @param string  $key Meta key.
+	 * @param mixed   $fallback Value for an unconfigured record.
+	 * @return mixed
+	 */
+	private function meta_or_default( $post, $key, $fallback = '' ) {
+		if ( ! metadata_exists( 'post', $post->ID, $key ) ) {
+			return $fallback;
+		}
+		return get_post_meta( $post->ID, $key, true );
 	}
 
 	/**
@@ -862,9 +881,15 @@ class SPP_Content_REST {
 	 * @return array
 	 */
 	private function resolve_media_meta( $meta ) {
+		$configured = isset( $meta['__configured'] ) && is_array( $meta['__configured'] ) ? $meta['__configured'] : array();
 		foreach ( $meta as $key => $value ) {
 			if ( preg_match( '/_image_id$|^logo_id$|^featured_media_id$/', $key ) ) {
-				$meta[ preg_replace( '/_id$/', '', $key ) ] = $this->media( $value );
+				$resolved_key = preg_replace( '/_id$/', '', $key );
+				$meta[ $resolved_key ] = $this->media( $value );
+				$configured_index = array_search( $key, $configured, true );
+				if ( false !== $configured_index ) {
+					$configured[ $configured_index ] = $resolved_key;
+				}
 				unset( $meta[ $key ] );
 			}
 			if ( false !== strpos( $key, 'gallery' ) || false !== strpos( $key, '_images' ) ) {
@@ -873,7 +898,12 @@ class SPP_Content_REST {
 		}
 		if ( isset( $meta['related_page_ids'] ) ) {
 			$meta['related_pages'] = $this->related_pages( $meta['related_page_ids'] );
+			$configured_index = array_search( 'related_page_ids', $configured, true );
+			if ( false !== $configured_index ) {
+				$configured[ $configured_index ] = 'related_pages';
+			}
 		}
+		$meta['__configured'] = array_values( array_unique( $configured ) );
 		return $meta;
 	}
 
@@ -1109,8 +1139,10 @@ class SPP_Content_REST {
 			$this->published_posts( 'spp_service' )
 		);
 		$meta = function ( $key, $fallback = '' ) use ( $config_id ) {
-			$value = $config_id ? get_post_meta( $config_id, $key, true ) : '';
-			return $value ? $value : $fallback;
+			if ( ! $config_id || ! metadata_exists( 'post', $config_id, $key ) ) {
+				return $fallback;
+			}
+			return get_post_meta( $config_id, $key, true );
 		};
 		$contact_links = array(
 			array( 'label' => $meta( 'spp_phone_display', '0470 234 567' ), 'url' => 'tel:' . $meta( 'spp_phone_normalized', '0470234567' ) ),

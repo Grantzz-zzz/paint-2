@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.3.5
+Stable tag: 2.5.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -38,6 +38,18 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.5.0 =
+* Adds a guarded per-item restore action for every bundled page, service, project, article, testimonial and FAQ.
+* Restores only the selected record and explicitly protects Site Settings, quote delivery, enquiries and other edited content.
+* Removes stale browser content caching so saved WordPress edits appear reliably after navigation or refresh.
+* Ensures generic content sections, secondary images and related-page controls render on Gallery, Blog and Service Area templates.
+* Preserves intentional blank text, deleted cards, removed images and empty relationship selections throughout the public site.
+
+= 2.4.0 =
+* Makes saved WordPress values authoritative across service heroes, cards, galleries, images, CTAs, areas, forms and site settings.
+* Preserves intentional blank fields and empty card/gallery lists instead of restoring fallback content.
+* Protects client-edited content from being overwritten during plugin upgrades and repeat imports.
 
 = 2.3.5 =
 * Fixes service pages being silently changed to drafts when optional hero subheaders are cleared.

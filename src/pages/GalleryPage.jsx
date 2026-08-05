@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Images, X } from 'lucide-react'
 import { projectMedia } from '../data/projectMedia'
 import { ClosingCTA, PageHero, PageLayout, SectionIntro, TrustStrip } from '../components/PageLayout'
+import ManagedPageExtras from '../components/ManagedPageExtras'
 import { mediaUrl, useCollection, useRouteContent } from '../content/ContentProvider'
 import { asset } from '../utils/assets'
 
@@ -21,13 +22,14 @@ const emptyProjects=[]
 export default function GalleryPage() {
   const {data:projects,status:projectsStatus}=useCollection('projects',emptyProjects,{preserveEmpty:true})
   const {data:route}=useRouteContent('/gallery')
+  const fields=route?.content?.fields||{}
   const sections=useMemo(()=>gallerySections.map(([key,label])=>{
     const matchingProjects=(projects||[]).filter(project=>{
       const slugs=(project.categories||[]).map(category=>category.slug)
       return slugs.includes(key)||String(project.project_type||'').toLowerCase().includes(key)
     })
     const managed=matchingProjects.flatMap(project=>{
-      const gallery=(project.gallery||[]).filter(item=>item.type==='image').map(item=>({src:mediaUrl(item.media),type:'image',position:item.object_position,alt:item.alt||item.media?.alt,caption:item.caption}))
+      const gallery=(project.gallery??[]).filter(item=>item.type==='image').map(item=>({src:mediaUrl(item.media),type:'image',position:item.object_position,alt:item.alt??item.media?.alt,caption:item.caption}))
       const featured=mediaUrl(project.featured_media)
       return featured?[{src:featured,type:'image',position:project.object_position,alt:project.featured_media?.alt,caption:project.title},...gallery]:gallery
     }).filter(item=>item.src)
@@ -54,24 +56,30 @@ export default function GalleryPage() {
   },[selected])
 
   return <PageLayout
-    title={route?.seo?.title||"Painting Project Gallery Melbourne"}
-    description={route?.seo?.description||`Browse ${photoCount} real Superior Plus Painting project photos, grouped by residential, commercial, interior, exterior, roof, fence and specialist painting services.`}
+    title={route?.seo?.title??"Painting Project Gallery Melbourne"}
+    description={route?.seo?.description??`Browse ${photoCount} real Superior Plus Painting project photos, grouped by residential, commercial, interior, exterior, roof, fence and specialist painting services.`}
     pageType="CollectionPage"
     image={mediaUrl(route?.seo?.social_image,projectMedia.residential.items[0].src)}
     schemaData={{numberOfItems:photoCount}}
     mainClassName="gallery-main"
   >
     <PageHero
-      eyebrow={route?.hero?.eyebrow||"Real Melbourne projects"}
-      title={route?.hero?.title||"Every project,"}
-      accent={route?.hero?.accent||"all in one place."}
-      intro={route?.hero?.intro||"Scroll through our complete project archive. Every photograph is from supplied Superior Plus Painting work and is organised by service so you can quickly find the finish that suits your property."}
+      eyebrow={route?.hero?.eyebrow??"Real Melbourne projects"}
+      title={route?.hero?.title??"Every project,"}
+      accent={route?.hero?.accent??"all in one place."}
+      intro={route?.hero?.intro??"Scroll through our complete project archive. Every photograph is from supplied Superior Plus Painting work and is organised by service so you can quickly find the finish that suits your property."}
       image={mediaUrl(route?.hero?.image,asset('stock-main/gallery.webp'))}
-      imagePosition={route?.hero?.image?.object_position||'center center'}
-      imageAlt={route?.hero?.image?.alt||"A polished contemporary interior representing Superior Plus Painting's project gallery"}
+      imagePosition={route?.hero?.image?.object_position??'center center'}
+      imageAlt={route?.hero?.image?.alt??"A polished contemporary interior representing Superior Plus Painting's project gallery"}
       tone="green"
     />
     <TrustStrip/>
+    <ManagedPageExtras
+      fields={fields}
+      eyebrow="Project gallery"
+      accent="shown through real work."
+      imageAlt="Superior Plus Painting project gallery"
+    />
     <section className="gallery-directory" aria-label="Gallery sections">
       <div className="container">
         <div className="gallery-directory-summary"><Images aria-hidden="true"/><p><strong>{photoCount} real project photos</strong><span>All visible below. Choose a section or simply keep scrolling.</span></p></div>
@@ -99,7 +107,7 @@ export default function GalleryPage() {
         </div>
       </section>)}
     </div>
-    <ClosingCTA title={route?.closing_cta?.title||"Seen a finish you like?"} text={route?.closing_cta?.text||"Tell us which project caught your eye and we’ll help you plan a practical, durable finish for your own property."} label={route?.closing_cta?.link?.label} url={route?.closing_cta?.link?.url}/>
+    <ClosingCTA title={route?.closing_cta?.title??"Seen a finish you like?"} text={route?.closing_cta?.text??"Tell us which project caught your eye and we’ll help you plan a practical, durable finish for your own property."} label={route?.closing_cta?.link?.label} url={route?.closing_cta?.link?.url}/>
     {selected&&<div className="media-lightbox gallery-lightbox" role="dialog" aria-modal="true" aria-label={`${selected.section} project ${selected.number}`} onMouseDown={event=>{if(event.target===event.currentTarget)setSelected(null)}}>
       <button className="lightbox-close" onClick={()=>setSelected(null)} aria-label="Close project photo"><X/></button>
       <div className="lightbox-media"><img src={selected.src} alt={`${selected.section} project ${selected.number} by Superior Plus Painting`}/><p>{selected.section} · Project {String(selected.number).padStart(2,'0')}</p></div>

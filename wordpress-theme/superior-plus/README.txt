@@ -1,7 +1,7 @@
 === Superior Plus Painting ===
 Requires at least: 6.4
 Requires PHP: 8.0
-Stable tag: 3.3.6
+Stable tag: 3.4.1
 
 Exact WordPress delivery of the approved Superior Plus Painting React frontend.
 
@@ -9,7 +9,7 @@ Exact WordPress delivery of the approved Superior Plus Painting React frontend.
 
 1. Back up the WordPress site and use staging.
 2. Open Appearance > Themes > Add New > Upload Theme.
-3. Upload superior-plus-3.3.6.zip and activate it on staging only.
+3. Upload superior-plus-3.4.1.zip and activate it on staging only.
 4. Install and activate the separately packaged Superior Plus Content plugin.
 5. Clear WordPress, hosting and CDN caches.
 6. Test the main menu, Services dropdown and all pages.
@@ -50,7 +50,7 @@ Version 3.3.3 restores the original compact Areas navigation dropdown while
 keeping all managed suburbs available on the full Service Areas directory.
 Version 3.3.4 restores every managed suburb and all seven regional groups to
 the original full Areas navigation dropdown.
-Version 3.3.6 preserves the approved localhost region and suburb arrangement
+Version 3.4.1 preserves the approved localhost region and suburb arrangement
 when WordPress returns the same managed areas in alphabetical database order.
 
 == Bundled media ==

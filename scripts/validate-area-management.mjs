@@ -29,7 +29,7 @@ const checks=[
   ['theme navigation guard',app.includes("{id:'areas',label:'Areas',url:'/service-areas'")],
   ['homepage consumes managed areas',app.includes("useCollection('areas',serviceAreas)")],
   ['directory consumes managed areas',pages.includes("useCollection('areas',serviceAreas)")],
-  ['new managed suburb routes resolve',pages.includes('routeArea||fallbackArea')],
+  ['new managed suburb routes resolve',pages.includes('routeArea??fallbackArea')],
   ['WordPress records preserve approved region order',orderedApiGroups.map(region=>region.title).join('|')===serviceAreaRegions.map(region=>region.title).join('|')],
   ['WordPress records preserve approved suburb order',orderedApiGroups.every((region,index)=>region.suburbs.join('|')===serviceAreaRegions[index].suburbs.join('|'))],
 ]

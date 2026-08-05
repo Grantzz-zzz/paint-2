@@ -199,6 +199,7 @@ class SPP_Content_Fields {
 					'spp_home_commercial_title'   => array( 'label' => 'Commercial feature title', 'type' => 'text', 'max' => 180 ),
 					'spp_home_commercial_accent'  => array( 'label' => 'Commercial feature accent', 'type' => 'text', 'max' => 180 ),
 					'spp_home_commercial_text'    => array( 'label' => 'Commercial feature text', 'type' => 'textarea', 'max' => 900 ),
+					'spp_home_commercial_tags'    => array( 'label' => 'Commercial property tags — one per line', 'type' => 'list', 'max_items' => 20 ),
 					'spp_home_commercial_image_id' => array( 'label' => 'Commercial feature image', 'type' => 'media', 'mime' => 'image' ),
 					'spp_home_project_ids'        => array( 'label' => 'Selected homepage projects', 'type' => 'relationships', 'post_type' => 'spp_project' ),
 					'spp_home_why_title'          => array( 'label' => 'Why-us title', 'type' => 'text', 'max' => 180 ),
@@ -206,9 +207,11 @@ class SPP_Content_Fields {
 					'spp_home_why_text'           => array( 'label' => 'Why-us introduction', 'type' => 'textarea', 'max' => 900 ),
 					'spp_home_trust_cards'        => array( 'label' => 'Trust cards — Heading | Description', 'type' => 'pairs', 'max_items' => 12 ),
 					'spp_home_areas_title'        => array( 'label' => 'Service-areas title', 'type' => 'text', 'max' => 180 ),
+					'spp_home_areas_accent'       => array( 'label' => 'Service-areas accent', 'type' => 'text', 'max' => 180 ),
 					'spp_home_areas_text'         => array( 'label' => 'Service-areas introduction', 'type' => 'textarea', 'max' => 700 ),
 					'spp_home_testimonial_ids'    => array( 'label' => 'Selected homepage testimonials', 'type' => 'relationships', 'post_type' => 'spp_testimonial' ),
 					'spp_home_quote_title'        => array( 'label' => 'Quote section title', 'type' => 'text', 'max' => 180 ),
+					'spp_home_quote_accent'       => array( 'label' => 'Quote section accent', 'type' => 'text', 'max' => 180 ),
 					'spp_home_quote_text'         => array( 'label' => 'Quote section text', 'type' => 'textarea', 'max' => 700 ),
 					'spp_home_response_label'     => array( 'label' => 'Response-time label', 'type' => 'text', 'max' => 120 ),
 					'spp_home_form_fields'        => array( 'label' => 'Quote form fields — Label | Placeholder', 'type' => 'pairs', 'max_items' => 20 ),
@@ -367,6 +370,7 @@ class SPP_Content_Fields {
 	public function render_faq_guidance( $post ) {
 		wp_nonce_field( 'spp_content_save_' . $post->ID, 'spp_content_nonce' );
 		echo '<p>' . esc_html__( 'Use the title for the question and the editor for the answer. Menu Order controls its position.', 'superior-plus-content' ) . '</p>';
+		$this->render_restore_control( $post );
 	}
 
 	/**
@@ -383,6 +387,38 @@ class SPP_Content_Fields {
 			$this->render_field( $post, $key, $definition );
 		}
 		echo '</div>';
+		$this->render_restore_control( $post );
+	}
+
+	/**
+	 * Render a guarded reset action for records that came from the bundled site.
+	 *
+	 * Custom records have no original source key, and Site Settings are excluded
+	 * so a content reset can never alter quote delivery or business details.
+	 *
+	 * @param WP_Post $post Current post.
+	 */
+	private function render_restore_control( $post ) {
+		$supported = array( 'page', 'spp_service', 'spp_project', 'spp_article', 'spp_testimonial', 'spp_faq' );
+		$source    = get_post_meta( $post->ID, '_spp_source_key', true );
+		if ( ! $source || ! in_array( $post->post_type, $supported, true ) || ! current_user_can( 'manage_spp_content' ) ) {
+			return;
+		}
+		$url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'action'  => 'spp_restore_original_content',
+					'post_id' => $post->ID,
+				),
+				admin_url( 'admin-post.php' )
+			),
+			'spp_restore_original_content_' . $post->ID
+		);
+		$confirmation = __( 'Restore the original bundled text, images, cards and selections for this item? This cannot be undone, but it will not change other pages or Site Settings.', 'superior-plus-content' );
+		echo '<hr style="margin:24px 0 16px">';
+		echo '<div class="spp-restore-original"><h3>' . esc_html__( 'Restore this item', 'superior-plus-content' ) . '</h3>';
+		echo '<p class="description">' . esc_html__( 'Returns only this managed item to the approved Superior Plus defaults. Other content, menus, enquiries and email settings remain unchanged.', 'superior-plus-content' ) . '</p>';
+		echo '<p><a class="button button-secondary" href="' . esc_url( $url ) . '" onclick="return window.confirm(' . esc_attr( wp_json_encode( $confirmation ) ) . ');">' . esc_html__( 'Restore original Superior Plus content', 'superior-plus-content' ) . '</a></p></div>';
 	}
 
 	/**
@@ -850,13 +886,19 @@ class SPP_Content_Fields {
 	 * @return array
 	 */
 	public function get_public_meta( $post ) {
-		$data = array();
+		$data       = array();
+		$configured = array();
 		foreach ( $this->definitions_for_post( $post ) as $key => $definition ) {
 			if ( 'system_email' === $definition['type'] ) {
 				continue;
 			}
-			$data[ substr( $key, 4 ) ] = get_post_meta( $post->ID, $key, true );
+			$public_key          = substr( $key, 4 );
+			$data[ $public_key ] = get_post_meta( $post->ID, $key, true );
+			if ( metadata_exists( 'post', $post->ID, $key ) ) {
+				$configured[] = $public_key;
+			}
 		}
+		$data['__configured'] = $configured;
 		return $data;
 	}
 

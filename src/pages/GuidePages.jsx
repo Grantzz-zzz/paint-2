@@ -6,6 +6,7 @@ import { Divider, Reveal } from '../App'
 import { paintingGuideBySlug, paintingGuides } from '../data/paintingGuides'
 import { serviceList } from '../data/siteData'
 import { mediaUrl, useCollection, useRouteContent } from '../content/ContentProvider'
+import ManagedPageExtras from '../components/ManagedPageExtras'
 import { asset } from '../utils/assets'
 import NotFoundPage from './NotFoundPage'
 import approvedBlogData from '../data/clientApprovedBlogs.json'
@@ -42,12 +43,12 @@ function normalizeArticle(article) {
   return {
     ...fallback,
     ...article,
-    title:repairDisplayCopy(article.title||fallback?.title),
-    excerpt:repairDisplayCopy(article.excerpt||fallback?.excerpt),
-    body:repairDisplayCopy(article.body||fallback?.body),
-    image:mediaUrl(article.hero?.image,article.image||fallback?.image),
-    imageAlt:article.hero?.image?.alt||article.imageAlt||fallback?.imageAlt||`${article.title} by Superior Plus Painting`,
-    readTime:article.read_time||article.readTime||fallback?.readTime||'Practical guide',
+    title:repairDisplayCopy(article.title??fallback?.title),
+    excerpt:repairDisplayCopy(article.excerpt??fallback?.excerpt),
+    body:repairDisplayCopy(article.body??fallback?.body),
+    image:mediaUrl(article.hero?.image,article.image??fallback?.image),
+    imageAlt:article.hero?.image?.alt??article.imageAlt??fallback?.imageAlt??`${article.title} by Superior Plus Painting`,
+    readTime:article.read_time??article.readTime??fallback?.readTime??'Practical guide',
     sourceLabel:publicSourceLabel,
   }
 }
@@ -65,6 +66,7 @@ function GuideCard({guide,index}) {
 
 export function PaintingGuidesPage() {
   const {data:route}=useRouteContent('/painting-guides')
+  const fields=route?.content?.fields||{}
   const {data:cmsArticles}=useCollection('articles',emptyArticles)
   const articles=useMemo(()=>{
     const cms=(cmsArticles||[]).map(normalizeArticle)
@@ -72,12 +74,18 @@ export function PaintingGuidesPage() {
     return [...cms,...approvedPaintingGuides.filter(item=>!cmsSlugs.has(item.slug))]
   },[cmsArticles])
   const image=mediaUrl(route?.hero?.image,asset('client/heroes/blog-house-hero.jpg'))
-  return <PageLayout mainClassName="blog-main" title={route?.seo?.title||'Painting Blog for Melbourne Property Owners'} description={route?.seo?.description||'Melbourne painting articles about preparation, colour, interiors, exteriors, roofs, commercial projects and choosing a professional painter.'} image={mediaUrl(route?.seo?.social_image,image)} pageType="Blog" schemaData={{blogPost:articles.map(guide=>({'@type':'BlogPosting',headline:guide.title,url:`/blog/${guide.slug}`,datePublished:guide.published}))}}>
-    <PageHero eyebrow={route?.hero?.eyebrow||'Superior Plus Painting blog'} title={route?.hero?.title||'Practical painting advice'} accent={route?.hero?.accent||'for Melbourne properties.'} intro={route?.hero?.intro||'Explore practical articles for homeowners, property managers and businesses planning a repaint, repair or property refresh.'} image={image} imageAlt={route?.hero?.image?.alt||'Professional painting team refreshing the exterior of a residential home'} tone="gold"/>
+  return <PageLayout mainClassName="blog-main" title={route?.seo?.title??'Painting Blog for Melbourne Property Owners'} description={route?.seo?.description??'Melbourne painting articles about preparation, colour, interiors, exteriors, roofs, commercial projects and choosing a professional painter.'} image={mediaUrl(route?.seo?.social_image,image)} pageType="Blog" schemaData={{blogPost:articles.map(guide=>({'@type':'BlogPosting',headline:guide.title,url:`/blog/${guide.slug}`,datePublished:guide.published}))}}>
+    <PageHero eyebrow={route?.hero?.eyebrow??'Superior Plus Painting blog'} title={route?.hero?.title??'Practical painting advice'} accent={route?.hero?.accent??'for Melbourne properties.'} intro={route?.hero?.intro??'Explore practical articles for homeowners, property managers and businesses planning a repaint, repair or property refresh.'} image={image} imageAlt={route?.hero?.image?.alt??'Professional painting team refreshing the exterior of a residential home'} tone="gold"/>
     <TrustStrip/>
+    <ManagedPageExtras
+      fields={fields}
+      eyebrow="Painting advice"
+      accent="for better project decisions."
+      imageAlt="Professional house painting project in Melbourne"
+    />
     <section className="inner-section guide-directory"><div className="container"><SectionIntro eyebrow={`${articles.length} practical articles`} title="Select a topic" accent="and plan with confidence." text="Choose a guide below. New articles added in WordPress automatically use this same approved layout."/><div className="guide-grid blog-grid">{articles.map((guide,index)=><GuideCard guide={guide} index={index} key={guide.slug}/>)}</div></div></section>
     <section className="guide-help-band"><div className="container"><Reveal><BookOpen/><span>Advice for your property</span><h2>Useful information,<br/><em>grounded in real work.</em></h2></Reveal><Reveal delay={.1}><p>These articles help you understand the process, but the right coating system still depends on the existing surface, exposure, access and preparation identified during an inspection.</p></Reveal></div><Divider color="#fff" variant="drip"/></section>
-    <ClosingCTA title={route?.closing_cta?.title||"Ready to discuss your painting project?"} text={route?.closing_cta?.text||"Tell us about the property, the surfaces involved and what you would like to change. We’ll arrange a free, no-obligation quotation."} label={route?.closing_cta?.link?.label} url={route?.closing_cta?.link?.url}/>
+    <ClosingCTA title={route?.closing_cta?.title??"Ready to discuss your painting project?"} text={route?.closing_cta?.text??"Tell us about the property, the surfaces involved and what you would like to change. We’ll arrange a free, no-obligation quotation."} label={route?.closing_cta?.link?.label} url={route?.closing_cta?.link?.url}/>
   </PageLayout>
 }
 
@@ -119,7 +127,7 @@ export function PaintingGuidePage() {
   const {data:cmsArticles}=useCollection('articles',emptyArticles)
   const cms=route?.template_key==='article'?route.content:null
   const article=cms?normalizeArticle(cms):fallback
-  const prepared=useMemo(()=>prepareCmsBody(cms?.body||article?.body),[cms?.body,article?.body])
+  const prepared=useMemo(()=>prepareCmsBody(cms?.body??article?.body),[cms?.body,article?.body])
   const approvedSections=useMemo(()=>splitApprovedBody(article?.body),[article?.body])
   const allArticles=useMemo(()=>{
     const normalized=(cmsArticles||[]).map(normalizeArticle)
@@ -136,8 +144,8 @@ export function PaintingGuidePage() {
   const scrollToSection=index=>document.getElementById(`guide-section-${index+1}`)?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})
   const takeaways=cms?.takeaways||article.takeaways||[]
   const references=cms?.references||article.references||[]
-  return <PageLayout mainClassName="blog-main blog-article-main" title={route?.seo?.title||article.title} description={route?.seo?.description||article.excerpt} image={mediaUrl(route?.seo?.social_image,heroImage)} pageType="BlogPosting" schemaData={{headline:article.title,datePublished:article.published,dateModified:article.modified||article.published,keywords:article.seo_keywords?.join(', '),author:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},publisher:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},about:'Professional painting in Melbourne'}}>
-    <PageHero eyebrow={cms?.eyebrow||article.eyebrow} title={cms?.hero?.title||article.title} accent={cms?.hero?.accent||'A practical Melbourne article.'} intro={cms?.hero?.intro||article.excerpt} image={heroImage} imageAlt={cms?.hero?.image?.alt||article.imageAlt} tone="green"/>
+  return <PageLayout mainClassName="blog-main blog-article-main" title={route?.seo?.title??article.title} description={route?.seo?.description??article.excerpt} image={mediaUrl(route?.seo?.social_image,heroImage)} pageType="BlogPosting" schemaData={{headline:article.title,datePublished:article.published,dateModified:article.modified??article.published,keywords:article.seo_keywords?.join(', '),author:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},publisher:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},about:'Professional painting in Melbourne'}}>
+    <PageHero eyebrow={cms?.eyebrow??article.eyebrow} title={cms?.hero?.title??article.title} accent={cms?.hero?.accent??'A practical Melbourne article.'} intro={cms?.hero?.intro??article.excerpt} image={heroImage} imageAlt={cms?.hero?.image?.alt??article.imageAlt} tone="green"/>
     <TrustStrip/>
     <article className="guide-article"><div className="container guide-article-layout">
       <aside><div><BookOpen/><small>{publicSourceLabel}</small><strong>{cms?.read_time||article.readTime}</strong></div>{sections.length>0&&<nav aria-label="On this page">{sections.map((title,index)=><button type="button" onClick={()=>scrollToSection(index)} key={`${title}-${index}`}><span>{String(index+1).padStart(2,'0')}</span>{repairDisplayCopy(title)}</button>)}</nav>}</aside>
@@ -149,6 +157,6 @@ export function PaintingGuidePage() {
     </div></article>
     {moreArticles.length>0&&<section className="inner-section blog-more"><div className="container"><SectionIntro eyebrow="Continue reading" title="Choose another" accent="painting article." text="Keep exploring without returning to the main Blog page. Select any article below to open it directly."/><div className="guide-grid">{moreArticles.map((guide,index)=><GuideCard guide={guide} index={index+1} key={guide.slug}/>)}</div></div></section>}
     {related.length>0&&<section className="inner-section cream"><div className="container"><SectionIntro eyebrow="Relevant services" title="Turn the advice" accent="into a clear project plan."/><div className="related-grid">{related.map(service=><button className={`related-card tone-${service.tone||'green'}`} key={service.slug} onClick={()=>navigate(`/services/${service.slug}`)}><span>Superior Plus service</span><h3>{service.title}</h3><p>{service.short}</p><ArrowRight/></button>)}</div></div></section>}
-    <ClosingCTA title={route?.closing_cta?.title||'Would you like advice for your property?'} text={route?.closing_cta?.text||'Arrange a free consultation and written quote based on the actual surfaces, preparation and finish your project needs.'} label={route?.closing_cta?.link?.label} url={route?.closing_cta?.link?.url}/>
+    <ClosingCTA title={route?.closing_cta?.title??'Would you like advice for your property?'} text={route?.closing_cta?.text??'Arrange a free consultation and written quote based on the actual surfaces, preparation and finish your project needs.'} label={route?.closing_cta?.link?.label} url={route?.closing_cta?.link?.url}/>
   </PageLayout>
 }

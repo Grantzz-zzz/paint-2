@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.3.5';
+	const VERSION = '2.5.0';
 	const APPROVED_HERO_VERSION = 'aesthetic-main-heroes-2026-08-02';
 
 	private $types;
@@ -21,6 +21,8 @@ class SPP_Content_Migration {
 		$this->types = $types;
 		add_action( 'admin_menu', array( $this, 'register_page' ), 30 );
 		add_action( 'admin_post_spp_migrate_approved_site', array( $this, 'handle' ) );
+		add_action( 'admin_post_spp_restore_original_content', array( $this, 'handle_restore_original' ) );
+		add_action( 'admin_notices', array( $this, 'render_restore_notice' ) );
 	}
 
 	public function register_page() {
@@ -83,6 +85,137 @@ class SPP_Content_Migration {
 		}
 		wp_safe_redirect( admin_url( 'admin.php?page=spp-content-migration&migrated=1' ) );
 		exit;
+	}
+
+	/**
+	 * Restore one managed record to the content bundled with this plugin.
+	 *
+	 * The action is deliberately scoped to the selected record. Site settings,
+	 * quote delivery, enquiries, navigation, and every other edited record remain
+	 * untouched. The normal idempotent importer is then reused so media and
+	 * relationships are rebuilt by the same code that created the originals.
+	 */
+	public function handle_restore_original() {
+		$post_id = isset( $_GET['post_id'] ) ? absint( $_GET['post_id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! $post_id || ! current_user_can( 'manage_spp_content' ) || ! current_user_can( 'edit_post', $post_id ) ) {
+			wp_die( esc_html__( 'You do not have permission to restore this content.', 'superior-plus-content' ) );
+		}
+		check_admin_referer( 'spp_restore_original_content_' . $post_id );
+		if ( 'superior-plus' !== get_stylesheet() || ! function_exists( 'spp_default_services' ) ) {
+			wp_die( esc_html__( 'Activate the Superior Plus theme before restoring bundled content.', 'superior-plus-content' ) );
+		}
+
+		$post   = get_post( $post_id );
+		$source = $post ? (string) get_post_meta( $post_id, '_spp_source_key', true ) : '';
+		if ( ! $post || ! $source || ! $this->restore_post_fields( $post, $source ) ) {
+			wp_die( esc_html__( 'This record has no bundled original to restore.', 'superior-plus-content' ) );
+		}
+
+		$meta = get_post_meta( $post_id );
+		foreach ( array_keys( $meta ) as $key ) {
+			if ( 0 === strpos( $key, 'spp_' ) || in_array( $key, array( '_spp_client_modified_at', '_spp_design_variant', '_spp_approved_hero_version' ), true ) ) {
+				delete_post_meta( $post_id, $key );
+			}
+		}
+		delete_post_thumbnail( $post_id );
+
+		$this->run();
+		clean_post_cache( $post_id );
+		wp_safe_redirect( add_query_arg( 'spp_restored', '1', get_edit_post_link( $post_id, 'url' ) ) );
+		exit;
+	}
+
+	/**
+	 * Show confirmation after a page-level restore.
+	 */
+	public function render_restore_notice() {
+		if ( empty( $_GET['spp_restored'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+		echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Original Superior Plus content restored for this item. Other pages and site settings were not changed.', 'superior-plus-content' ) . '</p></div>';
+	}
+
+	/**
+	 * Restore native WordPress fields before managed metadata is re-imported.
+	 *
+	 * @param WP_Post $post Managed post.
+	 * @param string  $source Stable migration source key.
+	 * @return bool
+	 */
+	private function restore_post_fields( $post, $source ) {
+		$update = array( 'ID' => $post->ID, 'post_status' => 'publish' );
+
+		if ( 'page' === $post->post_type && 0 === strpos( $source, 'page:' ) ) {
+			$slug  = substr( $source, 5 );
+			$pages = $this->page_dataset();
+			if ( empty( $pages[ $slug ] ) ) {
+				return false;
+			}
+			$update['post_title']   = $pages[ $slug ]['title'];
+			$update['post_excerpt'] = $pages[ $slug ]['excerpt'];
+			$update['post_content'] = $pages[ $slug ]['excerpt'];
+		} elseif ( 'spp_service' === $post->post_type && 0 === strpos( $source, 'service:' ) ) {
+			$slug     = substr( $source, 8 );
+			$services = spp_default_services();
+			if ( empty( $services[ $slug ] ) ) {
+				return false;
+			}
+			$update['post_title']   = $services[ $slug ]['title'];
+			$update['post_excerpt'] = $services[ $slug ]['intro'];
+			$update['post_content'] = $services[ $slug ]['intro'];
+			$update['menu_order']   = array_search( $slug, array_keys( $services ), true ) + 1;
+		} elseif ( 'spp_article' === $post->post_type && 0 === strpos( $source, 'article:' ) ) {
+			$slug  = substr( $source, 8 );
+			$items   = json_decode( file_get_contents( SPP_CONTENT_PATH . 'data/blog-articles.json' ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$matches = is_array( $items ) ? array_filter( $items, function ( $candidate ) use ( $slug ) { return isset( $candidate['slug'] ) && $slug === $candidate['slug']; } ) : array();
+			$item    = $matches ? reset( $matches ) : null;
+			if ( ! $item ) {
+				return false;
+			}
+			$update['post_title']   = sanitize_text_field( $item['title'] );
+			$update['post_excerpt'] = sanitize_textarea_field( $item['excerpt'] );
+			$update['post_content'] = wp_kses_post( $item['content'] );
+		} elseif ( 'spp_faq' === $post->post_type && 0 === strpos( $source, 'faq:' ) ) {
+			$index = absint( substr( $source, 4 ) ) - 1;
+			$items = spp_default_faqs();
+			if ( ! isset( $items[ $index ] ) ) {
+				return false;
+			}
+			$update['post_title']   = $items[ $index ][0];
+			$update['post_content'] = $items[ $index ][1];
+			$update['menu_order']   = $index + 1;
+		} elseif ( 'spp_testimonial' === $post->post_type && 0 === strpos( $source, 'testimonial:' ) ) {
+			$index = absint( substr( $source, 12 ) ) - 1;
+			$items = array(
+				array( 'Professional & Reliable', 'Superior Plus Painting completed the work on time with excellent attention to detail. The finish was outstanding, and the team kept everything clean throughout the project. Highly recommended.' ),
+				array( 'Excellent Quality', 'We were impressed with the preparation and workmanship. The painters were friendly, punctual and delivered exactly what they promised. Our home looks fantastic.' ),
+				array( 'Great Communication', 'From the first quote to the final inspection, the communication was excellent. The project was completed on schedule and the quality exceeded our expectations.' ),
+				array( 'Value for Money', 'We received honest advice, competitive pricing and a high-quality finish. We would definitely use Superior Plus Painting again and recommend them to friends and family.' ),
+			);
+			if ( ! isset( $items[ $index ] ) ) {
+				return false;
+			}
+			$update['post_title']   = $items[ $index ][0];
+			$update['post_content'] = $items[ $index ][1];
+			$update['menu_order']   = $index + 1;
+		} elseif ( 'spp_project' === $post->post_type && 0 === strpos( $source, 'project:' ) ) {
+			$category = substr( $source, 8 );
+			$labels   = array(
+				'residential' => 'Residential Painting Showcase', 'commercial' => 'Commercial Painting Portfolio',
+				'interior' => 'Interior Painting Portfolio', 'exterior' => 'Exterior Painting Portfolio',
+				'fence' => 'Fence Painting Portfolio', 'outdoor' => 'Outdoor Timber Portfolio',
+				'roof' => 'Roof Painting Showcase', 'wallpaper' => 'Wallpaper Removal Showcase',
+				'plaster' => 'Plaster Repairs Showcase',
+			);
+			if ( empty( $labels[ $category ] ) ) {
+				return false;
+			}
+			$update['post_title'] = $labels[ $category ];
+		} else {
+			return false;
+		}
+
+		return ! is_wp_error( wp_update_post( $update, true ) );
 	}
 
 	/**
@@ -298,7 +431,9 @@ class SPP_Content_Migration {
 			}
 			if ( isset( $approved_documents[ $document_key ] ) ) {
 				foreach ( array( 'spp_copy_source_version', 'spp_eyebrow', 'spp_hero_title', 'spp_accent', 'spp_hero_intro', 'spp_content_sections', 'spp_additional_services', 'spp_master_process', 'spp_service_options', 'spp_property_options', 'spp_contact_form_fields', 'spp_about_approach_copy', 'spp_about_standards', 'spp_about_roots_copy', 'spp_process_proof', 'spp_faq_intro' ) as $approved_key ) {
-					if ( array_key_exists( $approved_key, $meta ) ) { update_post_meta( $post->ID, $approved_key, $meta[ $approved_key ] ); }
+					if ( array_key_exists( $approved_key, $meta ) && ! metadata_exists( 'post', $post->ID, $approved_key ) ) {
+						update_post_meta( $post->ID, $approved_key, $meta[ $approved_key ] );
+					}
 				}
 			}
 		}
@@ -335,6 +470,11 @@ class SPP_Content_Migration {
 		if ( self::APPROVED_HERO_VERSION === get_post_meta( $post_id, '_spp_approved_hero_version', true ) ) {
 			return;
 		}
+		if ( get_post_meta( $post_id, '_spp_client_modified_at', true ) ) {
+			update_post_meta( $post_id, '_spp_approved_hero_version', self::APPROVED_HERO_VERSION );
+			$this->report['protected'][] = 'approved-hero:' . get_post_field( 'post_name', $post_id );
+			return;
+		}
 		update_post_meta( $post_id, 'spp_hero_image_id', absint( $image_id ) );
 		update_post_meta( $post_id, '_spp_approved_hero_version', self::APPROVED_HERO_VERSION );
 		set_post_thumbnail( $post_id, absint( $image_id ) );
@@ -359,7 +499,9 @@ class SPP_Content_Migration {
 				$this->report['created'][] = $key;
 			}
 			$ids[] = (int) $post->ID;
-			wp_update_post( array( 'ID' => $post->ID, 'post_title' => $item[0], 'post_content' => $item[1], 'menu_order' => $index + 1 ) );
+			if ( ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) ) {
+				wp_update_post( array( 'ID' => $post->ID, 'post_title' => $item[0], 'post_content' => $item[1], 'menu_order' => $index + 1 ) );
+			}
 			$this->claim_record( $post->ID, $key, array( 'question' => $item[0], 'answer' => $item[1] ) );
 		}
 		return $ids;
@@ -558,10 +700,12 @@ class SPP_Content_Migration {
 			$this->write_meta( $post->ID, 'service:' . $slug, $meta, $is_new );
 			if ( $approved ) {
 				foreach ( array( 'spp_copy_source_version', 'spp_eyebrow', 'spp_hero_title', 'spp_accent', 'spp_hero_intro', 'spp_scope_title', 'spp_scope', 'spp_process', 'spp_process_title', 'spp_document_sections', 'spp_closing_cta_title', 'spp_closing_cta_text', 'spp_seo_title', 'spp_seo_description' ) as $approved_key ) {
-					update_post_meta( $post->ID, $approved_key, $meta[ $approved_key ] );
+					if ( ! metadata_exists( 'post', $post->ID, $approved_key ) ) {
+						update_post_meta( $post->ID, $approved_key, $meta[ $approved_key ] );
+					}
 				}
 			}
-			if ( $hero ) {
+			if ( $hero && ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) ) {
 				set_post_thumbnail( $post->ID, $hero );
 			}
 			$ids[ $slug ] = (int) $post->ID;
@@ -612,7 +756,7 @@ class SPP_Content_Migration {
 					continue;
 				}
 				$post = get_post( $id );
-			} elseif ( get_post_meta( $post->ID, '_spp_source_key', true ) === $key ) {
+			} elseif ( get_post_meta( $post->ID, '_spp_source_key', true ) === $key && ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) ) {
 				$postarr['ID'] = $post->ID;
 				wp_update_post( $postarr );
 			}
@@ -651,17 +795,7 @@ class SPP_Content_Migration {
 				),
 				$is_new
 			);
-			update_post_meta( $post->ID, 'spp_copy_source_version', 'pdf-verbatim-2026-08-01' );
-			update_post_meta( $post->ID, 'spp_article_read_time', $item['read_time'] );
-			update_post_meta( $post->ID, 'spp_article_source_label', $item['source_label'] );
-			update_post_meta( $post->ID, 'spp_article_seo_keywords', isset( $item['seo_keywords'] ) ? $item['seo_keywords'] : array() );
-			update_post_meta( $post->ID, 'spp_article_outline_topics', isset( $item['outline_topics'] ) ? $item['outline_topics'] : array() );
-			update_post_meta( $post->ID, 'spp_article_takeaways', $item['takeaways'] );
-			update_post_meta( $post->ID, 'spp_hero_title', $item['title'] );
-			update_post_meta( $post->ID, 'spp_hero_intro', $item['excerpt'] );
-			update_post_meta( $post->ID, 'spp_seo_title', $item['title'] );
-			update_post_meta( $post->ID, 'spp_seo_description', $item['excerpt'] );
-			if ( $image_id ) {
+			if ( $image_id && ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) ) {
 				set_post_thumbnail( $post->ID, $image_id );
 			}
 			$ids[ $slug ] = (int) $post->ID;
@@ -951,6 +1085,7 @@ class SPP_Content_Migration {
 					'spp_home_commercial_title' => 'We keep your business', 'spp_home_commercial_accent' => 'looking its best.',
 					'spp_home_commercial_text' => 'Professional finishes, clear communication and scheduling built around your operation—from a single office to multi-site projects.',
 					'spp_home_projects_heading' => 'Colour changes',
+					'spp_home_commercial_tags' => array( 'Offices', 'Retail', 'Warehouses', 'Medical', 'Education', 'Hospitality', 'Strata' ),
 					'spp_home_projects_accent' => 'everything.',
 					'spp_home_projects_intro' => 'Explore the care behind every edge, every surface and every final coat. Hover a project to reveal the colour beneath.',
 					'spp_home_why_title' => 'Good painting starts', 'spp_home_why_accent' => 'before the first coat.',
@@ -964,6 +1099,8 @@ class SPP_Content_Migration {
 					'spp_home_areas_title' => 'Your local painting team,', 'spp_home_areas_text' => 'Based in Melbourne and proudly servicing homes and businesses across the south-east and surrounding suburbs.',
 					'spp_home_quote_title' => 'Ready for a', 'spp_home_quote_text' => 'Tell us what you’re planning. We’ll arrange a free, no-obligation quote and help you choose the right way forward.',
 					'spp_home_response_label' => 'Usually replies within 2 hours',
+					'spp_home_areas_accent' => 'Melbourne east.',
+					'spp_home_quote_accent' => 'fresh start?',
 					'spp_home_form_fields' => array(
 						array( 'title' => 'Name', 'text' => 'Your name' ), array( 'title' => 'Phone', 'text' => '04xx xxx xxx' ),
 						array( 'title' => 'Email', 'text' => 'you@email.com' ), array( 'title' => 'Suburb', 'text' => 'Your suburb' ),
