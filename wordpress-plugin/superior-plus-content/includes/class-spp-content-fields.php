@@ -384,6 +384,7 @@ class SPP_Content_Fields {
 		echo '<p class="description">' . esc_html__( 'These controls change content only. The React theme keeps the approved layout and styling locked.', 'superior-plus-content' ) . '</p>';
 		echo '<div class="spp-content-fields">';
 		foreach ( $definitions as $key => $definition ) {
+			$was_configured = metadata_exists( 'post', $post_id, $key );
 			$this->render_field( $post, $key, $definition );
 		}
 		echo '</div>';
@@ -668,7 +669,10 @@ class SPP_Content_Fields {
 			if ( 'services' === $definition['type'] || 'relationships' === $definition['type'] ) {
 				$raw = isset( $_POST[ $key ] ) ? (array) wp_unslash( $_POST[ $key ] ) : array();
 				$relationship_type = 'services' === $definition['type'] ? 'spp_service' : $definition['post_type'];
-				update_post_meta( $post_id, $key, $this->sanitize_relationships( $raw, $relationship_type, $post_id ) );
+				$value = $this->sanitize_relationships( $raw, $relationship_type, $post_id );
+				if ( $was_configured || $value ) {
+					update_post_meta( $post_id, $key, $value );
+				}
 				continue;
 			}
 			if ( ! isset( $_POST[ $key ] ) ) {
@@ -677,6 +681,9 @@ class SPP_Content_Fields {
 			$raw      = wp_unslash( $_POST[ $key ] );
 			$existing = get_post_meta( $post_id, $key, true );
 			$value    = $this->sanitize_value( $raw, $definition, $existing );
+			if ( ! $was_configured && $this->is_blank_value( $value, $definition['type'] ) ) {
+				continue;
+			}
 			if ( '' === $value && '' !== $existing ) {
 				$explicit_blanks[] = $key;
 			} elseif ( '' !== $value ) {
@@ -686,6 +693,26 @@ class SPP_Content_Fields {
 		}
 		update_post_meta( $post_id, 'spp_explicit_blank_fields', array_values( array_unique( $explicit_blanks ) ) );
 		update_post_meta( $post_id, '_spp_client_modified_at', gmdate( 'c' ) );
+	}
+
+	/**
+	 * Determine whether a submitted control contains no client content.
+	 *
+	 * Untouched empty controls must not become configured metadata merely
+	 * because WordPress submitted the entire edit form.
+	 *
+	 * @param mixed  $value Sanitized value.
+	 * @param string $type Field type.
+	 * @return bool
+	 */
+	private function is_blank_value( $value, $type ) {
+		if ( in_array( $type, array( 'list', 'pairs', 'gallery', 'services', 'relationships' ), true ) ) {
+			return empty( $value );
+		}
+		if ( 'media' === $type ) {
+			return ! absint( $value );
+		}
+		return '' === $value;
 	}
 
 	/**

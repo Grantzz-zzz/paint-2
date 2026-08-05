@@ -52,6 +52,7 @@ const checks = [
   [servicePage.includes("service.tone||serviceList.find(item=>item.slug===service.slug)?.tone||'cream'") && rest.includes("'tone'  => $tone"), 'related service cards retain canonical colour tones when live metadata is missing'],
   [pageLayout.includes('title===undefined?defaults.title:title') && pageLayout.includes('resolvedLabel&&destination'), 'blank page CTA fields do not restore hardcoded defaults'],
   [fields.includes("'spp_explicit_blank_fields'") && fields.includes("'' === $value && '' !== $existing"), 'only fields deliberately cleared by an editor receive an explicit-blank marker'],
+  [fields.includes('! $was_configured && $this->is_blank_value') && fields.includes('$was_configured || $value'), 'saving one edit does not configure untouched blank text, media, card, or relationship controls'],
   [rest.includes('$explicit_blanks') && rest.includes("in_array( $key, $explicit_blanks, true )"), 'importer blanks fall back while explicitly cleared CTA fields remain removed'],
   [contentPages.includes("textItems(fieldValue(fields,'service_options',undefined),approved.service_options)") && contentPages.includes("pairItems(fieldValue(fields,'contact_form_fields',undefined),defaultFormFields)"), 'contact options and field copy are connected to the editor'],
   [managedExtras.includes("fieldValue(fields, 'content_sections'") && managedExtras.includes("fieldValue(fields, 'secondary_image'") && managedExtras.includes("fieldValue(fields, 'related_pages'"), 'shared page controls preserve blank sections, media, and relationships'],
