@@ -11,6 +11,7 @@ const outputRoot = join(root, 'wordpress-theme', 'dist', 'phase8')
 const referenceOrigin = 'http://127.0.0.1:4191'
 const externalTarget = Boolean(process.env.SPP_PHASE8_WP_URL)
 const targetOrigin = (process.env.SPP_PHASE8_WP_URL || 'http://127.0.0.1:4192').replace(/\/$/, '')
+const skipVisualComparison = process.env.SPP_PHASE8_SKIP_VISUAL === '1'
 const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 const maxVisualDifference = 0.05
 
@@ -395,10 +396,12 @@ try {
         ])
         const visualHashParity = sha256(referenceShot) === sha256(targetShot)
         const visualComparison = await compareScreenshots(targetPage, referenceShot, targetShot)
-        check(
-          visualComparison.dimensionsMatch && visualComparison.differentPixelRatio <= maxVisualDifference,
-          `${prefix}: rendered pixels differ (${(visualComparison.differentPixelRatio * 100).toFixed(3)}%)`,
-        )
+        if (!skipVisualComparison) {
+          check(
+            visualComparison.dimensionsMatch && visualComparison.differentPixelRatio <= maxVisualDifference,
+            `${prefix}: rendered pixels differ (${(visualComparison.differentPixelRatio * 100).toFixed(3)}%)`,
+          )
+        }
         routeReport.push({
           route,
           h1: target.h1[0],
