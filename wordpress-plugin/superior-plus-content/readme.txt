@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.5.0
+Stable tag: 2.5.4
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -38,6 +38,20 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.5.4 =
+* Companion release for the restored FAQ, area-card, and default-content theme presentation.
+
+= 2.5.3 =
+* Recover About flip-card content damaged by the legacy blank-field reset state.
+* Preserve localhost defaults for all untouched page collections and media fields.
+
+= 2.5.2 =
+* Distinguish unsaved area-card media from images deliberately removed by an editor.
+
+= 2.5.1 =
+* Restore the seven verified Google reviews used by the localhost baseline.
+* Recover blank managed records, canonical pages, and damaged navigation during approved-site refresh.
 
 = 2.5.0 =
 * Adds a guarded per-item restore action for every bundled page, service, project, article, testimonial and FAQ.

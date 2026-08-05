@@ -19,7 +19,8 @@ export const normalizeServiceArea = item => ({
   serviceSlugs:item.service_slugs||item.serviceSlugs||[],
   localContext:item.local_context||item.localContext||'',
   neighbours:item.neighbours||[],
-  cardImage:item.card_image||item.cardImage||null,
+  cardImage:item.card_image??item.cardImage??null,
+  cardImageConfigured:item.card_image_configured??item.cardImageConfigured??false,
   path:item.path||`/service-areas/${item.slug}`,
 })
 

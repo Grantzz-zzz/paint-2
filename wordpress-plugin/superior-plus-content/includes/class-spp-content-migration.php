@@ -10,8 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.5.0';
+	const VERSION = '2.5.4';
 	const APPROVED_HERO_VERSION = 'aesthetic-main-heroes-2026-08-02';
+	const STRUCTURAL_DEFAULTS_VERSION = 'restore-card-content-2026-08-05';
 
 	private $types;
 	private $report = array();
@@ -186,17 +187,12 @@ class SPP_Content_Migration {
 			$update['menu_order']   = $index + 1;
 		} elseif ( 'spp_testimonial' === $post->post_type && 0 === strpos( $source, 'testimonial:' ) ) {
 			$index = absint( substr( $source, 12 ) ) - 1;
-			$items = array(
-				array( 'Professional & Reliable', 'Superior Plus Painting completed the work on time with excellent attention to detail. The finish was outstanding, and the team kept everything clean throughout the project. Highly recommended.' ),
-				array( 'Excellent Quality', 'We were impressed with the preparation and workmanship. The painters were friendly, punctual and delivered exactly what they promised. Our home looks fantastic.' ),
-				array( 'Great Communication', 'From the first quote to the final inspection, the communication was excellent. The project was completed on schedule and the quality exceeded our expectations.' ),
-				array( 'Value for Money', 'We received honest advice, competitive pricing and a high-quality finish. We would definitely use Superior Plus Painting again and recommend them to friends and family.' ),
-			);
+			$items = $this->testimonial_dataset();
 			if ( ! isset( $items[ $index ] ) ) {
 				return false;
 			}
-			$update['post_title']   = $items[ $index ][0];
-			$update['post_content'] = $items[ $index ][1];
+			$update['post_title']   = $items[ $index ]['name'];
+			$update['post_content'] = $items[ $index ]['quote'];
 			$update['menu_order']   = $index + 1;
 		} elseif ( 'spp_project' === $post->post_type && 0 === strpos( $source, 'project:' ) ) {
 			$category = substr( $source, 8 );
@@ -236,12 +232,13 @@ class SPP_Content_Migration {
 			'reused'        => array(),
 			'protected'     => array(),
 			'errors'        => array(),
-			'expected'      => array( 'pages' => 81, 'services' => 9, 'articles' => 19, 'faqs' => 10, 'testimonials' => 4, 'projects' => 9 ),
+			'expected'      => array( 'pages' => 81, 'services' => 9, 'articles' => 19, 'faqs' => 10, 'testimonials' => 7, 'projects' => 9 ),
 		);
 
 		$config_id = $this->types->ensure_site_config();
 		$this->migrate_config( $config_id );
 		$page_ids = $this->migrate_pages();
+		$this->repair_structural_defaults( $page_ids );
 		$faq_ids = $this->migrate_faqs();
 		$testimonial_ids = $this->migrate_testimonials();
 		$project_ids = $this->migrate_projects();
@@ -316,7 +313,10 @@ class SPP_Content_Migration {
 		$approved_documents = isset( $approved_manifest['documents'] ) ? $approved_manifest['documents'] : array();
 		$ids = array();
 		foreach ( $pages as $slug => $data ) {
-			$post = get_page_by_path( $slug, OBJECT, 'page' );
+			$post = $this->find_source( 'page:' . $slug, 'page' );
+			if ( ! $post ) {
+				$post = get_page_by_path( $slug, OBJECT, 'page' );
+			}
 			$is_new = ! $post;
 			if ( $is_new ) {
 				$path_parts = explode( '/', trim( $slug, '/' ) );
@@ -339,6 +339,11 @@ class SPP_Content_Migration {
 				}
 				$post = get_post( $id );
 				$this->report['created'][] = 'page:' . $slug;
+			}
+			if ( ! $is_new && ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) && 'publish' !== $post->post_status ) {
+				wp_update_post( array( 'ID' => $post->ID, 'post_status' => 'publish' ) );
+				$post = get_post( $post->ID );
+				$this->report['updated'][] = 'page-status:' . $slug;
 			}
 			$ids[ $slug ] = (int) $post->ID;
 			$meta = $data['meta'];
@@ -499,6 +504,11 @@ class SPP_Content_Migration {
 				$this->report['created'][] = $key;
 			}
 			$ids[] = (int) $post->ID;
+			$is_blank = ! trim( (string) $post->post_title ) || ! trim( (string) $post->post_content );
+			if ( $is_blank && get_post_meta( $post->ID, '_spp_client_modified_at', true ) ) {
+				delete_post_meta( $post->ID, '_spp_client_modified_at' );
+				$this->report['updated'][] = $key . ':recovered-blank';
+			}
 			if ( ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) ) {
 				wp_update_post( array( 'ID' => $post->ID, 'post_title' => $item[0], 'post_content' => $item[1], 'menu_order' => $index + 1 ) );
 			}
@@ -508,18 +518,13 @@ class SPP_Content_Migration {
 	}
 
 	private function migrate_testimonials() {
-		$items = array(
-			array( 'Professional & Reliable', 'Superior Plus Painting completed the work on time with excellent attention to detail. The finish was outstanding, and the team kept everything clean throughout the project. Highly recommended.' ),
-			array( 'Excellent Quality', 'We were impressed with the preparation and workmanship. The painters were friendly, punctual and delivered exactly what they promised. Our home looks fantastic.' ),
-			array( 'Great Communication', 'From the first quote to the final inspection, the communication was excellent. The project was completed on schedule and the quality exceeded our expectations.' ),
-			array( 'Value for Money', 'We received honest advice, competitive pricing and a high-quality finish. We would definitely use Superior Plus Painting again and recommend them to friends and family.' ),
-		);
+		$items = $this->testimonial_dataset();
 		$ids = array();
 		foreach ( $items as $index => $item ) {
 			$key = 'testimonial:' . ( $index + 1 );
 			$post = $this->find_source( $key, 'spp_testimonial' );
 			if ( ! $post ) {
-				$id = wp_insert_post( array( 'post_type' => 'spp_testimonial', 'post_status' => 'publish', 'post_title' => $item[0], 'post_content' => $item[1], 'menu_order' => $index + 1 ), true );
+				$id = wp_insert_post( array( 'post_type' => 'spp_testimonial', 'post_status' => 'publish', 'post_title' => $item['name'], 'post_content' => $item['quote'], 'menu_order' => $index + 1 ), true );
 				if ( is_wp_error( $id ) ) {
 					$this->report['errors'][] = $key;
 					continue;
@@ -528,12 +533,40 @@ class SPP_Content_Migration {
 				$this->report['created'][] = $key;
 			}
 			$ids[] = (int) $post->ID;
+			$is_blank = ! trim( (string) $post->post_title ) || ! trim( (string) $post->post_content );
+			if ( $is_blank && get_post_meta( $post->ID, '_spp_client_modified_at', true ) ) {
+				delete_post_meta( $post->ID, '_spp_client_modified_at' );
+				$this->report['updated'][] = $key . ':recovered-blank';
+			}
+			if ( ! get_post_meta( $post->ID, '_spp_client_modified_at', true ) ) {
+				wp_update_post( array(
+					'ID'           => $post->ID,
+					'post_status'  => 'publish',
+					'post_title'   => $item['name'],
+					'post_content' => $item['quote'],
+					'menu_order'   => $index + 1,
+				) );
+			}
 			$this->write_meta( $post->ID, $key, array(
-				'spp_testimonial_name' => $item[0], 'spp_testimonial_label' => $item[0],
-				'spp_testimonial_project' => $item[0], 'spp_testimonial_rating' => 5, 'spp_is_placeholder' => 1,
+				'spp_testimonial_name' => $item['name'], 'spp_testimonial_label' => $item['name'],
+				'spp_testimonial_project' => 'Verified Google review', 'spp_testimonial_rating' => 5,
+				'spp_testimonial_source' => 'Google', 'spp_testimonial_url' => 'https://tinyurl.com/36jdkp9d',
+				'spp_testimonial_date' => $item['date'], 'spp_is_placeholder' => 0,
 			), ! get_post_meta( $post->ID, '_spp_source_key', true ) );
 		}
 		return $ids;
+	}
+
+	private function testimonial_dataset() {
+		return array(
+			array( 'name' => 'chen yangyang', 'date' => 'A week ago', 'quote' => 'Always quick to respond, reliable, and genuinely cares about the quality of his work.' ),
+			array( 'name' => 'Indigo Jewel', 'date' => 'A week ago', 'quote' => 'I recently completed an extensive renovation and was in need of a painter for a full internal house paint. Afshin and his team was professional, easy to work with, and produced a very high quality finish in a timely manner. Would happily recommend him to anyone in need of a painter.' ),
+			array( 'name' => 'Shane McLachlan', 'date' => '2 months ago', 'quote' => 'Afshin does a great job and is very well priced. He’s done two jobs for me now, always listens to what I would like done, works fast with good detail and works in with my schedule. A++' ),
+			array( 'name' => 'Timothy Fagan', 'date' => '3 months ago', 'quote' => 'We are so incredibly happy and impressed with Superior Plus Painting & Remodeling. Afshin is an expert as well as a lovely human being. He communicated clearly, quoted fairly, and the job was finished quickly and beautifully. I would recommend him to anyone looking for a painter.' ),
+			array( 'name' => 'Sern Boey', 'date' => '3 months ago', 'quote' => 'Afshin did a good job painting and restoring the old windows of our house. Always on time and very proficient at his job.' ),
+			array( 'name' => 'Josh Vatansever Ly', 'date' => '4 months ago', 'quote' => 'I’m very happy with the service that Afshin and his team delivered. I called on a Friday because I needed urgent assistance painting my barbershop shopfront, and they did not disappoint. They came the next day at 8am and started the work right away. Couldn’t be happier; they are also reasonably priced. Would recommend.' ),
+			array( 'name' => 'Omid Ashur', 'date' => '4 months ago', 'quote' => 'Thank you, Afshin, for doing an outstanding job. Afshin recently painted my house and truly went above and beyond. If anyone is looking to have their house painted, Afshin is the person to call.' ),
+		);
 	}
 
 	private function migrate_projects() {
@@ -853,10 +886,88 @@ class SPP_Content_Migration {
 	}
 
 	private function ensure_navigation( $pages, $services ) {
-		if ( function_exists( 'spp_install_theme_content' ) && ! wp_get_nav_menu_object( 'Superior Plus Primary' ) ) {
-			spp_install_theme_content();
+		$menu = wp_get_nav_menu_object( 'Superior Plus Primary' );
+		if ( ! $menu ) {
+			$menu_id = wp_create_nav_menu( 'Superior Plus Primary' );
+			if ( is_wp_error( $menu_id ) ) {
+				$this->report['errors'][] = 'navigation:create-menu';
+				return;
+			}
+		} else {
+			$menu_id = (int) $menu->term_id;
 		}
-		unset( $pages, $services );
+
+		$existing = wp_get_nav_menu_items( $menu_id, array( 'post_status' => 'any' ) );
+		$by_object = array();
+		foreach ( (array) $existing as $item ) {
+			$by_object[ (int) $item->object_id ][] = $item;
+		}
+		$top = array(
+			'home' => 'Home', 'services' => 'Services', 'service-areas' => 'Areas', 'gallery' => 'Gallery',
+			'about' => 'About', 'our-process' => 'Our Process', 'faqs' => 'FAQs',
+			'painting-guides' => 'Blog', 'contact' => 'Contact',
+		);
+		$services_parent = 0;
+		$position = 1;
+		foreach ( $top as $slug => $label ) {
+			if ( empty( $pages[ $slug ] ) ) {
+				continue;
+			}
+			$object_id = (int) $pages[ $slug ];
+			$item = ! empty( $by_object[ $object_id ] ) ? array_shift( $by_object[ $object_id ] ) : null;
+			$item_id = wp_update_nav_menu_item( $menu_id, $item ? $item->ID : 0, array(
+				'menu-item-object-id' => $object_id, 'menu-item-object' => 'page', 'menu-item-type' => 'post_type',
+				'menu-item-title' => $label, 'menu-item-parent-id' => 0, 'menu-item-position' => $position++, 'menu-item-status' => 'publish',
+			) );
+			if ( is_wp_error( $item_id ) ) {
+				$this->report['errors'][] = 'navigation:' . $slug;
+				continue;
+			}
+			if ( 'services' === $slug ) {
+				$services_parent = (int) $item_id;
+			}
+		}
+
+		$child_position = $position;
+		foreach ( $services as $service_id ) {
+			$item = ! empty( $by_object[ (int) $service_id ] ) ? array_shift( $by_object[ (int) $service_id ] ) : null;
+			wp_update_nav_menu_item( $menu_id, $item ? $item->ID : 0, array(
+				'menu-item-object-id' => (int) $service_id, 'menu-item-object' => 'spp_service', 'menu-item-type' => 'post_type',
+				'menu-item-parent-id' => $services_parent, 'menu-item-position' => $child_position++, 'menu-item-status' => 'publish',
+			) );
+		}
+
+		$locations = get_theme_mod( 'nav_menu_locations', array() );
+		$locations['primary'] = $menu_id;
+		$locations['footer'] = $menu_id;
+		set_theme_mod( 'nav_menu_locations', $locations );
+		$this->report['updated'][] = 'navigation:primary';
+	}
+
+	/**
+	 * Repair the legacy reset state that saved empty card controls as if an
+	 * editor had deliberately removed the approved About content. This runs
+	 * once; later intentional edits remain authoritative.
+	 *
+	 * @param array $pages Migrated page IDs keyed by route.
+	 */
+	private function repair_structural_defaults( $pages ) {
+		if ( self::STRUCTURAL_DEFAULTS_VERSION === get_option( 'spp_structural_defaults_version', '' ) ) {
+			return;
+		}
+		if ( ! empty( $pages['about'] ) ) {
+			$about_id = (int) $pages['about'];
+			$standards = get_post_meta( $about_id, 'spp_about_standards', true );
+			if ( ! is_array( $standards ) || ! array_filter( $standards ) ) {
+				$defaults = $this->page_dataset();
+				update_post_meta( $about_id, 'spp_about_standards', $defaults['about']['meta']['spp_about_standards'] );
+				foreach ( array( 'spp_about_standard_summaries', 'spp_about_standard_details', 'spp_about_standard_images' ) as $key ) {
+					delete_post_meta( $about_id, $key );
+				}
+				$this->report['updated'][] = 'page:about:recovered-cards';
+			}
+		}
+		update_option( 'spp_structural_defaults_version', self::STRUCTURAL_DEFAULTS_VERSION, false );
 	}
 
 	private function write_meta( $post_id, $source, $meta, $is_new ) {
@@ -886,7 +997,7 @@ class SPP_Content_Migration {
 
 	private function find_source( $source, $post_type ) {
 		$posts = get_posts( array(
-			'post_type' => $post_type, 'post_status' => array( 'publish', 'private', 'draft' ), 'posts_per_page' => 1,
+			'post_type' => $post_type, 'post_status' => 'any', 'posts_per_page' => 1,
 			'meta_key' => '_spp_source_key', 'meta_value' => $source,
 		) );
 		return $posts ? $posts[0] : null;

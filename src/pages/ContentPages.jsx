@@ -60,16 +60,17 @@ export function ServicesPage() {
   const fallbackHero={eyebrow:'Everything under one careful eye',title:'Painting & property services',accent:'made beautifully simple.',intro:'From complete residential and commercial painting to the preparation and repairs behind a lasting finish, our team can coordinate more of your project from one place.',image:images.services,tone:'gold'}
   const {fields,hero,seo,cta}=usePageContent('/services',fallbackHero)
   const fallbackExtras=[['Wallpaper removal','Adhesive removal and wall preparation for a smooth paint-ready finish.'],['Carpentry services','Suitable repairs or replacement for damaged trims, frames, weatherboards and timber details.'],['Caulking & gap sealing','Neat sealing around windows, doors, skirtings and suitable interior or exterior joints.'],['Tiling services','Tiling support for suitable residential and commercial improvement projects.'],['Timber restoration','Preparation and restoration for decks, fences, pergolas and weatherboards.'],['Surface preparation','Pressure washing, sanding, scraping, filling and priming.'],['Property maintenance','Ongoing support to keep residential and commercial properties in excellent condition.']]
-  const extras=pairItems(fields.additional_services,fallbackExtras)
+  const extras=pairItems(fieldValue(fields,'additional_services',undefined),fallbackExtras)
   const extraIcons=[SprayCan,Hammer,ShieldCheck,Palette,Trees,PaintRoller,ClipboardCheck]
   const fallbackServicePrinciples=[
     {title:'A complete, written scope',text:'We inspect the property, discuss the surfaces, colours and finish, then provide a detailed no-obligation quotation with preparation and pricing clearly explained.',image:asset('client/projects/residential/residential-01.webp'),alt:'Superior Plus vehicle attending a residential painting inspection'},
     {title:'Preparation selected for the surface',text:'Cleaning, pressure washing, scraping, sanding, filling, suitable repairs, gap sealing and priming are matched to the condition of the project—not treated as an afterthought.',image:asset('client/projects/plaster/plaster-07.webp'),alt:'Detailed plaster and surface preparation before painting'},
     {title:'A finish planned for daily use',text:'Paint systems and application methods are selected around exposure, expected wear and the substrate, with careful protection, inspection, touch-ups and a tidy handover.',image:asset('client/projects/commercial/commercial-06.webp'),alt:'Commercial painting work prepared for a durable professional finish'},
   ]
-  const principlePairs=pairItems(fields.service_principles,fallbackServicePrinciples.map(item=>[item.title,item.text]))
-  const managedPrincipleImages=Array.isArray(fields.service_principle_images)
-  const principleImages=(fields.service_principle_images??[]).map(item=>({src:mediaUrl(item.media),alt:item.alt})).filter(item=>item.src)
+  const principlePairs=pairItems(fieldValue(fields,'service_principles',undefined),fallbackServicePrinciples.map(item=>[item.title,item.text]))
+	const configuredPrincipleImages=fieldValue(fields,'service_principle_images',undefined)
+	const managedPrincipleImages=Array.isArray(configuredPrincipleImages)
+	const principleImages=(configuredPrincipleImages??[]).map(item=>({src:mediaUrl(item.media),alt:item.alt})).filter(item=>item.src)
   const servicePrinciples=principlePairs.map(([title,text],index)=>({title,text,image:principleImages[index]?.src??(managedPrincipleImages?'':fallbackServicePrinciples[index%fallbackServicePrinciples.length].image),alt:principleImages[index]?.alt??fallbackServicePrinciples[index%fallbackServicePrinciples.length].alt}))
   return <PageLayout title={seo?.title||'Painting & Property Services'} description={seo?.description||'Explore Superior Plus Painting’s complete painting, preparation, repair and property improvement services across Melbourne.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="CollectionPage" mainClassName="services-main">
     <PageHero {...hero}/>
@@ -91,8 +92,8 @@ export function AdditionalServicesPage() {
   const fallbackHero={eyebrow:approved.title,title:approved.headline,accent:'Coordinated with care.',intro:approvedIntro.body,image:asset('stock-main/additional-services.webp'),tone:'terracotta'}
   const {fields,hero,seo,cta}=usePageContent('/additional-services',fallbackHero)
   const fallbackServices=approvedServices.map(section=>[section.heading,section.body])
-  const services=pairItems(fields.additional_services,fallbackServices)
-  const supporting=pairItems(fields.content_sections,[[approvedNeed.heading,approvedNeed.body],[approvedQuote.heading,approvedQuote.body]])
+  const services=pairItems(fieldValue(fields,'additional_services',undefined),fallbackServices)
+  const supporting=pairItems(fieldValue(fields,'content_sections',undefined),[[approvedNeed.heading,approvedNeed.body],[approvedQuote.heading,approvedQuote.body]])
   const need=supporting[0]??['','']
   const quote=supporting[1]??[approvedQuote.heading,approvedQuote.body]
   const serviceIcons=[Hammer,ShieldCheck,Palette,Trees,SprayCan,ClipboardCheck,PaintRoller,ShieldCheck,Palette,SprayCan]
@@ -117,7 +118,7 @@ export function AboutPage() {
   const approvedClosing=approved.sections.find(section=>section.heading==="Let's Transform Your Property")
   const fallbackHero={eyebrow:approved.title,title:approved.headline,accent:'Care in every detail.',intro:approvedIntro.body,image:images.about,tone:'green'}
   const {fields,hero,seo,cta}=usePageContent('/about',fallbackHero)
-  const managedSections=pairItems(fields.content_sections,[approvedWhat,approvedQuality,approvedReasons,approvedRoots,approvedClosing].map(section=>[section.heading,[section.body,...(section.items??[])].filter(Boolean).join('\n')]))
+  const managedSections=pairItems(fieldValue(fields,'content_sections',undefined),[approvedWhat,approvedQuality,approvedReasons,approvedRoots,approvedClosing].map(section=>[section.heading,[section.body,...(section.items??[])].filter(Boolean).join('\n')]))
   const whatLines=(managedSections[0]?.[1]??'').split(/\r?\n/).map(line=>line.trim()).filter(Boolean)
   const whatTitle=managedSections[0]?.[0]??approvedWhat.heading
   const whatBody=whatLines[0]??''
@@ -130,8 +131,8 @@ export function AboutPage() {
   const closingBody=managedSections[4]?.[1]??approvedClosing.body
   const fallbackApproach=[qualityBody]
   const approach=fieldValue(fields,'about_approach_copy',undefined)!==undefined?fieldValue(fields,'about_approach_copy','').split(/\n\s*\n/).filter(Boolean):fallbackApproach
-  const standards=textItems(fields.about_standards,approvedReasons.items)
-  const editorialImage=mediaUrl(fields.about_editorial_image,asset('client/projects/new-batch/batch-097.webp'))
+  const standards=textItems(fieldValue(fields,'about_standards',undefined),approvedReasons.items)
+  const editorialImage=mediaUrl(fieldValue(fields,'about_editorial_image',undefined),asset('client/projects/new-batch/batch-097.webp'))
   const standardDetails=[
     ['Practical experience across homes and businesses.','From small residential touch-ups to complete repaints and commercial projects, each suitable job is approached with the same professional planning and pride.'],
     ['Preparation and application treated as one system.','Surfaces are inspected, repaired and prepared before premium coatings are applied with suitable brush, roller or spray techniques for even coverage and durable results.'],
@@ -142,8 +143,8 @@ export function AboutPage() {
     ['Confidence while work is underway.','The supplied company information states that Superior Plus Painting is fully insured, supporting a professional approach to work in and around client properties.'],
     ['Useful advice before any commitment.','The initial consultation is an opportunity to discuss surfaces, colours, finishes, repairs and timing before receiving a detailed written quotation.'],
   ]
-  const standardSummaries=textItems(fields.about_standard_summaries,standardDetails.map(item=>item[0]))
-  const standardDescriptions=textItems(fields.about_standard_details,standardDetails.map(item=>item[1]))
+  const standardSummaries=textItems(fieldValue(fields,'about_standard_summaries',undefined),standardDetails.map(item=>item[0]))
+  const standardDescriptions=textItems(fieldValue(fields,'about_standard_details',undefined),standardDetails.map(item=>item[1]))
   const standardImages=[
     asset('client/projects/new-batch/batch-073.webp'),
     asset('client/projects/new-batch/batch-049.webp'),
@@ -154,8 +155,9 @@ export function AboutPage() {
     asset('client/projects/new-batch/batch-096.webp'),
     asset('client/projects/new-batch/batch-145.webp'),
   ]
-  const managedStandardImages=(fields.about_standard_images??[]).map(item=>({src:mediaUrl(item.media),alt:item.alt})).filter(item=>item.src)
-  const hasManagedStandardImages=Array.isArray(fields.about_standard_images)
+  const configuredStandardImages=fieldValue(fields,'about_standard_images',undefined)
+  const managedStandardImages=(configuredStandardImages??[]).map(item=>({src:mediaUrl(item.media),alt:item.alt})).filter(item=>item.src)
+  const hasManagedStandardImages=Array.isArray(configuredStandardImages)
   const standardCards=standards.map((title,index)=>({title,brief:standardSummaries[index]??'Professional care throughout the project.',detail:standardDescriptions[index]??'Every suitable project is inspected, planned and delivered with clear communication and careful workmanship.',image:managedStandardImages[index]?.src??(hasManagedStandardImages?'':standardImages[index%standardImages.length]),alt:managedStandardImages[index]?.alt??`${title} demonstrated on a Superior Plus Painting project`}))
   const archiveImage=mediaUrl(fieldValue(fields,'about_archive_image',undefined),brandTeamArchive)
   const certificateImage=asset('client/certificate-mpa-costing-estimating.png')
@@ -178,8 +180,8 @@ export function ProcessPage() {
   const approvedReady=approved.sections.find(section=>section.heading==='Ready to Start?')
   const fallbackHero={eyebrow:approved.title,title:approved.headline,accent:'Clear from quote to handover.',intro:approvedIntro.body,image:images.process,imagePosition:'74% center',imageAlt:'Professional painter applying a fresh exterior finish to a modern residential home',tone:'gold'}
   const {fields,hero,seo,cta}=usePageContent('/our-process',fallbackHero)
-  const steps=pairItems(fields.master_process,approved.steps.map(item=>[item.heading,item.body])).map(([title,text])=>({title,text}))
-  const processSections=pairItems(fields.content_sections,[[approvedWhy.heading,approvedWhy.items.join('\n')],[approvedReady.heading,approvedReady.body]])
+  const steps=pairItems(fieldValue(fields,'master_process',undefined),approved.steps.map(item=>[item.heading,item.body])).map(([title,text])=>({title,text}))
+  const processSections=pairItems(fieldValue(fields,'content_sections',undefined),[[approvedWhy.heading,approvedWhy.items.join('\n')],[approvedReady.heading,approvedReady.body]])
   const sectionProof=processSections[0]?.[1]?.split(/\r?\n/).map(item=>item.trim()).filter(Boolean)??approvedWhy.items
   const proof=textItems(fieldValue(fields,'process_proof',undefined),sectionProof)
   const processClosing=processSections[1]??[approvedReady.heading,approvedReady.body]
@@ -191,8 +193,8 @@ export function ProcessPage() {
     ['Plan access, timing and disruption.','The proposed schedule is discussed before work begins, with commercial projects able to consider operating hours and residential projects organised around the property.'],
     ['Inspect the small details before sign-off.','Coverage, lines, trims and the completed surfaces are checked, suitable touch-ups are completed and the client can review the result during the final walkthrough.'],
   ]
-  const proofSummaries=textItems(fields.process_proof_summaries,proofDetails.map(item=>item[0]))
-  const proofDescriptions=textItems(fields.process_proof_details,proofDetails.map(item=>item[1]))
+  const proofSummaries=textItems(fieldValue(fields,'process_proof_summaries',undefined),proofDetails.map(item=>item[0]))
+  const proofDescriptions=textItems(fieldValue(fields,'process_proof_details',undefined),proofDetails.map(item=>item[1]))
   const proofImages=[
     asset('client/projects/new-batch/batch-155.webp'),
     asset('client/projects/new-batch/batch-100.webp'),
@@ -201,8 +203,9 @@ export function ProcessPage() {
     asset('client/projects/new-batch/batch-145.webp'),
     asset('client/projects/new-batch/batch-102.webp'),
   ]
-  const managedProofImages=(fields.process_proof_images??[]).map(item=>({src:mediaUrl(item.media),alt:item.alt})).filter(item=>item.src)
-  const hasManagedProofImages=Array.isArray(fields.process_proof_images)
+  const configuredProofImages=fieldValue(fields,'process_proof_images',undefined)
+  const managedProofImages=(configuredProofImages??[]).map(item=>({src:mediaUrl(item.media),alt:item.alt})).filter(item=>item.src)
+  const hasManagedProofImages=Array.isArray(configuredProofImages)
   const proofCards=proof.map((title,index)=>({title,brief:proofSummaries[index]??'A carefully managed part of the project.',detail:proofDescriptions[index]??'The project is planned and checked carefully from quotation to handover.',image:managedProofImages[index]?.src??(hasManagedProofImages?'':proofImages[index%proofImages.length]),alt:managedProofImages[index]?.alt??`${title} during a Superior Plus Painting project`}))
   const preparationStories=[
     {icon:ClipboardCheck,title:'Inspect and document',text:'The quote starts with the site, surface condition, access, repairs, colour direction and finish. This creates a practical written scope before scheduling.',image:asset('client/projects/residential/residential-10.webp'),alt:'Residential property inspection before a painting quotation'},
@@ -228,7 +231,8 @@ export function FAQsPage() {
   const {data:allFaqs}=useCollection('faqs',collectionFallbacks.faqs)
   const {data:reviewItems}=useCollection('testimonials',collectionFallbacks.testimonials)
   const {review_profile:reviewProfile}=useSiteContent()
-  const selectedFaqIds=Array.isArray(fields.faq_ids)?fields.faq_ids.map(Number):null
+  const configuredFaqIds=fieldValue(fields,'faq_ids',undefined)
+  const selectedFaqIds=Array.isArray(configuredFaqIds)?configuredFaqIds.map(Number):null
   const items=selectedFaqIds
     ? selectedFaqIds.map(id=>allFaqs.find(item=>Number(item.id)===id)).filter(Boolean)
     : (allFaqs.length?allFaqs:approved.items)
@@ -269,20 +273,21 @@ export function FAQsPage() {
     ['Interior colour transformation',asset('client/projects/new-batch/batch-130.webp')],
     ['Residential exterior transformation',asset('client/projects/new-batch/batch-159.webp')],
   ]
-  const managedComparisonBoards=Array.isArray(fields.faq_project_gallery)
-    ? fields.faq_project_gallery.map((item,index)=>[item.caption||item.alt||`Project comparison ${index+1}`,mediaUrl(item.media)]).filter(([,image])=>image)
+  const configuredProjectGallery=fieldValue(fields,'faq_project_gallery',undefined)
+  const managedComparisonBoards=Array.isArray(configuredProjectGallery)
+    ? configuredProjectGallery.map((item,index)=>[item.caption||item.alt||`Project comparison ${index+1}`,mediaUrl(item.media)]).filter(([,image])=>image)
     : comparisonBoards
   const plasterComparisons=[
     {title:'Ceiling and cornice repairs',before:asset('client/projects/plaster/plaster-01.webp'),after:asset('client/projects/plaster/plaster-03.webp')},
     {title:'Detailed plaster finishing',before:asset('client/projects/plaster/plaster-05.webp'),after:asset('client/projects/plaster/plaster-06.webp')},
   ]
-  return <PageLayout title={seo?.title||'Frequently Asked Questions'} description={seo?.description||'Answers about quotes, service areas, preparation, timing, paint systems and booking with Superior Plus Painting.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="FAQPage" schemaData={{mainEntity:items.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))}}>
+  return <PageLayout title={seo?.title||'Frequently Asked Questions'} description={seo?.description||'Answers about quotes, service areas, preparation, timing, paint systems and booking with Superior Plus Painting.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="FAQPage" mainClassName="faqs-main" schemaData={{mainEntity:items.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))}}>
     <PageHero {...hero} intro={fieldValue(fields,'faq_intro',hero.intro)}/>
     <section className="inner-section"><div className="container faq-layout"><SectionIntro eyebrow="What clients ask us" title="Everything you need" accent="to move forward."/><div className="faq-list">{items.map((item,i)=><div className={`faq-item ${open===i?'open':''}`} key={item.id||item.question}><button onClick={()=>setOpen(open===i?-1:i)} aria-expanded={open===i}><span>{String(i+1).padStart(2,'0')}</span><b>{item.question}</b><ChevronDown/></button>{open===i&&<div className="faq-answer" dangerouslySetInnerHTML={{__html:item.answer}}/>}</div>)}</div></div></section>
     <Testimonials items={reviewItems} className="faq-google-reviews" profile={reviewProfile}/>
     <section className="inner-section client-testimonial-archive"><div className="container"><SectionIntro eyebrow={approvedTestimonials.title} title={approvedTestimonials.headline} accent="" text={approvedTestimonials.sections[0].body}/><div className="client-testimonial-grid">{approvedTestimonials.reviews.map((review,index)=><Reveal key={review.heading} delay={(index%2)*.06}><article><span>★★★★★</span><h3>{review.heading.replace('★★★★★ ','')}</h3><p>“{review.body}”</p></article></Reveal>)}</div></div></section>
     <ApprovedSections sections={approvedTestimonials.sections.slice(5)} eyebrow="Testimonials & Reviews"/>
-    <section className="inner-section cream faq-transformations"><div className="container"><SectionIntro eyebrow="Before & after archive" title="The preparation." accent="The visible difference." text="A collection of client-supplied comparison boards showing exterior, fence, interior and repair work. Project results vary with the original surface, repairs and selected coating system."/><div className="comparison-board-grid">{managedComparisonBoards.map(([title,image],index)=><Reveal key={`${image}-${index}`} className={index===0||index===9?'comparison-board-featured':''} delay={(index%4)*.04}><figure><div><img src={image} alt={`${title} before and after comparison supplied by Superior Plus Painting`} loading="lazy" decoding="async"/><span>Comparison {String(index+1).padStart(2,'0')}</span></div><figcaption><Palette/><b>{title}</b><small>Client project archive</small></figcaption></figure></Reveal>)}</div>{!Array.isArray(fields.faq_project_gallery)&&<div className="plaster-comparison-grid">{plasterComparisons.map((comparison,index)=><Reveal key={comparison.title} delay={index*.08}><article><div className="plaster-pair"><figure><img src={comparison.before} alt={`${comparison.title} before repair`} loading="lazy" decoding="async"/><span>Before</span></figure><figure><img src={comparison.after} alt={`${comparison.title} after repair`} loading="lazy" decoding="async"/><span>After</span></figure></div><div><span>Repair sequence 0{index+1}</span><h3>{comparison.title}</h3><p>Preparation and finishing images retained together from the supplied plaster-repair archive.</p></div></article></Reveal>)}</div>}</div></section>
+    <section className="inner-section cream faq-transformations"><div className="container"><SectionIntro eyebrow="Before & after archive" title="The preparation." accent="The visible difference." text="A collection of client-supplied comparison boards showing exterior, fence, interior and repair work. Project results vary with the original surface, repairs and selected coating system."/><div className="comparison-board-grid">{managedComparisonBoards.map(([title,image],index)=><Reveal key={`${image}-${index}`} className={index===0||index===9?'comparison-board-featured':''} delay={(index%4)*.04}><figure><div><img src={image} alt={`${title} before and after comparison supplied by Superior Plus Painting`} loading="lazy" decoding="async"/><span>Comparison {String(index+1).padStart(2,'0')}</span></div><figcaption><Palette/><b>{title}</b><small>Client project archive</small></figcaption></figure></Reveal>)}</div>{!Array.isArray(configuredProjectGallery)&&<div className="plaster-comparison-grid">{plasterComparisons.map((comparison,index)=><Reveal key={comparison.title} delay={index*.08}><article><div className="plaster-pair"><figure><img src={comparison.before} alt={`${comparison.title} before repair`} loading="lazy" decoding="async"/><span>Before</span></figure><figure><img src={comparison.after} alt={`${comparison.title} after repair`} loading="lazy" decoding="async"/><span>After</span></figure></div><div><span>Repair sequence 0{index+1}</span><h3>{comparison.title}</h3><p>Preparation and finishing images retained together from the supplied plaster-repair archive.</p></div></article></Reveal>)}</div>}</div></section>
     <ClosingCTA title={cta?.title??'Still have a question?'} text={cta?.text??'Call our team or send an enquiry. We’ll talk through your property, surfaces and preferred timing before arranging a quote.'} label={cta?.link?.label} url={cta?.link?.url}/>
   </PageLayout>
 }
@@ -293,12 +298,12 @@ export function ContactPage() {
   const approved=approvedContent.documents.contact
   const fallbackHero={eyebrow:'Tell us what you’re planning',title:'Get in touch',accent:'and get a fresh start.',intro:'Share a few details about your property and the work you have in mind. We’ll follow up to arrange a free, no-obligation consultation and written quote.',image:images.contact,tone:'green'}
   const {fields,hero,seo}=usePageContent('/contact',fallbackHero)
-  const serviceOptions=textItems(fields.service_options,approved.service_options)
-  const propertyOptions=textItems(fields.property_options,approved.property_options)
+  const serviceOptions=textItems(fieldValue(fields,'service_options',undefined),approved.service_options)
+  const propertyOptions=textItems(fieldValue(fields,'property_options',undefined),approved.property_options)
   const defaultFormFields=[['Name','Your name'],['Phone Number','04xx xxx xxx'],['Email Address','you@email.com'],['Suburb','Your suburb'],['Property Address','Street address'],['Project Details','What would you like painted or repaired?']]
-  const formFields=pairItems(fields.contact_form_fields,defaultFormFields)
+  const formFields=pairItems(fieldValue(fields,'contact_form_fields',undefined),defaultFormFields)
   const fieldAt=index=>formFields[index]??defaultFormFields[index]
-  const steps=pairItems(fields.contact_steps,[['We review your enquiry.','We’ll confirm the service, property and best way to reach you.'],['We arrange an inspection.','Our team assesses the surfaces and discusses colours, finishes and timing.'],['You receive a written quote.','Clear scope, preparation and pricing—with no obligation to proceed.']])
+  const steps=pairItems(fieldValue(fields,'contact_steps',undefined),[['We review your enquiry.','We’ll confirm the service, property and best way to reach you.'],['We arrange an inspection.','Our team assesses the surfaces and discusses colours, finishes and timing.'],['You receive a written quote.','Clear scope, preparation and pricing—with no obligation to proceed.']])
   const mapAddress=business.street_address??'20 Rae Street, Chadstone VIC 3148, Australia'
   const mapQuery=mapAddress
   const mapUrl=business.google_maps_url??`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`

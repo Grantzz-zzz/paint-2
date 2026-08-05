@@ -40,7 +40,8 @@ const easternServiceHighlights = [
 function AreaCard({area,index}) {
   const navigate=useNavigate()
   const globalIndex=serviceAreas.findIndex(item=>item.slug===area.slug)
-  const image=mediaUrl(area.cardImage,areaCardImages[Math.max(0,globalIndex<0?index:globalIndex)%areaCardImages.length])
+  const fallbackImage=areaCardImages[Math.max(0,globalIndex<0?index:globalIndex)%areaCardImages.length]
+  const image=area.cardImageConfigured?mediaUrl(area.cardImage):mediaUrl(area.cardImage,fallbackImage)||fallbackImage
   return <Reveal delay={(index%4)*.04}><button className="area-directory-card" onClick={()=>navigate(area.path)}><span className="area-directory-photo"><img src={image} alt={`Superior Plus Painting project representing service in ${area.name}`} loading="lazy" decoding="async"/><MapPin/></span><span className="area-directory-copy"><small>{area.region}</small><h3>Painters in {area.name}</h3><p>{area.propertyTypes.slice(0,3).join(' · ')}</p></span><ArrowRight/></button></Reveal>
 }
 

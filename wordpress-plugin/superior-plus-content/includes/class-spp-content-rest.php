@@ -376,6 +376,7 @@ class SPP_Content_REST {
 				'path'               => '/service-areas/' . $post->post_name,
 				'url'                => get_permalink( $post ),
 				'card_image'         => $this->media( get_post_meta( $post->ID, 'spp_area_card_image_id', true ) ),
+				'card_image_configured' => metadata_exists( 'post', $post->ID, 'spp_area_card_image_id' ),
 				'hero'               => $this->hero( $post ),
 			);
 		}

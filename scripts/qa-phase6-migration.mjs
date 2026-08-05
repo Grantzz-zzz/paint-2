@@ -32,7 +32,7 @@ try{
   const counts=Object.fromEntries(first)
   check(counts.services===9,'expected 9 services')
   check(counts.faqs===10,'expected 10 FAQs')
-  check(counts.testimonials===4,'expected 4 testimonials')
+  check(counts.testimonials===7,'expected 7 testimonials')
   check(counts.projects===9,'expected 9 projects')
 
   await runMigration()

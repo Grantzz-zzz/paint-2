@@ -50,7 +50,7 @@ const checks = [
   [rest.includes("$configured[ $configured_index ] = $resolved_key"), 'resolved media fields retain configured-state authority'],
   [servicePage.includes('const heroTitle=page.title === undefined') && !servicePage.includes('approved?.headline||'), 'editable service hero title controls the live heading'],
   [pageLayout.includes('title===undefined?defaults.title:title') && pageLayout.includes('resolvedLabel&&destination'), 'blank page CTA fields do not restore hardcoded defaults'],
-  [contentPages.includes("textItems(fields.service_options,approved.service_options)") && contentPages.includes("pairItems(fields.contact_form_fields,defaultFormFields)"), 'contact options and field copy are connected to the editor'],
+  [contentPages.includes("textItems(fieldValue(fields,'service_options',undefined),approved.service_options)") && contentPages.includes("pairItems(fieldValue(fields,'contact_form_fields',undefined),defaultFormFields)"), 'contact options and field copy are connected to the editor'],
   [managedExtras.includes("fieldValue(fields, 'content_sections'") && managedExtras.includes("fieldValue(fields, 'secondary_image'") && managedExtras.includes("fieldValue(fields, 'related_pages'"), 'shared page controls preserve blank sections, media, and relationships'],
   [galleryPage.includes('<ManagedPageExtras') && guidePages.includes('<ManagedPageExtras') && areaPages.match(/<ManagedPageExtras/g)?.length >= 2, 'gallery, blog, and both area templates render every shared editor control'],
   [areaPages.includes('route?.closing_cta?.title') && areaPages.includes('route?.closing_cta?.link?.url'), 'service-area calls to action remain editor controlled'],

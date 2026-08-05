@@ -42,7 +42,7 @@ $cases = array(
 	array( (object) array( 'ID' => 12, 'post_type' => 'spp_service' ), 'service:residential-painting-melbourne', 'Residential Painting' ),
 	array( (object) array( 'ID' => 13, 'post_type' => 'spp_article' ), 'article:how-often-repaint-house-melbourne', 'How Often Should You Repaint Your House in Melbourne? A Complete Guide' ),
 	array( (object) array( 'ID' => 14, 'post_type' => 'spp_faq' ), 'faq:1', 'Original FAQ?' ),
-	array( (object) array( 'ID' => 15, 'post_type' => 'spp_testimonial' ), 'testimonial:1', 'Professional & Reliable' ),
+	array( (object) array( 'ID' => 15, 'post_type' => 'spp_testimonial' ), 'testimonial:1', 'chen yangyang' ),
 	array( (object) array( 'ID' => 16, 'post_type' => 'spp_project' ), 'project:roof', 'Roof Painting Showcase' ),
 );
 
