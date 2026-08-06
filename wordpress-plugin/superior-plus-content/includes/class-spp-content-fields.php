@@ -45,6 +45,7 @@ class SPP_Content_Fields {
 			'spp_hero_intro'            => array( 'label' => 'Hero introduction', 'type' => 'textarea', 'max' => 1200 ),
 			'spp_hero_image_id'         => array( 'label' => 'Hero image', 'type' => 'media', 'mime' => 'image' ),
 			'spp_hero_image_alt'        => array( 'label' => 'Hero image alt text', 'type' => 'text', 'max' => 250 ),
+			'spp_content_sections'      => array( 'label' => 'Additional flexible sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 			'spp_closing_cta_title'     => array( 'label' => 'Closing CTA title', 'type' => 'text', 'max' => 180 ),
 			'spp_closing_cta_text'      => array( 'label' => 'Closing CTA text', 'type' => 'textarea', 'max' => 600 ),
 			'spp_closing_cta_label'     => array( 'label' => 'Closing CTA button label', 'type' => 'text', 'max' => 100 ),
@@ -110,7 +111,7 @@ class SPP_Content_Fields {
 					'spp_directory_excerpt'  => array( 'label' => 'Services-directory summary', 'type' => 'textarea', 'max' => 400 ),
 					'spp_scope_title'        => array( 'label' => 'Scope heading', 'type' => 'text', 'max' => 180 ),
 					'spp_scope'              => array( 'label' => 'Scope items — one per line', 'type' => 'list', 'max_items' => 30 ),
-					'spp_document_sections'  => array( 'label' => 'Client PDF sections — Heading | Verbatim body', 'type' => 'pairs', 'max_items' => 20 ),
+					'spp_document_sections'  => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_why'                => array( 'label' => 'Process introduction', 'type' => 'textarea', 'max' => 1600 ),
 					'spp_process'            => array( 'label' => 'Process steps — one per line', 'type' => 'list', 'max_items' => 20 ),
 					'spp_benefits'           => array( 'label' => 'Benefits — one per line', 'type' => 'list', 'max_items' => 12 ),
@@ -149,12 +150,17 @@ class SPP_Content_Fields {
 		}
 
 		if ( 'spp_project' === $post->post_type ) {
-			return array(
-				'spp_project_type'     => array( 'label' => 'Project type', 'type' => 'text', 'max' => 180 ),
-				'spp_featured_media_id' => array( 'label' => 'Featured project image', 'type' => 'media', 'mime' => 'image' ),
-				'spp_object_position'  => array( 'label' => 'Image crop position (example: 50% 50%)', 'type' => 'position' ),
-				'spp_gallery_items'    => array( 'label' => 'Project gallery', 'type' => 'gallery', 'max_items' => 100 ),
-				'spp_related_page_ids' => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
+			$project_fields = $this->shared_page_fields();
+			unset( $project_fields['spp_template_key'] );
+			return array_merge(
+				$project_fields,
+				array(
+					'spp_project_type'      => array( 'label' => 'Project type', 'type' => 'text', 'max' => 180 ),
+					'spp_featured_media_id' => array( 'label' => 'Featured project image', 'type' => 'media', 'mime' => 'image' ),
+					'spp_object_position'   => array( 'label' => 'Image crop position (example: 50% 50%)', 'type' => 'position' ),
+					'spp_gallery_items'     => array( 'label' => 'Project gallery', 'type' => 'gallery', 'max_items' => 100 ),
+					'spp_related_page_ids'  => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
+				)
 			);
 		}
 
@@ -189,6 +195,7 @@ class SPP_Content_Fields {
 		switch ( $template_key ) {
 			case 'home':
 				$fields += array(
+					'spp_content_sections'        => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_home_hero_closing'       => array( 'label' => 'Optional third hero headline line', 'type' => 'text', 'max' => 180 ),
 					'spp_home_trust_points'       => array( 'label' => 'Hero trust points — one per line', 'type' => 'list', 'max_items' => 8 ),
 					'spp_home_services_eyebrow'   => array( 'label' => 'Services eyebrow', 'type' => 'text', 'max' => 120 ),
@@ -227,7 +234,7 @@ class SPP_Content_Fields {
 				break;
 			case 'about':
 				$fields += array(
-					'spp_content_sections'   => array( 'label' => 'Client-approved sections — Heading | Body', 'type' => 'pairs', 'max_items' => 20 ),
+					'spp_content_sections'   => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_about_approach_title' => array( 'label' => 'Approach heading', 'type' => 'text', 'max' => 180 ),
 					'spp_about_approach_copy'  => array( 'label' => 'Approach paragraphs', 'type' => 'textarea', 'max' => 3000 ),
 					'spp_about_editorial_image_id' => array( 'label' => 'Editorial project image', 'type' => 'media', 'mime' => 'image' ),
@@ -241,6 +248,7 @@ class SPP_Content_Fields {
 				break;
 			case 'services_directory':
 				$fields += array(
+					'spp_content_sections'   => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_services_intro'      => array( 'label' => 'Core services introduction', 'type' => 'textarea', 'max' => 900 ),
 					'spp_additional_services' => array( 'label' => 'Additional services — Heading | Description', 'type' => 'pairs', 'max_items' => 30 ),
 					'spp_service_principles' => array( 'label' => 'Professional-service cards — Heading | Description', 'type' => 'pairs', 'max_items' => 12 ),
@@ -250,14 +258,14 @@ class SPP_Content_Fields {
 			case 'additional_services':
 				$fields += array(
 					'spp_additional_services' => array( 'label' => 'Additional services — Heading | Description', 'type' => 'pairs', 'max_items' => 40 ),
-					'spp_content_sections'   => array( 'label' => 'Supporting content — Heading | Body', 'type' => 'pairs', 'max_items' => 20 ),
+					'spp_content_sections'   => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_secondary_image_id' => array( 'label' => 'Secondary image', 'type' => 'media', 'mime' => 'image' ),
 					'spp_related_page_ids'   => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
 				);
 				break;
 			case 'process':
 				$fields += array(
-					'spp_content_sections' => array( 'label' => 'Client-approved supporting sections — Heading | Body', 'type' => 'pairs', 'max_items' => 10 ),
+					'spp_content_sections' => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_master_process' => array( 'label' => 'Process steps — Heading | Description', 'type' => 'pairs', 'max_items' => 20 ),
 					'spp_process_proof'  => array( 'label' => 'Why-it-works points — one per line', 'type' => 'list', 'max_items' => 20 ),
 					'spp_process_proof_summaries' => array( 'label' => 'Why-it-works summaries — one per line', 'type' => 'list', 'max_items' => 20 ),
@@ -267,6 +275,7 @@ class SPP_Content_Fields {
 				break;
 			case 'faqs':
 				$fields += array(
+					'spp_content_sections' => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_faq_intro' => array( 'label' => 'FAQ introduction', 'type' => 'textarea', 'max' => 900 ),
 					'spp_faq_ids'   => array( 'label' => 'Displayed FAQs', 'type' => 'relationships', 'post_type' => 'spp_faq' ),
 					'spp_faq_project_gallery' => array( 'label' => 'Before-and-after / project images', 'type' => 'gallery', 'max_items' => 100 ),
@@ -274,6 +283,7 @@ class SPP_Content_Fields {
 				break;
 			case 'contact':
 				$fields += array(
+					'spp_content_sections'   => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_contact_steps'     => array( 'label' => 'What-happens-next steps — Heading | Description', 'type' => 'pairs', 'max_items' => 10 ),
 					'spp_service_options'   => array( 'label' => 'Form service options — one per line', 'type' => 'list', 'max_items' => 50 ),
 					'spp_property_options'  => array( 'label' => 'Form property options — one per line', 'type' => 'list', 'max_items' => 30 ),
@@ -286,14 +296,14 @@ class SPP_Content_Fields {
 			case 'gallery':
 			case 'blog_hub':
 				$fields += array(
-					'spp_content_sections'   => array( 'label' => 'Content sections — Heading | Body', 'type' => 'pairs', 'max_items' => 20 ),
+					'spp_content_sections'   => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_secondary_image_id' => array( 'label' => 'Secondary image', 'type' => 'media', 'mime' => 'image' ),
 					'spp_related_page_ids'  => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
 				);
 				break;
 			case 'service_areas':
 				$fields += array(
-					'spp_content_sections'   => array( 'label' => 'Content sections - Heading | Body', 'type' => 'pairs', 'max_items' => 20 ),
+					'spp_content_sections'   => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_secondary_image_id' => array( 'label' => 'Secondary image', 'type' => 'media', 'mime' => 'image' ),
 					'spp_related_page_ids'   => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
 				);
@@ -445,7 +455,7 @@ class SPP_Content_Fields {
 
 		if ( 'textarea' === $type ) {
 			echo '<textarea class="widefat" rows="5" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '">' . esc_textarea( $value ) . '</textarea>';
-		} elseif ( 'list' === $type || 'pairs' === $type ) {
+		} elseif ( in_array( $type, array( 'list', 'pairs', 'sections' ), true ) ) {
 			$this->render_structured_field( $key, $value, $type );
 		} elseif ( 'media' === $type ) {
 			$this->render_media_field( $key, $value, $definition );
@@ -476,7 +486,7 @@ class SPP_Content_Fields {
 	 *
 	 * @param string $key Meta key.
 	 * @param mixed  $value Stored rows.
-	 * @param string $type list or pairs.
+	 * @param string $type list, pairs or sections.
 	 */
 	private function render_structured_field( $key, $value, $type ) {
 		$items = is_array( $value ) ? array_values( $value ) : array();
@@ -486,8 +496,8 @@ class SPP_Content_Fields {
 				if ( ! $line ) {
 					continue;
 				}
-				$parts   = 'pairs' === $type ? array_map( 'trim', explode( '|', $line, 2 ) ) : array( $line );
-				$items[] = 'pairs' === $type
+				$parts   = in_array( $type, array( 'pairs', 'sections' ), true ) ? array_map( 'trim', explode( '|', $line, 2 ) ) : array( $line );
+				$items[] = in_array( $type, array( 'pairs', 'sections' ), true )
 					? array( 'id' => wp_generate_uuid4(), 'title' => $parts[0], 'text' => isset( $parts[1] ) ? $parts[1] : '', 'order' => $index )
 					: array( 'id' => wp_generate_uuid4(), 'text' => $parts[0], 'order' => $index );
 			}
@@ -495,8 +505,9 @@ class SPP_Content_Fields {
 		echo '<div class="spp-structured-control" data-structured-type="' . esc_attr( $type ) . '">';
 		echo '<input type="hidden" class="spp-structured-json" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( wp_json_encode( $items ) ) . '">';
 		echo '<div class="spp-structured-items"></div>';
-		echo '<button type="button" class="button button-secondary spp-add-structured-item">' . esc_html( 'pairs' === $type ? __( 'Add card', 'superior-plus-content' ) : __( 'Add item', 'superior-plus-content' ) ) . '</button>';
-		echo '<p class="description">' . esc_html__( 'Add, edit, reorder or delete individual rows. Deleting a row removes its frontend card completely.', 'superior-plus-content' ) . '</p>';
+		$button_label = 'sections' === $type ? __( 'Add section', 'superior-plus-content' ) : ( 'pairs' === $type ? __( 'Add card', 'superior-plus-content' ) : __( 'Add item', 'superior-plus-content' ) );
+		echo '<button type="button" class="button button-secondary spp-add-structured-item">' . esc_html( $button_label ) . '</button>';
+		echo '<p class="description">' . esc_html__( 'Add, edit, reorder or delete individual rows. Flexible section lists display as compact, seamless bullet points on the site.', 'superior-plus-content' ) . '</p>';
 		echo '</div>';
 	}
 
@@ -706,7 +717,7 @@ class SPP_Content_Fields {
 	 * @return bool
 	 */
 	private function is_blank_value( $value, $type ) {
-		if ( in_array( $type, array( 'list', 'pairs', 'gallery', 'services', 'relationships' ), true ) ) {
+		if ( in_array( $type, array( 'list', 'pairs', 'sections', 'gallery', 'services', 'relationships' ), true ) ) {
 			return empty( $value );
 		}
 		if ( 'media' === $type ) {
@@ -727,7 +738,7 @@ class SPP_Content_Fields {
 		$type = $definition['type'];
 		$max  = isset( $definition['max'] ) ? (int) $definition['max'] : 0;
 
-		if ( 'list' === $type || 'pairs' === $type ) {
+		if ( in_array( $type, array( 'list', 'pairs', 'sections' ), true ) ) {
 			return $this->sanitize_lines( $raw, $type, isset( $definition['max_items'] ) ? (int) $definition['max_items'] : 100, $existing );
 		}
 		if ( 'gallery' === $type ) {
@@ -779,7 +790,7 @@ class SPP_Content_Fields {
 	 * Sanitize ordered line/pair fields with stable IDs.
 	 *
 	 * @param mixed  $raw Submitted text.
-	 * @param string $type list or pairs.
+	 * @param string $type list, pairs or sections.
 	 * @param int    $limit Maximum items.
 	 * @param mixed  $existing Existing items.
 	 * @return array
@@ -793,7 +804,26 @@ class SPP_Content_Fields {
 					continue;
 				}
 				$id = ! empty( $item['id'] ) ? sanitize_key( $item['id'] ) : wp_generate_uuid4();
-				if ( 'pairs' === $type ) {
+				if ( 'sections' === $type ) {
+					$eyebrow = isset( $item['eyebrow'] ) ? sanitize_text_field( $item['eyebrow'] ) : '';
+					$title    = isset( $item['title'] ) ? sanitize_text_field( $item['title'] ) : '';
+					$text     = isset( $item['text'] ) ? sanitize_textarea_field( $item['text'] ) : '';
+					$list     = array();
+					$raw_list = isset( $item['items'] ) ? $item['items'] : array();
+					if ( is_string( $raw_list ) ) {
+						$raw_list = preg_split( '/\r\n|\r|\n/', $raw_list );
+					}
+					foreach ( array_slice( is_array( $raw_list ) ? $raw_list : array(), 0, 60 ) as $list_item ) {
+						$list_text = sanitize_text_field( is_array( $list_item ) ? ( isset( $list_item['text'] ) ? $list_item['text'] : '' ) : $list_item );
+						if ( '' !== $list_text ) {
+							$list[] = $list_text;
+						}
+					}
+					if ( '' === $eyebrow && '' === $title && '' === $text && empty( $list ) ) {
+						continue;
+					}
+					$result[] = array( 'id' => $id, 'eyebrow' => $eyebrow, 'title' => $title, 'text' => $text, 'items' => $list, 'order' => count( $result ) );
+				} elseif ( 'pairs' === $type ) {
 					$title = isset( $item['title'] ) ? sanitize_text_field( $item['title'] ) : '';
 					$text  = isset( $item['text'] ) ? sanitize_textarea_field( $item['text'] ) : '';
 					if ( '' === $title && '' === $text ) {
@@ -816,14 +846,19 @@ class SPP_Content_Fields {
 		$result   = array();
 		foreach ( $lines as $index => $line ) {
 			$id = isset( $existing[ $index ]['id'] ) ? sanitize_key( $existing[ $index ]['id'] ) : wp_generate_uuid4();
-			if ( 'pairs' === $type ) {
+			if ( in_array( $type, array( 'pairs', 'sections' ), true ) ) {
 				$parts    = array_map( 'trim', explode( '|', $line, 2 ) );
-				$result[] = array(
+				$row = array(
 					'id'    => $id,
 					'title' => sanitize_text_field( $parts[0] ),
 					'text'  => isset( $parts[1] ) ? sanitize_textarea_field( $parts[1] ) : '',
 					'order' => $index,
 				);
+				if ( 'sections' === $type ) {
+					$row['eyebrow'] = '';
+					$row['items']    = array();
+				}
+				$result[] = $row;
 			} else {
 				$result[] = array(
 					'id'    => $id,
@@ -970,6 +1005,8 @@ class SPP_Content_Fields {
 				'focalPoint'  => __( 'Image focal point (example: 50% 50%)', 'superior-plus-content' ),
 				'heading'     => __( 'Heading', 'superior-plus-content' ),
 				'description' => __( 'Description', 'superior-plus-content' ),
+				'eyebrow'     => __( 'Eyebrow (small section label)', 'superior-plus-content' ),
+				'listItems'   => __( 'List items (one item per line)', 'superior-plus-content' ),
 				'itemText'    => __( 'Item text', 'superior-plus-content' ),
 			)
 		);

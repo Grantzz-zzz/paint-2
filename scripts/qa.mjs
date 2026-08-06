@@ -198,7 +198,7 @@ try {
         })))
         check(badgeLayout.every(item=>item.width===badgeLayout[0].width&&item.height===badgeLayout[0].height), `${label}: homepage trust badges are not equally sized (${JSON.stringify(badgeLayout)})`)
         check(badgeLayout.every(item=>item.alignedWithCounter), `${label}: a homepage trust badge is not aligned inside its counter column`)
-        const descriptionSizes=await page.locator('.hero-copy>p,.section-heading>p,.commercial-top>div:last-child>p,.why-copy>p,.home-areas-copy>p,.contact-copy>p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
+        const descriptionSizes=await page.locator('.hero-copy .expandable-copy>p,.section-heading>p,.commercial-top>div:last-child>p,.why-copy>p,.home-areas-copy>p,.contact-copy>p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
         const expectedMinimum=22
         check(descriptionSizes.length===8, `${label}: expected eight primary homepage descriptions, found ${descriptionSizes.length}`)
         check(Math.min(...descriptionSizes)>=expectedMinimum, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
@@ -217,7 +217,7 @@ try {
         check(await page.getByRole('button',{name:/View all service areas/i}).count()===1, `${label}: full service-area directory link is missing`)
       }
       if(route==='/services'||route==='/gallery'){
-        const selector=route==='/services'?'.services-main .page-hero-copy>p,.services-main .inner-section-heading>p,.services-main .closing-cta p':'.gallery-main .page-hero-copy>p,.gallery-main .inner-section-heading>p,.gallery-main .closing-cta p'
+        const selector=route==='/services'?'.services-main .page-hero-copy .expandable-copy>p,.services-main .inner-section-heading>p,.services-main .closing-cta p':'.gallery-main .page-hero-copy .expandable-copy>p,.gallery-main .inner-section-heading>p,.gallery-main .closing-cta p'
         const descriptionSizes=await page.locator(selector).evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
         const expectedCount=route==='/services'?5:11
         check(descriptionSizes.length===expectedCount, `${label}: expected ${expectedCount} primary descriptions, found ${descriptionSizes.length}`)
@@ -232,7 +232,7 @@ try {
         check(!(await page.locator('.process-section .inner-section-heading').innerText()).toLowerCase().includes('why choose'),`${label}: Why Choose copy is still incorrectly attached to the process section`)
         check(await page.locator('.service-local-approved').count()===1,`${label}: approved service-area statement is missing`)
         const localArea=await page.locator('.service-local-card').evaluate(element=>({
-          paragraphSize:Number.parseFloat(getComputedStyle(element.querySelector(':scope > div:first-child > p')).fontSize),
+          paragraphSize:Number.parseFloat(getComputedStyle(element.querySelector(':scope > div:first-child .structured-section-copy > p')).fontSize),
           image:element.querySelector('img')?.getAttribute('src')||'',
         }))
         check(localArea.paragraphSize>=(viewportName==='mobile'?20:24),`${label}: service-area copy is below the prominent type target (${localArea.paragraphSize}px)`)
@@ -290,7 +290,7 @@ try {
         }
       }
       if(route!=='/'){
-        const allPrimarySizes=await page.locator('.inner-main .page-hero-copy>p,.inner-main .inner-section-heading>p,.inner-main .closing-cta p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
+        const allPrimarySizes=await page.locator('.inner-main .page-hero-copy .expandable-copy>p,.inner-main .inner-section-heading>p,.inner-main .closing-cta p').evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
         check(allPrimarySizes.length>0, `${label}: no primary page descriptions were detected`)
         check(Math.min(...allPrimarySizes)>=22, `${label}: a primary page description is below 22px (${allPrimarySizes.join(', ')}px)`)
         if(viewportName==='desktop'){
@@ -617,12 +617,17 @@ try {
             template_key: 'gallery',
             title: 'Gallery',
             seo: { title: 'Editable gallery', description: '', social_image: null },
-            hero: { eyebrow: '', title: 'Editable Gallery Hero', accent: '', intro: '', image: null },
+            hero: { eyebrow: '', title: 'Editable Gallery Hero', accent: '', intro: 'This is a deliberately long first hero paragraph used to verify that detailed client copy remains available without overwhelming the locked page design. It includes enough carefully written information to cross the disclosure threshold while retaining the exact saved wording for visitors who want to continue reading.\n\nThis second hero paragraph must remain separate and become visible after the reader chooses See more.', image: null },
             closing_cta: { title: '', text: '', link: { label: '', url: '' } },
             content: {
               fields: {
                 __configured: ['content_sections', 'secondary_image', 'related_pages'],
-                content_sections: [{ title: 'Editable gallery section', text: '<p>Visible editor-managed gallery copy.</p>' }],
+                content_sections: [{
+                  eyebrow: 'Editable eyebrow',
+                  title: 'Editable gallery section',
+                  text: '<p>Visible editor-managed gallery copy.</p><p>A separately editable second paragraph.</p>',
+                  items: ['Compact list item one', 'Compact list item two'],
+                }],
                 secondary_image: null,
                 related_pages: [{ id: 901, title: 'Editable related page', path: '/contact' }],
               },
@@ -668,7 +673,7 @@ try {
   await apiPage.locator('.page-hero-copy h1').waitFor()
   check((await apiPage.locator('.page-hero-copy h1').innerText()).trim()==='Editable Residential Hero', 'editor authority: service hero title was replaced by hardcoded approved copy')
   check(!(await apiPage.locator('.page-hero-copy .eyebrow').count()), 'editor authority: intentionally blank hero eyebrow reappeared')
-  check(!(await apiPage.locator('.page-hero-copy>p').count()), 'editor authority: intentionally blank hero introduction reappeared')
+  check(!(await apiPage.locator('.page-hero-copy .expandable-copy').count()), 'editor authority: intentionally blank hero introduction reappeared')
   check((await apiPage.locator('.scope-grid .scope-item').count())===0, 'editor authority: deleted service scope cards reappeared')
   check((await apiPage.locator('.service-process article').count())===0, 'editor authority: deleted service process steps reappeared')
   check((await apiPage.locator('.related-grid .related-card').count())===0, 'editor authority: deleted related services reappeared')
@@ -676,7 +681,15 @@ try {
   await apiPage.goto(`${origin}#/gallery`, { waitUntil: 'domcontentloaded' })
   await apiPage.locator('[data-content-state="ready"]').waitFor()
   await apiPage.getByRole('heading', { name: 'Editable gallery section' }).waitFor()
+  check(await apiPage.getByRole('button',{name:'See more'}).isVisible(), 'hero disclosure: long copy did not receive a See more control')
+  check(!(await apiPage.getByText('This second hero paragraph must remain separate and become visible after the reader chooses See more.').count()), 'hero disclosure: collapsed copy exposed the hidden second paragraph')
+  await apiPage.getByRole('button',{name:'See more'}).click()
+  check(await apiPage.getByText('This second hero paragraph must remain separate and become visible after the reader chooses See more.').isVisible(), 'hero disclosure: second paragraph did not appear after expansion')
+  check(await apiPage.getByRole('button',{name:'Show less'}).isVisible(), 'hero disclosure: Show less control did not appear after expansion')
   check(await apiPage.getByText('Visible editor-managed gallery copy.').isVisible(), 'editor authority: shared content section did not render on gallery template')
+  check(await apiPage.getByText('Editable eyebrow').isVisible(), 'flexible sections: editable eyebrow did not render')
+  check(await apiPage.getByText('A separately editable second paragraph.').isVisible(), 'flexible sections: second paragraph did not render separately')
+  check((await apiPage.locator('.managed-page-extra .structured-list li').count())===2, 'flexible sections: compact list items did not render')
   check(await apiPage.getByRole('heading', { name: 'Editable related page' }).isVisible(), 'editor authority: related-page selection did not render on gallery template')
   check((await apiPage.locator('.managed-page-extra .editorial-image').count())===0, 'editor authority: intentionally removed secondary image reappeared')
 

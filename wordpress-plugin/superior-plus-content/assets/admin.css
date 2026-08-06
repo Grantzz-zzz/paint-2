@@ -17,6 +17,7 @@
 .spp-field-textarea,
 .spp-field-list,
 .spp-field-pairs,
+.spp-field-sections,
 .spp-field-gallery,
 .spp-field-services,
 .spp-field-relationships {
@@ -81,6 +82,19 @@
 .spp-structured-copy {
   display: grid;
   gap: 8px;
+}
+
+.spp-field-sections .spp-structured-item {
+  border-left: 4px solid #8f1f1f;
+  padding: 16px;
+}
+
+.spp-field-sections .spp-structured-copy {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.spp-field-sections .spp-structured-copy label:nth-child(n + 3) {
+  grid-column: 1 / -1;
 }
 
 .spp-structured-copy label {
@@ -163,6 +177,14 @@
 
   .spp-structured-item {
     grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .spp-field-sections .spp-structured-copy {
+    grid-template-columns: 1fr;
+  }
+
+  .spp-field-sections .spp-structured-copy label {
+    grid-column: 1;
   }
 
   .spp-structured-actions {

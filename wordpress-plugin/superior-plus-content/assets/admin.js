@@ -55,7 +55,24 @@
       const row = $('<div>', { class: 'spp-structured-item', 'data-index': index })
       $('<strong>', { class: 'spp-structured-number', text: `${index + 1}.` }).appendTo(row)
       const fields = $('<div>', { class: 'spp-structured-copy' }).appendTo(row)
-      if (type === 'pairs') {
+      if (type === 'sections') {
+        $('<label>', { text: sppContentAdmin.eyebrow }).append(
+          $('<input>', { type: 'text', class: 'widefat spp-structured-eyebrow', value: item.eyebrow || '' })
+        ).appendTo(fields)
+        $('<label>', { text: sppContentAdmin.heading }).append(
+          $('<input>', { type: 'text', class: 'widefat spp-structured-title', value: item.title || '' })
+        ).appendTo(fields)
+        $('<label>', { text: sppContentAdmin.description }).append(
+          $('<textarea>', { class: 'widefat spp-structured-text', rows: 6, text: item.text || '' })
+        ).appendTo(fields)
+        $('<label>', { text: sppContentAdmin.listItems }).append(
+          $('<textarea>', {
+            class: 'widefat spp-structured-list',
+            rows: 5,
+            text: Array.isArray(item.items) ? item.items.map(entry => typeof entry === 'string' ? entry : entry?.text || '').filter(Boolean).join('\n') : (item.items || '')
+          })
+        ).appendTo(fields)
+      } else if (type === 'pairs') {
         $('<label>', { text: sppContentAdmin.heading }).append(
           $('<input>', { type: 'text', class: 'widefat spp-structured-title', value: item.title || '' })
         ).appendTo(fields)
@@ -86,20 +103,25 @@
     const items = readStructured(control)
     items.push({
       id: window.crypto?.randomUUID ? window.crypto.randomUUID() : `row-${Date.now()}-${items.length}`,
-      ...(type === 'pairs' ? { title: '', text: '' } : { text: '' }),
+      ...(type === 'sections' ? { eyebrow: '', title: '', text: '', items: [] } : type === 'pairs' ? { title: '', text: '' } : { text: '' }),
       order: items.length
     })
     writeStructured(control, items)
     control.find('.spp-structured-item').last().find('input, textarea').first().trigger('focus')
   })
 
-  $(document).on('input', '.spp-structured-title, .spp-structured-text', function () {
+  $(document).on('input', '.spp-structured-eyebrow, .spp-structured-title, .spp-structured-text, .spp-structured-list', function () {
     const control = $(this).closest('.spp-structured-control')
     const index = Number($(this).closest('.spp-structured-item').data('index'))
     const items = readStructured(control)
     if (!items[index]) return
-    items[index].title = control.find(`.spp-structured-item[data-index="${index}"] .spp-structured-title`).val() || ''
-    items[index].text = control.find(`.spp-structured-item[data-index="${index}"] .spp-structured-text`).val() || ''
+    const row = control.find(`.spp-structured-item[data-index="${index}"]`)
+    if (control.data('structured-type') !== 'list') items[index].title = row.find('.spp-structured-title').val() || ''
+    items[index].text = row.find('.spp-structured-text').val() || ''
+    if (control.data('structured-type') === 'sections') {
+      items[index].eyebrow = row.find('.spp-structured-eyebrow').val() || ''
+      items[index].items = String(row.find('.spp-structured-list').val() || '').split(/\r?\n/).map(value => value.trim()).filter(Boolean)
+    }
     control.find('.spp-structured-json').val(JSON.stringify(items))
   })
 

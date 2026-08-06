@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.5.9
+Stable tag: 2.6.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -38,6 +38,12 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.6.0 =
+* Add flexible sections with editable eyebrows, headings, multi-paragraph descriptions and compact list items across every page type.
+* Upgrade existing service and generic content sections without discarding their saved heading/body data.
+* Add accessible See more / Show less controls for long hero descriptions.
+* Preserve intentional blank values and untouched localhost defaults under the existing safe-save rules.
 
 = 2.5.9 =
 * Prevent untouched empty editor controls from hiding original page sections when another field is saved.

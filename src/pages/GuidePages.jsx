@@ -10,6 +10,7 @@ import ManagedPageExtras from '../components/ManagedPageExtras'
 import { asset } from '../utils/assets'
 import NotFoundPage from './NotFoundPage'
 import approvedBlogData from '../data/clientApprovedBlogs.json'
+import { StructuredSectionCopy, structuredSections } from '../components/StructuredContent'
 
 const emptyArticles=[]
 const publicSourceLabel='Superior Plus Painting guide'
@@ -144,6 +145,7 @@ export function PaintingGuidePage() {
   const scrollToSection=index=>document.getElementById(`guide-section-${index+1}`)?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})
   const takeaways=cms?.takeaways||article.takeaways||[]
   const references=cms?.references||article.references||[]
+  const flexibleSections=structuredSections(cms?.content_sections,[])
   return <PageLayout mainClassName="blog-main blog-article-main" title={route?.seo?.title??article.title} description={route?.seo?.description??article.excerpt} image={mediaUrl(route?.seo?.social_image,heroImage)} pageType="BlogPosting" schemaData={{headline:article.title,datePublished:article.published,dateModified:article.modified??article.published,keywords:article.seo_keywords?.join(', '),author:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},publisher:{'@type':'Organization',name:'Superior Plus Painting & Remodeling'},about:'Professional painting in Melbourne'}}>
     <PageHero eyebrow={cms?.eyebrow??article.eyebrow} title={cms?.hero?.title??article.title} accent={cms?.hero?.accent??'A practical Melbourne article.'} intro={cms?.hero?.intro??article.excerpt} image={heroImage} imageAlt={cms?.hero?.image?.alt??article.imageAlt} tone="green"/>
     <TrustStrip/>
@@ -155,6 +157,7 @@ export function PaintingGuidePage() {
         {takeaways.length>0&&<section className="guide-takeaways"><PaintRoller/><h2>Key takeaways</h2>{takeaways.map(item=><p key={item}><Check/>{item}</p>)}</section>}
       </div>
     </div></article>
+    {flexibleSections.map((section,index)=><section className={`inner-section managed-page-extra ${index%2?'cream':''}`} key={section.id}><div className="container"><Reveal><StructuredSectionCopy section={section} defaultEyebrow="More from this guide"/></Reveal></div></section>)}
     {moreArticles.length>0&&<section className="inner-section blog-more"><div className="container"><SectionIntro eyebrow="Continue reading" title="Choose another" accent="painting article." text="Keep exploring without returning to the main Blog page. Select any article below to open it directly."/><div className="guide-grid">{moreArticles.map((guide,index)=><GuideCard guide={guide} index={index+1} key={guide.slug}/>)}</div></div></section>}
     {related.length>0&&<section className="inner-section cream"><div className="container"><SectionIntro eyebrow="Relevant services" title="Turn the advice" accent="into a clear project plan."/><div className="related-grid">{related.map(service=><button className={`related-card tone-${service.tone||'green'}`} key={service.slug} onClick={()=>navigate(`/services/${service.slug}`)}><span>Superior Plus service</span><h3>{service.title}</h3><p>{service.short}</p><ArrowRight/></button>)}</div></div></section>}
     <ClosingCTA title={route?.closing_cta?.title??'Would you like advice for your property?'} text={route?.closing_cta?.text??'Arrange a free consultation and written quote based on the actual surfaces, preparation and finish your project needs.'} label={route?.closing_cta?.link?.label} url={route?.closing_cta?.link?.url}/>

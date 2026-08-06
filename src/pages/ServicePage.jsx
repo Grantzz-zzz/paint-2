@@ -6,9 +6,10 @@ import { Reveal, Divider } from '../App'
 import ProjectGallery from '../components/ProjectGallery'
 import { serviceMediaCategory } from '../data/projectMedia'
 import NotFoundPage from './NotFoundPage'
-import { mediaUrl, mergeContent, pairItems, textItems, useRouteContent, useSiteContent } from '../content/ContentProvider'
+import { mediaUrl, mergeContent, textItems, useRouteContent, useSiteContent } from '../content/ContentProvider'
 import approvedContent from '../data/clientApprovedContent.json'
 import { asset } from '../utils/assets'
+import { CompactList, StructuredSectionCopy, structuredSections } from '../components/StructuredContent'
 
 const scopeIcons=[PaintRoller,Brush,Palette,SprayCan,Hammer]
 const serviceAreaImage=asset('client/projects/exterior/exterior-07.webp')
@@ -81,12 +82,15 @@ export default function ServicePage() {
     benefits:Array.isArray(cms.benefits)?cms.benefits.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.benefits,
     gallery:Array.isArray(cms.gallery)?cms.gallery:mergedPage.gallery,
   }:mergedPage
-  const narrative=cms?.copy_version==='pdf-verbatim-2026-08-01'&&Array.isArray(cms.document_sections)
-    ?pairItems(cms.document_sections).map(([heading,text])=>({heading,paragraphs:[text]}))
-    :approvedNarrative
-  const whySection=narrative.find(section=>/^(Why Choose|Why Businesses)/i.test(section.heading))
-  const benefitSection=narrative.find(section=>/^Benefits of/i.test(section.heading))
-  const areasSection=narrative.find(section=>section.heading==='Areas We Service')
+  const narrative=[
+    ...(cms?.copy_version==='pdf-verbatim-2026-08-01'&&Array.isArray(cms.document_sections)
+      ?structuredSections(cms.document_sections)
+      :structuredSections(approvedNarrative)),
+    ...structuredSections(cms?.content_sections,[]),
+  ]
+  const whySection=narrative.find(section=>/^(Why Choose|Why Businesses)/i.test(section.title))
+  const benefitSection=narrative.find(section=>/^Benefits of/i.test(section.title))
+  const areasSection=narrative.find(section=>section.title==='Areas We Service')
   const storySections=narrative.filter(section=>section!==whySection&&section!==benefitSection&&section!==areasSection)
   const storyImages=(serviceStoryImages[slug]||[]).map(asset)
   const sectionText=section=>(section?.paragraphs||[]).join(' ')
@@ -115,13 +119,13 @@ export default function ServicePage() {
       <div className="service-process">{page.process.map((item,i)=><Reveal key={item} delay={i*.06}><article><b>{String(i+1).padStart(2,'0')}</b><span>{item}</span>{i<page.process.length-1&&<i/>}</article></Reveal>)}</div>
     </div></section>
 
-    <ProjectGallery category={serviceMediaCategory[slug]} items={page.gallery} heading={whySection?{eyebrow:"Why Superior Plus",title:whySection.heading,accent:"Proven through our work.",text:sectionText(whySection)}:undefined}/>
+    <ProjectGallery category={serviceMediaCategory[slug]} items={page.gallery} heading={whySection?{eyebrow:whySection.eyebrow||"Why Superior Plus",title:whySection.title,accent:"Proven through our work.",text:sectionText(whySection)}:undefined}/>
 
-    {storySections.map((section,index)=><section className={`inner-section service-approved-story ${index%2?'cream':''}`} key={section.heading}><div className="container service-story-grid"><Reveal className="service-story-photo"><img src={storyImages[index%storyImages.length]||image} alt={`${section.heading} for ${page.title}`} loading="lazy" decoding="async"/><span>Superior Plus project</span></Reveal><Reveal className="service-story-copy" delay={.1}><span className="service-story-icon">{index%2?<Palette/>:<PaintRoller/>}</span><SectionIntro eyebrow="Service information" title={section.heading} accent=""/>{section.paragraphs?.map(paragraph=><p key={paragraph}>{paragraph}</p>)}</Reveal></div></section>)}
+    {storySections.map((section,index)=><section className={`inner-section service-approved-story ${index%2?'cream':''}`} key={section.id}><div className="container service-story-grid"><Reveal className="service-story-photo"><img src={storyImages[index%storyImages.length]||image} alt={`${section.title} for ${page.title}`} loading="lazy" decoding="async"/><span>Superior Plus project</span></Reveal><Reveal className="service-story-copy" delay={.1}><span className="service-story-icon">{index%2?<Palette/>:<PaintRoller/>}</span><StructuredSectionCopy section={section} defaultEyebrow="Service information"/></Reveal></div></section>)}
 
-    <section className={`benefit-section benefit-${page.tone}`}><div className="container benefit-grid"><Reveal><PaintRoller/><h2>{labels.benefits_title??benefitSection?.heading??"Why this work"}<br/><em>{labels.benefits_accent??"makes a difference."}</em></h2>{sectionText(benefitSection)&&<p className="benefit-intro">{sectionText(benefitSection)}</p>}</Reveal><div className="benefit-list">{(page.benefits||[]).map((item,i)=><Reveal key={item} delay={i*.06}><div><span>0{i+1}</span><h3>{item}</h3></div></Reveal>)}</div></div><Divider color="#fff" variant="drip"/></section>
+    <section className={`benefit-section benefit-${page.tone}`}><div className="container benefit-grid"><Reveal><PaintRoller/><h2>{labels.benefits_title??benefitSection?.title??"Why this work"}<br/><em>{labels.benefits_accent??"makes a difference."}</em></h2>{sectionText(benefitSection)&&<p className="benefit-intro">{sectionText(benefitSection)}</p>}<CompactList items={benefitSection?.items}/></Reveal><div className="benefit-list">{(page.benefits||[]).map((item,i)=><Reveal key={item} delay={i*.06}><div><span>0{i+1}</span><h3>{item}</h3></div></Reveal>)}</div></div><Divider color="#fff" variant="drip"/></section>
 
-    {areasSection&&<section className="inner-section service-local-approved"><div className="container service-local-card"><Reveal><span className="service-story-icon"><Check/></span><SectionIntro eyebrow="Melbourne service coverage" title={areasSection.heading} accent=""/><p>{sectionText(areasSection)}</p></Reveal><Reveal className="service-local-photo" delay={.1}><img src={serviceAreaImage} alt="Completed Superior Plus Painting exterior project in Melbourne" loading="lazy" decoding="async"/><span>Painting across Melbourne</span></Reveal></div></section>}
+    {areasSection&&<section className="inner-section service-local-approved"><div className="container service-local-card"><Reveal><span className="service-story-icon"><Check/></span><StructuredSectionCopy section={areasSection} defaultEyebrow="Melbourne service coverage"/></Reveal><Reveal className="service-local-photo" delay={.1}><img src={serviceAreaImage} alt="Completed Superior Plus Painting exterior project in Melbourne" loading="lazy" decoding="async"/><span>Painting across Melbourne</span></Reveal></div></section>}
 
     <section className="inner-section related-section"><div className="container"><SectionIntro eyebrow={labels.related_eyebrow??"Keep exploring"} title={labels.related_title??"Related services"} accent={labels.related_accent??"for the whole property."}/><div className="related-grid">{related.map(service=>{const tone=service.tone||serviceList.find(item=>item.slug===service.slug)?.tone||'cream';return <button key={service.slug} className={`related-card tone-${tone}`} onClick={()=>navigate(`/services/${service.slug}`)}><span>Superior Plus</span><h3>{service.title}</h3><p>{service.short}</p><ArrowRight/></button>})}</div></div></section>
 

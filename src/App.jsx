@@ -14,6 +14,7 @@ import { groupManagedServiceAreas, serviceAreaBySlug, serviceAreas } from './dat
 import { paintingGuides } from './data/paintingGuides'
 import { asset, publicRouteUrl, siteUrl } from './utils/assets'
 import { fieldValue, mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
+import { ExpandableCopy, StructuredSectionCopy, structuredSections } from './components/StructuredContent'
 
 const emptyArticles=[]
 
@@ -189,7 +190,7 @@ function Hero({hero,fields}) {
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">
         {hero?.eyebrow!==''&&<Eyebrow>{hero?.eyebrow??'Melbourne painting team'}</Eyebrow>}
         <h1 className="hero-title-seo">{title}<br/>{' '}<em>{accent}</em>{closing&&<><br/>{' '}{closing}</>}</h1>
-        {hero?.intro!==''&&<p>{hero?.intro??'Professional residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and a finish made to last.'}</p>}
+        {hero?.intro!==''&&<ExpandableCopy text={hero?.intro??'Professional residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and a finish made to last.'} className="home-hero-intro"/>}
         <div className="hero-buttons"><button className="btn" onClick={() => navigate('/contact')}>Get a free quote <ArrowRight size={18}/></button><button className="text-link" onClick={() => scrollTo('projects')}>See our work <span>↘</span></button></div>
         <div className="hero-trust">{trustPoints.map(item=><span key={item}><Check/> {item}</span>)}</div>
       </motion.div>
@@ -575,6 +576,7 @@ export default function App() {
   const {data:testimonialItems}=useCollection('testimonials',testimonials,{preserveEmpty:true})
   const {data:articleItems}=useCollection('articles',emptyArticles,{preserveEmpty:true})
   const fields=homeRoute?.content?.fields||{}
+  const flexibleSections=structuredSections(fieldValue(fields,'content_sections',undefined),[])
   const seo=homeRoute?.seo
   const homeHero=homeRoute?{
     eyebrow:fieldValue(fields,'eyebrow','Melbourne painting team'),
@@ -599,7 +601,7 @@ export default function App() {
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
     return()=>ctx.revert()
   },[seo?.description,seo?.canonical_url,seo?.title,business])
-  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} badge={footer.trust_badge} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview fields={fields} items={articleItems}/><Areas fields={fields}/><Testimonials items={displayedTestimonials} profile={reviewProfile}/><Contact fields={fields} business={business}/><HomeLocation business={business}/></main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} badge={footer.trust_badge} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview fields={fields} items={articleItems}/><Areas fields={fields}/>{flexibleSections.map((section,index)=><section className={`inner-section managed-page-extra ${index%2?'cream':''}`} key={section.id}><div className="container"><Reveal><StructuredSectionCopy section={section} defaultEyebrow="More from Superior Plus"/></Reveal></div></section>)}<Testimonials items={displayedTestimonials} profile={reviewProfile}/><Contact fields={fields} business={business}/><HomeLocation business={business}/></main><Footer/></>
 }
 
 export { Navbar, Footer, Reveal, Eyebrow, Divider }

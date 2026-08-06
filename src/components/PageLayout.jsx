@@ -6,6 +6,7 @@ import { Navbar, Footer, Reveal, Eyebrow, Divider } from '../App'
 import { suburbs, testimonials } from '../data/siteData'
 import { asset, publicRouteUrl, siteUrl } from '../utils/assets'
 import { collectionFallbacks, mediaUrl, useCollection, useSiteContent } from '../content/ContentProvider'
+import { ExpandableCopy } from './StructuredContent'
 
 function upsertMeta(selector, attributes) {
   let element = document.head.querySelector(selector)
@@ -86,7 +87,7 @@ export function PageHero({ eyebrow, title, accent, intro, image, tone = 'maroon'
       >
         {eyebrow&&<Eyebrow>{eyebrow}</Eyebrow>}
         {title&&<h1>{title}{accent&&<><br/><em>{accent}</em></>}</h1>}
-        {intro&&<p>{intro}</p>}
+        {intro&&<ExpandableCopy text={intro} className="page-hero-intro"/>}
         <div className="page-hero-actions">
           <QuoteButton/>
           <button type="button" className="text-link" onClick={()=>navigate('/gallery')}>See our work <span aria-hidden="true">↘</span></button>

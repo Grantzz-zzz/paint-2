@@ -661,6 +661,7 @@ class SPP_Content_REST {
 			'why'         => get_post_meta( $post->ID, 'spp_why', true ),
 			'benefits'    => $this->ordered_items( get_post_meta( $post->ID, 'spp_benefits', true ) ),
 			'document_sections' => get_post_meta( $post->ID, 'spp_document_sections', true ),
+			'content_sections'  => get_post_meta( $post->ID, 'spp_content_sections', true ),
 			'related'     => $related,
 			'gallery'     => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
 			'section_labels' => $section_labels,
@@ -709,6 +710,7 @@ class SPP_Content_REST {
 			'takeaways'        => $this->text_values( get_post_meta( $post->ID, 'spp_article_takeaways', true ) ),
 			'references'       => $this->reference_values( get_post_meta( $post->ID, 'spp_article_references', true ) ),
 			'related_services' => $related,
+			'content_sections' => get_post_meta( $post->ID, 'spp_content_sections', true ),
 		);
 		return $data;
 	}
@@ -742,6 +744,7 @@ class SPP_Content_REST {
 			),
 			'related_page_ids' => array_map( 'absint', (array) get_post_meta( $post->ID, 'spp_related_page_ids', true ) ),
 			'related_pages'    => $this->related_pages( get_post_meta( $post->ID, 'spp_related_page_ids', true ) ),
+			'content_sections' => get_post_meta( $post->ID, 'spp_content_sections', true ),
 		);
 	}
 

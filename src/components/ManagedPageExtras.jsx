@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { Divider, Reveal } from '../App'
-import { fieldValue, mediaUrl, pairItems } from '../content/ContentProvider'
+import { fieldValue, mediaUrl } from '../content/ContentProvider'
 import { SectionIntro } from './PageLayout'
+import { StructuredSectionCopy, structuredSections } from './StructuredContent'
 
 /**
  * Shared renderer for the generic controls exposed by the WordPress editor.
@@ -14,11 +15,10 @@ import { SectionIntro } from './PageLayout'
 export default function ManagedPageExtras({
   fields = {},
   eyebrow = 'More from Superior Plus',
-  accent = 'planned around your property.',
   imageAlt = 'Superior Plus Painting project in Melbourne',
 }) {
   const navigate = useNavigate()
-  const sections = pairItems(fieldValue(fields, 'content_sections', undefined), [])
+  const sections = structuredSections(fieldValue(fields, 'content_sections', undefined), [])
   const secondaryMedia = fieldValue(fields, 'secondary_image', undefined)
   const secondaryImage = mediaUrl(secondaryMedia)
   const relatedPages = fieldValue(fields, 'related_pages', undefined)
@@ -27,14 +27,13 @@ export default function ManagedPageExtras({
   if (!sections.length && !secondaryImage && !related.length) return null
 
   return <>
-    {sections.map(([title, body], index) => <section
+    {sections.map((section, index) => <section
       className={`inner-section managed-page-extra ${index % 2 ? 'cream' : ''}`}
-      key={`${title}-${index}`}
+      key={section.id}
     >
       <div className={`container ${index === 0 && secondaryImage ? 'editorial-grid' : ''}`}>
         <Reveal>
-          <SectionIntro eyebrow={eyebrow} title={title} accent={accent}/>
-          {body && <div className="managed-page-extra-copy" dangerouslySetInnerHTML={{ __html: body }}/>}
+          <StructuredSectionCopy section={section} defaultEyebrow={eyebrow}/>
         </Reveal>
         {index === 0 && secondaryImage && <Reveal className="editorial-image" delay={.1}>
           <img
