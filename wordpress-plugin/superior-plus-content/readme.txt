@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.6.0
+Stable tag: 2.7.0
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -27,6 +27,10 @@ It provides:
 
 Elementor and ACF are not required. Deactivation or uninstall does not delete content.
 
+Flexible sections support optional project images, image focal points,
+text-only/image-left/image-right/background-image layouts and locked white,
+cream, green, maroon and gold brand treatments.
+
 == Installation ==
 
 1. Install on staging only.
@@ -38,6 +42,19 @@ Elementor and ACF are not required. Deactivation or uninstall does not delete co
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.7.0 =
+* Make the homepage process-strip label, description and ordered steps editable.
+* Add global local-service section copy, visibility and placement controls.
+* Reuse the ordered Service areas list for add, edit, remove and move controls without duplicating location data.
+
+= 2.6.2 =
+* Add responsive per-section images, layouts and brand-colour presets.
+* Add a safe About standards-section visibility control that defaults to visible.
+* Preserve existing text-only flexible sections without migration or content loss.
+
+= 2.6.1 =
+* Fix configured-field detection so an editor can intentionally clear previously saved text without affecting untouched default content.
 
 = 2.6.0 =
 * Add flexible sections with editable eyebrows, headings, multi-paragraph descriptions and compact list items across every page type.

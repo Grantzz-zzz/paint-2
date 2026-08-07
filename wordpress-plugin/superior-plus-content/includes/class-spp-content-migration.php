@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.6.0';
+	const VERSION = '2.7.0';
 	const APPROVED_HERO_VERSION = 'aesthetic-main-heroes-2026-08-02';
 	const STRUCTURAL_DEFAULTS_VERSION = 'restore-card-content-2026-08-05';
 
@@ -297,6 +297,12 @@ class SPP_Content_Migration {
 				array( 'title' => '500+', 'text' => 'Commercial projects completed' ),
 			),
 			'spp_trust_items' => array( 'Fully insured', 'Free written quotes', 'Careful preparation', 'Clean, tidy sites' ),
+			'spp_location_band_enabled' => 1,
+			'spp_location_band_after_coloured' => 0,
+			'spp_location_band_eyebrow' => 'Melbourne-wide',
+			'spp_location_band_title' => 'Local service,',
+			'spp_location_band_accent' => 'carefully delivered.',
+			'spp_location_band_text' => 'A selection of Melbourne suburbs regularly serviced for this type of work.',
 			'spp_service_areas' => spp_suburbs(),
 			'spp_default_cta_title' => 'Ready for a fresh start?',
 			'spp_default_cta_text' => 'Tell us about your property and we’ll arrange a free, no-obligation quotation.',
@@ -1190,13 +1196,16 @@ class SPP_Content_Migration {
 					'spp_eyebrow' => 'Melbourne painters who care', 'spp_hero_title' => 'Professional painting services', 'spp_accent' => 'in Melbourne',
 					'spp_home_hero_closing' => '',
 					'spp_hero_intro' => 'Premium residential and commercial painting, delivered with careful preparation, honest advice and a finish we’re proud to put our name on.',
-					'spp_home_trust_points' => array( 'Fully insured', 'Free colour advice', 'Melbourne-wide' ),
+					'spp_home_trust_points' => array( 'Fully insured', 'Free written quotes', 'Careful preparation' ),
 					'spp_home_services_eyebrow' => 'What we paint', 'spp_home_services_title' => 'Every surface deserves', 'spp_home_services_accent' => 'the right finish.',
 					'spp_home_services_intro' => 'From one carefully refreshed room to a complete commercial transformation, our experienced team brings the same care to every job.',
 					'spp_home_commercial_title' => 'We keep your business', 'spp_home_commercial_accent' => 'looking its best.',
 					'spp_home_commercial_text' => 'Professional finishes, clear communication and scheduling built around your operation—from a single office to multi-site projects.',
 					'spp_home_projects_heading' => 'Colour changes',
 					'spp_home_commercial_tags' => array( 'Offices', 'Retail', 'Warehouses', 'Medical', 'Education', 'Hospitality', 'Strata' ),
+					'spp_home_process_label' => 'Our process',
+					'spp_home_process_intro' => 'Simple, transparent, stress-free.',
+					'spp_home_process_steps' => array( 'Inspect & quote', 'Plan & schedule', 'Prep & prime', 'Paint & perfect', 'Final walkthrough' ),
 					'spp_home_projects_accent' => 'everything.',
 					'spp_home_projects_intro' => 'Explore the care behind every edge, every surface and every final coat. Hover a project to reveal the colour beneath.',
 					'spp_home_why_title' => 'Good painting starts', 'spp_home_why_accent' => 'before the first coat.',

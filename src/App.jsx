@@ -13,8 +13,8 @@ import { roofHomepageCardImage } from './data/newBatchMedia'
 import { groupManagedServiceAreas, serviceAreaBySlug, serviceAreas } from './data/serviceAreas'
 import { paintingGuides } from './data/paintingGuides'
 import { asset, publicRouteUrl, siteUrl } from './utils/assets'
-import { fieldValue, mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
-import { ExpandableCopy, StructuredSectionCopy, structuredSections } from './components/StructuredContent'
+import { booleanValue, fieldValue, mediaUrl, pairItems, textItems, toAppPath, useCollection, useEnquirySubmission, useRouteContent, useSiteContent } from './content/ContentProvider'
+import { ExpandableCopy, ManagedContentSection, StructuredSectionCopy, structuredSections } from './components/StructuredContent'
 
 const emptyArticles=[]
 
@@ -179,7 +179,10 @@ function Navbar() {
 function Hero({hero,fields}) {
   const navigate = useNavigate()
   const image=mediaUrl(hero?.image,asset('client/projects/brand/home-hero-ai-v2.webp'))
-  const trustPoints=textItems(fieldValue(fields,'home_trust_points',undefined),['Fully insured','Free colour advice','Melbourne-wide'])
+  const defaultTrustPoints=['Fully insured','Free written quotes','Careful preparation']
+  const configuredTrustPoints=textItems(fieldValue(fields,'home_trust_points',undefined),[])
+  const showTrustPoints=booleanValue(fieldValue(fields,'home_trust_points_enabled',true),true)
+  const trustPoints=showTrustPoints?(configuredTrustPoints.length?configuredTrustPoints:defaultTrustPoints):[]
   const title=hero?.title??'Professional painting services'
   const accent=hero?.accent??'in Melbourne'
   const closing=fieldValue(fields,'home_hero_closing','')
@@ -190,7 +193,7 @@ function Hero({hero,fields}) {
       <motion.div initial={{ opacity:0, x:-40 }} animate={{ opacity:1, x:0 }} transition={{ duration:.8 }} className="hero-copy">
         {hero?.eyebrow!==''&&<Eyebrow>{hero?.eyebrow??'Melbourne painting team'}</Eyebrow>}
         <h1 className="hero-title-seo">{title}<br/>{' '}<em>{accent}</em>{closing&&<><br/>{' '}{closing}</>}</h1>
-        {hero?.intro!==''&&<ExpandableCopy text={hero?.intro??'Professional residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and a finish made to last.'} className="home-hero-intro"/>}
+        {hero?.intro!==''&&<ExpandableCopy text={hero?.intro??'Professional residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and a finish made to last.'} maxCharacters={220} className="home-hero-intro"/>}
         <div className="hero-buttons"><button className="btn" onClick={() => navigate('/contact')}>Get a free quote <ArrowRight size={18}/></button><button className="text-link" onClick={() => scrollTo('projects')}>See our work <span>↘</span></button></div>
         <div className="hero-trust">{trustPoints.map(item=><span key={item}><Check/> {item}</span>)}</div>
       </motion.div>
@@ -266,10 +269,13 @@ function Services({fields,serviceItems}) {
 function Commercial({fields}) {
   const commercialTags=textItems(fieldValue(fields,'home_commercial_tags',undefined),['Offices','Retail','Warehouses','Medical','Education','Hospitality','Strata'])
   const commercialImage=mediaUrl(fieldValue(fields,'home_commercial_image',undefined))
+  const processSteps=textItems(fieldValue(fields,'home_process_steps',undefined),process.map(([,title])=>title))
+  const processLabel=fieldValue(fields,'home_process_label','Our process')
+  const processIntro=fieldValue(fields,'home_process_intro','Simple, transparent, stress-free.')
   return <section id="commercial" className="commercial section-track">
     <div className="texture"/>{commercialImage&&<div className="commercial-feature-image" aria-hidden="true"><img src={commercialImage} alt="" loading="lazy" decoding="async"/></div>}<div className="container">
       <div className="commercial-top"><Reveal><Eyebrow light>Commercial specialists</Eyebrow><h2>{fields?.home_commercial_title??'We keep your business'}{(fields?.home_commercial_accent??'looking its best.')&&<><br/><em>{fields?.home_commercial_accent??'looking its best.'}</em></>}</h2></Reveal><Reveal delay={.15}>{fields?.home_commercial_text!==''&&<p>{fields?.home_commercial_text??'Professional finishes, clear communication and scheduling built around your operation—from a single office to multi-site projects.'}</p>}<div className="business-tags">{commercialTags.map(x=><span key={x}>{x}</span>)}</div></Reveal></div>
-      <Reveal className="process-wrap"><div className="process-label"><span>Our process</span><p>Simple, transparent, stress-free.</p></div><div className="process-grid">{process.map(([n,title],i)=><div className="process-step" key={n}><b>{n}</b><span>{title}</span>{i<4&&<i/>}</div>)}</div></Reveal>
+      {(processLabel||processIntro||processSteps.length>0)&&<Reveal className="process-wrap"><div className="process-label">{processLabel&&<span>{processLabel}</span>}{processIntro&&<p>{processIntro}</p>}</div>{processSteps.length>0&&<div className={`process-grid ${processSteps.length>6?'process-grid-many':''}`}>{processSteps.map((title,i)=><div className="process-step" key={`${title}-${i}`}><b>{String(i+1).padStart(2,'0')}</b><span>{title}</span>{i<processSteps.length-1&&<i/>}</div>)}</div>}</Reveal>}
     </div>
     <Divider color="#fbf6ec" variant="drip" />
   </section>
@@ -530,6 +536,13 @@ function ProjectStats({stats: suppliedStats,badge: suppliedBadge,className='',sh
   })}</div>
 }
 
+function HomeAreasBand() {
+  const {location_band:content,service_areas:areas}=useSiteContent()
+  if(content?.enabled===false)return null
+  const items=Array.isArray(areas)?areas:[]
+  return <section className="inner-areas home-areas-band"><div className="container"><Reveal className="inner-section-heading"><div>{content?.eyebrow&&<Eyebrow>{content.eyebrow}</Eyebrow>}{(content?.title||content?.accent)&&<h2>{content?.title}{content?.title&&content?.accent&&<br/>}{content?.accent&&<em>{content.accent}</em>}</h2>}</div>{content?.text&&<p>{content.text}</p>}</Reveal>{items.length>0&&<div className="inner-suburbs">{items.map((name,index)=><span key={`${name}-${index}`}><MapPin size={13}/>{name}</span>)}</div>}</div></section>
+}
+
 function Footer() {
   const navigate = useNavigate()
   const {business,footer,navigation,services:cmsServices}=useSiteContent()
@@ -570,7 +583,7 @@ function Footer() {
 }
 
 export default function App() {
-  const {business,footer,services:cmsServices,review_profile:reviewProfile}=useSiteContent()
+  const {business,footer,services:cmsServices,review_profile:reviewProfile,location_band:locationBand}=useSiteContent()
   const {data:homeRoute}=useRouteContent('/')
   const {data:projectItems}=useCollection('projects',projects,{preserveEmpty:true})
   const {data:testimonialItems}=useCollection('testimonials',testimonials,{preserveEmpty:true})
@@ -601,7 +614,7 @@ export default function App() {
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
     return()=>ctx.revert()
   },[seo?.description,seo?.canonical_url,seo?.title,business])
-  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} badge={footer.trust_badge} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview fields={fields} items={articleItems}/><Areas fields={fields}/>{flexibleSections.map((section,index)=><section className={`inner-section managed-page-extra ${index%2?'cream':''}`} key={section.id}><div className="container"><Reveal><StructuredSectionCopy section={section} defaultEyebrow="More from Superior Plus"/></Reveal></div></section>)}<Testimonials items={displayedTestimonials} profile={reviewProfile}/><Contact fields={fields} business={business}/><HomeLocation business={business}/></main><Footer/></>
+  return <><Navbar/><main id="main-content" tabIndex="-1"><Hero hero={homeHero} fields={fields}/><Services fields={fields} serviceItems={cmsServices}/><section className="home-stats-band"><ProjectStats stats={footer.stats} badge={footer.trust_badge} className="home-project-stats" showTrustBadges/></section><Commercial fields={fields}/><Projects fields={fields} projectItems={projectItems}/><WhyUs fields={fields} business={business}/><GuidesPreview fields={fields} items={articleItems}/><Areas fields={fields}/>{flexibleSections.map((section,index)=><ManagedContentSection section={section} index={index} defaultEyebrow="More from Superior Plus" key={section.id}/>)}<Testimonials items={displayedTestimonials} profile={reviewProfile}/>{!locationBand?.after_coloured&&<HomeAreasBand/>}<Contact fields={fields} business={business}/><HomeLocation business={business}/>{locationBand?.after_coloured&&<HomeAreasBand/>}</main><Footer/></>
 }
 
 export { Navbar, Footer, Reveal, Eyebrow, Divider }

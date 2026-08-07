@@ -72,8 +72,38 @@ export function structuredSections(value, fallback = []) {
       title: String(item.title || item.heading || item.label || ''),
       paragraphs: body.paragraphs,
       items: [...body.items, ...explicitItems],
+      style: ['auto', 'white', 'cream', 'green', 'maroon', 'gold'].includes(item.style) ? item.style : 'auto',
+      layout: ['text', 'image-left', 'image-right', 'image-background'].includes(item.layout) ? item.layout : 'text',
+      image: item.image?.url ? item.image : null,
+      imageAlt: String(item.image_alt || item.image?.alt || ''),
+      imagePosition: /^((100|[0-9]{1,2})%) ((100|[0-9]{1,2})%)$/.test(item.image_position || '') ? item.image_position : '50% 50%',
     }
-  }).filter(section => section.eyebrow || section.title || section.paragraphs.length || section.items.length)
+  }).filter(section => section.eyebrow || section.title || section.paragraphs.length || section.items.length || section.image)
+}
+
+export function ManagedContentSection({ section, index = 0, defaultEyebrow = '', fallbackImage = null, fallbackImageAlt = '' }) {
+  if (!section) return null
+  const image = section.image?.url ? section.image : fallbackImage?.url ? fallbackImage : null
+  const selectedLayout = section.layout || 'text'
+  const layout = image ? selectedLayout : 'text'
+  const tone = section.style && section.style !== 'auto' ? section.style : (index % 2 ? 'cream' : 'white')
+  const background = layout === 'image-background'
+  const imageAlt = section.imageAlt || image?.alt || fallbackImageAlt || section.title
+  return <section className={`inner-section managed-content-section tone-${tone} layout-${layout}`}>
+    {background && <div className="managed-content-background" aria-hidden="true">
+      <img src={image.url} alt="" style={{ objectPosition: section.imagePosition }}/><span/>
+    </div>}
+    <div className={`container managed-content-grid ${image && !background ? 'has-image' : ''}`}>
+      {image && !background && <figure className="managed-content-media">
+        <img src={image.url} alt={imageAlt} loading="lazy" decoding="async" style={{ objectPosition: section.imagePosition }}/>
+        <figcaption>Superior Plus project</figcaption>
+      </figure>}
+      <div className="managed-content-panel">
+        <span className="managed-content-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+        <StructuredSectionCopy section={section} defaultEyebrow={defaultEyebrow}/>
+      </div>
+    </div>
+  </section>
 }
 
 export function CompactList({ items = [] }) {

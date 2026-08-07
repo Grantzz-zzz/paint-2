@@ -4,7 +4,7 @@ import { ClosingCTA, PageHero, PageLayout, SectionIntro, TrustStrip } from '../c
 import ProjectGallery from '../components/ProjectGallery'
 import { Divider, Reveal } from '../App'
 import { mediaUrl, useRouteContent } from '../content/ContentProvider'
-import { StructuredSectionCopy, structuredSections } from '../components/StructuredContent'
+import { ManagedContentSection, structuredSections } from '../components/StructuredContent'
 import { asset } from '../utils/assets'
 import NotFoundPage from './NotFoundPage'
 
@@ -27,7 +27,7 @@ export function DynamicContentPage() {
   return <PageLayout title={route.seo?.title??route.title} description={route.seo?.description??hero.intro} image={mediaUrl(route.seo?.social_image,hero.image)}>
     <PageHero {...hero}/>
     <TrustStrip/>
-    {sections.map((section,index)=><section className={`inner-section ${index%2?'cream':''}`} key={section.id}><div className="container editorial-grid"><Reveal><StructuredSectionCopy section={section} defaultEyebrow="Superior Plus"/></Reveal>{index===0&&fields.secondary_image?.url&&<Reveal className="editorial-image" delay={.1}><img src={fields.secondary_image.url} alt={fields.secondary_image.alt??section.title}/></Reveal>}</div>{!index&&<Divider color="#fbf6ec" variant="wave"/>}</section>)}
+    {sections.map((section,index)=><ManagedContentSection section={section} index={index} defaultEyebrow="Superior Plus" fallbackImage={index===0?fields.secondary_image:null} key={section.id}/>)}
     {fields.related_pages?.length>0&&<section className="inner-section"><div className="container"><SectionIntro eyebrow="Keep exploring" title="Related pages" accent="from Superior Plus."/><div className="related-grid">{fields.related_pages.map(page=><button className="related-card tone-cream" key={page.id} onClick={()=>navigate(page.path)}><span>Superior Plus</span><h3>{page.title}</h3><ArrowRight/></button>)}</div></div></section>}
     <ClosingCTA title={cta?.title} text={cta?.text} label={cta?.link?.label} url={cta?.link?.url}/>
   </PageLayout>
@@ -47,7 +47,7 @@ export function ProjectPage() {
     <PageHero {...hero}/>
     <TrustStrip/>
     <ProjectGallery items={project.gallery}/>
-    {sections.map((section,index)=><section className={`inner-section managed-page-extra ${index%2?'cream':''}`} key={section.id}><div className="container"><Reveal><StructuredSectionCopy section={section} defaultEyebrow="Project information"/></Reveal></div></section>)}
+    {sections.map((section,index)=><ManagedContentSection section={section} index={index} defaultEyebrow="Project information" key={section.id}/>)}
     {project.related_pages?.length>0&&<section className="inner-section"><div className="container"><SectionIntro eyebrow="Keep exploring" title="Related pages" accent="from this project."/><div className="related-grid">{project.related_pages.map(page=><button className="related-card tone-cream" key={page.id} onClick={()=>navigate(page.path)}><span>Superior Plus</span><h3>{page.title}</h3><ArrowRight/></button>)}</div></div></section>}
     <ClosingCTA title={cta?.title} text={cta?.text} label={cta?.link?.label} url={cta?.link?.url}/>
   </PageLayout>

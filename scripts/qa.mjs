@@ -219,7 +219,7 @@ try {
       if(route==='/services'||route==='/gallery'){
         const selector=route==='/services'?'.services-main .page-hero-copy .expandable-copy>p,.services-main .inner-section-heading>p,.services-main .closing-cta p':'.gallery-main .page-hero-copy .expandable-copy>p,.gallery-main .inner-section-heading>p,.gallery-main .closing-cta p'
         const descriptionSizes=await page.locator(selector).evaluateAll(elements=>elements.map(element=>Number.parseFloat(getComputedStyle(element).fontSize)))
-        const expectedCount=route==='/services'?5:11
+        const expectedCount=route==='/services'?6:12
         check(descriptionSizes.length===expectedCount, `${label}: expected ${expectedCount} primary descriptions, found ${descriptionSizes.length}`)
         check(Math.min(...descriptionSizes)>=22, `${label}: a primary description is below the senior-readable target (${descriptionSizes.join(', ')}px)`)
       }
@@ -689,7 +689,7 @@ try {
   check(await apiPage.getByText('Visible editor-managed gallery copy.').isVisible(), 'editor authority: shared content section did not render on gallery template')
   check(await apiPage.getByText('Editable eyebrow').isVisible(), 'flexible sections: editable eyebrow did not render')
   check(await apiPage.getByText('A separately editable second paragraph.').isVisible(), 'flexible sections: second paragraph did not render separately')
-  check((await apiPage.locator('.managed-page-extra .structured-list li').count())===2, 'flexible sections: compact list items did not render')
+  check((await apiPage.locator('.managed-content-section .structured-list li').count())===2, 'flexible sections: compact list items did not render')
   check(await apiPage.getByRole('heading', { name: 'Editable related page' }).isVisible(), 'editor authority: related-page selection did not render on gallery template')
   check((await apiPage.locator('.managed-page-extra .editorial-image').count())===0, 'editor authority: intentionally removed secondary image reappeared')
 

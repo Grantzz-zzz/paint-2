@@ -45,7 +45,7 @@ class SPP_Content_Fields {
 			'spp_hero_intro'            => array( 'label' => 'Hero introduction', 'type' => 'textarea', 'max' => 1200 ),
 			'spp_hero_image_id'         => array( 'label' => 'Hero image', 'type' => 'media', 'mime' => 'image' ),
 			'spp_hero_image_alt'        => array( 'label' => 'Hero image alt text', 'type' => 'text', 'max' => 250 ),
-			'spp_content_sections'      => array( 'label' => 'Additional flexible sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+			'spp_content_sections'      => array( 'label' => 'Additional flexible sections — Content, image, layout & brand style', 'type' => 'sections', 'max_items' => 40 ),
 			'spp_closing_cta_title'     => array( 'label' => 'Closing CTA title', 'type' => 'text', 'max' => 180 ),
 			'spp_closing_cta_text'      => array( 'label' => 'Closing CTA text', 'type' => 'textarea', 'max' => 600 ),
 			'spp_closing_cta_label'     => array( 'label' => 'Closing CTA button label', 'type' => 'text', 'max' => 100 ),
@@ -94,7 +94,13 @@ class SPP_Content_Fields {
 				'spp_project_stats'       => array( 'label' => 'Homepage counters — Number | Label', 'type' => 'pairs', 'max_items' => 6 ),
 				'spp_trust_badge_image_id' => array( 'label' => 'Homepage review-platform badge image', 'type' => 'media', 'mime' => 'image' ),
 				'spp_trust_items'         => array( 'label' => 'Trust strip — exactly four lines', 'type' => 'list', 'max_items' => 4 ),
-				'spp_service_areas'       => array( 'label' => 'Service areas — one suburb per line', 'type' => 'list', 'max_items' => 100 ),
+				'spp_service_areas'       => array( 'label' => 'Local-service location chips — add, edit, remove or move items below', 'type' => 'list', 'max_items' => 100 ),
+				'spp_location_band_enabled' => array( 'label' => 'Show the site-wide local-service section', 'type' => 'checkbox', 'default' => 1 ),
+				'spp_location_band_after_coloured' => array( 'label' => 'Move the local-service section below the final coloured section', 'type' => 'checkbox', 'default' => 0 ),
+				'spp_location_band_eyebrow' => array( 'label' => 'Local-service section eyebrow', 'type' => 'text', 'max' => 120 ),
+				'spp_location_band_title' => array( 'label' => 'Local-service section title', 'type' => 'text', 'max' => 180 ),
+				'spp_location_band_accent' => array( 'label' => 'Local-service section accent line', 'type' => 'text', 'max' => 180 ),
+				'spp_location_band_text'  => array( 'label' => 'Local-service section description', 'type' => 'textarea', 'max' => 700 ),
 				'spp_default_cta_title'   => array( 'label' => 'Default CTA title', 'type' => 'text', 'max' => 180 ),
 				'spp_default_cta_text'    => array( 'label' => 'Default CTA text', 'type' => 'textarea', 'max' => 600 ),
 				'spp_default_cta_label'   => array( 'label' => 'Default CTA button label', 'type' => 'text', 'max' => 100 ),
@@ -111,7 +117,7 @@ class SPP_Content_Fields {
 					'spp_directory_excerpt'  => array( 'label' => 'Services-directory summary', 'type' => 'textarea', 'max' => 400 ),
 					'spp_scope_title'        => array( 'label' => 'Scope heading', 'type' => 'text', 'max' => 180 ),
 					'spp_scope'              => array( 'label' => 'Scope items — one per line', 'type' => 'list', 'max_items' => 30 ),
-					'spp_document_sections'  => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+					'spp_document_sections'  => array( 'label' => 'Imported service sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40, 'section_design' => false ),
 					'spp_why'                => array( 'label' => 'Process introduction', 'type' => 'textarea', 'max' => 1600 ),
 					'spp_process'            => array( 'label' => 'Process steps — one per line', 'type' => 'list', 'max_items' => 20 ),
 					'spp_benefits'           => array( 'label' => 'Benefits — one per line', 'type' => 'list', 'max_items' => 12 ),
@@ -197,7 +203,8 @@ class SPP_Content_Fields {
 				$fields += array(
 					'spp_content_sections'        => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
 					'spp_home_hero_closing'       => array( 'label' => 'Optional third hero headline line', 'type' => 'text', 'max' => 180 ),
-					'spp_home_trust_points'       => array( 'label' => 'Hero trust points — one per line', 'type' => 'list', 'max_items' => 8 ),
+					'spp_home_trust_points_enabled' => array( 'label' => 'Show homepage hero trust points', 'type' => 'checkbox', 'default' => 1 ),
+					'spp_home_trust_points'       => array( 'label' => 'Homepage hero trust points — one per line; an empty untouched field uses the three defaults', 'type' => 'list', 'max_items' => 8 ),
 					'spp_home_services_eyebrow'   => array( 'label' => 'Services eyebrow', 'type' => 'text', 'max' => 120 ),
 					'spp_home_services_title'     => array( 'label' => 'Services title', 'type' => 'text', 'max' => 180 ),
 					'spp_home_services_accent'    => array( 'label' => 'Services accent', 'type' => 'text', 'max' => 180 ),
@@ -208,6 +215,9 @@ class SPP_Content_Fields {
 					'spp_home_commercial_text'    => array( 'label' => 'Commercial feature text', 'type' => 'textarea', 'max' => 900 ),
 					'spp_home_commercial_tags'    => array( 'label' => 'Commercial property tags — one per line', 'type' => 'list', 'max_items' => 20 ),
 					'spp_home_commercial_image_id' => array( 'label' => 'Commercial feature image', 'type' => 'media', 'mime' => 'image' ),
+					'spp_home_process_label'      => array( 'label' => 'Homepage process-strip label', 'type' => 'text', 'max' => 120 ),
+					'spp_home_process_intro'      => array( 'label' => 'Homepage process-strip description', 'type' => 'textarea', 'max' => 350 ),
+					'spp_home_process_steps'      => array( 'label' => 'Homepage process-strip steps - add, edit, remove or move items below', 'type' => 'list', 'max_items' => 12 ),
 					'spp_home_project_ids'        => array( 'label' => 'Selected homepage projects', 'type' => 'relationships', 'post_type' => 'spp_project' ),
 					'spp_home_why_title'          => array( 'label' => 'Why-us title', 'type' => 'text', 'max' => 180 ),
 					'spp_home_why_accent'         => array( 'label' => 'Why-us accent', 'type' => 'text', 'max' => 180 ),
@@ -227,14 +237,15 @@ class SPP_Content_Fields {
 					'spp_home_blog_accent'        => array( 'label' => 'Blog preview accent', 'type' => 'text', 'max' => 180 ),
 					'spp_home_blog_intro'         => array( 'label' => 'Blog preview introduction', 'type' => 'textarea', 'max' => 700 ),
 					'spp_home_article_ids'        => array( 'label' => 'Selected homepage blog articles', 'type' => 'relationships', 'post_type' => 'spp_article' ),
-					'spp_home_projects_heading'   => array( 'label' => 'Projects section heading', 'type' => 'text', 'max' => 180 ),
-					'spp_home_projects_accent'    => array( 'label' => 'Projects section accent line', 'type' => 'text', 'max' => 180 ),
-					'spp_home_projects_intro'     => array( 'label' => 'Projects section introduction', 'type' => 'textarea', 'max' => 700 ),
+					'spp_home_projects_heading'   => array( 'label' => 'Selected Work heading — first line', 'type' => 'text', 'max' => 180 ),
+					'spp_home_projects_accent'    => array( 'label' => 'Selected Work accent — italic line', 'type' => 'text', 'max' => 180 ),
+					'spp_home_projects_intro'     => array( 'label' => 'Selected Work description — right-hand paragraphs', 'type' => 'textarea', 'max' => 1200 ),
 				);
 				break;
 			case 'about':
 				$fields += array(
-					'spp_content_sections'   => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+					'spp_about_standards_enabled' => array( 'label' => 'Show the “Standards you can see” section', 'type' => 'checkbox', 'default' => 1 ),
+					'spp_content_sections'   => array( 'label' => 'Page sections — original copy followed by added flexible sections', 'type' => 'sections', 'max_items' => 40, 'section_design_start' => 5 ),
 					'spp_about_approach_title' => array( 'label' => 'Approach heading', 'type' => 'text', 'max' => 180 ),
 					'spp_about_approach_copy'  => array( 'label' => 'Approach paragraphs', 'type' => 'textarea', 'max' => 3000 ),
 					'spp_about_editorial_image_id' => array( 'label' => 'Editorial project image', 'type' => 'media', 'mime' => 'image' ),
@@ -258,14 +269,14 @@ class SPP_Content_Fields {
 			case 'additional_services':
 				$fields += array(
 					'spp_additional_services' => array( 'label' => 'Additional services — Heading | Description', 'type' => 'pairs', 'max_items' => 40 ),
-					'spp_content_sections'   => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+					'spp_content_sections'   => array( 'label' => 'Page sections — original copy followed by added flexible sections', 'type' => 'sections', 'max_items' => 40, 'section_design_start' => 2 ),
 					'spp_secondary_image_id' => array( 'label' => 'Secondary image', 'type' => 'media', 'mime' => 'image' ),
 					'spp_related_page_ids'   => array( 'label' => 'Related pages', 'type' => 'relationships', 'post_type' => 'page' ),
 				);
 				break;
 			case 'process':
 				$fields += array(
-					'spp_content_sections' => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+					'spp_content_sections' => array( 'label' => 'Page sections — original copy followed by added flexible sections', 'type' => 'sections', 'max_items' => 40, 'section_design_start' => 2 ),
 					'spp_master_process' => array( 'label' => 'Process steps — Heading | Description', 'type' => 'pairs', 'max_items' => 20 ),
 					'spp_process_proof'  => array( 'label' => 'Why-it-works points — one per line', 'type' => 'list', 'max_items' => 20 ),
 					'spp_process_proof_summaries' => array( 'label' => 'Why-it-works summaries — one per line', 'type' => 'list', 'max_items' => 20 ),
@@ -320,6 +331,35 @@ class SPP_Content_Fields {
 					);
 				}
 				break;
+		}
+
+		/*
+		 * Page-specific definitions must replace shared definitions with the
+		 * same key. The switch above intentionally uses array union for unique
+		 * fields, which does not overwrite the shared content-sections entry.
+		 */
+		$section_definitions = array(
+			'home'                => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+			'about'               => array( 'label' => 'Page sections — first five use original layouts; added sections include image & design controls', 'type' => 'sections', 'max_items' => 40, 'section_design_start' => 5 ),
+			'services_directory'  => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+			'additional_services' => array( 'label' => 'Page sections — first two use original layouts; added sections include image & design controls', 'type' => 'sections', 'max_items' => 40, 'section_design_start' => 2 ),
+			'process'             => array( 'label' => 'Page sections — first two use original layouts; added sections include image & design controls', 'type' => 'sections', 'max_items' => 40, 'section_design_start' => 2 ),
+			'faqs'                => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+			'contact'             => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+			'landing'             => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+			'standard'            => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+			'gallery'             => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+			'blog_hub'            => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+			'service_areas'       => array( 'label' => 'Flexible content sections — Eyebrow, heading, description & list', 'type' => 'sections', 'max_items' => 40 ),
+		);
+		if ( isset( $section_definitions[ $template_key ] ) ) {
+			$fields['spp_content_sections'] = $section_definitions[ $template_key ];
+		}
+
+		if ( 'about' === $template_key && isset( $fields['spp_about_standards_enabled'] ) ) {
+			$visibility = $fields['spp_about_standards_enabled'];
+			unset( $fields['spp_about_standards_enabled'] );
+			$fields = array( 'spp_about_standards_enabled' => $visibility ) + $fields;
 		}
 
 		return $fields;
@@ -394,7 +434,6 @@ class SPP_Content_Fields {
 		echo '<p class="description">' . esc_html__( 'These controls change content only. The React theme keeps the approved layout and styling locked.', 'superior-plus-content' ) . '</p>';
 		echo '<div class="spp-content-fields">';
 		foreach ( $definitions as $key => $definition ) {
-			$was_configured = metadata_exists( 'post', $post_id, $key );
 			$this->render_field( $post, $key, $definition );
 		}
 		echo '</div>';
@@ -443,9 +482,13 @@ class SPP_Content_Fields {
 		$value = get_post_meta( $post->ID, $key, true );
 		$type  = $definition['type'];
 		$label = $definition['label'];
-		echo '<div class="spp-field spp-field-' . esc_attr( $type ) . '">';
+		if ( 'checkbox' === $type && ! metadata_exists( 'post', $post->ID, $key ) && isset( $definition['default'] ) ) {
+			$value = $definition['default'];
+		}
+		echo '<div class="spp-field spp-field-' . esc_attr( $type ) . ' spp-field-key-' . esc_attr( sanitize_html_class( $key ) ) . '">';
 
 		if ( 'checkbox' === $type ) {
+			echo '<input type="hidden" name="' . esc_attr( $key ) . '" value="0">';
 			echo '<label><input type="checkbox" name="' . esc_attr( $key ) . '" value="1" ' . checked( (bool) $value, true, false ) . '> <strong>' . esc_html( $label ) . '</strong></label>';
 			echo '</div>';
 			return;
@@ -456,7 +499,11 @@ class SPP_Content_Fields {
 		if ( 'textarea' === $type ) {
 			echo '<textarea class="widefat" rows="5" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '">' . esc_textarea( $value ) . '</textarea>';
 		} elseif ( in_array( $type, array( 'list', 'pairs', 'sections' ), true ) ) {
-			$this->render_structured_field( $key, $value, $type );
+			$design_start = isset( $definition['section_design_start'] ) ? max( 0, (int) $definition['section_design_start'] ) : 0;
+			if ( isset( $definition['section_design'] ) && false === $definition['section_design'] ) {
+				$design_start = 1000000;
+			}
+			$this->render_structured_field( $key, $value, $type, $design_start );
 		} elseif ( 'media' === $type ) {
 			$this->render_media_field( $key, $value, $definition );
 		} elseif ( 'gallery' === $type ) {
@@ -487,9 +534,18 @@ class SPP_Content_Fields {
 	 * @param string $key Meta key.
 	 * @param mixed  $value Stored rows.
 	 * @param string $type list, pairs or sections.
+	 * @param int    $section_design_start First row that may use image/design controls.
 	 */
-	private function render_structured_field( $key, $value, $type ) {
+	private function render_structured_field( $key, $value, $type, $section_design_start = 0 ) {
 		$items = is_array( $value ) ? array_values( $value ) : array();
+		if ( 'sections' === $type ) {
+			foreach ( $items as &$section_item ) {
+				if ( is_array( $section_item ) && ! empty( $section_item['attachment_id'] ) ) {
+					$section_item['preview_url'] = wp_get_attachment_image_url( absint( $section_item['attachment_id'] ), 'medium' ) ?: '';
+				}
+			}
+			unset( $section_item );
+		}
 		if ( ! $items && is_string( $value ) && trim( $value ) ) {
 			foreach ( preg_split( '/\r\n|\r|\n/', $value ) as $index => $line ) {
 				$line = trim( $line );
@@ -502,7 +558,7 @@ class SPP_Content_Fields {
 					: array( 'id' => wp_generate_uuid4(), 'text' => $parts[0], 'order' => $index );
 			}
 		}
-		echo '<div class="spp-structured-control" data-structured-type="' . esc_attr( $type ) . '">';
+		echo '<div class="spp-structured-control" data-structured-type="' . esc_attr( $type ) . '" data-section-design-start="' . esc_attr( $section_design_start ) . '">';
 		echo '<input type="hidden" class="spp-structured-json" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( wp_json_encode( $items ) ) . '">';
 		echo '<div class="spp-structured-items"></div>';
 		$button_label = 'sections' === $type ? __( 'Add section', 'superior-plus-content' ) : ( 'pairs' === $type ? __( 'Add card', 'superior-plus-content' ) : __( 'Add item', 'superior-plus-content' ) );
@@ -664,6 +720,7 @@ class SPP_Content_Fields {
 		$definitions = $this->definitions_for_post( $post );
 		$explicit_blanks = (array) get_post_meta( $post_id, 'spp_explicit_blank_fields', true );
 		foreach ( $definitions as $key => $definition ) {
+			$was_configured = metadata_exists( 'post', $post_id, $key );
 			if ( 'system_email' === $definition['type'] && ! current_user_can( 'manage_spp_system' ) ) {
 				continue;
 			}
@@ -674,7 +731,11 @@ class SPP_Content_Fields {
 				continue;
 			}
 			if ( 'checkbox' === $definition['type'] ) {
-				update_post_meta( $post_id, $key, isset( $_POST[ $key ] ) ? 1 : 0 );
+				if ( ! isset( $_POST[ $key ] ) ) {
+					continue;
+				}
+				$checkbox_value = sanitize_text_field( wp_unslash( $_POST[ $key ] ) );
+				update_post_meta( $post_id, $key, in_array( strtolower( $checkbox_value ), array( '1', 'true', 'on', 'yes' ), true ) ? 1 : 0 );
 				continue;
 			}
 			if ( 'services' === $definition['type'] || 'relationships' === $definition['type'] ) {
@@ -808,6 +869,16 @@ class SPP_Content_Fields {
 					$eyebrow = isset( $item['eyebrow'] ) ? sanitize_text_field( $item['eyebrow'] ) : '';
 					$title    = isset( $item['title'] ) ? sanitize_text_field( $item['title'] ) : '';
 					$text     = isset( $item['text'] ) ? sanitize_textarea_field( $item['text'] ) : '';
+					$styles   = array( 'auto', 'white', 'cream', 'green', 'maroon', 'gold' );
+					$layouts  = array( 'text', 'image-left', 'image-right', 'image-background' );
+					$style    = isset( $item['style'] ) && in_array( sanitize_key( $item['style'] ), $styles, true ) ? sanitize_key( $item['style'] ) : 'auto';
+					$layout   = isset( $item['layout'] ) && in_array( sanitize_key( $item['layout'] ), $layouts, true ) ? sanitize_key( $item['layout'] ) : 'text';
+					$image_id = isset( $item['attachment_id'] ) ? $this->sanitize_attachment( $item['attachment_id'], 'image' ) : 0;
+					$image_alt = isset( $item['image_alt'] ) ? sanitize_text_field( $item['image_alt'] ) : '';
+					$image_position = isset( $item['image_position'] ) ? sanitize_text_field( $item['image_position'] ) : '50% 50%';
+					if ( ! preg_match( '/^(100|[0-9]{1,2})% (100|[0-9]{1,2})%$/', $image_position ) ) {
+						$image_position = '50% 50%';
+					}
 					$list     = array();
 					$raw_list = isset( $item['items'] ) ? $item['items'] : array();
 					if ( is_string( $raw_list ) ) {
@@ -819,10 +890,10 @@ class SPP_Content_Fields {
 							$list[] = $list_text;
 						}
 					}
-					if ( '' === $eyebrow && '' === $title && '' === $text && empty( $list ) ) {
+					if ( '' === $eyebrow && '' === $title && '' === $text && empty( $list ) && ! $image_id ) {
 						continue;
 					}
-					$result[] = array( 'id' => $id, 'eyebrow' => $eyebrow, 'title' => $title, 'text' => $text, 'items' => $list, 'order' => count( $result ) );
+					$result[] = array( 'id' => $id, 'eyebrow' => $eyebrow, 'title' => $title, 'text' => $text, 'items' => $list, 'style' => $style, 'layout' => $layout, 'attachment_id' => $image_id, 'image_alt' => $image_alt, 'image_position' => $image_position, 'order' => count( $result ) );
 				} elseif ( 'pairs' === $type ) {
 					$title = isset( $item['title'] ) ? sanitize_text_field( $item['title'] ) : '';
 					$text  = isset( $item['text'] ) ? sanitize_textarea_field( $item['text'] ) : '';
@@ -857,6 +928,11 @@ class SPP_Content_Fields {
 				if ( 'sections' === $type ) {
 					$row['eyebrow'] = '';
 					$row['items']    = array();
+					$row['style'] = 'auto';
+					$row['layout'] = 'text';
+					$row['attachment_id'] = 0;
+					$row['image_alt'] = '';
+					$row['image_position'] = '50% 50%';
 				}
 				$result[] = $row;
 			} else {
@@ -1008,6 +1084,26 @@ class SPP_Content_Fields {
 				'eyebrow'     => __( 'Eyebrow (small section label)', 'superior-plus-content' ),
 				'listItems'   => __( 'List items (one item per line)', 'superior-plus-content' ),
 				'itemText'    => __( 'Item text', 'superior-plus-content' ),
+				'originalSection' => __( 'Original section — layout locked', 'superior-plus-content' ),
+				'addedSection' => __( 'Added section — design controls available', 'superior-plus-content' ),
+				'sectionStyle' => __( 'Section colour style', 'superior-plus-content' ),
+				'sectionLayout' => __( 'Section layout', 'superior-plus-content' ),
+				'chooseSectionImage' => __( 'Choose section image', 'superior-plus-content' ),
+				'removeImage' => __( 'Remove image', 'superior-plus-content' ),
+				'sectionStyles' => array(
+					'auto' => __( 'Automatic white / cream', 'superior-plus-content' ),
+					'white' => __( 'Clean white', 'superior-plus-content' ),
+					'cream' => __( 'Warm cream', 'superior-plus-content' ),
+					'green' => __( 'Superior green', 'superior-plus-content' ),
+					'maroon' => __( 'Superior maroon', 'superior-plus-content' ),
+					'gold' => __( 'Superior gold', 'superior-plus-content' ),
+				),
+				'sectionLayouts' => array(
+					'text' => __( 'Text only', 'superior-plus-content' ),
+					'image-left' => __( 'Image left', 'superior-plus-content' ),
+					'image-right' => __( 'Image right', 'superior-plus-content' ),
+					'image-background' => __( 'Image background', 'superior-plus-content' ),
+				),
 			)
 		);
 	}

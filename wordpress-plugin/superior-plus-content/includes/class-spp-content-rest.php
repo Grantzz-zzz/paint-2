@@ -207,6 +207,14 @@ class SPP_Content_REST {
 					)
 				)
 			),
+			'location_band' => array(
+				'enabled' => (bool) $get( 'spp_location_band_enabled', 1 ),
+				'after_coloured' => (bool) $get( 'spp_location_band_after_coloured', 0 ),
+				'eyebrow' => $get( 'spp_location_band_eyebrow', 'Melbourne-wide' ),
+				'title'   => $get( 'spp_location_band_title', 'Local service,' ),
+				'accent'  => $get( 'spp_location_band_accent', 'carefully delivered.' ),
+				'text'    => $get( 'spp_location_band_text', 'A selection of Melbourne suburbs regularly serviced for this type of work.' ),
+			),
 			'service_areas' => $this->text_values( $get( 'spp_service_areas', array() ) ),
 			'default_cta'   => array(
 				'title' => $get( 'spp_default_cta_title', 'Ready for a fresh start?' ),
@@ -660,8 +668,8 @@ class SPP_Content_REST {
 			'process'     => $this->ordered_items( get_post_meta( $post->ID, 'spp_process', true ) ),
 			'why'         => get_post_meta( $post->ID, 'spp_why', true ),
 			'benefits'    => $this->ordered_items( get_post_meta( $post->ID, 'spp_benefits', true ) ),
-			'document_sections' => get_post_meta( $post->ID, 'spp_document_sections', true ),
-			'content_sections'  => get_post_meta( $post->ID, 'spp_content_sections', true ),
+			'document_sections' => $this->section_values( get_post_meta( $post->ID, 'spp_document_sections', true ) ),
+			'content_sections'  => $this->section_values( get_post_meta( $post->ID, 'spp_content_sections', true ) ),
 			'related'     => $related,
 			'gallery'     => $this->gallery( get_post_meta( $post->ID, 'spp_gallery_items', true ) ),
 			'section_labels' => $section_labels,
@@ -710,7 +718,7 @@ class SPP_Content_REST {
 			'takeaways'        => $this->text_values( get_post_meta( $post->ID, 'spp_article_takeaways', true ) ),
 			'references'       => $this->reference_values( get_post_meta( $post->ID, 'spp_article_references', true ) ),
 			'related_services' => $related,
-			'content_sections' => get_post_meta( $post->ID, 'spp_content_sections', true ),
+			'content_sections' => $this->section_values( get_post_meta( $post->ID, 'spp_content_sections', true ) ),
 		);
 		return $data;
 	}
@@ -744,7 +752,7 @@ class SPP_Content_REST {
 			),
 			'related_page_ids' => array_map( 'absint', (array) get_post_meta( $post->ID, 'spp_related_page_ids', true ) ),
 			'related_pages'    => $this->related_pages( get_post_meta( $post->ID, 'spp_related_page_ids', true ) ),
-			'content_sections' => get_post_meta( $post->ID, 'spp_content_sections', true ),
+			'content_sections' => $this->section_values( get_post_meta( $post->ID, 'spp_content_sections', true ) ),
 		);
 	}
 
@@ -910,6 +918,10 @@ class SPP_Content_REST {
 	private function resolve_media_meta( $meta ) {
 		$configured = isset( $meta['__configured'] ) && is_array( $meta['__configured'] ) ? $meta['__configured'] : array();
 		foreach ( $meta as $key => $value ) {
+			if ( 'content_sections' === $key || 'document_sections' === $key ) {
+				$meta[ $key ] = $this->section_values( $value );
+				continue;
+			}
 			if ( preg_match( '/_image_id$|^logo_id$|^featured_media_id$/', $key ) ) {
 				$resolved_key = preg_replace( '/_id$/', '', $key );
 				$meta[ $resolved_key ] = $this->media( $value );
@@ -932,6 +944,33 @@ class SPP_Content_REST {
 		}
 		$meta['__configured'] = array_values( array_unique( $configured ) );
 		return $meta;
+	}
+
+	/**
+	 * Resolve optional images and locked presentation choices in flexible sections.
+	 * Existing text-only section records remain fully compatible.
+	 *
+	 * @param mixed $items Stored flexible sections.
+	 * @return array
+	 */
+	private function section_values( $items ) {
+		$result = array();
+		foreach ( is_array( $items ) ? $items : array() as $index => $item ) {
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+			$item['image'] = $this->media(
+				isset( $item['attachment_id'] ) ? $item['attachment_id'] : 0,
+				isset( $item['image_alt'] ) ? $item['image_alt'] : ''
+			);
+			$item['style'] = isset( $item['style'] ) ? $item['style'] : 'auto';
+			$item['layout'] = isset( $item['layout'] ) ? $item['layout'] : 'text';
+			$item['image_position'] = isset( $item['image_position'] ) ? $item['image_position'] : '50% 50%';
+			$item['order'] = isset( $item['order'] ) ? (int) $item['order'] : $index;
+			unset( $item['attachment_id'] );
+			$result[] = $item;
+		}
+		return $result;
 	}
 
 	/**

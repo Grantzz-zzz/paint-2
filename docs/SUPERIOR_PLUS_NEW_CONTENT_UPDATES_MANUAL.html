@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Superior Plus New Content Updates Manual</title>
+<style>
+  @page { size: A4; margin: 15mm 15mm 17mm; }
+  :root { --green:#174f3d; --green2:#236852; --red:#922722; --gold:#f2c51d; --ink:#18231e; --muted:#58645e; --cream:#faf5ea; --line:#ddd6c8; --soft:#eef4f0; }
+  * { box-sizing:border-box; }
+  html { font-family:Arial,Helvetica,sans-serif; color:var(--ink); font-size:10.5pt; line-height:1.48; }
+  body { margin:0; }
+  h1,h2,h3,h4,p { margin-top:0; }
+  h1 { font-size:29pt; line-height:1.08; }
+  h2 { margin:0 0 13px; padding:9px 12px; background:var(--cream); border-left:5px solid var(--red); color:var(--green); font-size:18pt; line-height:1.22; break-after:avoid; }
+  h3 { margin:19px 0 7px; color:var(--red); font-size:13.5pt; break-after:avoid; }
+  h4 { margin:14px 0 5px; color:var(--green); font-size:11pt; break-after:avoid; }
+  p { margin-bottom:9px; }
+  ul,ol { margin:7px 0 12px; padding-left:23px; }
+  li { margin:4px 0; }
+  li::marker { color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; margin:10px 0 16px; font-size:9.1pt; }
+  th,td { padding:7px 8px; border:1px solid var(--line); vertical-align:top; }
+  th { background:var(--green); color:#fff; text-align:left; }
+  tr:nth-child(even) td { background:#fcfaf5; }
+  code { padding:1px 4px; background:#f1ede5; border:1px solid #ded8cc; border-radius:3px; font-size:9pt; }
+  strong { color:#124936; }
+  .cover { min-height:257mm; padding:25mm 18mm 18mm; background:var(--green); color:#fff; page-break-after:always; }
+  .brand { padding-bottom:13px; border-bottom:7px solid var(--gold); color:var(--gold); font-size:10pt; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+  .cover h1 { margin:32mm 0 12px; max-width:150mm; color:#fff; }
+  .cover .subtitle { max-width:145mm; color:#d8e6df; font-size:14pt; line-height:1.55; }
+  .release { display:inline-block; margin-top:18mm; padding:10px 14px; background:var(--gold); color:#25200a; font-weight:800; border-radius:3px 14px 3px 14px; }
+  .cover-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:18mm; }
+  .cover-grid div { padding:10px 12px; border:1px solid rgba(255,255,255,.22); }
+  .cover-grid small { display:block; color:#bcd1c7; text-transform:uppercase; letter-spacing:.08em; }
+  .cover-grid b { display:block; margin-top:4px; color:#fff; }
+  .section { page-break-before:always; }
+  .section.first { page-break-before:auto; }
+  .kicker { margin-bottom:7px; color:var(--red); font-size:8.5pt; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+  .callout { margin:12px 0 15px; padding:11px 13px; background:var(--soft); border-left:5px solid var(--green2); break-inside:avoid; }
+  .warning { background:#fff3db; border-left-color:#c98c00; }
+  .danger { background:#fbeceb; border-left-color:var(--red); }
+  .success { background:#edf6ee; border-left-color:#328448; }
+  .example { margin:11px 0 15px; padding:12px 14px; border:1px solid var(--line); border-radius:4px 18px 4px 18px; break-inside:avoid; }
+  .example .label { display:block; margin-bottom:6px; color:var(--red); font-size:8pt; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+  .steps { counter-reset:step; list-style:none; padding:0; }
+  .steps > li { position:relative; min-height:28px; padding:3px 0 9px 35px; }
+  .steps > li::before { counter-increment:step; content:counter(step); position:absolute; left:0; top:0; display:grid; place-items:center; width:25px; height:25px; background:var(--red); color:#fff; border-radius:50%; font-size:9pt; font-weight:800; }
+  .toc { columns:2; column-gap:25px; padding-left:20px; }
+  .toc li { break-inside:avoid; margin-bottom:7px; }
+  .field { color:var(--red); font-weight:700; }
+  .good,.bad { display:grid; grid-template-columns:26mm 1fr; gap:8px; margin:7px 0; }
+  .good b,.bad b { padding:5px 7px; color:#fff; text-align:center; }
+  .good b { background:#328448; }.bad b { background:var(--red); }
+  .mini { color:var(--muted); font-size:8.8pt; }
+  .checklist { list-style:none; padding-left:0; }
+  .checklist li { padding-left:24px; position:relative; }
+  .checklist li::before { content:'✓'; position:absolute; left:2px; color:#328448; font-weight:900; }
+  .footer-note { position:fixed; bottom:-11mm; left:0; right:0; color:#6b756f; font-size:8pt; text-align:center; }
+  .no-break { break-inside:avoid; }
+  @media print { * { -webkit-print-color-adjust:exact; print-color-adjust:exact; } a { color:inherit; text-decoration:none; } }
+</style>
+</head>
+<body>
+<div class="footer-note">Superior Plus Content Plugin — New Content Updates Manual — August 2026</div>
+
+<section class="cover">
+  <div class="brand">Superior Plus Painting &amp; Remodeling</div>
+  <h1>New Content Editing Updates<br>User Manual</h1>
+  <p class="subtitle">A detailed guide to flexible sections, clean bullet lists, multiple paragraphs, expandable hero copy, safe saving, intentional deletion and page-by-page editing in WordPress.</p>
+  <div class="release">Plugin 2.6.1 · Theme 3.5.1</div>
+  <div class="cover-grid">
+    <div><small>Prepared for</small><b>Website administrators and content editors</b></div>
+    <div><small>Document date</small><b>6 August 2026</b></div>
+    <div><small>Editing method</small><b>WordPress plugin fields only</b></div>
+    <div><small>Design policy</small><b>Content editable; approved layout protected</b></div>
+  </div>
+</section>
+
+<section class="first">
+  <div class="kicker">Document map</div>
+  <h2>Contents</h2>
+  <ol class="toc">
+    <li>What the update adds</li>
+    <li>Install and verify the update</li>
+    <li>Where to edit each page</li>
+    <li>Flexible-section field anatomy</li>
+    <li>Add, edit, reorder and delete sections</li>
+    <li>Multiple paragraphs</li>
+    <li>Bullet and numbered content</li>
+    <li>Hero See more / Show less</li>
+    <li>Cards versus full content sections</li>
+    <li>Blank, untouched and deleted content</li>
+    <li>Homepage instructions</li>
+    <li>Service-page instructions</li>
+    <li>Other page instructions</li>
+    <li>Images and media</li>
+    <li>Limits and content planning</li>
+    <li>Preview and publishing checklist</li>
+    <li>Troubleshooting</li>
+  </ol>
+
+  <div class="callout success"><strong>Verified:</strong> the flexible-section browser stress test passed 254 checks across 14 route types on desktop and mobile. The WordPress save/sanitization test passed 370 checks with no failures.</div>
+
+  <h3>Purpose of this manual</h3>
+  <p>This manual explains the controls introduced for editing long client-supplied content without changing theme code. It focuses on choosing the correct field for each type of content so the website remains readable and visually consistent.</p>
+  <p>The plugin controls content. The theme controls the layout, responsive design, card dimensions, colours, typography and spacing. Normal content work should therefore be completed through the plugin fields described below.</p>
+</section>
+
+<section class="section">
+  <div class="kicker">Release overview</div>
+  <h2>1. What the update adds</h2>
+  <table>
+    <thead><tr><th>New capability</th><th>What it does</th><th>Where it is useful</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Flexible sections</strong></td><td>Add complete page sections containing an eyebrow, heading, description and list.</td><td>Long client copy, service information, supporting explanations and new content blocks.</td></tr>
+      <tr><td><strong>Repeatable list items</strong></td><td>Add each bullet as a separate item instead of pasting one dense sentence.</td><td>Benefits, inclusions, preparation steps, service lists and coverage lists.</td></tr>
+      <tr><td><strong>Multiple paragraphs</strong></td><td>Blank lines inside a description are preserved as paragraph breaks.</td><td>Long descriptions that must retain the client's wording.</td></tr>
+      <tr><td><strong>Hero expansion</strong></td><td>Long hero descriptions automatically receive accessible See more and Show less controls.</td><td>Homepage and managed page hero descriptions longer than approximately 330 characters.</td></tr>
+      <tr><td><strong>Safe untouched fields</strong></td><td>A blank field that has never been configured does not overwrite visible default content when another field is saved.</td><td>Editing only one title without accidentally removing unrelated sections.</td></tr>
+      <tr><td><strong>Intentional clearing</strong></td><td>A previously configured field can be cleared deliberately and remains cleared.</td><td>Removing a heading, paragraph, CTA or other optional element.</td></tr>
+      <tr><td><strong>Backward compatibility</strong></td><td>Older heading-and-description section data remains readable after the update.</td><td>Pages already edited with earlier plugin versions.</td></tr>
+      <tr><td><strong>Safe live-content loading</strong></td><td>A neutral branded loading state prevents bundled originals from flashing before current WordPress content arrives.</td><td>Every live route using plugin-edited content; the bundled originals remain available only after API failure.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><strong>Key principle:</strong> cards are for summaries. Flexible sections are for detailed content. Keeping that distinction prevents tall, narrow cards and excessively wordy layouts.</div>
+</section>
+
+<section class="section">
+  <div class="kicker">Before editing</div>
+  <h2>2. Install and verify the update</h2>
+  <ol class="steps">
+    <li>Create a current backup through <strong>Superior Plus → Content Backup</strong>.</li>
+    <li>Go to <strong>Plugins → Add New Plugin → Upload Plugin</strong>.</li>
+    <li>Upload <code>superior-plus-content-2.6.1.zip</code> and approve replacing the installed version.</li>
+    <li>Confirm <strong>Superior Plus Content 2.6.1</strong> is active.</li>
+    <li>Confirm the active theme is <strong>Superior Plus 3.5.1</strong>.</li>
+    <li>Clear the WordPress/page cache and any hosting or CDN cache.</li>
+    <li>Open the homepage in a private/incognito browser window and check the footer, navigation and one edited page.</li>
+  </ol>
+  <div class="callout warning"><strong>Do not run Restore original content as part of a normal plugin update.</strong> Updating the plugin should preserve saved content. Restore is a separate recovery action for one managed record.</div>
+  <h3>Recommended editing sequence</h3>
+  <ol>
+    <li>Back up.</li>
+    <li>Edit one page.</li>
+    <li>Use Preview.</li>
+    <li>Update or Publish.</li>
+    <li>Check desktop and mobile.</li>
+    <li>Continue to the next page.</li>
+  </ol>
+</section>
+
+<section class="section">
+  <div class="kicker">WordPress navigation</div>
+  <h2>3. Where to edit each page</h2>
+  <table>
+    <thead><tr><th>Website content</th><th>WordPress location</th><th>Main new field</th></tr></thead>
+    <tbody>
+      <tr><td>Home</td><td>Pages → Home → Edit</td><td>Additional flexible sections</td></tr>
+      <tr><td>About</td><td>Pages → About → Edit</td><td>Flexible content sections</td></tr>
+      <tr><td>Services directory</td><td>Pages → Services → Edit</td><td>Flexible content sections</td></tr>
+      <tr><td>Additional Services</td><td>Pages → Additional Services → Edit</td><td>Flexible content sections</td></tr>
+      <tr><td>Our Process</td><td>Pages → Our Process → Edit</td><td>Flexible content sections</td></tr>
+      <tr><td>FAQs</td><td>Pages → FAQs → Edit</td><td>Flexible content sections</td></tr>
+      <tr><td>Contact</td><td>Pages → Contact → Edit</td><td>Flexible content sections</td></tr>
+      <tr><td>Gallery</td><td>Pages → Gallery → Edit</td><td>Flexible content sections</td></tr>
+      <tr><td>Service Areas directory</td><td>Pages → Service Areas → Edit</td><td>Flexible content sections</td></tr>
+      <tr><td>Individual suburb/area</td><td>Superior Plus → Service Areas → select area</td><td>Flexible content sections and area media</td></tr>
+      <tr><td>Individual service</td><td>Superior Plus → Services → select service</td><td>Flexible content sections and document sections</td></tr>
+      <tr><td>Blog article</td><td>Superior Plus → Blog Articles → select article</td><td>Flexible content sections</td></tr>
+      <tr><td>Project</td><td>Superior Plus → Projects → select project</td><td>Flexible content sections and gallery</td></tr>
+      <tr><td>Standard/landing page</td><td>Pages → select page</td><td>Flexible content sections</td></tr>
+    </tbody>
+  </table>
+  <p>On the edit screen, scroll to the panel named <strong>Superior Plus editable content</strong>. The ordinary WordPress title identifies the record; the content shown by the React theme is controlled primarily by the Superior Plus fields.</p>
+</section>
+
+<section class="section">
+  <div class="kicker">Field reference</div>
+  <h2>4. Flexible-section field anatomy</h2>
+  <table>
+    <thead><tr><th>Field</th><th>What it edits</th><th>Recommended use</th></tr></thead>
+    <tbody>
+      <tr><td class="field">Eyebrow</td><td>The small uppercase label above the heading, normally accompanied by a short line.</td><td>Two to five words, such as “Service information” or “Why choose us”.</td></tr>
+      <tr><td class="field">Heading</td><td>The large section title.</td><td>A clear heading that describes one topic. Avoid placing a full sentence or paragraph here.</td></tr>
+      <tr><td class="field">Description</td><td>One or more paragraphs displayed beneath the heading.</td><td>Client wording, supporting explanations and introductory copy.</td></tr>
+      <tr><td class="field">List items</td><td>Compact, seamless bullet rows beneath the description.</td><td>One complete idea per item. Do not manually type all bullets into one line.</td></tr>
+      <tr><td class="field">Move up / Move down</td><td>Changes the section's order.</td><td>Arrange the page story without code.</td></tr>
+      <tr><td class="field">Delete</td><td>Removes that complete section from the saved collection.</td><td>Use only when the eyebrow, heading, description and list should all disappear.</td></tr>
+      <tr><td class="field">Add section</td><td>Creates another independent section.</td><td>Use when the next content has a different topic or requires its own heading.</td></tr>
+    </tbody>
+  </table>
+  <div class="example"><span class="label">Example structure</span><strong>Eyebrow:</strong> Service information<br><strong>Heading:</strong> Restore and protect your timber deck<br><strong>Description:</strong> Two short paragraphs explaining exposure, preparation and protection.<br><strong>List items:</strong> Protect timber from UV damage · Reduce moisture penetration · Improve durability · Restore faded surfaces</div>
+</section>
+
+<section class="section">
+  <div class="kicker">Daily workflow</div>
+  <h2>5. Add, edit, reorder and delete sections</h2>
+  <h3>Add a new section</h3>
+  <ol class="steps">
+    <li>Open the required record and scroll to <strong>Superior Plus editable content</strong>.</li>
+    <li>Find <strong>Additional flexible sections — Eyebrow, heading, description &amp; list</strong> or <strong>Flexible content sections</strong>.</li>
+    <li>Click <strong>Add section</strong>.</li>
+    <li>Complete only the fields needed for that section.</li>
+    <li>Add list items individually when the content is a list.</li>
+    <li>Use the movement controls to place the section in the required order.</li>
+    <li>Preview, then click <strong>Update</strong> or <strong>Publish</strong>.</li>
+  </ol>
+  <h3>Edit an existing section</h3>
+  <p>Change the eyebrow, heading, description or individual list items inside that section. Editing one section does not require re-entering the other sections.</p>
+  <h3>Delete a section</h3>
+  <p>Click the section's <strong>Delete</strong> control, then save the page. Deleting a section removes that section only. It does not delete the page, service, images or unrelated sections.</p>
+  <div class="callout danger"><strong>Do not use Restore original content to remove one section.</strong> Restore replaces the managed record with approved defaults and can discard other edits on that same record.</div>
+</section>
+
+<section class="section">
+  <div class="kicker">Readable long copy</div>
+  <h2>6. Multiple paragraphs</h2>
+  <p>The description field supports paragraph breaks. Press <strong>Enter twice</strong> so there is one completely blank line between paragraphs.</p>
+  <div class="example"><span class="label">Correct entry</span>Our painters inspect the surfaces and discuss the required finish.<br><br>Preparation is then matched to the substrate, existing coating and condition of the property.</div>
+  <div class="good"><b>Good</b><span>Separate two distinct ideas with a blank line. The website renders them as separate paragraphs.</span></div>
+  <div class="bad"><b>Avoid</b><span>Pasting five paragraphs with no blank lines. WordPress will treat them as one dense paragraph.</span></div>
+  <h3>Keeping wording verbatim</h3>
+  <p>You may keep the client's wording exactly while improving presentation. Split the supplied wording only at natural paragraph boundaries and move enumerated benefits into list items. Do not rewrite the sentences unless the client approves wording changes.</p>
+  <h3>Formatting that is intentionally restricted</h3>
+  <p>The field stores safe plain text rather than arbitrary HTML. Script tags and unsafe markup are removed. Bold, custom colours, custom font sizes and pasted document styling are not supported because the theme controls typography consistently.</p>
+</section>
+
+<section class="section">
+  <div class="kicker">Clean lists</div>
+  <h2>7. Bullet and numbered content</h2>
+  <h3>Recommended method: separate list items</h3>
+  <ol class="steps">
+    <li>Open the flexible section.</li>
+    <li>Under <strong>List items</strong>, click <strong>Add item</strong>.</li>
+    <li>Paste or type one item only.</li>
+    <li>Repeat for every point.</li>
+    <li>Reorder or delete individual items as needed.</li>
+    <li>Save and preview.</li>
+  </ol>
+  <div class="example"><span class="label">Example list items</span>
+    <ul><li>Protect timber from UV damage</li><li>Reduce moisture penetration</li><li>Improve durability</li><li>Enhance the natural beauty of timber</li></ul>
+  </div>
+  <h3>If the source document already contains bullets</h3>
+  <p>Copy each bullet without its bullet symbol into its own list-item field. This is more dependable than pasting a formatted list from Word or a PDF into one description box.</p>
+  <h3>Numbered steps</h3>
+  <p>If exact numbering is important, include the number in the item's text, for example <code>1. Inspect the surfaces</code>. For normal benefit lists, omit manual numbers and allow the theme's compact list styling to provide the visual marker.</p>
+  <div class="callout warning"><strong>Why pasted bullets sometimes become one sentence:</strong> PDF and messaging applications may copy visual bullets without real line breaks. Separate list-item controls prevent that formatting loss.</div>
+</section>
+
+<section class="section">
+  <div class="kicker">Long hero introductions</div>
+  <h2>8. Hero See more / Show less</h2>
+  <p>The hero introduction can contain multiple paragraphs. When its combined text exceeds approximately <strong>330 characters</strong>, the theme automatically shows a shortened preview followed by <strong>See more</strong>.</p>
+  <ul>
+    <li>The editor does not need to insert the See more button.</li>
+    <li>Selecting See more reveals the complete wording.</li>
+    <li>Selecting Show less returns to the compact hero.</li>
+    <li>The control is keyboard accessible and exposes its expanded state to assistive technology.</li>
+    <li>The original full text remains available to the page; it is not deleted or shortened in WordPress.</li>
+  </ul>
+  <div class="callout"><strong>Field:</strong> use <span class="field">Hero introduction</span>. Do not place the complete hero description inside the Hero title or Hero accent line.</div>
+  <h3>Recommended hero composition</h3>
+  <table><thead><tr><th>Field</th><th>Recommended length</th></tr></thead><tbody>
+    <tr><td>Hero eyebrow</td><td>2–6 words</td></tr>
+    <tr><td>Hero title</td><td>2–8 words</td></tr>
+    <tr><td>Hero accent line</td><td>2–8 words</td></tr>
+    <tr><td>Hero introduction</td><td>Short copy displays normally; long copy collapses automatically</td></tr>
+  </tbody></table>
+</section>
+
+<section class="section">
+  <div class="kicker">Prevent broken layouts</div>
+  <h2>9. Cards versus full content sections</h2>
+  <p>A card is a small preview component. It is not a replacement for a full page section. Putting an entire service-page paragraph into a card creates the tall, narrow block shown in the reported homepage issue.</p>
+  <table>
+    <thead><tr><th>Content type</th><th>Correct field</th><th>Avoid</th></tr></thead>
+    <tbody>
+      <tr><td>Short trust promise</td><td>Trust cards — Heading | Description</td><td>Long service explanations</td></tr>
+      <tr><td>Homepage service preview</td><td>Services-directory summary on the service record</td><td>Full service-page copy</td></tr>
+      <tr><td>Complete explanation</td><td>Flexible content section description</td><td>Small card description</td></tr>
+      <tr><td>Several benefits or inclusions</td><td>Flexible section list items</td><td>Bullets pasted into a one-line card field</td></tr>
+      <tr><td>Full service detail</td><td>Service document/flexible sections</td><td>Homepage card</td></tr>
+    </tbody>
+  </table>
+  <h3>Fix the “Our Professional Painting Services” card</h3>
+  <ol class="steps">
+    <li>Go to <strong>Pages → Home → Edit</strong>.</li>
+    <li>Find <strong>Trust cards — Heading | Description</strong>.</li>
+    <li>Keep the card heading concise and replace its description with a 15–35 word summary.</li>
+    <li>Create an <strong>Additional flexible section</strong> for the complete wording.</li>
+    <li>Use the flexible section's list items for Residential Painting, Interior Painting and the other named services.</li>
+    <li>Preview the homepage at desktop and mobile widths before updating.</li>
+  </ol>
+  <div class="callout warning"><strong>Current limitation:</strong> trust cards do not have their own See more control. The hero introduction does. For long trust-card copy, move the full wording into a flexible section.</div>
+</section>
+
+<section class="section">
+  <div class="kicker">Safe editing model</div>
+  <h2>10. Blank, untouched and deleted content</h2>
+  <table>
+    <thead><tr><th>Situation</th><th>Result after saving</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td>The plugin field is blank and you have never edited it, but original default content is visible.</td><td>The default content remains visible.</td><td>Leave it untouched when editing another field.</td></tr>
+      <tr><td>You enter new content.</td><td>Your saved content replaces the default for that field.</td><td>Preview and confirm the result.</td></tr>
+      <tr><td>You clear a previously configured normal text field.</td><td>The field remains intentionally blank after Plugin 2.6.1.</td><td>Delete all characters and save.</td></tr>
+      <tr><td>You delete one card, list item or flexible section.</td><td>That row disappears; unrelated rows remain.</td><td>Use the row's Delete control and save.</td></tr>
+      <tr><td>You delete every row from a previously configured structured field.</td><td>The saved collection becomes empty.</td><td>Preview carefully because the complete component may disappear.</td></tr>
+      <tr><td>You type spaces into a field.</td><td>Spaces are sanitized as blank; they are not reliable hidden content.</td><td>Use a genuine deletion workflow, not spaces.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout danger"><strong>Special case — visible fallback with a never-configured blank field:</strong> if clearing the already blank control does not hide the fallback, first save a temporary real value so the field becomes configured, then clear it and save again. Preview after both saves. A space does not count as real content.</div>
+  <h3>Restore original content</h3>
+  <p>This action restores only the current managed record to approved Superior Plus defaults. It should be used for recovery, not routine deletion. It does not restore other pages, menus, enquiries or email configuration.</p>
+</section>
+
+<section class="section">
+  <div class="kicker">Page-specific workflow</div>
+  <h2>11. Homepage instructions</h2>
+  <table>
+    <thead><tr><th>Homepage field</th><th>Controls</th><th>Content rule</th></tr></thead>
+    <tbody>
+      <tr><td>Hero eyebrow/title/accent</td><td>Top hero wording</td><td>Keep titles concise.</td></tr>
+      <tr><td>Hero introduction</td><td>Hero paragraphs and automatic See more</td><td>Long client copy may be retained here.</td></tr>
+      <tr><td>Hero trust points</td><td>Small claims beneath the hero actions</td><td>One short phrase per item.</td></tr>
+      <tr><td>Homepage service cards</td><td>Selects service records displayed on Home</td><td>Card text comes from each service's Services-directory summary.</td></tr>
+      <tr><td>Services eyebrow/title/accent/introduction</td><td>Heading above the service cards</td><td>Use the introduction for an overview, not every service detail.</td></tr>
+      <tr><td>Trust cards</td><td>Why-us card heading and description</td><td>Use short proof points only.</td></tr>
+      <tr><td>Additional flexible sections</td><td>Full-width detailed content</td><td>Best location for long paragraphs and bullet lists.</td></tr>
+      <tr><td>Closing CTA fields</td><td>Final call-to-action wording and destination</td><td>Keep action text direct and concise.</td></tr>
+    </tbody>
+  </table>
+  <h3>Homepage content placement rule</h3>
+  <div class="good"><b>Good</b><span>Short card summary → Read more/service page → complete information in flexible sections.</span></div>
+  <div class="bad"><b>Avoid</b><span>Complete PDF section → one homepage trust or service card.</span></div>
+</section>
+
+<section class="section">
+  <div class="kicker">Individual services</div>
+  <h2>12. Service-page instructions</h2>
+  <p>Go to <strong>Superior Plus → Services</strong> and edit the required service.</p>
+  <table>
+    <thead><tr><th>Service field</th><th>Where it appears</th><th>Best use</th></tr></thead>
+    <tbody>
+      <tr><td>Services-directory summary</td><td>Homepage/directory/related-service preview cards</td><td>A short summary only; maximum 400 characters.</td></tr>
+      <tr><td>Hero introduction</td><td>Top of the individual service page</td><td>Opening description; long text receives See more.</td></tr>
+      <tr><td>Scope heading/introduction/items</td><td>Scope section</td><td>Service inclusions, each as a separate item.</td></tr>
+      <tr><td>Document sections</td><td>Main approved service narrative</td><td>Eyebrow, heading, multi-paragraph description and lists.</td></tr>
+      <tr><td>Additional flexible sections</td><td>Extra managed sections</td><td>New client content that does not replace an existing section.</td></tr>
+      <tr><td>Process introduction/steps</td><td>Service process section</td><td>One process step per item.</td></tr>
+      <tr><td>Benefits</td><td>Benefits section</td><td>One benefit per item.</td></tr>
+      <tr><td>Related services</td><td>Related-service cards</td><td>Select existing service records; do not recreate them as plain text.</td></tr>
+      <tr><td>Service gallery</td><td>Project imagery on the service page</td><td>Add, remove and reorder Media Library items.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><strong>Important:</strong> changing the Services-directory summary changes every card that uses that service record. It does not replace the full service-page narrative.</div>
+</section>
+
+<section class="section">
+  <div class="kicker">Other managed records</div>
+  <h2>13. Instructions for the remaining pages</h2>
+  <h3>About</h3>
+  <p>Use existing About-specific fields for the approved approach, standards and roots sections. Use flexible sections for new topics containing an eyebrow, heading, paragraphs or lists. Keep flip-card text compact.</p>
+  <h3>Our Process</h3>
+  <p>Use the dedicated process-step controls for the main sequence. Use flexible sections for detailed explanations, lists or supporting information. Do not force several paragraphs onto a flip card.</p>
+  <h3>FAQs</h3>
+  <p>Edit individual questions under <strong>Superior Plus → FAQs</strong>. Use the FAQs page fields for page introductions and follow-up sections such as Why Clients Choose Us, Share Your Experience and Request a Free Quote. Use flexible sections for additional explanatory content.</p>
+  <h3>Contact</h3>
+  <p>Use the dedicated form fields and contact-step controls for the form. Flexible sections can add preparation notes or service information, but they do not create new form inputs.</p>
+  <h3>Service Areas and individual suburbs</h3>
+  <p>Edit directory copy on the Service Areas page. Edit each suburb record for its own hero, descriptions, images and flexible sections. A missing area image must be replaced through that area's Media Library control, then the area record must be updated.</p>
+  <h3>Gallery and Projects</h3>
+  <p>Use Projects for individual project titles, types and image collections. Flexible sections can add project background, scope or results. Use the gallery control—not the description field—to add images.</p>
+  <h3>Blog articles</h3>
+  <p>Use article-specific fields for category, read time, takeaways and references. Use flexible sections for additional article topics that need paragraphs and lists.</p>
+</section>
+
+<section class="section">
+  <div class="kicker">Media workflow</div>
+  <h2>14. Images and media</h2>
+  <h3>Add or replace one image</h3>
+  <ol class="steps">
+    <li>Open the required page, service, area or project.</li>
+    <li>Find the correct Hero image, Secondary image or other named media field.</li>
+    <li>Click <strong>Choose or replace</strong>.</li>
+    <li>Upload a file or select an existing Media Library item.</li>
+    <li>Add meaningful alt text describing the image's content and purpose.</li>
+    <li>Click <strong>Update</strong>; selecting media alone does not publish it.</li>
+  </ol>
+  <h3>Add several gallery items</h3>
+  <p>Use <strong>Add images or videos</strong>, choose the Media Library items, reorder them inside the gallery control, then save the record.</p>
+  <h3>Hawthorn East or Camberwell missing photos</h3>
+  <ol>
+    <li>Go to <strong>Superior Plus → Service Areas</strong>.</li>
+    <li>Edit Hawthorn East or Camberwell.</li>
+    <li>Choose/replace the relevant hero or area image.</li>
+    <li>Enter accurate alt text.</li>
+    <li>Update and clear caches.</li>
+  </ol>
+  <div class="callout warning"><strong>If an image still does not appear:</strong> confirm the image loads in the Media Library, the live site is running Theme 3.5.1 and Plugin 2.6.1, then clear page/CDN/browser caches.</div>
+</section>
+
+<section class="section">
+  <div class="kicker">Capacity planning</div>
+  <h2>15. Limits and content planning</h2>
+  <table>
+    <thead><tr><th>Control</th><th>Limit</th><th>Planning recommendation</th></tr></thead>
+    <tbody>
+      <tr><td>Flexible sections per field</td><td>40</td><td>Group related content. Do not create one section for every sentence.</td></tr>
+      <tr><td>List items per flexible section</td><td>60</td><td>Use one idea per item. Split unrelated lists into different sections.</td></tr>
+      <tr><td>Service document + additional sections</td><td>Up to 40 in each field</td><td>Use document sections for core narrative and additional sections for new supporting copy.</td></tr>
+      <tr><td>Services-directory summary</td><td>400 characters</td><td>Aim for 15–35 words so cards remain balanced.</td></tr>
+      <tr><td>Hero introduction</td><td>1,200 characters</td><td>Long copy is allowed and automatically collapses after about 330 characters.</td></tr>
+    </tbody>
+  </table>
+  <p>During testing, 40 sections with dense lists rendered successfully across representative homepage, standard page, directory, service, area, article and project routes at desktop and mobile sizes. Nevertheless, content should be divided according to reader needs—not filled to the technical maximum without reason.</p>
+  <div class="callout danger"><strong>Values above the hard limits are discarded during saving.</strong> If more content is genuinely required, create another appropriate record/page or revise the information architecture before editing code.</div>
+</section>
+
+<section class="section">
+  <div class="kicker">Quality control</div>
+  <h2>16. Preview and publishing checklist</h2>
+  <ul class="checklist">
+    <li>Confirm the correct page, service, area, project or article is open.</li>
+    <li>Confirm the eyebrow is a small label, not a paragraph.</li>
+    <li>Confirm the heading is concise and contains no bullet list.</li>
+    <li>Confirm paragraphs have blank lines between them.</li>
+    <li>Confirm every bullet is a separate list item.</li>
+    <li>Confirm card descriptions are summaries rather than full sections.</li>
+    <li>Confirm images appear and have useful alt text.</li>
+    <li>Use Preview before Update/Publish.</li>
+    <li>Check desktop layout.</li>
+    <li>Check a mobile-sized browser or real phone.</li>
+    <li>Test See more and Show less where shown.</li>
+    <li>Test card links and CTA destinations.</li>
+    <li>Clear caches if the live page still shows the old version.</li>
+  </ul>
+  <h3>Safe batch-edit method</h3>
+  <p>For a large client document, edit and verify one page at a time. Keep a checklist of PDF headings and mark each one only after the wording and placement have been verified on the live preview.</p>
+</section>
+
+<section class="section">
+  <div class="kicker">Problem solving</div>
+  <h2>17. Troubleshooting</h2>
+  <table>
+    <thead><tr><th>Problem</th><th>Likely cause</th><th>Resolution</th></tr></thead>
+    <tbody>
+      <tr><td>A card becomes extremely tall or narrow.</td><td>Long page copy was placed in a card description.</td><td>Shorten the card summary and move the full copy into a flexible section.</td></tr>
+      <tr><td>Bullets become one sentence.</td><td>The source did not contain real line breaks, or everything was pasted into one description.</td><td>Create separate list items in the flexible-section editor.</td></tr>
+      <tr><td>Untouched default content remains after editing another field.</td><td>This is the intended safe-save behavior.</td><td>No action is required.</td></tr>
+      <tr><td>You want visible default content to disappear.</td><td>The field may never have been configured.</td><td>Save a real temporary value, then clear the field and save again. Do not use a space.</td></tr>
+      <tr><td>A section disappears after saving.</td><td>All its eyebrow, heading, description and list fields are empty, or the section was deleted.</td><td>Restore the required content or restore the current record if recovery is intended.</td></tr>
+      <tr><td>The live site shows old content.</td><td>WordPress, hosting, CDN or browser cache.</td><td>Clear caches and confirm Plugin 2.6.1 and Theme 3.5.1 are active.</td></tr>
+      <tr><td>Original wording briefly appears before edited wording.</td><td>An older fallback-first theme is still active or cached.</td><td>Install Theme 3.5.1 and clear all caches. The updated theme shows a neutral loader until current WordPress content resolves.</td></tr>
+      <tr><td>An image is missing.</td><td>No Media Library attachment, inaccessible file or cached response.</td><td>Choose/replace the image, update the record and clear caches.</td></tr>
+      <tr><td>Changes appear on more than one card.</td><td>Several components reference the same service record.</td><td>Remember that the Services-directory summary is shared anywhere that service appears as a preview.</td></tr>
+      <tr><td>See more does not appear.</td><td>The hero introduction is below the automatic threshold or the text was entered in a different field.</td><td>Use Hero introduction; the control appears only when the combined copy exceeds about 330 characters.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout success"><strong>Final rule:</strong> short promotional copy belongs in cards; complete client wording belongs in hero introductions, dedicated page fields or flexible sections. This preserves the wording and the design at the same time.</div>
+
+  <h3>Support information to record before reporting an issue</h3>
+  <ul>
+    <li>The exact WordPress record and field name.</li>
+    <li>Plugin and theme versions.</li>
+    <li>A screenshot of the editor field and the resulting page.</li>
+    <li>Whether the issue occurs on desktop, mobile or both.</li>
+    <li>Whether caches were cleared.</li>
+    <li>Whether Restore original content was used.</li>
+  </ul>
+</section>
+
+</body>
+</html>

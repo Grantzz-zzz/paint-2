@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Superior Plus Website Quote Email Delivery Setup</title>
+  <style>
+    @page { size: A4; margin: 17mm 16mm 18mm; }
+    :root { --green:#1f5140; --green-dark:#163b30; --maroon:#8f2824; --gold:#f3c51d; --cream:#fbf6ec; --ink:#18211e; --muted:#59655f; --line:#d9dfdb; }
+    * { box-sizing: border-box; }
+    body { margin:0; color:var(--ink); font: 10.6pt/1.5 Arial, Helvetica, sans-serif; background:#fff; }
+    h1,h2,h3 { font-family:Arial, Helvetica, sans-serif; line-height:1.16; margin:0 0 10px; }
+    h1 { font-size:30pt; letter-spacing:-1.2px; }
+    h2 { font-size:20pt; color:var(--green); border-bottom:2px solid var(--gold); padding-bottom:7px; margin-top:4px; }
+    h3 { font-size:13pt; margin-top:18px; color:var(--maroon); }
+    p { margin:0 0 10px; }
+    a { color:var(--maroon); overflow-wrap:anywhere; }
+    ul,ol { margin:7px 0 12px; padding-left:22px; }
+    li { margin:4px 0; }
+    code { font-family:Consolas, monospace; font-size:9.3pt; }
+    .cover { min-height:252mm; display:flex; flex-direction:column; justify-content:space-between; padding:18mm 14mm; color:white; background:linear-gradient(145deg,var(--green-dark),var(--green) 62%,#2b6a55); position:relative; overflow:hidden; }
+    .cover:before { content:""; position:absolute; width:180mm; height:70mm; border:18mm solid rgba(255,255,255,.055); border-radius:50%; right:-62mm; top:30mm; transform:rotate(-14deg); }
+    .cover .kicker { text-transform:uppercase; letter-spacing:2.5px; font-weight:700; color:var(--gold); margin-bottom:22px; }
+    .cover h1 { max-width:145mm; }
+    .cover .lead { font-size:14pt; max-width:142mm; color:rgba(255,255,255,.85); margin-top:18px; }
+    .cover .meta { border-top:1px solid rgba(255,255,255,.25); padding-top:16px; display:grid; grid-template-columns:1fr 1fr; gap:12px; color:rgba(255,255,255,.8); }
+    .cover .meta b { display:block; color:white; }
+    .page { break-before:page; }
+    .section-label { display:inline-block; padding:5px 10px; border-radius:14px 4px; background:var(--cream); color:var(--maroon); font-size:8pt; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:10px; }
+    .notice { border-left:5px solid var(--gold); background:var(--cream); padding:13px 15px; margin:13px 0 16px; break-inside:avoid; }
+    .notice strong { color:var(--green-dark); }
+    .warning { border-left-color:var(--maroon); background:#f8e9e6; }
+    .success { border-left-color:var(--green); background:#e7f1ec; }
+    .settings { width:100%; border-collapse:collapse; margin:12px 0 17px; break-inside:avoid; }
+    .settings th,.settings td { border:1px solid var(--line); text-align:left; padding:8px 9px; vertical-align:top; }
+    .settings th { width:34%; background:var(--cream); color:var(--green-dark); }
+    .checklist { list-style:none; padding-left:0; }
+    .checklist li { position:relative; padding-left:23px; margin:7px 0; }
+    .checklist li:before { content:"□"; position:absolute; left:0; top:-1px; color:var(--green); font-size:15pt; }
+    .step { display:grid; grid-template-columns:28px 1fr; gap:10px; margin:9px 0; break-inside:avoid; }
+    .step .n { width:26px; height:26px; border-radius:50%; display:grid; place-items:center; background:var(--green); color:white; font-weight:700; }
+    .step p { margin:2px 0 0; }
+    .codebox { background:#17231f; color:#eff7f2; border-radius:5px 14px; padding:12px 14px; margin:10px 0 15px; break-inside:avoid; }
+    .small { color:var(--muted); font-size:9pt; }
+    .comparison td:first-child { font-weight:700; }
+    .footer-note { margin-top:24px; padding-top:8px; border-top:1px solid var(--line); color:var(--muted); font-size:8.5pt; }
+    .no-break { break-inside:avoid; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div>
+      <div class="kicker">Superior Plus Painting &amp; Remodeling</div>
+      <h1>Website Quote Email Delivery Setup</h1>
+      <p class="lead">A secure, step-by-step guide for connecting the WordPress quote form without sharing the client’s Google password.</p>
+    </div>
+    <div class="meta">
+      <div><b>Recommended first option</b>Google / Gmail API</div>
+      <div><b>Alternative option</b>GoDaddy SMTP Relay</div>
+      <div><b>Website</b>sppaintingremodeling.com.au</div>
+      <div><b>Prepared</b>31 July 2026</div>
+    </div>
+  </section>
+
+  <section class="page">
+    <span class="section-label">Read this first</span>
+    <h2>What is being configured?</h2>
+    <p>The website quote forms already collect and validate customer enquiries. WordPress now needs an authorised email service to deliver each enquiry to the business inbox.</p>
+    <div class="notice success"><strong>The client never needs to give the developer their Google password.</strong> For the Gmail method, the client signs into Google privately and clicks Allow. The developer never sees or stores the password.</div>
+    <h3>How a quote email is routed</h3>
+    <table class="settings">
+      <tr><th>Recipient</th><td><code>sppainting.remodeling@gmail.com</code></td></tr>
+      <tr><th>Sender</th><td>The authorised Gmail account under Option 1, or the confirmed domain mailbox under Option 2.</td></tr>
+      <tr><th>Reply-To</th><td>The customer email entered in the quote form. Pressing Reply addresses the customer.</td></tr>
+    </table>
+    <h3>Before beginning</h3>
+    <ul class="checklist">
+      <li>Keep the WordPress administrator dashboard open.</li>
+      <li>Confirm WP Mail SMTP is installed and active.</li>
+      <li>Use a private/incognito window for the client’s Google authorisation if multiple Google accounts are signed in.</li>
+      <li>Never send passwords, OAuth Client Secrets or recovery codes by email or chat.</li>
+      <li>Use controlled test information only until delivery is confirmed.</li>
+    </ul>
+  </section>
+
+  <section class="page">
+    <span class="section-label">Option 1 · Recommended</span>
+    <h2>Google / Gmail API</h2>
+    <p>This method sends website email through Google’s HTTPS API. It avoids GoDaddy’s blocked external SMTP ports and does not require a new domain mailbox.</p>
+    <div class="notice"><strong>Account ownership:</strong> the Google project and final authorisation should be completed while signed into <code>sppainting.remodeling@gmail.com</code>. The client may complete the login/Allow step themselves while the developer provides guidance.</div>
+
+    <h3>Step 1 — Select Gmail in WordPress</h3>
+    <ol>
+      <li>Open <strong>WordPress Dashboard → WP Mail SMTP → Settings → General</strong>.</li>
+      <li>Set the values below.</li>
+    </ol>
+    <table class="settings">
+      <tr><th>From Email</th><td><code>sppainting.remodeling@gmail.com</code></td></tr>
+      <tr><th>Force From Email</th><td>On</td></tr>
+      <tr><th>From Name</th><td>Superior Plus Painting &amp; Remodeling</td></tr>
+      <tr><th>Force From Name</th><td>On</td></tr>
+      <tr><th>Mailer</th><td>Google / Gmail</td></tr>
+    </table>
+    <p>WP Mail SMTP Free requires manual setup. One-Click Setup is a paid Pro feature. Copy the <strong>Authorized Redirect URI</strong> shown in WP Mail SMTP and keep the WordPress tab open.</p>
+
+    <h3>Step 2 — Create the Google Cloud project</h3>
+    <div class="step"><span class="n">1</span><p>While signed into <code>sppainting.remodeling@gmail.com</code>, open <a href="https://console.cloud.google.com/">console.cloud.google.com</a>.</p></div>
+    <div class="step"><span class="n">2</span><p>Open the project selector at the top, choose <strong>New Project</strong>, and name it <strong>Superior Plus Website Mail</strong>.</p></div>
+    <div class="step"><span class="n">3</span><p>Create the project and make sure it is selected before continuing.</p></div>
+
+    <h3>Step 3 — Enable Gmail API</h3>
+    <ol>
+      <li>Open <strong>APIs &amp; Services → Library</strong>.</li>
+      <li>Search for <strong>Gmail API</strong>.</li>
+      <li>Open the Gmail API result and click <strong>Enable</strong>.</li>
+    </ol>
+  </section>
+
+  <section class="page">
+    <span class="section-label">Option 1 · Google configuration</span>
+    <h2>Create OAuth credentials</h2>
+    <h3>Step 4 — Configure the consent screen</h3>
+    <ol>
+      <li>After enabling Gmail API, select <strong>Create Credentials</strong>.</li>
+      <li>Choose <strong>Gmail API</strong> and select <strong>User data</strong>.</li>
+      <li>Enter the following application details:</li>
+    </ol>
+    <table class="settings">
+      <tr><th>App name</th><td>Superior Plus Website Mail</td></tr>
+      <tr><th>User support email</th><td><code>sppainting.remodeling@gmail.com</code></td></tr>
+      <tr><th>Developer contact email</th><td><code>sppainting.remodeling@gmail.com</code></td></tr>
+    </table>
+    <p>The Scopes step may be skipped when Google marks it optional. Continue until the OAuth Client section appears.</p>
+
+    <h3>Step 5 — Create the Web application</h3>
+    <ol>
+      <li>Choose <strong>Web application</strong> as the application type.</li>
+      <li>Name it <strong>Superior Plus WordPress</strong>.</li>
+      <li>Leave <strong>Authorized JavaScript origins</strong> empty.</li>
+      <li>Under <strong>Authorized redirect URIs</strong>, paste the exact URI displayed by WP Mail SMTP.</li>
+    </ol>
+    <div class="codebox"><code>https://connect.wpmailsmtp.com/google/</code></div>
+    <div class="notice warning"><strong>Use the value displayed inside WP Mail SMTP if it differs.</strong> Add it under Authorized redirect URIs—not Authorized JavaScript origins.</div>
+    <ol start="5">
+      <li>Create the OAuth client.</li>
+      <li>Copy the resulting <strong>Client ID</strong> and <strong>Client Secret</strong>.</li>
+    </ol>
+
+    <h3>Step 6 — Publish the Google application</h3>
+    <ol>
+      <li>Open <strong>APIs &amp; Services → OAuth consent screen → Audience</strong>.</li>
+      <li>For a standard Gmail account, change the publishing status from <strong>Testing</strong> to <strong>In production</strong>.</li>
+      <li>If Google displays a user-type choice, choose <strong>External</strong>.</li>
+    </ol>
+  </section>
+
+  <section class="page">
+    <span class="section-label">Option 1 · Final connection</span>
+    <h2>Authorise and test Gmail</h2>
+    <h3>Step 7 — Connect WP Mail SMTP</h3>
+    <ol>
+      <li>Return to <strong>WP Mail SMTP → Settings → General</strong>.</li>
+      <li>Paste the Google <strong>Client ID</strong> and <strong>Client Secret</strong>.</li>
+      <li>Click <strong>Save Settings</strong>.</li>
+      <li>Click <strong>Allow plugin to send emails using your Google account</strong>.</li>
+      <li>The client signs into <code>sppainting.remodeling@gmail.com</code> privately and approves the permission request.</li>
+    </ol>
+    <div class="notice"><strong>No password is shared.</strong> Google returns an access authorisation to WordPress. The client can revoke it later from their Google Account security settings.</div>
+    <p>If Google shows “This app isn’t verified” for the private app, select <strong>Advanced</strong>, continue to the app, and approve it. Only proceed when the client recognises the project created in this guide.</p>
+
+    <h3>Step 8 — Test email delivery</h3>
+    <ol>
+      <li>Open <strong>WP Mail SMTP → Tools → Email Test</strong>.</li>
+      <li>Send a test to an inbox you can access.</li>
+      <li>Confirm it actually appears in Inbox, Spam or All Mail. A green “sent” banner alone is not enough.</li>
+      <li>Submit one website quote marked <strong>TEST QUOTE — PLEASE IGNORE</strong>.</li>
+      <li>Confirm the quote reaches <code>sppainting.remodeling@gmail.com</code>.</li>
+      <li>Press Reply and confirm the reply is addressed to the email entered in the quote form.</li>
+    </ol>
+
+    <h3>Gmail limits and suitability</h3>
+    <p>A standard Gmail account is generally limited to approximately 500 outgoing messages per day. Each quote normally uses one message, so this is suitable for a painting-business contact form, but not for newsletters or bulk marketing.</p>
+
+    <h3>Common Gmail errors</h3>
+    <table class="settings">
+      <tr><th>redirect_uri_mismatch</th><td>The URI in Google does not exactly match the WP Mail SMTP Authorized Redirect URI.</td></tr>
+      <tr><th>invalid_client</th><td>Re-copy the Client ID without extra spaces.</td></tr>
+      <tr><th>403 access_denied</th><td>Publish the application or add/authorise the correct Google user.</td></tr>
+      <tr><th>Login Required</th><td>Return to WP Mail SMTP and complete the Allow/authorisation step.</td></tr>
+    </table>
+  </section>
+
+  <section class="page">
+    <span class="section-label">Option 2 · Alternative</span>
+    <h2>GoDaddy SMTP Relay</h2>
+    <p>This method uses GoDaddy’s internal Managed WordPress relay. It does not use the client’s Gmail password, but it requires a legitimate sender address under the website’s domain and correct DNS authentication.</p>
+    <div class="notice warning"><strong>Do not use Gmail as the From Email with this relay.</strong> GoDaddy states that third-party sender domains such as Gmail can fail authentication because the website owner does not control Gmail’s DNS.</div>
+
+    <h3>Requirements</h3>
+    <ul class="checklist">
+      <li>Authorised access to the client’s GoDaddy hosting/email account, or assistance from GoDaddy Support.</li>
+      <li>A real, confirmed mailbox ending in <code>@sppaintingremodeling.com.au</code>.</li>
+      <li>Authorised access to Cloudflare DNS, because the domain currently uses Cloudflare nameservers.</li>
+      <li>The sender mailbox address confirmed by the client or GoDaddy. Do not invent or type an address that has not been created.</li>
+    </ul>
+
+    <h3>Step 1 — Confirm the sender mailbox</h3>
+    <p>In the client’s GoDaddy account, open the Email &amp; Office area and confirm the exact active mailbox under <code>sppaintingremodeling.com.au</code>. If none exists, the client must decide whether to create one before using this option.</p>
+    <p class="small">The business recipient may remain <code>sppainting.remodeling@gmail.com</code>. The domain mailbox is the authorised sender, not necessarily the destination.</p>
+
+    <h3>Step 2 — Configure WP Mail SMTP</h3>
+    <p>Open <strong>WP Mail SMTP → Settings → General</strong>, select <strong>Other SMTP</strong>, and enter:</p>
+    <table class="settings">
+      <tr><th>SMTP Host</th><td><code>relay-hosting.secureserver.net</code></td></tr>
+      <tr><th>Encryption</th><td>None</td></tr>
+      <tr><th>SMTP Port</th><td><code>25</code></td></tr>
+      <tr><th>Auto TLS</th><td>Off</td></tr>
+      <tr><th>Authentication</th><td>Off</td></tr>
+      <tr><th>SMTP Username</th><td>Leave blank</td></tr>
+      <tr><th>SMTP Password</th><td>Leave blank</td></tr>
+      <tr><th>From Email</th><td>The exact active domain mailbox confirmed in Step 1</td></tr>
+      <tr><th>Force From Email</th><td>On</td></tr>
+      <tr><th>From Name</th><td>Superior Plus Painting &amp; Remodeling</td></tr>
+      <tr><th>Force From Name</th><td>On</td></tr>
+    </table>
+  </section>
+
+  <section class="page">
+    <span class="section-label">Option 2 · DNS and testing</span>
+    <h2>Authorise the GoDaddy relay</h2>
+    <h3>Step 3 — Add or merge the SPF record</h3>
+    <p>Open <strong>Cloudflare → sppaintingremodeling.com.au → DNS</strong>. Search existing TXT records for a value beginning with <code>v=spf1</code>.</p>
+    <p>If no SPF record exists, add:</p>
+    <table class="settings">
+      <tr><th>Type</th><td>TXT</td></tr>
+      <tr><th>Name</th><td><code>@</code></td></tr>
+      <tr><th>Content</th><td><code>v=spf1 include:secureserver.net -all</code></td></tr>
+      <tr><th>TTL</th><td>Auto</td></tr>
+    </table>
+    <div class="notice warning"><strong>Never publish two separate SPF records.</strong> If an SPF record exists when configuring the site, merge <code>include:secureserver.net</code> into that record or ask GoDaddy/Cloudflare support to merge it safely.</div>
+
+    <h3>Step 4 — Test actual delivery</h3>
+    <ol>
+      <li>Wait for DNS propagation. Allow at least 30 minutes before the first retest.</li>
+      <li>Open <strong>WP Mail SMTP → Tools → Email Test</strong>.</li>
+      <li>Send to an inbox you can access.</li>
+      <li>Verify the message appears in Inbox, Spam or All Mail.</li>
+      <li>Submit a test quote and verify the business receives it.</li>
+    </ol>
+    <div class="notice"><strong>Important:</strong> WP Mail SMTP’s “Test email sent successfully” only proves that GoDaddy accepted the message. The test is complete only when the message appears in the destination mailbox.</div>
+
+    <h3>If GoDaddy accepts but nothing arrives</h3>
+    <p>Send this to GoDaddy Advanced Hosting Support:</p>
+    <div class="codebox"><code>We configured relay-hosting.secureserver.net on port 25 with no encryption and no authentication. WP Mail SMTP reports success, but the recipient does not receive the message. Please confirm the exact authorised From mailbox for this Managed WordPress account and verify the relay logs, SPF requirements and delivery status.</code></div>
+  </section>
+
+  <section class="page">
+    <span class="section-label">Decision and handoff</span>
+    <h2>Which option should be used?</h2>
+    <table class="settings comparison">
+      <tr><th>Consideration</th><th>Google / Gmail API</th><th>GoDaddy Relay</th></tr>
+      <tr><td>Recommended</td><td>Yes</td><td>Alternative</td></tr>
+      <tr><td>Uses existing Gmail</td><td>Yes</td><td>Only as recipient</td></tr>
+      <tr><td>Client shares password</td><td>No</td><td>No</td></tr>
+      <tr><td>New domain mailbox</td><td>Not required</td><td>Required/confirmed</td></tr>
+      <tr><td>Cloudflare SPF work</td><td>Not required for the existing Gmail address</td><td>Required</td></tr>
+      <tr><td>Setup effort</td><td>Google Cloud OAuth setup</td><td>GoDaddy mailbox plus DNS</td></tr>
+      <tr><td>SMTP port dependency</td><td>No</td><td>Uses GoDaddy internal port 25</td></tr>
+    </table>
+
+    <h3>Final production checklist</h3>
+    <ul class="checklist">
+      <li>The selected mailer is connected under a client-controlled account.</li>
+      <li>The WP Mail SMTP test message is physically present in the destination inbox.</li>
+      <li>The Superior Plus quote recipient is <code>sppainting.remodeling@gmail.com</code>.</li>
+      <li>A live quote marked as a test reaches the client.</li>
+      <li>Reply addresses the customer email entered in the form.</li>
+      <li>Inbox, Spam and All Mail have been checked.</li>
+      <li>Temporary developer accounts and test recipients have been removed.</li>
+      <li>No Google password, Client Secret or recovery code has been shared.</li>
+    </ul>
+
+    <h3>Official references</h3>
+    <ul>
+      <li><a href="https://wpmailsmtp.com/docs/how-to-set-up-the-gmail-mailer-in-wp-mail-smtp/">WP Mail SMTP — Google Workspace / Gmail setup</a></li>
+      <li><a href="https://www.godaddy.com/help/send-form-mail-using-an-smtp-relay-server-953">GoDaddy — Send form mail using an SMTP relay server</a></li>
+      <li><a href="https://support.google.com/mail/answer/22839">Google — Gmail sending and receiving limits</a></li>
+    </ul>
+    <p class="footer-note">Prepared for Superior Plus Painting &amp; Remodeling. This guide covers mail transport only; it does not require a new website theme or Superior Plus Content plugin update.</p>
+  </section>
+</body>
+</html>

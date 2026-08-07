@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { Divider, Reveal } from '../App'
+import { Reveal } from '../App'
 import { fieldValue, mediaUrl } from '../content/ContentProvider'
 import { SectionIntro } from './PageLayout'
-import { StructuredSectionCopy, structuredSections } from './StructuredContent'
+import { ManagedContentSection, structuredSections } from './StructuredContent'
 
 /**
  * Shared renderer for the generic controls exposed by the WordPress editor.
@@ -27,26 +27,14 @@ export default function ManagedPageExtras({
   if (!sections.length && !secondaryImage && !related.length) return null
 
   return <>
-    {sections.map((section, index) => <section
-      className={`inner-section managed-page-extra ${index % 2 ? 'cream' : ''}`}
+    {sections.map((section, index) => <ManagedContentSection
+      section={section}
+      index={index}
+      defaultEyebrow={eyebrow}
+      fallbackImage={index === 0 && secondaryImage ? { url: secondaryImage, alt: secondaryMedia?.alt, object_position: secondaryMedia?.object_position } : null}
+      fallbackImageAlt={imageAlt}
       key={section.id}
-    >
-      <div className={`container ${index === 0 && secondaryImage ? 'editorial-grid' : ''}`}>
-        <Reveal>
-          <StructuredSectionCopy section={section} defaultEyebrow={eyebrow}/>
-        </Reveal>
-        {index === 0 && secondaryImage && <Reveal className="editorial-image" delay={.1}>
-          <img
-            src={secondaryImage}
-            alt={secondaryMedia?.alt || imageAlt}
-            loading="lazy"
-            decoding="async"
-            style={{ objectPosition: secondaryMedia?.object_position || '50% 50%' }}
-          />
-        </Reveal>}
-      </div>
-      {index === 0 && <Divider color={index % 2 ? '#fff' : '#fbf6ec'} variant="wave"/>}
-    </section>)}
+    />)}
 
     {!sections.length && secondaryImage && <section className="inner-section managed-page-extra">
       <div className="container">

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import {
   contact as fallbackContact,
   faqs as fallbackFaqs,
@@ -14,7 +14,7 @@ import { toInternalAppPath } from '../utils/routes'
  * @typedef {{label:string, url:string}} SppLink
  * @typedef {{id:number|string, label:string, url:string, children?:SppLink[]}} SppNavigationItem
  * @typedef {{name:string, phone_display:string, phone_href:string, email:string, location:string, google_maps_url?:string, google_maps_embed_url?:string, facebook_url?:string, instagram_url?:string, logo?:SppMedia|null}} SppBusiness
- * @typedef {{business:SppBusiness, review_profile:{rating:number,count:number,url:string}, navigation:SppNavigationItem[], footer:{intro:string, columns:Array<{heading:string,links:SppLink[]}>, stats:Array<{value:string,label:string}>, copyright:string, closing_line:string}, trust_items:string[], service_areas:string[], default_cta:{title:string,text:string,link:SppLink}}} SppBootstrap
+ * @typedef {{business:SppBusiness, review_profile:{rating:number,count:number,url:string}, navigation:SppNavigationItem[], footer:{intro:string, columns:Array<{heading:string,links:SppLink[]}>, stats:Array<{value:string,label:string}>, copyright:string, closing_line:string}, trust_items:string[], location_band:{enabled:boolean,after_coloured:boolean,eyebrow:string,title:string,accent:string,text:string}, service_areas:string[], default_cta:{title:string,text:string,link:SppLink}}} SppBootstrap
  * @typedef {{id?:number,slug:string,title:string,short:string,url?:string,tone?:string}} SppServiceSummary
  */
 
@@ -70,6 +70,14 @@ export const fallbackBootstrap = {
     closing_line: 'Made with care in Melbourne.',
   },
   trust_items: ['Fully insured', 'Free written quotes', 'Careful preparation', 'Clean, tidy sites'],
+  location_band: {
+    enabled: true,
+    after_coloured: false,
+    eyebrow: 'Melbourne-wide',
+    title: 'Local service,',
+    accent: 'carefully delivered.',
+    text: 'A selection of Melbourne suburbs regularly serviced for this type of work.',
+  },
   service_areas: fallbackAreas,
   default_cta: {
     title: 'Ready for a fresh start?',
@@ -84,6 +92,7 @@ export const fallbackBootstrap = {
 
 const ContentContext = createContext(null)
 const inflight = new Map()
+const resolved = new Map()
 
 function configuredApiBase() {
   const configured = typeof window !== 'undefined' ? window.__SPP_CONTENT_API__ : ''
@@ -95,10 +104,14 @@ async function request(endpoint) {
   const base = configuredApiBase()
   const isPreview = endpoint.startsWith('/preview/')
   if (!base) throw new Error('WordPress content API is not configured')
+  if (resolved.has(endpoint)) return resolved.get(endpoint)
   if (inflight.has(endpoint)) return inflight.get(endpoint)
+  const controller = new AbortController()
+  const timeout = window.setTimeout(() => controller.abort(), 8000)
   const pending = fetch(`${base}${endpoint}`, {
     credentials: 'same-origin',
     cache: 'no-store',
+    signal: controller.signal,
     headers: {
       Accept: 'application/json',
       ...(isPreview && window.__SPP_REST_NONCE__ ? { 'X-WP-Nonce': window.__SPP_REST_NONCE__ } : {}),
@@ -109,8 +122,12 @@ async function request(endpoint) {
     if (payload?.schema_version !== '1.0.0' || !Object.hasOwn(payload, 'data')) {
       throw new Error('Unsupported Superior Plus content response')
     }
+    resolved.set(endpoint, payload.data)
     return payload.data
-  }).finally(() => inflight.delete(endpoint))
+  }).finally(() => {
+    window.clearTimeout(timeout)
+    inflight.delete(endpoint)
+  })
   inflight.set(endpoint, pending)
   return pending
 }
@@ -207,6 +224,16 @@ export function fieldValue(fields, key, fallback) {
   return fields[key]
 }
 
+export function booleanValue(value, fallback = false) {
+  if (value === undefined || value === null) return fallback
+  if (typeof value === 'boolean') return value
+  if (typeof value === 'number') return value !== 0
+  const normalized = String(value).trim().toLowerCase()
+  if (['0', 'false', 'off', 'no', ''].includes(normalized)) return false
+  if (['1', 'true', 'on', 'yes'].includes(normalized)) return true
+  return Boolean(value)
+}
+
 export function textItems(items, fallback = []) {
   if (items === undefined) return fallback
   if (!Array.isArray(items)) return fallback
@@ -263,6 +290,16 @@ export function ContentProvider({ children }) {
   const [bootstrap, setBootstrap] = useState(fallbackBootstrap)
   const [services, setServices] = useState(fallbackServices)
   const [status, setStatus] = useState(enabled ? 'loading' : 'fallback')
+  const [routeRequest, setRouteRequest] = useState({ key: '', status: enabled ? 'loading' : 'fallback' })
+  const [initialContentReady, setInitialContentReady] = useState(!enabled)
+
+  const reportRouteStatus = useCallback((key, nextStatus) => {
+    setRouteRequest(current => {
+      if (nextStatus !== 'loading' && current.key && current.key !== key) return current
+      if (current.key === key && current.status === nextStatus) return current
+      return { key, status: nextStatus }
+    })
+  }, [])
 
   useEffect(() => {
     if (!enabled) return
@@ -285,13 +322,28 @@ export function ContentProvider({ children }) {
     services,
     enabled,
     status,
-  }), [bootstrap, services, enabled, status])
+    reportRouteStatus,
+  }), [bootstrap, services, enabled, status, reportRouteStatus])
+
+  const awaitingContent = enabled && (status === 'loading' || routeRequest.status === 'loading')
+  useEffect(() => {
+    if (!awaitingContent) setInitialContentReady(true)
+  }, [awaitingContent])
+  const initialLoading = enabled && !initialContentReady
+  const routeLoading = enabled && initialContentReady && routeRequest.status === 'loading'
 
   return <ContentContext.Provider value={value}>
     <div className="content-status" aria-live="polite" data-content-state={status}>
       {status === 'loading' ? 'Loading current website content.' : status === 'error' ? 'Current saved website content is temporarily unavailable; showing the complete site fallback.' : ''}
     </div>
-    {children}
+    {initialLoading && <div className="content-loading-gate" role="status" aria-live="polite">
+      <div className="content-loading-brand"><span/><strong>Superior Plus</strong><small>Loading current website content</small></div>
+      <div className="content-loading-preview" aria-hidden="true"><i/><b/><b/><em/><em/><em/></div>
+    </div>}
+    {routeLoading && <div className="content-route-progress" role="status" aria-label="Loading saved page content"><span/></div>}
+    <div className={`content-application ${initialLoading ? 'is-loading' : routeLoading ? 'is-route-loading' : 'is-ready'}`} aria-hidden={initialLoading ? 'true' : undefined}>
+      {children}
+    </div>
   </ContentContext.Provider>
 }
 
@@ -351,7 +403,7 @@ export function useEnquirySubmission() {
 export function useCollection(name, fallback, options = {}) {
   const { enabled } = useSiteContent()
   const preserveEmpty=Boolean(options.preserveEmpty)
-  const [data, setData] = useState(fallback)
+  const [data, setData] = useState(enabled ? [] : fallback)
   const [status, setStatus] = useState(enabled ? 'loading' : 'fallback')
   useEffect(() => {
     if (!enabled) {
@@ -360,6 +412,8 @@ export function useCollection(name, fallback, options = {}) {
       return
     }
     let active = true
+    setData([])
+    setStatus('loading')
     request(`/${name}`)
       .then(next => {
         if (active) {
@@ -379,34 +433,46 @@ export function useCollection(name, fallback, options = {}) {
 }
 
 export function useRouteContent(path, fallback = null) {
-  const { enabled } = useSiteContent()
-  const [data, setData] = useState(fallback)
-  const [status, setStatus] = useState(enabled ? 'loading' : 'fallback')
+  const { enabled, reportRouteStatus } = useSiteContent()
+  const normalized = String(path || '/').replace(/^\/+|\/+$/g, '')
+  const previewId = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('spp_preview') : ''
+  const endpoint = previewId && /^\d+$/.test(previewId) ? `/preview/${previewId}` : normalized ? `/routes/${encodeURI(normalized)}` : '/routes'
+  const [state, setState] = useState(() => ({
+    key: enabled ? '' : endpoint,
+    data: enabled ? null : fallback,
+    status: enabled ? 'loading' : 'fallback',
+  }))
+
+  useLayoutEffect(() => {
+    if (enabled) reportRouteStatus?.(endpoint, 'loading')
+  }, [enabled, endpoint, reportRouteStatus])
+
   useEffect(() => {
     if (!enabled) {
-      setData(fallback)
-      setStatus('fallback')
+      setState({ key: endpoint, data: fallback, status: 'fallback' })
       return
     }
     let active = true
-    const normalized = String(path || '/').replace(/^\/+|\/+$/g, '')
-    const previewId = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('spp_preview') : ''
-    request(previewId && /^\d+$/.test(previewId) ? `/preview/${previewId}` : normalized ? `/routes/${encodeURI(normalized)}` : '/routes')
+    setState({ key: endpoint, data: null, status: 'loading' })
+    request(endpoint)
       .then(next => {
         if (active) {
-          setData(next)
-          setStatus('ready')
+          setState({ key: endpoint, data: next, status: 'ready' })
+          reportRouteStatus?.(endpoint, 'ready')
         }
       })
       .catch(error => {
         if (active) {
-          setData(fallback)
-          setStatus(error.message.includes('(404)') ? 'not-found' : 'error')
+          const nextStatus = error.message.includes('(404)') ? 'not-found' : 'error'
+          setState({ key: endpoint, data: fallback, status: nextStatus })
+          reportRouteStatus?.(endpoint, nextStatus)
         }
       })
     return () => { active = false }
-  }, [enabled, path, fallback])
-  return { data, status }
+  }, [enabled, endpoint, fallback, reportRouteStatus])
+
+  if (enabled && state.key !== endpoint) return { data: null, status: 'loading' }
+  return { data: state.data, status: state.status }
 }
 
 export const collectionFallbacks = {

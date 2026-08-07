@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowRight, Brush, Check, Hammer, PaintRoller, Palette, SprayCan } from 'lucide-react'
+import { ArrowRight, Check, PaintRoller, Palette } from 'lucide-react'
 import { PageLayout, PageHero, TrustStrip, SectionIntro, TestimonialBand, AreasBand, ClosingCTA } from '../components/PageLayout'
 import { serviceList, servicePages } from '../data/siteData'
 import { Reveal, Divider } from '../App'
@@ -9,9 +9,9 @@ import NotFoundPage from './NotFoundPage'
 import { mediaUrl, mergeContent, textItems, useRouteContent, useSiteContent } from '../content/ContentProvider'
 import approvedContent from '../data/clientApprovedContent.json'
 import { asset } from '../utils/assets'
-import { CompactList, StructuredSectionCopy, structuredSections } from '../components/StructuredContent'
+import { CompactList, ManagedContentSection, StructuredSectionCopy, structuredSections } from '../components/StructuredContent'
+import { paintingToolIcon } from '../components/paintingToolIcons'
 
-const scopeIcons=[PaintRoller,Brush,Palette,SprayCan,Hammer]
 const serviceAreaImage=asset('client/projects/exterior/exterior-07.webp')
 const serviceStoryImages={
   'residential-painting-melbourne':['client/projects/new-batch/batch-159.webp','client/projects/new-batch/batch-102.webp'],
@@ -82,12 +82,12 @@ export default function ServicePage() {
     benefits:Array.isArray(cms.benefits)?cms.benefits.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.benefits,
     gallery:Array.isArray(cms.gallery)?cms.gallery:mergedPage.gallery,
   }:mergedPage
-  const narrative=[
-    ...(cms?.copy_version==='pdf-verbatim-2026-08-01'&&Array.isArray(cms.document_sections)
+  const approvedSections=cms?.copy_version==='pdf-verbatim-2026-08-01'&&Array.isArray(cms.document_sections)
       ?structuredSections(cms.document_sections)
-      :structuredSections(approvedNarrative)),
-    ...structuredSections(cms?.content_sections,[]),
-  ]
+      :structuredSections(approvedNarrative)
+  const addedSections=structuredSections(cms?.content_sections,[])
+  const addedSectionIds=new Set(addedSections.map(section=>section.id))
+  const narrative=[...approvedSections,...addedSections]
   const whySection=narrative.find(section=>/^(Why Choose|Why Businesses)/i.test(section.title))
   const benefitSection=narrative.find(section=>/^Benefits of/i.test(section.title))
   const areasSection=narrative.find(section=>section.title==='Areas We Service')
@@ -111,7 +111,7 @@ export default function ServicePage() {
 
     <section className="inner-section scope-section"><div className="container">
       <SectionIntro eyebrow={labels.scope_eyebrow??"What we can help with"} title={page.scopeTitle} accent={labels.scope_accent??"covered with care."} text={labels.scope_intro??"Every approved service inclusion is presented clearly below, with the final scope tailored to the property and existing surface condition."}/>
-      <div className="scope-grid">{page.scope.map((item,i)=>{const Icon=scopeIcons[i%scopeIcons.length];return <Reveal key={item} delay={(i%5)*.04}><div className={`scope-item scope-${page.tone}`}><small>{String(i+1).padStart(2,'0')}</small><span className="scope-icon"><Icon/></span><b>{item}</b></div></Reveal>})}</div>
+      <div className="scope-grid">{page.scope.map((item,i)=>{const Icon=paintingToolIcon(i);return <Reveal key={item} delay={(i%5)*.04}><div className={`scope-item scope-${page.tone}`}><small>{String(i+1).padStart(2,'0')}</small><span className="scope-icon"><Icon/></span><b>{item}</b></div></Reveal>})}</div>
     </div><Divider color="#fbf6ec" variant="slash"/></section>
 
     <section className="inner-section process-section"><div className="container">
@@ -121,7 +121,9 @@ export default function ServicePage() {
 
     <ProjectGallery category={serviceMediaCategory[slug]} items={page.gallery} heading={whySection?{eyebrow:whySection.eyebrow||"Why Superior Plus",title:whySection.title,accent:"Proven through our work.",text:sectionText(whySection)}:undefined}/>
 
-    {storySections.map((section,index)=><section className={`inner-section service-approved-story ${index%2?'cream':''}`} key={section.id}><div className="container service-story-grid"><Reveal className="service-story-photo"><img src={storyImages[index%storyImages.length]||image} alt={`${section.title} for ${page.title}`} loading="lazy" decoding="async"/><span>Superior Plus project</span></Reveal><Reveal className="service-story-copy" delay={.1}><span className="service-story-icon">{index%2?<Palette/>:<PaintRoller/>}</span><StructuredSectionCopy section={section} defaultEyebrow="Service information"/></Reveal></div></section>)}
+    {storySections.map((section,index)=>addedSectionIds.has(section.id)
+      ?<ManagedContentSection section={section} index={index} defaultEyebrow="Service information" fallbackImage={{url:storyImages[index%storyImages.length]||image,alt:`${section.title} for ${page.title}`}} key={section.id}/>
+      :<section className={`inner-section service-approved-story ${index%2?'cream':''}`} key={section.id}><div className="container service-story-grid"><Reveal className="service-story-photo"><img src={storyImages[index%storyImages.length]||image} alt={`${section.title} for ${page.title}`} loading="lazy" decoding="async"/><span>Superior Plus project</span></Reveal><Reveal className="service-story-copy" delay={.1}><span className="service-story-icon">{index%2?<Palette/>:<PaintRoller/>}</span><StructuredSectionCopy section={section} defaultEyebrow="Service information"/></Reveal></div></section>)}
 
     <section className={`benefit-section benefit-${page.tone}`}><div className="container benefit-grid"><Reveal><PaintRoller/><h2>{labels.benefits_title??benefitSection?.title??"Why this work"}<br/><em>{labels.benefits_accent??"makes a difference."}</em></h2>{sectionText(benefitSection)&&<p className="benefit-intro">{sectionText(benefitSection)}</p>}<CompactList items={benefitSection?.items}/></Reveal><div className="benefit-list">{(page.benefits||[]).map((item,i)=><Reveal key={item} delay={i*.06}><div><span>0{i+1}</span><h3>{item}</h3></div></Reveal>)}</div></div><Divider color="#fff" variant="drip"/></section>
 
