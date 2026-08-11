@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Superior Plus Comprehensive Yoast SEO Plan</title>
+  <style>
+    @page { size:A4; margin:14mm 13mm 16mm; @bottom-right { content:"Page " counter(page) " of " counter(pages); color:#65716b; font:8pt Arial,sans-serif; } }
+    :root { --green:#1f5140; --dark:#12382e; --red:#982c27; --gold:#f2c419; --cream:#fbf6eb; --ink:#18211d; --muted:#5d6863; --line:#d7ddd9; --pale:#e8f2ed; --danger:#fae9e6; --blue:#e8f1fa; }
+    * { box-sizing:border-box; }
+    html { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+    body { margin:0; color:var(--ink); background:#fff; font:9.7pt/1.43 Arial,Helvetica,sans-serif; }
+    h1,h2,h3,h4 { margin:0 0 8px; line-height:1.14; }
+    h1 { font-size:29pt; letter-spacing:-1px; }
+    h2 { padding-bottom:7px; border-bottom:2px solid var(--gold); color:var(--green); font-size:18pt; }
+    h3 { margin-top:15px; color:var(--red); font-size:12.3pt; }
+    h4 { margin-top:10px; color:var(--dark); font-size:10.5pt; }
+    p { margin:0 0 8px; }
+    ul,ol { margin:5px 0 11px; padding-left:21px; }
+    li { margin:3px 0; }
+    a { color:var(--red); overflow-wrap:anywhere; }
+    code { font:8.5pt Consolas,monospace; overflow-wrap:anywhere; }
+    table { width:100%; margin:9px 0 13px; border-collapse:collapse; }
+    tr { break-inside:avoid; }
+    th,td { padding:6px 7px; border:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { color:var(--dark); background:var(--cream); }
+    .compact { font-size:8.35pt; line-height:1.34; }
+    .compact th,.compact td { padding:4px 5px; }
+    .cover { min-height:254mm; padding:18mm 14mm; color:#fff; background:linear-gradient(145deg,var(--dark),var(--green) 67%,#2f6c57); display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+    .cover:before,.cover:after { content:""; position:absolute; border-radius:50%; transform:rotate(-14deg); }
+    .cover:before { width:190mm; height:82mm; right:-70mm; top:27mm; border:18mm solid rgba(255,255,255,.055); }
+    .cover:after { width:120mm; height:52mm; left:-48mm; bottom:38mm; border:13mm solid rgba(242,196,25,.12); }
+    .cover-content,.cover-meta { position:relative; z-index:1; }
+    .kicker { margin-bottom:23px; color:var(--gold); font-weight:700; letter-spacing:2.2px; text-transform:uppercase; }
+    .cover h1 { max-width:164mm; }
+    .lead { max-width:152mm; margin-top:17px; color:rgba(255,255,255,.88); font-size:13pt; }
+    .cover-meta { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding-top:14px; border-top:1px solid rgba(255,255,255,.25); color:rgba(255,255,255,.8); }
+    .cover-meta b { display:block; color:#fff; }
+    .page { break-before:page; }
+    .label { display:inline-block; margin-bottom:9px; padding:5px 10px; border-radius:14px 4px; color:var(--red); background:var(--cream); font-size:7.8pt; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+    .notice { margin:10px 0 13px; padding:10px 12px; border-left:5px solid var(--gold); background:var(--cream); break-inside:avoid; }
+    .notice.good { border-color:var(--green); background:var(--pale); }
+    .notice.bad { border-color:var(--red); background:var(--danger); }
+    .notice.info { border-color:#3b78a5; background:var(--blue); }
+    .two { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin:10px 0 13px; }
+    .three { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:10px 0 13px; }
+    .card { padding:10px 11px; border:1px solid var(--line); border-radius:4px 14px; background:#fff; break-inside:avoid; }
+    .card h3,.card h4 { margin-top:0; }
+    .card h4 { color:var(--green); }
+    .step { display:grid; grid-template-columns:27px 1fr; gap:8px; margin:7px 0; break-inside:avoid; }
+    .step .n { width:25px; height:25px; display:grid; place-items:center; border-radius:50%; color:#fff; background:var(--green); font-weight:700; }
+    .check { list-style:none; padding-left:0; }
+    .check li { position:relative; padding-left:22px; margin:5px 0; }
+    .check li:before { content:"\2610"; position:absolute; left:0; top:-2px; color:var(--green); font-size:14pt; }
+    .small { color:var(--muted); font-size:8.2pt; }
+    .pill { display:inline-block; margin:2px 3px 2px 0; padding:3px 7px; border-radius:12px; color:var(--dark); background:var(--pale); font-size:7.7pt; font-weight:700; }
+    .p1 { color:#fff; background:var(--red); }
+    .p2 { color:#fff; background:var(--green); }
+    .p3 { background:#eee9dc; }
+    .footer { margin-top:15px; padding-top:7px; border-top:1px solid var(--line); color:var(--muted); font-size:8pt; }
+    .toc td:first-child { width:31%; font-weight:700; color:var(--green); }
+    .route { font-family:Consolas,monospace; font-size:8.2pt; overflow-wrap:anywhere; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div class="cover-content">
+      <div class="kicker">Superior Plus Painting &amp; Remodeling</div>
+      <h1>Comprehensive Yoast SEO &amp; Google Growth Plan</h1>
+      <p class="lead">A page-by-page, client-aligned implementation plan for discoverability, local relevance, technical quality, content authority and measurable organic growth—without replacing the client-approved website wording.</p>
+    </div>
+    <div class="cover-meta">
+      <div><b>Website</b>sppaintingremodeling.com.au</div>
+      <div><b>Prepared</b>11 August 2026</div>
+      <div><b>Content authority</b>Live WordPress copy + client PDFs</div>
+      <div><b>Scope</b>Every URL in all 8 live Yoast sitemaps</div>
+    </div>
+  </section>
+
+  <section class="page">
+    <span class="label">Executive summary</span>
+    <h2>The strategy in one page</h2>
+    <p>The site already contains substantial client-approved service information. The priority is to make that information technically unambiguous, easy to crawl, locally credible and connected by a deliberate internal-link structure. Yoast is the control panel; it is not a ranking switch.</p>
+    <div class="notice bad"><strong>No responsible SEO plan can guarantee first place, a specific date, or a Google rich result.</strong> This plan improves eligibility, clarity and competitiveness. Rankings remain dependent on competition, location, authority, reviews, links, search demand and Google’s systems.</div>
+    <div class="three">
+      <div class="card"><h4>Layer 1 — Repair</h4><p>Consolidate duplicate URLs, correct the Service Areas directory, remove thin records from the sitemap, fix schema ownership and confirm every canonical.</p></div>
+      <div class="card"><h4>Layer 2 — Organise</h4><p>Give every page one search intent, one primary keyphrase, useful supporting terms and links to its parent, related services and relevant local pages.</p></div>
+      <div class="card"><h4>Layer 3 — Prove</h4><p>Add real project evidence, team expertise, verified business details, original images, reviews and local references—not generic suburb-name swapping.</p></div>
+    </div>
+    <div class="three">
+      <div class="card"><h4>Layer 4 — Publish</h4><p>Strengthen the 19 approved guides, add author/reviewer and update dates, connect each guide to one service cornerstone, and release consistently.</p></div>
+      <div class="card"><h4>Layer 5 — Promote</h4><p>Improve Google Business Profile, consistent business citations, partnerships, project mentions and legitimate local links.</p></div>
+      <div class="card"><h4>Layer 6 — Measure</h4><p>Track non-brand clicks, qualified enquiries, calls, quote submissions, indexed pages and local visibility—not only Yoast traffic-light colours.</p></div>
+    </div>
+    <h3>First five actions</h3>
+    <ol>
+      <li>Back up and stage the site; record current traffic, enquiries, indexed pages and rankings.</li>
+      <li>Choose one canonical URL for every duplicate route family and implement one-hop 301 redirects.</li>
+      <li>Make one system responsible for title, description, canonical and schema output; verify raw HTML and rendered HTML.</li>
+      <li>Fix the generic <code>/service-areas/</code> directory so it is not serving Chadstone-specific metadata/content.</li>
+      <li>Optimise the core and service pages first; release suburb pages in evidence-backed tiers rather than indexing all 67 at once.</li>
+    </ol>
+  </section>
+
+  <section class="page">
+    <span class="label">Content governance</span>
+    <h2>What may change—and what must stay intact</h2>
+    <h3>Authority order</h3>
+    <table>
+      <tr><th>Priority</th><th>Source</th><th>How this plan uses it</th></tr>
+      <tr><td>1</td><td>Current client-approved live WordPress wording</td><td>Preserve headings, claims, descriptions and client tone unless the client explicitly approves a rewrite.</td></tr>
+      <tr><td>2</td><td>Client-supplied master and individual page PDFs</td><td>Use to check coverage, terminology, service scope, FAQs, process, testimonials, areas and article intent.</td></tr>
+      <tr><td>3</td><td>Approved content bundled with the theme/plugin</td><td>Use as a recovery/reference layer where a live field is unintentionally empty—not to overwrite intentional edits.</td></tr>
+      <tr><td>4</td><td>SEO additions</td><td>Add titles, descriptions, canonicals, links, alt text and supporting sections without silently changing service promises.</td></tr>
+    </table>
+    <div class="notice good"><strong>Client-preference rule:</strong> SEO work describes the approved service accurately. It must not invent licences, warranties, team size, years in business, price claims, response times, products, addresses or suburbs actually serviced.</div>
+    <h3>Documents reconciled</h3>
+    <p>Master website pages; service areas keyword map; About; Additional Services; Residential, Commercial, Interior, Exterior, Roof, Fence, Deck, Wallpaper Removal and Plaster Repairs pages; Our Painting Process; FAQs; Testimonials and Reviews; Get in Touch; and the website blogs document.</p>
+    <h3>How to handle the older page-to-suburb keyword sheet</h3>
+    <p>The sheet maps terms such as “Painters Mount Waverley” to About and “Interior Painters Glen Waverley” to Interior. Forcing suburb phrases into unrelated Melbourne-wide pages would blur intent and compete with the dedicated suburb pages. This plan keeps:</p>
+    <ul>
+      <li><strong>Service pages</strong> focused on the service across Melbourne.</li>
+      <li><strong>Suburb pages</strong> focused on painters in that suburb, with locally relevant services.</li>
+      <li><strong>About, Process and Contact</strong> focused on trust, method and conversion—not used as substitute doorway pages.</li>
+      <li><strong>The client’s requested suburb/service pairings</strong> as supporting anchors and local content priorities where factually appropriate.</li>
+    </ul>
+  </section>
+
+  <section class="page">
+    <span class="label">Current-state diagnosis</span>
+    <h2>Technical priorities before page polishing</h2>
+    <table>
+      <tr><th>Finding</th><th>Risk</th><th>Required action</th></tr>
+      <tr><td>Duplicate route families exist for services, service areas, additional services and articles.</td><td>Split signals, duplicate indexing, unstable canonicals and wasted crawl attention.</td><td>Select one permanent URL, 301 every alternate directly to it, use only the canonical URL in links and sitemaps.</td></tr>
+      <tr><td>The live <code>/service-areas/</code> directory has returned Chadstone-specific hero data.</td><td>The directory and Chadstone page compete; title/H1 do not match directory intent.</td><td>Restore generic Melbourne eastern-suburbs directory fields and retest API, raw HTML, browser title and canonical.</td></tr>
+      <tr><td>Yoast and the custom theme/plugin can both emit title, description, canonical and schema.</td><td>Duplicate or conflicting tags; breadcrumb errors; Google chooses an unintended signal.</td><td>Assign one owner per property. Prefer server-rendered Yoast output only if the custom system consumes it consistently; otherwise disable the duplicate Yoast/custom output.</td></tr>
+      <tr><td>Custom post-type sitemaps include services, projects, articles, testimonials and FAQs.</td><td>Internal records or thin pages can enter Google.</td><td>Index only content with a useful standalone public page. Noindex internal-only records and confirm they disappear from Yoast sitemaps.</td></tr>
+      <tr><td>Articles appear under both <code>/painting-guides/</code> and <code>/blog/</code> families.</td><td>Two URLs can represent the same article.</td><td>Keep the URL family used by the live navigation—recommended <code>/blog/{slug}/</code>—and 301 each old guide URL to its exact article.</td></tr>
+      <tr><td>Camberwell and Hawthorn East cards have had missing image sources; mobile floating controls can overlap copy.</td><td>Weaker user experience, image-search loss and lower conversion.</td><td>Add valid media-library images and alt text; test overlays at 320, 360, 390 and 430 px widths.</td></tr>
+    </table>
+    <h3>Duplicate URL consolidation map</h3>
+    <table class="compact">
+      <tr><th>Keep as canonical</th><th>Redirect the alternate</th></tr>
+      <tr><td><code>/services/</code></td><td><code>/painting-services-melbourne/</code></td></tr>
+      <tr><td><code>/service-areas/</code></td><td><code>/professional-painters-in-melbourne-eastern-suburbs/</code></td></tr>
+      <tr><td><code>/services/roof-painting-melbourne/</code></td><td><code>/roof-painting-melbourne/</code></td></tr>
+      <tr><td><code>/services/commercial-painting-melbourne/</code></td><td><code>/commercial-painting-melbourne/</code></td></tr>
+      <tr><td><code>/services/residential-painting-melbourne/</code></td><td><code>/residential-painting-melbourne-house-painters-melbourne/</code></td></tr>
+      <tr><td><code>/service-areas/camberwell/</code></td><td><code>/service-areas/painters-camberwell-house-painters-camberwell/</code></td></tr>
+      <tr><td><code>/service-areas/hawthorn-east/</code></td><td><code>/service-areas/painters-hawthorn-east-house-painters-hawthorn-east/</code></td></tr>
+      <tr><td><code>/additional-services/</code></td><td><code>/property-improvement-services-melbourne/</code></td></tr>
+      <tr><td><code>/blog/</code> and <code>/blog/{slug}/</code></td><td><code>/painting-guides-melbourne/</code>, <code>/painting-guides/</code> and matched article duplicates</td></tr>
+    </table>
+    <p class="small">Confirm each pair against WordPress IDs and analytics before deployment. Never redirect unrelated missing URLs to the homepage; use the closest equivalent or a genuine 404/410.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Yoast configuration</span>
+    <h2>One safe global setup</h2>
+    <table>
+      <tr><th>Yoast area</th><th>Recommended setting</th><th>Reason</th></tr>
+      <tr><td>Site representation</td><td>Organisation; exact trading name, real logo and verified social profiles.</td><td>Connects consistent entity information. Do not enter an unverified address.</td></tr>
+      <tr><td>Site basics</td><td>Website name: Superior Plus Painting &amp; Remodeling. Keep a short alternate name only if actually used.</td><td>Consistency across metadata and schema.</td></tr>
+      <tr><td>Pages</td><td>Show in search results: Yes. Default schema: WebPage.</td><td>Core landing pages should be discoverable.</td></tr>
+      <tr><td>Blog/articles</td><td>Show in search: Yes when complete. Page type WebPage; Article type BlogPosting.</td><td>Preserves article dates, author and publisher relationships.</td></tr>
+      <tr><td>Service CPT</td><td>Index only if its public URL is the canonical service page. Otherwise noindex the duplicate record.</td><td>Avoids two records for one service.</td></tr>
+      <tr><td>Project CPT</td><td>Index only substantial case studies with unique scope, suburb, service, images and outcome.</td><td>Thin gallery records should not consume the sitemap.</td></tr>
+      <tr><td>Testimonial/FAQ CPT</td><td>Noindex when records are only embedded inside other pages.</td><td>Prevents thin standalone records.</td></tr>
+      <tr><td>Author archives</td><td>Noindex if there is one author or no useful biography archive.</td><td>Avoids a duplicate/thin archive.</td></tr>
+      <tr><td>Date archives</td><td>Disable/noindex unless users genuinely browse by date.</td><td>Local service content is not date-archive driven.</td></tr>
+      <tr><td>Category archives</td><td>Index only curated categories with an introduction and enough distinct articles; otherwise noindex.</td><td>A bare list is weak search content.</td></tr>
+      <tr><td>Media pages</td><td>Redirect attachment URLs to the media item or parent page.</td><td>Prevents thin attachment pages.</td></tr>
+      <tr><td>XML sitemap</td><td>Enabled; submit only <code>/sitemap_index.xml</code>.</td><td>Yoast automatically excludes noindexed records.</td></tr>
+    </table>
+    <div class="notice info"><strong>Metadata ownership gate:</strong> View the raw page source. There must be one canonical, one useful meta description and one coherent schema graph. If both Yoast and the Superior Plus system output competing versions, resolve the integration before editing dozens of fields.</div>
+    <h3>Recommended page-specific schema types</h3>
+    <p><span class="pill">About: AboutPage</span><span class="pill">Contact: ContactPage</span><span class="pill">Services/Areas/Blog directories: CollectionPage</span><span class="pill">Services/Suburbs: WebPage</span><span class="pill">Articles: WebPage + BlogPosting</span><span class="pill">FAQ: FAQPage only when visible Q&amp;A matches markup</span></p>
+    <p class="small">A local painting business should not expect FAQ rich results, and self-published testimonials should not be marked up to obtain self-serving LocalBusiness review stars. Schema must match visible content and must not duplicate another provider’s graph.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Yoast workflow</span>
+    <h2>How to optimise one page safely</h2>
+    <div class="step"><span class="n">1</span><p><strong>Confirm the page intent.</strong> One page should answer one main need: service, location, company information, process, contact or educational question.</p></div>
+    <div class="step"><span class="n">2</span><p><strong>Preserve approved copy.</strong> Compare the live page with the client PDF. SEO edits may add missing context and links but must not silently change promises or wording.</p></div>
+    <div class="step"><span class="n">3</span><p><strong>Enter the focus keyphrase.</strong> Use it as an editing prompt, not as a ranking guarantee. A red/orange Yoast light is not permission to repeat awkward phrases.</p></div>
+    <div class="step"><span class="n">4</span><p><strong>Set the SEO title and meta description.</strong> Keep them distinct, accurate and compelling. Google may still rewrite either.</p></div>
+    <div class="step"><span class="n">5</span><p><strong>Set the canonical only when needed.</strong> A normal unique page should self-canonicalise. A duplicate should normally be redirected, not merely canonicalised.</p></div>
+    <div class="step"><span class="n">6</span><p><strong>Select schema type.</strong> Choose the page’s actual function. Do not select FAQPage unless the full Q&amp;A is visible.</p></div>
+    <div class="step"><span class="n">7</span><p><strong>Add internal links.</strong> Link upward to a hub, sideways to relevant services/areas, and downward to supporting guides. Use descriptive anchor text.</p></div>
+    <div class="step"><span class="n">8</span><p><strong>Preview desktop and mobile.</strong> Check title wrapping, hero height, long lists, images, floating buttons, forms and accordion accessibility.</p></div>
+    <div class="step"><span class="n">9</span><p><strong>Publish, purge cache, test.</strong> Verify status 200, canonical, indexability, sitemap membership, schema validation and the actual live text.</p></div>
+    <div class="step"><span class="n">10</span><p><strong>Record the change.</strong> Log URL, date, title, meta, focus phrase, links added and baseline Search Console figures.</p></div>
+    <h3>Yoast quality rule</h3>
+    <div class="notice good">Aim for useful, natural copy and correct technical output. Do not weaken client-approved language, overstuff suburbs, add filler, or make every indicator green at the expense of readers.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Page map — core</span>
+    <h2>Core pages: exact Yoast direction</h2>
+    <table class="compact">
+      <thead><tr><th>Canonical page</th><th>Focus keyphrase</th><th>Recommended SEO title</th><th>Recommended meta description</th><th>Schema / links</th></tr></thead>
+      <tbody id="coreRows"></tbody>
+    </table>
+    <div class="notice"><strong>Homepage title/content rule:</strong> keep the client-approved hero and body wording. The SEO title is a search label, not a replacement H1. Keep the three assurance points—fully insured, free written quotes and careful preparation—when those claims remain accurate.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Page map — services</span>
+    <h2>Service pages: exact Yoast direction</h2>
+    <table class="compact">
+      <thead><tr><th>Canonical page</th><th>Focus keyphrase</th><th>Recommended SEO title</th><th>Recommended meta description</th><th>Primary links</th></tr></thead>
+      <tbody id="serviceRows"></tbody>
+    </table>
+    <h3>Additional-services expansion backlog</h3>
+    <p>The client keyword PDF also identifies kitchen cabinet painting, epoxy garage floors, pressure washing, weatherboard painting, and strata/body corporate painting. Keep these as sections on <code>/additional-services/</code> until each has verified capability, original images, a complete scope, process, FAQs and project evidence. Create a standalone page only when it can genuinely answer a distinct service intent.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Local SEO architecture</span>
+    <h2>How to handle 67 suburb pages safely</h2>
+    <p>Every suburb page must be more than the same paragraph with a different place name. Google’s spam policies specifically warn against doorway pages and scaled content created mainly to manipulate rankings. The safe approach is staged indexing based on real local usefulness.</p>
+    <table>
+      <tr><th>Tier</th><th>Indexing rule</th><th>Minimum evidence before indexing</th></tr>
+      <tr><td><span class="pill p1">Tier 1</span> Primary client markets</td><td>Optimise first and keep indexable once complete.</td><td>Unique local introduction, property context, suitable services, 2–4 original project images where available, nearby-area links, one testimonial/project reference if genuine, and an accurate CTA.</td></tr>
+      <tr><td><span class="pill p2">Tier 2</span> Adjacent growth markets</td><td>Index in batches after Tier 1 is stable.</td><td>All Tier 1 quality checks except a local project may be replaced temporarily by detailed suburb-specific property/surface guidance. Add proof before promotion.</td></tr>
+      <tr><td><span class="pill p3">Tier 3</span> Coverage inventory</td><td>Keep accessible for users but noindex until genuinely differentiated.</td><td>Do not index a templated page merely because it exists. Promote only after unique evidence and editorial review.</td></tr>
+    </table>
+    <h3>Per-suburb Yoast pattern</h3>
+    <ul>
+      <li><strong>Focus keyphrase:</strong> painters {Suburb}; secondary phrase: house painters {Suburb}.</li>
+      <li><strong>Title pattern:</strong> Painters {Suburb} | House &amp; Commercial Painting. Vary naturally where a verified specialty is stronger.</li>
+      <li><strong>Meta pattern:</strong> Professional painting in {Suburb} for homes and commercial properties. Careful preparation, clear quotes and durable finishes. Request a free quote.</li>
+      <li><strong>H1:</strong> Professional Painters in {Suburb}. Keep one H1; use H2s for services, local property needs, process, proof, nearby areas and quote CTA.</li>
+      <li><strong>Links:</strong> Service Areas hub, 2–4 relevant services, 3–5 genuine neighbouring suburbs, Contact, and one applicable guide.</li>
+      <li><strong>Schema:</strong> WebPage + BreadcrumbList through the single approved schema provider. Do not create a fake LocalBusiness branch/address in every suburb.</li>
+    </ul>
+    <div class="notice bad"><strong>Avoid:</strong> hidden city lists, blocks of repeated suburbs, fake local offices, copied testimonials, invented project claims, or 67 pages published simultaneously with near-identical copy.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">All suburb routes</span>
+    <h2>Suburb implementation register</h2>
+    <p>Use the priority column to decide the publishing order. “Client target” reflects the supplied keyword map or locations repeatedly emphasised in approved content; it does not replace page-level evidence requirements.</p>
+    <table class="compact">
+      <thead><tr><th>Suburb / canonical route</th><th>Region</th><th>Priority</th><th>Focus keyphrase</th><th>Required action</th></tr></thead>
+      <tbody id="areaRows"></tbody>
+    </table>
+  </section>
+
+  <section class="page">
+    <span class="label">Literal live inventory</span>
+    <h2>Every sitemap URL is accounted for</h2>
+    <p>A fresh audit on 11 August 2026 found <strong>162 URLs</strong> across the live Yoast sitemap index. The intended <code>/blog/</code> hub is also included in this plan even though it is not currently listed in the live XML sitemap.</p>
+    <table>
+      <tr><th>Live sitemap</th><th>URLs</th><th>Plan coverage</th></tr>
+      <tr><td><code>page-sitemap.xml</code></td><td>105</td><td>9 canonical core pages, 67 suburb pages, 19 duplicate guide pages and 10 legacy/duplicate routes.</td></tr>
+      <tr><td><code>spp_service-sitemap.xml</code></td><td>9</td><td>Every service has exact Yoast metadata and links.</td></tr>
+      <tr><td><code>spp_project-sitemap.xml</code></td><td>10</td><td>Every project record has an individual index/upgrade/consolidation decision below.</td></tr>
+      <tr><td><code>spp_article-sitemap.xml</code></td><td>19</td><td>Every article has an individual keyphrase, cornerstone and quality action.</td></tr>
+      <tr><td><code>spp_testimonial-sitemap.xml</code></td><td>7</td><td>Every query-style testimonial URL is listed for noindex/removal from XML while the testimonial stays visible where embedded.</td></tr>
+      <tr><td><code>spp_faq-sitemap.xml</code></td><td>10</td><td>Every query-style FAQ URL is listed for noindex/removal while its approved answer stays on the FAQ page.</td></tr>
+      <tr><td><code>category-sitemap.xml</code></td><td>1</td><td>Uncategorised archive decision included.</td></tr>
+      <tr><td><code>author-sitemap.xml</code></td><td>1</td><td>Single-author archive decision included.</td></tr>
+      <tr><th>Total live XML inventory</th><th>162</th><th>All 162 URLs receive an explicit action in this document.</th></tr>
+    </table>
+    <div class="notice good"><strong>Meaning of “every page” in this document:</strong> every URL exposed by the live Yoast sitemap index is named directly or is present in the 67-suburb, 9-service or 19-article registers. No sitemap content type is left under a vague site-wide rule.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Legacy and duplicate pages</span>
+    <h2>Every alternate Page URL: exact disposition</h2>
+    <table class="compact">
+      <thead><tr><th>Current live sitemap URL</th><th>Required target/action</th><th>Yoast handling</th></tr></thead>
+      <tbody id="legacyRows"></tbody>
+    </table>
+    <div class="notice bad"><strong>Implementation order matters:</strong> create/test the destination first, replace all internal links, add a one-hop 301, remove the old WordPress Page from the sitemap, then request validation. Never leave both versions indexable with competing titles.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Project pages</span>
+    <h2>Every project-showcase URL</h2>
+    <p>These URLs can become valuable case studies, but only if each page contains more than a reusable gallery shell. The default safe state is <strong>noindex, follow</strong> until the stated evidence exists. Once upgraded, use the recommended Yoast direction below and add the page to the sitemap.</p>
+    <table class="compact">
+      <thead><tr><th>Current URL</th><th>Focus keyphrase / SEO title after upgrade</th><th>Required proof and action</th></tr></thead>
+      <tbody id="projectRows"></tbody>
+    </table>
+  </section>
+
+  <section class="page">
+    <span class="label">Embedded content records</span>
+    <h2>Every testimonial and FAQ URL</h2>
+    <p>These query-string URLs represent individual WordPress records used inside richer pages. They should not compete with the Homepage or FAQ page as thin standalone search results.</p>
+    <h3>Testimonial records — preserve the review, noindex the record</h3>
+    <table class="compact"><thead><tr><th>Current live URL</th><th>Exact action</th></tr></thead><tbody id="testimonialRows"></tbody></table>
+    <h3>FAQ records — preserve the answer, noindex the record</h3>
+    <table class="compact"><thead><tr><th>Current live URL</th><th>Exact action</th></tr></thead><tbody id="faqRows"></tbody></table>
+    <div class="notice"><strong>Developer setting:</strong> if these CPTs exist only as embedded content, set them to non-public/non-queryable for front-end singular records while retaining admin editing and REST access required by the site. In Yoast, set “Show in search results” to No and verify both CPT sitemaps disappear.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Archives and system routes</span>
+    <h2>Every remaining live sitemap URL</h2>
+    <table>
+      <tr><th>Current URL</th><th>Decision</th><th>Reason / replacement</th></tr>
+      <tr><td class="route">/category/uncategorized/</td><td><strong>Noindex and remove from sitemap.</strong> Reassign any articles to meaningful categories before deleting the empty term where safe.</td><td>A generic “Uncategorized” archive has no client-facing search purpose.</td></tr>
+      <tr><td class="route">/author/sppaintingremodeling-painting/</td><td><strong>Noindex and remove from sitemap for now.</strong></td><td>It is a single-author archive that duplicates article listings. If later replaced by a genuine expert profile with biography and credentials, reassess indexability.</td></tr>
+      <tr><td class="route">/blog/</td><td><strong>Create/confirm as the canonical Article CollectionPage and include in the sitemap.</strong></td><td>This is the recommended destination for the two old painting-guide hub URLs and should list the 19 canonical <code>/blog/...</code> articles.</td></tr>
+    </table>
+    <h3>System pages not expected in the XML sitemap</h3>
+    <p>WordPress admin/login, internal REST endpoints, search-result URLs, preview URLs, feeds, tracking parameters and form-success states should not be added as ordinary indexable landing pages. Verify their canonical/robots behaviour separately; retain only the public content URLs defined in this plan.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Blog content plan</span>
+    <h2>Approved 19-guide cluster</h2>
+    <p>Use <code>/blog/{slug}/</code> as the recommended canonical family. Each article should answer its question fully, name an author/reviewer, show published and genuinely updated dates, use original project imagery where possible, and link to one principal service cornerstone.</p>
+    <table class="compact">
+      <thead><tr><th>Guide / canonical route</th><th>Focus keyphrase</th><th>Primary cornerstone</th><th>Yoast/quality action</th></tr></thead>
+      <tbody id="guideRows"></tbody>
+    </table>
+    <h3>Publishing rhythm</h3>
+    <p>Start with the two fully developed client articles, then publish the remaining guides only after a human checks accuracy and usefulness. A practical cadence is two high-quality guides per month, with older cornerstone pages refreshed when a new supporting guide is added.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Internal links</span>
+    <h2>A deliberate site-wide link system</h2>
+    <table>
+      <tr><th>From</th><th>Must link to</th><th>Example natural anchors</th></tr>
+      <tr><td>Homepage</td><td>Services, all service cards, Service Areas, About/process proof, Gallery and Contact.</td><td>residential painting in Melbourne; areas we service; view Melbourne painting projects</td></tr>
+      <tr><td>Services hub</td><td>All 9 services + Additional Services + related guide hub.</td><td>roof painting; wallpaper removal; plaster repairs before painting</td></tr>
+      <tr><td>Each service</td><td>Services hub, 2–4 related services, 3–6 priority suburbs, 1–3 relevant guides, Gallery and Contact.</td><td>interior painters in Glen Waverley; see our painting process; request a written quote</td></tr>
+      <tr><td>Service Areas hub</td><td>Every indexable suburb grouped by region, plus core services and Contact.</td><td>painters in Chadstone; commercial painters in Dandenong</td></tr>
+      <tr><td>Each suburb</td><td>Hub, relevant services, neighbours, one guide, Contact.</td><td>exterior painting services; painters in nearby Oakleigh</td></tr>
+      <tr><td>Each guide</td><td>One main service page, one related guide, relevant Gallery/project evidence and Contact where appropriate.</td><td>professional exterior painting; compare interior and exterior painting</td></tr>
+      <tr><td>Gallery/case study</td><td>Performed service, actual suburb when relevant, Contact.</td><td>roof painting service; request a quote for a similar project</td></tr>
+    </table>
+    <div class="notice good"><strong>Anchor rule:</strong> buttons may visually say “Read more,” but the accessible link name or surrounding card should identify the destination. In body copy, prefer descriptive anchors over repeated exact-match keywords.</div>
+    <h3>Cornerstones to mark in Yoast</h3>
+    <p><span class="pill">Homepage</span><span class="pill">Services hub</span><span class="pill">9 core service pages</span><span class="pill">Service Areas hub</span><span class="pill">How often to repaint</span><span class="pill">Interior vs exterior</span></p>
+    <p>Do not mark every page cornerstone. The feature is useful only when it identifies the pages that should receive the strongest internal-link support.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Local authority</span>
+    <h2>Signals beyond Yoast</h2>
+    <div class="two">
+      <div class="card"><h4>Google Business Profile</h4><ul><li>Exact business name, phone, website and service area.</li><li>Correct primary and secondary categories.</li><li>Original project photos added regularly.</li><li>Services and descriptions aligned with the live site.</li><li>Respond to reviews without templated keyword stuffing.</li></ul></div>
+      <div class="card"><h4>Business consistency</h4><ul><li>Use one phone/name format on site, profile and trusted directories.</li><li>Correct outdated citations; do not create mass low-quality listings.</li><li>Keep social profiles and business hours current.</li><li>Only publish a street address if it is genuine and eligible.</li></ul></div>
+      <div class="card"><h4>Reputation</h4><ul><li>Ask real customers for honest Google reviews.</li><li>Never offer incentives in exchange for a positive rating.</li><li>Display approved testimonials accurately.</li><li>Turn substantial projects into evidence-rich case studies.</li></ul></div>
+      <div class="card"><h4>Earned links</h4><ul><li>Suppliers, builders, property partners and local organisations.</li><li>Useful project or maintenance resources worth citing.</li><li>No purchased link packages, private blog networks or automated guest-post spam.</li><li>Track referring domains and remove only demonstrably harmful tactics.</li></ul></div>
+    </div>
+    <h3>Trust details each important page should expose</h3>
+    <p>Who performs/reviews the work; service scope; preparation method; suitable property types; real project imagery; clear quote process; contact details; applicable insurance statement; and a path to About, Gallery, Process and Contact.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Images and mobile</span>
+    <h2>Search visibility must still look good</h2>
+    <table>
+      <tr><th>Area</th><th>Implementation standard</th></tr>
+      <tr><td>File names</td><td>Use descriptive names such as <code>exterior-house-painting-camberwell.webp</code>; do not rename unrelated stock images to claim a location.</td></tr>
+      <tr><td>Alt text</td><td>Describe what is visibly shown and, when true, the service/location. Decorative shapes should use empty alt text.</td></tr>
+      <tr><td>Delivery</td><td>Use real <code>&lt;img src&gt;</code>/<code>picture</code>, modern formats, intrinsic width/height and responsive <code>srcset</code>. Do not lazy-load the main hero/LCP image.</td></tr>
+      <tr><td>Context</td><td>Place images beside relevant headings/captions. Include project scope and suburb only when verified.</td></tr>
+      <tr><td>Mobile</td><td>At 320–430 px, hero copy must remain readable, badges/floating buttons must not cover text, cards must not require hover, and long sections must wrap without horizontal scrolling.</td></tr>
+      <tr><td>Performance</td><td>Target LCP ≤2.5 s, INP &lt;200 ms and CLS &lt;0.1 at the 75th percentile; measure field data, not screenshots alone.</td></tr>
+    </table>
+    <h3>Page QA widths</h3>
+    <p><span class="pill">320 × 568</span><span class="pill">360 × 800</span><span class="pill">390 × 844</span><span class="pill">430 × 932</span><span class="pill">768 × 1024</span><span class="pill">1366 × 768</span><span class="pill">1920 × 1080</span></p>
+    <p>Test short and deliberately long titles, two-paragraph descriptions, 15–30 list items, missing optional images, portrait/landscape media and several added sections. A layout is not verified just because the default content fits.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Measurement</span>
+    <h2>How to know whether the plan works</h2>
+    <table>
+      <tr><th>Metric</th><th>Where</th><th>Interpretation</th></tr>
+      <tr><td>Qualified quote submissions, phone clicks and email clicks</td><td>GA4 events + enquiry logs</td><td>Primary business outcome. Test delivery monthly; never assume a form submission email arrived.</td></tr>
+      <tr><td>Non-brand clicks/impressions by page and query</td><td>Google Search Console</td><td>Shows whether service and suburb visibility grows beyond searches for the business name.</td></tr>
+      <tr><td>Indexed canonical pages</td><td>Search Console Page indexing + URL Inspection</td><td>Should converge on the selected URL set; duplicates and thin records should decline.</td></tr>
+      <tr><td>Local calls, directions and website visits</td><td>Google Business Profile performance</td><td>Measures local discovery; compare month-on-month and year-on-year.</td></tr>
+      <tr><td>Core Web Vitals</td><td>Search Console + PageSpeed Insights field data</td><td>Prioritise page templates affecting many URLs.</td></tr>
+      <tr><td>Rank coverage</td><td>Search Console or a compliant rank tracker</td><td>Track a representative grid/market set; rankings vary by searcher location.</td></tr>
+    </table>
+    <h3>Reporting segments</h3>
+    <p>Brand vs non-brand; service pages; Tier 1 suburbs; Tier 2 suburbs; articles; desktop vs mobile; conversions by landing page; new vs returning users. Annotate every theme/plugin release, redirect batch and major content update.</p>
+    <div class="notice info"><strong>Decision window:</strong> technical errors can be checked immediately, but organic trend decisions need enough impressions and crawl time. Review monthly; make strategic decisions quarterly unless there is a clear defect.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Roadmap</span>
+    <h2>30 / 60 / 90 / 180-day implementation</h2>
+    <table>
+      <tr><th>Window</th><th>Work</th><th>Exit criteria</th></tr>
+      <tr><td><strong>Days 0–30<br>Repair</strong></td><td>Backups/staging; analytics baseline; duplicate inventory; redirect map; metadata/schema ownership; Service Areas directory fix; sitemap pruning; form/email test; mobile blockers; submit sitemap.</td><td>One canonical per intent, clean sitemap, no critical schema errors, all core pages status 200, enquiries logged and delivered.</td></tr>
+      <tr><td><strong>Days 31–60<br>Core pages</strong></td><td>Implement the exact core/service Yoast map; internal links; image alt/file improvements; About/Process/Gallery proof; Contact conversion QA; mark true cornerstones.</td><td>Every core/service page has distinct metadata, correct schema, useful links, mobile QA and preserved approved wording.</td></tr>
+      <tr><td><strong>Days 61–90<br>Local Tier 1</strong></td><td>Upgrade/index primary suburbs; fix local images; connect service ↔ suburb ↔ project; strengthen Google Business Profile; begin citations/review workflow.</td><td>Each indexed Tier 1 page passes the evidence checklist and is not merely templated.</td></tr>
+      <tr><td><strong>Days 91–180<br>Authority</strong></td><td>Publish two quality guides/month; build case studies; promote earned local links; release Tier 2 areas selectively; refresh pages using Search Console query data.</td><td>Growing non-brand impressions, stronger internal-link graph, qualified leads attributable to organic/local channels.</td></tr>
+    </table>
+    <h3>Change-control rule</h3>
+    <ol>
+      <li>Take a backup and export current Yoast metadata.</li>
+      <li>Change one URL family or page batch at a time.</li>
+      <li>Test on staging, then production.</li>
+      <li>Purge cache and verify the public result.</li>
+      <li>Record before/after and keep a rollback route.</li>
+    </ol>
+  </section>
+
+  <section class="page">
+    <span class="label">Release checklist</span>
+    <h2>Per-page acceptance test</h2>
+    <div class="two">
+      <div class="card"><h4>Content</h4><ul class="check"><li>Client-approved wording is preserved.</li><li>One visible H1 and logical H2/H3 structure.</li><li>No invented claims or keyword stuffing.</li><li>Lists remain readable on mobile.</li><li>CTA matches the service and leads to Contact.</li></ul></div>
+      <div class="card"><h4>Yoast</h4><ul class="check"><li>Distinct focus keyphrase.</li><li>Accurate SEO title and meta description.</li><li>Correct canonical and robots setting.</li><li>Correct page/article schema type.</li><li>Social share image/title checked.</li></ul></div>
+      <div class="card"><h4>Technical</h4><ul class="check"><li>Status 200; HTTPS; self-canonical.</li><li>Only one indexable URL for the content.</li><li>Included in correct sitemap if indexable.</li><li>No duplicate title/meta/canonical/schema.</li><li>Structured data validates.</li></ul></div>
+      <div class="card"><h4>User experience</h4><ul class="check"><li>Desktop and mobile layout tested.</li><li>Images load; useful alt text; no layout shift.</li><li>Menu, cards, accordions and links work by touch/keyboard.</li><li>Floating controls do not obscure copy.</li><li>Form sends and stores a recoverable enquiry.</li></ul></div>
+    </div>
+    <h3>Indexing decision</h3>
+    <table>
+      <tr><th>If the page is…</th><th>Then…</th></tr>
+      <tr><td>Unique, useful and intended to appear in search</td><td>Index, self-canonicalise, include in sitemap and link internally.</td></tr>
+      <tr><td>A duplicate of a chosen page</td><td>301 redirect to the exact equivalent and remove from sitemap/internal links.</td></tr>
+      <tr><td>Useful for visitors but not ready for search</td><td>Noindex, follow; keep accessible; improve before indexing.</td></tr>
+      <tr><td>Deleted with a close replacement</td><td>301 to that replacement.</td></tr>
+      <tr><td>Deleted with no replacement</td><td>Return genuine 404/410; do not redirect automatically to the homepage.</td></tr>
+    </table>
+  </section>
+
+  <section class="page">
+    <span class="label">References</span>
+    <h2>Authoritative implementation references</h2>
+    <ul>
+      <li><a href="https://developers.google.com/search/docs/fundamentals/creating-helpful-content">Google: Creating helpful, reliable, people-first content</a></li>
+      <li><a href="https://developers.google.com/search/docs/essentials/spam-policies">Google: Search spam policies</a> — including scaled content, doorway abuse and keyword stuffing.</li>
+      <li><a href="https://developers.google.com/search/docs/appearance/title-link">Google: Title links</a> and <a href="https://developers.google.com/search/docs/appearance/snippet">snippets/meta descriptions</a>.</li>
+      <li><a href="https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls">Google: Canonicalisation and duplicate URLs</a>.</li>
+      <li><a href="https://developers.google.com/search/docs/crawling-indexing/links-crawlable">Google: Crawlable links and anchor text</a>.</li>
+      <li><a href="https://developers.google.com/search/docs/appearance/google-images">Google: Image SEO best practices</a>.</li>
+      <li><a href="https://developers.google.com/search/docs/appearance/core-web-vitals">Google: Core Web Vitals</a>.</li>
+      <li><a href="https://developers.google.com/search/docs/appearance/structured-data/local-business">Google: LocalBusiness structured data</a>.</li>
+      <li><a href="https://developers.google.com/search/blog/2023/08/howto-faq-changes">Google: FAQ rich-result availability changes</a>.</li>
+      <li><a href="https://developers.google.com/search/blog/2019/09/making-review-rich-results-more-helpful">Google: Self-serving review rich-result policy</a>.</li>
+      <li><a href="https://yoast.com/help/yoast-seo-settings-content-types/">Yoast: Content types and schema settings</a>.</li>
+      <li><a href="https://developer.yoast.com/features/xml-sitemaps/functional-specification/">Yoast: XML sitemap behaviour</a>.</li>
+      <li><a href="https://yoast.com/help/selecting-content-types-in-schema-settings/">Yoast: Selecting Page and Article schema types</a>.</li>
+      <li><a href="https://yoast.com/what-is-cornerstone-content/">Yoast: Cornerstone content and internal linking</a>.</li>
+    </ul>
+    <div class="notice"><strong>Document status:</strong> This is a strategy and implementation specification based on the 162-URL live Yoast sitemap audit and supplied client materials available on 11 August 2026. Recheck live routes, Google Search Console data, business facts and current plugin behaviour immediately before deployment.</div>
+    <p class="footer">Superior Plus Painting &amp; Remodeling — Comprehensive Yoast SEO &amp; Google Growth Plan</p>
+  </section>
+
+  <script>
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const core=[
+      ['/', 'painters Melbourne', 'Professional Painters Melbourne | Superior Plus Painting', 'Superior Plus Painting provides residential and commercial painting across Melbourne with careful preparation, premium finishes and free written quotes.', 'WebPage; link to Services, Areas, Gallery, About, Process and Contact'],
+      ['/services/', 'painting services Melbourne', 'Painting Services Melbourne | Residential & Commercial', 'Explore residential, commercial, interior, exterior, roof, fence, deck, wallpaper removal and plaster repair services across Melbourne.', 'CollectionPage; link to every service and Additional Services'],
+      ['/service-areas/', 'painters Melbourne eastern suburbs', 'Painters Melbourne Eastern Suburbs | Service Areas', 'View the Melbourne suburbs serviced by Superior Plus Painting for residential, commercial, interior, exterior and property painting projects.', 'CollectionPage; must use generic directory content, not Chadstone copy'],
+      ['/additional-services/', 'property improvement services Melbourne', 'Property Improvement Services Melbourne | Superior Plus', 'Explore coordinated property improvement services in Melbourne, including preparation, repairs and finishing support alongside professional painting.', 'WebPage; link to relevant services and Contact'],
+      ['/about/', 'about Superior Plus Painting', 'About Superior Plus | Melbourne Painting Team', 'Learn about Superior Plus Painting, our preparation-first approach, communication, workmanship and commitment to Melbourne homes and businesses.', 'AboutPage; link to Process, Gallery, Reviews and Contact'],
+      ['/our-process/', 'professional painting process', 'Our Painting Process | Superior Plus Melbourne', 'See how Superior Plus Painting plans, prepares, paints, inspects and cleans each Melbourne residential and commercial painting project.', 'WebPage; link to Services, FAQ and Contact'],
+      ['/gallery/', 'Melbourne painting projects', 'Melbourne Painting Projects | Superior Plus', 'View selected residential, commercial, interior, exterior, roof, fence and deck painting projects completed by Superior Plus Painting.', 'CollectionPage; each image/project links to its relevant service'],
+      ['/faqs/', 'painting FAQs Melbourne', 'Painting FAQs Melbourne | Superior Plus Painting', 'Find clear answers about quotes, preparation, paint systems, project timing, access, clean-up and professional painting across Melbourne.', 'FAQPage only for visible matched Q&A; link answers to services'],
+      ['/blog/', 'painting advice Melbourne', 'Painting Advice Melbourne | Superior Plus', 'Read practical Melbourne painting guides about preparation, interiors, exteriors, roofs, maintenance, colours and choosing a professional painter.', 'CollectionPage; link to all canonical guides'],
+      ['/contact/', 'painting quote Melbourne', 'Free Painting Quote Melbourne | Superior Plus', 'Request a free, no-obligation painting quote in Melbourne. Tell Superior Plus Painting about your property, surfaces, location and preferred timing.', 'ContactPage; verify phone, email and form delivery']
+    ];
+    const services=[
+      ['residential-painting-melbourne','residential painting Melbourne','Residential Painting Melbourne | Superior Plus Painting','Professional residential painting across Melbourne for complete home repaints, interior refreshes and exterior transformations. Request a free quote.','Interior, Exterior, Roof, Plaster, priority suburbs, Gallery, Contact'],
+      ['commercial-painting-melbourne','commercial painters Melbourne','Commercial Painters Melbourne | Superior Plus Painting','Commercial painting for Melbourne offices, shops, warehouses, managed properties and workplaces, planned to reduce disruption. Request a quote.','Interior, Exterior, Plaster, Dandenong, Mulgrave, Gallery, Contact'],
+      ['interior-painting-melbourne','interior painting Melbourne','Interior Painting Melbourne | Superior Plus Painting','Professional interior painting in Melbourne for walls, ceilings, trims and living spaces, with careful protection and surface preparation.','Residential, Plaster, Wallpaper, Glen Waverley, guides, Contact'],
+      ['exterior-painting-melbourne','exterior painting Melbourne','Exterior House Painting Melbourne | Superior Plus','Protect and refresh your Melbourne property with professional exterior painting, detailed preparation and durable coating systems. Free quote.','Residential, Roof, Fence, Deck, Clayton, guides, Contact'],
+      ['roof-painting-melbourne','roof painting Melbourne','Roof Painting Melbourne | Superior Plus Painting','Professional roof painting in Melbourne with assessment, cleaning, preparation, suitable coatings and a carefully finished result. Request a quote.','Exterior, Residential, Noble Park, roof guide, Gallery, Contact'],
+      ['fence-painting-melbourne','fence painting Melbourne','Fence Painting Melbourne | Superior Plus Painting','Refresh and protect Melbourne fences with professional preparation and suitable brush, spray, paint or stain finishes. Request a free quote.','Exterior, Deck, Springvale, fence guide, Gallery, Contact'],
+      ['deck-painting-staining-melbourne','deck painting Melbourne','Deck Painting & Staining Melbourne | Superior Plus','Restore and protect outdoor timber with professional deck painting and staining in Melbourne. Careful preparation and suitable finishes.','Exterior, Fence, Residential, projects, maintenance guide, Contact'],
+      ['wallpaper-removal-melbourne','wallpaper removal Melbourne','Wallpaper Removal Melbourne | Superior Plus','Professional wallpaper removal in Melbourne, including careful stripping, adhesive cleaning, wall preparation and paint-ready finishing.','Interior, Plaster, Residential, preparation guide, Contact'],
+      ['plaster-repairs-melbourne','plaster repairs Melbourne','Plaster Repairs Melbourne | Superior Plus Painting','Professional plaster repairs in Melbourne for cracks, holes and damaged walls or ceilings, prepared for a smooth painting finish.','Interior, Residential, Burwood, crack-repair guide, Contact']
+    ];
+    const areas=[
+      ['chadstone','Chadstone','Monash & nearby eastern suburbs'],['mount-waverley','Mount Waverley','Monash & nearby eastern suburbs'],['glen-waverley','Glen Waverley','Monash & nearby eastern suburbs'],['oakleigh','Oakleigh','Monash & nearby eastern suburbs'],['mulgrave','Mulgrave','Monash & nearby eastern suburbs'],['clayton','Clayton','Monash & nearby eastern suburbs'],['burwood','Burwood','Monash & nearby eastern suburbs'],['ashwood','Ashwood','Monash & nearby eastern suburbs'],['dandenong','Dandenong','Greater Dandenong'],['noble-park','Noble Park','Greater Dandenong'],['springvale','Springvale','Greater Dandenong'],['keysborough','Keysborough','Greater Dandenong'],['berwick','Berwick','Casey & outer south-east'],['narre-warren','Narre Warren','Casey & outer south-east'],['endeavour-hills','Endeavour Hills','Casey & outer south-east'],['hawthorn','Hawthorn','Inner Eastern Suburbs'],['hawthorn-east','Hawthorn East','Inner Eastern Suburbs'],['kew','Kew','Inner Eastern Suburbs'],['kew-east','Kew East','Inner Eastern Suburbs'],['camberwell','Camberwell','Inner Eastern Suburbs'],['canterbury','Canterbury','Inner Eastern Suburbs'],['balwyn','Balwyn','Inner Eastern Suburbs'],['balwyn-north','Balwyn North','Inner Eastern Suburbs'],['surrey-hills','Surrey Hills','Inner Eastern Suburbs'],['mont-albert','Mont Albert','Inner Eastern Suburbs'],['deepdene','Deepdene','Inner Eastern Suburbs'],['box-hill','Box Hill','Inner Eastern Suburbs'],['box-hill-north','Box Hill North','Inner Eastern Suburbs'],['box-hill-south','Box Hill South','Inner Eastern Suburbs'],['malvern','Malvern','South Eastern Suburbs'],['malvern-east','Malvern East','South Eastern Suburbs'],['glen-iris','Glen Iris','South Eastern Suburbs'],['burwood-east','Burwood East','South Eastern Suburbs'],['wheelers-hill','Wheelers Hill','South Eastern Suburbs'],['hughesdale','Hughesdale','South Eastern Suburbs'],['oakleigh-east','Oakleigh East','South Eastern Suburbs'],['oakleigh-south','Oakleigh South','South Eastern Suburbs'],['clayton-south','Clayton South','South Eastern Suburbs'],['vermont','Vermont','Eastern Suburbs'],['vermont-south','Vermont South','Eastern Suburbs'],['forest-hill','Forest Hill','Eastern Suburbs'],['blackburn','Blackburn','Eastern Suburbs'],['blackburn-north','Blackburn North','Eastern Suburbs'],['blackburn-south','Blackburn South','Eastern Suburbs'],['nunawading','Nunawading','Eastern Suburbs'],['mitcham','Mitcham','Eastern Suburbs'],['ringwood','Ringwood','Eastern Suburbs'],['ringwood-east','Ringwood East','Eastern Suburbs'],['ringwood-north','Ringwood North','Eastern Suburbs'],['heathmont','Heathmont','Eastern Suburbs'],['bayswater','Bayswater','Eastern Suburbs'],['boronia','Boronia','Eastern Suburbs'],['wantirna','Wantirna','Eastern Suburbs'],['wantirna-south','Wantirna South','Eastern Suburbs'],['knoxfield','Knoxfield','Eastern Suburbs'],['ferntree-gully','Ferntree Gully','Eastern Suburbs'],['scoresby','Scoresby','Outer Eastern Suburbs'],['rowville','Rowville','Outer Eastern Suburbs'],['lysterfield','Lysterfield','Outer Eastern Suburbs'],['the-basin','The Basin','Outer Eastern Suburbs'],['croydon','Croydon','Outer Eastern Suburbs'],['croydon-hills','Croydon Hills','Outer Eastern Suburbs'],['kilsyth','Kilsyth','Outer Eastern Suburbs'],['montrose','Montrose','Outer Eastern Suburbs'],['lilydale','Lilydale','Outer Eastern Suburbs'],['mooroolbark','Mooroolbark','Outer Eastern Suburbs'],['chirnside-park','Chirnside Park','Outer Eastern Suburbs']
+    ];
+    const tier1=new Set(['chadstone','mount-waverley','glen-waverley','oakleigh','mulgrave','clayton','burwood','ashwood','dandenong','noble-park','springvale','keysborough','berwick','narre-warren','endeavour-hills','box-hill','blackburn','camberwell','hawthorn-east']);
+    const tier2=new Set(['hawthorn','kew','kew-east','canterbury','balwyn','balwyn-north','surrey-hills','mont-albert','box-hill-north','box-hill-south','malvern','malvern-east','glen-iris','burwood-east','wheelers-hill','hughesdale','oakleigh-east','oakleigh-south','clayton-south','vermont','vermont-south','forest-hill','blackburn-north','blackburn-south','nunawading','mitcham','ringwood','rowville']);
+    const guides=[
+      ['how-often-repaint-house-melbourne','How Often Should You Repaint Your House in Melbourne?','how often to repaint a house','Residential Painting','Mark cornerstone; retain approved complete article; add maintenance checklist and service links.'],
+      ['interior-vs-exterior-painting','Interior Painting vs Exterior Painting: What Is the Difference?','interior vs exterior painting','Interior + Exterior','Mark cornerstone; comparison table, coating/preparation distinctions and links to both services.'],
+      ['professional-painting-services-melbourne','Professional Painting Services Melbourne','professional painting services Melbourne','Services hub','Avoid competing with Services hub: educational “what is included” intent and strong link to hub.'],
+      ['experienced-painting-contractors-melbourne','Experienced Painting Contractors Melbourne','painting contractors Melbourne','About / Services','Hiring checklist; verify every insurance/experience claim; link to About and quote process.'],
+      ['prepare-house-before-professional-painters-melbourne','How to Prepare Your House Before Professional Painters Arrive','prepare house for painters','Our Process','Practical checklist, accessibility notes and links to Process/Interior.'],
+      ['interior-house-painting-melbourne-complete-guide','Interior House Painting Melbourne: Complete Guide','interior house painting guide','Interior Painting','Long-tail guide; do not reuse the service page’s sales copy.'],
+      ['exterior-house-painting-melbourne-weather-protection','Exterior House Painting Melbourne: Weather Protection','exterior house painting guide','Exterior Painting','Melbourne weather/surface guidance; link to roof, fence and deck where useful.'],
+      ['commercial-painting-contractors-melbourne-businesses','Commercial Painting Contractors Melbourne for Businesses','commercial painting contractors Melbourne','Commercial Painting','Scheduling, safety, access and disruption-management focus.'],
+      ['roof-painting-melbourne-benefits-process-cost-guide','Roof Painting Melbourne: Benefits, Process and Cost Guide','roof painting Melbourne guide','Roof Painting','Explain quote factors without invented prices; safety and coating compatibility.'],
+      ['how-professional-painters-repair-cracks-before-painting','How Professional Painters Repair Cracks Before Painting','repair cracks before painting','Plaster Repairs','Differentiate crack types; state when another trade/assessment may be required.'],
+      ['best-paint-colours-australian-homes-2026','Best Paint Colours for Australian Homes in 2026','paint colours Australian homes 2026','Interior Painting','Time-sensitive: review yearly, cite current manufacturer palettes, add testing advice.'],
+      ['dulux-paint-systems-quality-paint-matters','Why Quality Paint Systems Matter for Your Home','quality paint systems','Interior + Exterior','Avoid implying endorsement/partnership; explain primer/topcoat compatibility and preparation.'],
+      ['new-home-painting-melbourne-builders','New Home Painting Melbourne: Why Builders Choose Professionals','new home painting Melbourne','Residential Painting','Builder coordination, sequencing, handover and touch-up intent.'],
+      ['before-after-professional-painting-melbourne-homes','Before and After: Painting Melbourne Homes','before and after house painting','Gallery','Use only real paired project images, scope and outcome; link to performed services.'],
+      ['fence-painting-melbourne-outdoor-protection','Fence Painting Melbourne: Outdoor Protection','fence painting Melbourne guide','Fence Painting','Preparation, application choice and coating suitability; avoid duplicating service sales copy.'],
+      ['strata-body-corporate-painting-melbourne-guide','Strata and Body Corporate Painting Melbourne Guide','strata painting Melbourne','Commercial / Additional','Stakeholders, scope, access and maintenance; create service page later only with capability proof.'],
+      ['how-long-professional-paint-job-lasts-melbourne','How Long Does a Professional Paint Job Last in Melbourne?','how long does paint last','Residential Painting','Explain variables and warning signs; avoid guarantees not supported by terms.'],
+      ['why-hiring-insured-painting-contractor-matters','Why Hiring an Insured Painting Contractor Matters','insured painting contractor','About','Explain verification questions; confirm the site’s own insurance claim remains current.'],
+      ['painter-melbourne-near-me-choose-local-company','Painter Melbourne Near Me: Choosing a Local Company','painter Melbourne near me','Services / Contact','Comparison checklist, quote questions and real trust signals; no fake “near me” repetition.']
+    ];
+    const legacy=[
+      ['/roof-painting-melbourne/','301 → /services/roof-painting-melbourne/','Remove old Page from XML; destination self-canonical and indexable.'],
+      ['/painting-services-melbourne/','301 → /services/','Remove old Page from XML; use only /services/ in navigation and cards.'],
+      ['/professional-painters-in-melbourne-eastern-suburbs/','301 → /service-areas/','Remove old Page from XML; the destination must carry generic eastern-suburbs directory content.'],
+      ['/painting-guides/','301 → /blog/','Remove old hub Page from XML after /blog/ is a valid indexable CollectionPage.'],
+      ['/commercial-painting-melbourne/','301 → /services/commercial-painting-melbourne/','Remove duplicate Page from XML.'],
+      ['/residential-painting-melbourne-house-painters-melbourne/','301 → /services/residential-painting-melbourne/','Remove duplicate Page from XML.'],
+      ['/service-areas/painters-camberwell-house-painters-camberwell/','301 → /service-areas/camberwell/','Remove long-form duplicate from XML; preserve the approved Camberwell content on the canonical page.'],
+      ['/service-areas/painters-hawthorn-east-house-painters-hawthorn-east/','301 → /service-areas/hawthorn-east/','Remove long-form duplicate from XML; preserve approved content on the canonical page.'],
+      ['/property-improvement-services-melbourne/','301 → /additional-services/','Remove duplicate Page from XML; use the homepage flip card and internal links to the canonical route.'],
+      ['/painting-guides-melbourne/','301 → /blog/','Remove old hub Page from XML after /blog/ is indexable.'],
+      ...guides.map(g=>[`/painting-guides/${g[0]}/`,`301 → /blog/${g[0]}/`,'Remove duplicate Page from XML; retain the spp_article URL as canonical.'])
+    ];
+    const projects=[
+      ['residential-painting-showcase','residential painting projects Melbourne','Residential Painting Projects Melbourne | Superior Plus','Add property type, verified suburb, scope, preparation, products where approved, outcome and original gallery; link to Residential.'],
+      ['commercial-painting-showcase','commercial painting projects Melbourne','Commercial Painting Projects Melbourne | Superior Plus','Add site type, scheduling constraints, scope, safety/access approach and original images; link to Commercial.'],
+      ['interior-painting-showcase','interior painting projects Melbourne','Interior Painting Projects Melbourne | Superior Plus','Add rooms/surfaces, preparation, colour/finish where approved, outcome and original before/after media; link to Interior.'],
+      ['exterior-painting-showcase','exterior painting projects Melbourne','Exterior Painting Projects Melbourne | Superior Plus','Make this the exterior project hub or one specific case study with verified property context; link to Exterior.'],
+      ['exterior-painting-showcase-2','second exterior painting project Melbourne','Exterior Painting Case Study Melbourne | Superior Plus','If it is a distinct project, rename slug/title around verified suburb/property. If substantially duplicate, 301 to the primary exterior showcase.'],
+      ['fence-painting-showcase','fence painting projects Melbourne','Fence Painting Projects Melbourne | Superior Plus','Add fence material/condition, preparation, finish and real result; link to Fence Painting.'],
+      ['outdoor-painting-showcase','outdoor painting projects Melbourne','Outdoor Painting Projects Melbourne | Superior Plus','Clarify whether this is deck, pergola or another outdoor surface; rename around the verified work and link to Deck/Fence/Exterior.'],
+      ['roof-painting-showcase','roof painting projects Melbourne','Roof Painting Projects Melbourne | Superior Plus','Add roof type/condition, cleaning/preparation and compatible coating details where approved; link to Roof Painting.'],
+      ['wallpaper-painting-showcase','wallpaper removal projects Melbourne','Wallpaper Removal Projects Melbourne | Superior Plus','Correct ambiguous “wallpaper painting” wording if removal/preparation is shown; document stripping, adhesive removal and wall finish.'],
+      ['plaster-painting-showcase','plaster repair projects Melbourne','Plaster Repair Projects Melbourne | Superior Plus','Clarify repair type, preparation and painted outcome; link to Plaster Repairs and Interior Painting.']
+    ];
+    const testimonials=['professional-reliable','excellent-quality','great-communication','value-for-money','sern-boey','josh-vatansever-ly','omid-ashur'];
+    const faqs=['do-you-provide-free-quotes','what-areas-do-you-service','are-you-fully-insured','what-painting-services-do-you-offer','how-long-will-my-project-take','do-i-need-to-move-my-furniture','can-you-repair-walls-before-painting','what-type-of-paint-do-you-use','do-you-clean-up-after-the-project','how-do-i-book-my-project'];
+    document.getElementById('coreRows').innerHTML=core.map(r=>`<tr><td class="route">${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td>${esc(r[4])}</td></tr>`).join('');
+    document.getElementById('serviceRows').innerHTML=services.map(r=>`<tr><td class="route">/services/${esc(r[0])}/</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td>${esc(r[4])}</td></tr>`).join('');
+    document.getElementById('areaRows').innerHTML=areas.map(([slug,name,region])=>{const t=tier1.has(slug)?1:tier2.has(slug)?2:3;const label=t===1?'Client target / Tier 1':t===2?'Growth / Tier 2':'Hold / Tier 3';const action=t===1?'Complete unique proof and index first':t===2?'Upgrade, then index in a measured batch':'Noindex until differentiated';return `<tr><td><strong>${esc(name)}</strong><br><span class="route">/service-areas/${esc(slug)}/</span></td><td>${esc(region)}</td><td><span class="pill p${t}">${label}</span></td><td>painters ${esc(name)}</td><td>${action}</td></tr>`}).join('');
+    document.getElementById('guideRows').innerHTML=guides.map(r=>`<tr><td><strong>${esc(r[1])}</strong><br><span class="route">/blog/${esc(r[0])}/</span></td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td>${esc(r[4])}</td></tr>`).join('');
+    document.getElementById('legacyRows').innerHTML=legacy.map(r=>`<tr><td class="route">${esc(r[0])}</td><td><strong>${esc(r[1])}</strong></td><td>${esc(r[2])}</td></tr>`).join('');
+    document.getElementById('projectRows').innerHTML=projects.map(r=>`<tr><td class="route">/projects/${esc(r[0])}/</td><td><strong>${esc(r[1])}</strong><br>${esc(r[2])}</td><td>${esc(r[3])}</td></tr>`).join('');
+    document.getElementById('testimonialRows').innerHTML=testimonials.map(slug=>`<tr><td class="route">/?spp_testimonial=${esc(slug)}</td><td>Noindex, follow; exclude from XML; retain the approved review in the visible reviews/testimonials section. Do not add self-serving LocalBusiness review-rating markup.</td></tr>`).join('');
+    document.getElementById('faqRows').innerHTML=faqs.map(slug=>`<tr><td class="route">/?spp_faq=${esc(slug)}</td><td>Noindex, follow; exclude from XML; retain the approved question and answer on /faqs/ and link that answer to a relevant service when helpful.</td></tr>`).join('');
+  </script>
+</body>
+</html>
