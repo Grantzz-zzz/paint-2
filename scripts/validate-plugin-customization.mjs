@@ -76,6 +76,7 @@ const checks = [
   [seo.includes("add_action( 'template_redirect'") && seo.includes('public static function legacy_redirects()'), 'exact legacy redirects are owned by one testable SEO layer'],
   [seo.includes("'/painting-guides/' => '/blog/'") && seo.includes("'/roof-painting-melbourne/' => '/services/roof-painting-melbourne/'"), 'known duplicate routes have one-hop canonical destinations'],
   [seo.includes("wpseo_sitemap_exclude_post_type") && seo.includes("wpseo_exclude_from_sitemap_by_post_ids"), 'Yoast sitemap exclusions cover embedded records and selected projects'],
+  [seo.includes('current_canonical_fallback') && seo.includes("get_query_var( 'spp_react_route' )") && seo.includes("is_singular( array( 'page', 'spp_service', 'spp_project', 'spp_article' ) )"), 'Yoast canonical fallback covers stored and virtual managed routes'],
   [contentTypes.includes("'publicly_queryable'  => $front_public") && contentTypes.includes("'show_in_rest'        => true"), 'FAQ and testimonial records remain editable and REST-enabled without public thin pages'],
   [fields.includes("'spp_seo_indexable'") && fields.includes('Allow this completed project page in Google'), 'projects require an explicit completed-case-study indexing choice'],
   [app.includes("id=\"reviews\"") && app.includes('__SPP_SEO_SERVER_MANAGED__'), 'review redirects have a destination and server SEO suppresses duplicate homepage schema'],

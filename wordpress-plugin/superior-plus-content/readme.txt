@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.8.1
+Stable tag: 2.8.2
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -42,6 +42,11 @@ cream, green, maroon and gold brand treatments.
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.8.2 =
+* Restore canonical tags on stored and virtual React-managed routes when Yoast has no explicit canonical value.
+* Keep explicit Yoast and Superior Plus canonicals authoritative and avoid emitting canonicals for genuine 404 responses.
+* Preserve all saved editor content, media, layouts and plugin records unchanged.
 
 = 2.8.1 =
 * Use the theme's verified JPEG compatibility assets for fresh imports, restored defaults, blog images and video posters on older iPad Safari.

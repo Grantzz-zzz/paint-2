@@ -212,7 +212,38 @@ class SPP_Content_SEO {
 	 * @return string
 	 */
 	public function yoast_canonical( $canonical ) {
-		return $this->yoast_or_spp_value( $canonical, '_yoast_wpseo_canonical', 'spp_canonical_url' );
+		$resolved = $this->yoast_or_spp_value( $canonical, '_yoast_wpseo_canonical', 'spp_canonical_url' );
+		if ( '' !== trim( (string) $resolved ) ) {
+			return $resolved;
+		}
+
+		return $this->current_canonical_fallback();
+	}
+
+	/**
+	 * Supply Yoast with a canonical for managed pages when neither Yoast nor the
+	 * Superior Plus editor has an explicit value. WordPress permalinks cover
+	 * stored Pages and public plugin records; the route fallback covers valid
+	 * React routes that intentionally have no backing post. Never canonicalize a
+	 * genuine 404 response.
+	 *
+	 * @return string
+	 */
+	private function current_canonical_fallback() {
+		if ( function_exists( 'is_404' ) && is_404() ) {
+			return '';
+		}
+
+		$post_id = get_queried_object_id();
+		if ( $post_id && function_exists( 'is_singular' ) && is_singular( array( 'page', 'spp_service', 'spp_project', 'spp_article' ) ) ) {
+			$permalink = get_permalink( $post_id );
+			if ( $permalink ) {
+				return $permalink;
+			}
+		}
+
+		$route = function_exists( 'get_query_var' ) ? trim( sanitize_text_field( (string) get_query_var( 'spp_react_route' ) ), '/' ) : '';
+		return '' !== $route ? home_url( '/' . $route . '/' ) : '';
 	}
 
 	/**
