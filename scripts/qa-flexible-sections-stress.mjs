@@ -13,6 +13,7 @@ const stressLocations = Array.from({ length: 60 }, (_, index) => `Melbourne stre
 const stressProcessSteps = Array.from({ length: 12 }, (_, index) => index === 6
   ? 'Protect every floor, fitting and adjacent surface before preparation begins'
   : `Editable process step ${String(index + 1).padStart(2, '0')}`)
+const editedHomepageSummary = 'This service-directory summary was edited in WordPress and must replace the bundled homepage flip-card description.'
 
 const mime = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
@@ -43,7 +44,7 @@ function flexibleSections(prefix) {
       items: Array.from({ length: itemsPerSection }, (_, itemIndex) => extreme ? `${prefix} ${number} deliberately long list item ${itemIndex + 1} that wraps naturally without creating a bulky card or horizontal overflow` : `${prefix} ${number} list item ${itemIndex + 1}`),
       style: designed ? styles[index % styles.length] : 'auto',
       layout: designed ? layouts[index % layouts.length] : 'text',
-      image: designed && index > 0 ? { url: `${origin}assets/client/projects/new-batch/batch-097.webp`, alt: `${prefix} test project` } : null,
+      image: designed && index > 0 ? { url: `${origin}assets/client/projects/new-batch/batch-097.jpg`, alt: `${prefix} test project` } : null,
       image_position: '50% 50%',
       order: index,
     }
@@ -175,7 +176,9 @@ const fulfilContentApi = async route => {
         location_band: { enabled: locationBandMode !== 'hidden', after_coloured: locationBandMode === 'after', eyebrow: 'Editable coverage', title: 'Local stress service,', accent: 'carefully tested.', text: 'Every location below is supplied by the plugin in editor order.' },
         service_areas: stressLocations,
       }
-    : ['/services', '/projects', '/articles', '/testimonials', '/faqs', '/areas'].includes(endpoint) ? [] : undefined
+    : endpoint === '/services'
+      ? [{ id: 901, slug: 'residential-painting-melbourne', title: 'Residential Painting', short: editedHomepageSummary, tone: 'maroon', url: '/services/residential-painting-melbourne' }]
+      : ['/projects', '/articles', '/testimonials', '/faqs', '/areas'].includes(endpoint) ? [] : undefined
   const data = pageRoutes.get(endpoint) ?? collection
   return route.fulfill({
     status: data === undefined ? 404 : 200,
@@ -190,7 +193,12 @@ try {
     const page = await context.newPage()
     const runtimeErrors = []
     page.on('pageerror', error => runtimeErrors.push(error.message))
-    page.on('console', message => { if (message.type() === 'error') runtimeErrors.push(message.text()) })
+    page.on('console', message => {
+      if (message.type() === 'error') {
+        const source = message.location().url
+        runtimeErrors.push(`${message.text()}${source ? ` @ ${source}` : ''}`)
+      }
+    })
     await page.addInitScript(() => { window.__SPP_CONTENT_API__ = `${window.location.origin}/wp-json/spp/v1` })
     await page.route('**/wp-json/spp/v1/**', fulfilContentApi)
 
@@ -297,6 +305,7 @@ try {
         const renderedSteps = await page.locator('.process-grid .process-step span').allTextContents()
         check(renderedSteps.length === stressProcessSteps.length, `${label}: rendered ${renderedSteps.length}/${stressProcessSteps.length} editable process steps`)
         check(renderedSteps[0]?.trim() === stressProcessSteps[0] && renderedSteps.at(-1)?.trim() === stressProcessSteps.at(-1), `${label}: process-step add/reorder order was not preserved`)
+        check((await page.locator('.home-service-back p').first().textContent())?.trim() === editedHomepageSummary, `${label}: edited Services-directory summary did not replace the default homepage flip-card description`)
       }
       const seeMore = page.getByRole('button', { name: 'See more' }).first()
       check(await seeMore.isVisible(), `${label}: long hero copy has no See more control`)

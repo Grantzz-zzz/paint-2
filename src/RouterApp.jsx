@@ -1,5 +1,5 @@
 import { lazy, Suspense, useLayoutEffect } from 'react'
-import { BrowserRouter, HashRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { routerBasePath } from './utils/routes'
 
 const HomePage=lazy(()=>import('./App'))
@@ -30,6 +30,11 @@ function RouteScrollReset() {
   return null
 }
 
+function LegacyGuideRedirect() {
+  const {slug}=useParams()
+  return <Navigate replace to={slug?`/blog/${slug}`:'/blog'}/>
+}
+
 export default function RouterApp() {
   const cleanRoutes=Boolean(window.__SPP_CONTENT_API__)
   const Router=cleanRoutes?BrowserRouter:HashRouter
@@ -50,8 +55,8 @@ export default function RouterApp() {
       <Route path="/additional-services" element={<AdditionalServicesPage/>}/>
       <Route path="/service-areas" element={<ServiceAreasPage/>}/>
       <Route path="/service-areas/:slug" element={<ServiceAreaPage/>}/>
-      <Route path="/painting-guides" element={<PaintingGuidesPage/>}/>
-      <Route path="/painting-guides/:slug" element={<PaintingGuidePage/>}/>
+      <Route path="/painting-guides" element={<LegacyGuideRedirect/>}/>
+      <Route path="/painting-guides/:slug" element={<LegacyGuideRedirect/>}/>
       <Route path="/blog" element={<PaintingGuidesPage/>}/>
       <Route path="/blog/:slug" element={<PaintingGuidePage/>}/>
       <Route path="/our-process" element={<ProcessPage/>}/>

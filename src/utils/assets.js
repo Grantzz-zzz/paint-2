@@ -10,8 +10,31 @@ const browserWindow = typeof window === 'undefined'
     }
   : window
 
+const webpExtension = /\.webp(?=($|[?#]))/i
+
+/**
+ * The client still uses an older iPad Safari release that cannot reliably
+ * decode the theme's WebP library. Built-in assets now ship as progressive
+ * JPEGs. Keep this translation in one place so existing WordPress fields that
+ * saved an earlier theme WebP URL continue to work after the theme update.
+ *
+ * Media Library and third-party WebP URLs are intentionally left alone: only
+ * files owned by this theme have a guaranteed sibling JPEG replacement.
+ */
+export function compatibleThemeImageUrl(value = '') {
+  const source = String(value || '')
+  if (!webpExtension.test(source)) return source
+
+  const themeAsset = /\/wp-content\/themes\/superior-plus\/(?:react-dist\/assets|assets\/images)\//i.test(source)
+  const localAsset = /^(?:\.?\/)?assets\//i.test(source) || /^\/assets\//i.test(source)
+  const moduleAsset = source.startsWith(moduleAssetBase.href)
+  if (!themeAsset && !localAsset && !moduleAsset) return source
+
+  return source.replace(webpExtension, '.jpg')
+}
+
 export function asset(path) {
-  const cleanPath = String(path).replace(/^\.?\/?assets\//, '')
+  const cleanPath = String(path).replace(/^\.?\/?assets\//, '').replace(webpExtension, '.jpg')
 
   // Vite serves files from public/assets at /assets during local development.
   // Production bundles live beside the copied asset directory, including when

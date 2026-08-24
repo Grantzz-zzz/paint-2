@@ -57,6 +57,7 @@ class SPP_Content_Types {
 			__( 'Testimonial', 'superior-plus-content' ),
 			'format-quote',
 			array( 'title', 'editor', 'page-attributes', 'revisions', 'author' ),
+			false,
 			false
 		);
 		$this->register_public_type(
@@ -65,6 +66,7 @@ class SPP_Content_Types {
 			__( 'FAQ', 'superior-plus-content' ),
 			'editor-help',
 			array( 'title', 'editor', 'page-attributes', 'revisions', 'author' ),
+			false,
 			false
 		);
 
@@ -127,8 +129,9 @@ class SPP_Content_Types {
 	 * @param string       $icon Dashicon suffix.
 	 * @param array        $supports Supported editor features.
 	 * @param array|false  $rewrite Rewrite configuration.
+	 * @param bool         $front_public Whether singular records are public frontend pages.
 	 */
-	private function register_public_type( $post_type, $plural, $singular, $icon, $supports, $rewrite ) {
+	private function register_public_type( $post_type, $plural, $singular, $icon, $supports, $rewrite, $front_public = true ) {
 		$base = substr( $post_type, 4 );
 		$cap  = ( 'faq' === $base ) ? array( 'spp_faq', 'spp_faqs' ) : array( "spp_{$base}", "spp_{$base}s" );
 		register_post_type(
@@ -148,15 +151,20 @@ class SPP_Content_Types {
 						$singular
 					),
 				),
-				'public'          => true,
-				'show_in_rest'    => true,
-				'show_in_menu'    => 'spp-content',
-				'has_archive'     => false,
-				'rewrite'         => $rewrite,
-				'menu_icon'       => 'dashicons-' . $icon,
-				'supports'        => $supports,
-				'capability_type' => $cap,
-				'map_meta_cap'    => true,
+				'public'              => $front_public,
+				'publicly_queryable'  => $front_public,
+				'exclude_from_search' => ! $front_public,
+				'show_ui'             => true,
+				'show_in_rest'        => true,
+				'show_in_nav_menus'   => $front_public,
+				'show_in_menu'        => 'spp-content',
+				'has_archive'         => false,
+				'query_var'           => $front_public,
+				'rewrite'             => $front_public ? $rewrite : false,
+				'menu_icon'           => 'dashicons-' . $icon,
+				'supports'            => $supports,
+				'capability_type'     => $cap,
+				'map_meta_cap'        => true,
 			)
 		);
 	}

@@ -89,7 +89,7 @@ function spp_section_intro( $eyebrow, $title, $accent, $text = '', $light = fals
 function spp_page_hero( $args ) {
 	$args = wp_parse_args(
 		$args,
-		array( 'eyebrow' => '', 'title' => get_the_title(), 'accent' => '', 'intro' => '', 'tone' => 'maroon', 'image' => 'projects/exterior/exterior-07.webp', 'image_url' => '', 'alt' => '' )
+		array( 'eyebrow' => '', 'title' => get_the_title(), 'accent' => '', 'intro' => '', 'tone' => 'maroon', 'image' => 'projects/exterior/exterior-07.jpg', 'image_url' => '', 'alt' => '' )
 	);
 	$image_url = $args['image_url'] ?: spp_asset( $args['image'] );
 	?>
@@ -182,7 +182,7 @@ function spp_project_gallery( $category ) {
 			$url     = get_the_post_thumbnail_url( $project, 'large' );
 			$alt     = get_the_title( $project );
 		} else {
-			$path = 'projects/' . $category . '/' . $category . '-' . str_pad( (string) $index, 2, '0', STR_PAD_LEFT ) . '.webp';
+			$path = 'projects/' . $category . '/' . $category . '-' . str_pad( (string) $index, 2, '0', STR_PAD_LEFT ) . '.jpg';
 			$url  = spp_asset( $path );
 			$alt  = ucfirst( $category ) . ' painting project by Superior Plus Painting';
 		}

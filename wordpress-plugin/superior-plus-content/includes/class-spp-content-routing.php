@@ -32,7 +32,9 @@ class SPP_Content_Routing {
 	 * Register routes that work before starter content has been imported.
 	 */
 	public function register_rewrites() {
-		add_rewrite_rule( '^sitemap\.xml$', 'index.php?spp_sitemap=1', 'top' );
+		if ( ! class_exists( 'SPP_Content_SEO' ) || ! SPP_Content_SEO::yoast_active() ) {
+			add_rewrite_rule( '^sitemap\.xml$', 'index.php?spp_sitemap=1', 'top' );
+		}
 		if ( 'superior-plus' !== get_stylesheet() ) {
 			return;
 		}
@@ -146,6 +148,10 @@ class SPP_Content_Routing {
 	 * Render every published public page in a compact XML sitemap.
 	 */
 	private function render_sitemap() {
+		if ( class_exists( 'SPP_Content_SEO' ) && SPP_Content_SEO::yoast_active() ) {
+			wp_safe_redirect( home_url( '/sitemap_index.xml' ), 301, 'Superior Plus SEO cleanup' );
+			exit;
+		}
 		$urls = array();
 		$add  = function ( $url, $modified = '' ) use ( &$urls ) {
 			$urls[ untrailingslashit( $url ) ?: home_url( '/' ) ] = $modified;
@@ -164,12 +170,20 @@ class SPP_Content_Routing {
 		}
 
 		$front_id = (int) get_option( 'page_on_front' );
+		$legacy_paths = class_exists( 'SPP_Content_SEO' ) ? array_keys( SPP_Content_SEO::legacy_redirects() ) : array();
 		foreach ( get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'posts_per_page' => -1, 'orderby' => 'ID', 'order' => 'ASC' ) ) as $page ) {
 			$url = $front_id === (int) $page->ID ? home_url( '/' ) : get_permalink( $page );
+			$page_path = '/' . trim( (string) wp_parse_url( $url, PHP_URL_PATH ), '/' ) . '/';
+			if ( in_array( $page_path, $legacy_paths, true ) ) {
+				continue;
+			}
 			$add( $url, $page->post_modified_gmt );
 		}
 		foreach ( array( 'spp_service', 'spp_project', 'spp_article' ) as $post_type ) {
 			foreach ( get_posts( array( 'post_type' => $post_type, 'post_status' => 'publish', 'posts_per_page' => -1, 'orderby' => 'ID', 'order' => 'ASC' ) ) as $post ) {
+				if ( 'spp_project' === $post_type && '1' !== (string) get_post_meta( $post->ID, 'spp_seo_indexable', true ) ) {
+					continue;
+				}
 				$add( get_permalink( $post ), $post->post_modified_gmt );
 			}
 		}
@@ -263,6 +277,9 @@ class SPP_Content_Routing {
 	 */
 	public function robots_txt( $output, $public ) {
 		unset( $public );
+		if ( class_exists( 'SPP_Content_SEO' ) && SPP_Content_SEO::yoast_active() ) {
+			return $output;
+		}
 		$line = 'Sitemap: ' . home_url( '/sitemap.xml' );
 		return false === strpos( $output, $line ) ? rtrim( $output ) . "\n" . $line . "\n" : $output;
 	}

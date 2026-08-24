@@ -5,30 +5,18 @@
  * @package SuperiorPlus
  */
 
-$spp_route    = spp_react_route_for_request();
-$spp_manifest = json_decode( file_get_contents( SPP_PATH . '/react-dist/.vite/manifest.json' ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-$spp_entry    = isset( $spp_manifest['index.html'] ) ? $spp_manifest['index.html'] : array();
-$spp_script   = isset( $spp_entry['file'] ) ? SPP_URI . '/react-dist/' . ltrim( $spp_entry['file'], '/' ) : '';
-$spp_styles   = isset( $spp_entry['css'] ) ? $spp_entry['css'] : array();
-$spp_canonical = spp_canonical_url_for_route( $spp_route );
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#8f2824">
-	<meta name="description" content="Premium residential and commercial painting across Melbourne, delivered with careful preparation, honest advice and quality workmanship.">
-	<link rel="canonical" href="<?php echo esc_url( $spp_canonical ); ?>">
-	<title><?php echo esc_html( get_bloginfo( 'name' ) ); ?></title>
-	<?php foreach ( $spp_styles as $spp_stylesheet ) : ?>
-		<link rel="stylesheet" href="<?php echo esc_url( SPP_URI . '/react-dist/' . ltrim( $spp_stylesheet, '/' ) ); ?>?ver=<?php echo esc_attr( SPP_VERSION ); ?>">
-	<?php endforeach; ?>
-	<script>window.__SPP_SITE_URL__=<?php echo wp_json_encode( trailingslashit( home_url( '/' ) ) ); ?>;window.__SPP_ROUTER_BASE__=<?php echo wp_json_encode( spp_router_basename() ); ?>;window.__SPP_CONTENT_API__=<?php echo wp_json_encode( untrailingslashit( rest_url( 'spp/v1' ) ) ); ?>;window.__SPP_REST_NONCE__=<?php echo wp_json_encode( wp_create_nonce( 'wp_rest' ) ); ?>;window.__SPP_FORM_NONCE__=<?php echo wp_json_encode( wp_create_nonce( 'spp_quote_form' ) ); ?>;</script>
+	<style id="spp-boot-fallback-style">.spp-boot-fallback{min-height:100vh;display:grid;place-items:center;padding:32px;background:#fbf6ec;color:#18211e;font-family:Arial,sans-serif;text-align:center}.spp-boot-fallback div{max-width:440px}.spp-boot-fallback img{display:block;width:min(220px,70vw);height:auto;margin:0 auto 24px}.spp-boot-fallback strong{display:block;font-size:1.5rem}.spp-boot-fallback p{line-height:1.6}.spp-boot-fallback a{display:inline-block;margin:5px 8px;color:#8f2824;font-weight:700}</style>
+	<?php wp_head(); ?>
 </head>
 <body <?php body_class( 'spp-react-frontend' ); ?>>
-<div id="root"></div>
-<?php if ( $spp_script ) : ?>
-	<script type="module" src="<?php echo esc_url( $spp_script ); ?>"></script>
-<?php endif; ?>
+	<?php wp_body_open(); ?>
+	<div id="root"><div class="spp-boot-fallback" role="status"><div><img src="<?php echo esc_url( SPP_URI . '/assets/images/logo.jpeg' ); ?>" alt="Superior Plus Painting &amp; Remodeling"><strong><?php esc_html_e( 'Superior Plus Painting', 'superior-plus' ); ?></strong><p><?php esc_html_e( 'Loading the current website content…', 'superior-plus' ); ?></p><a href="tel:0470234567"><?php esc_html_e( 'Call 0470 234 567', 'superior-plus' ); ?></a><a href="mailto:sppainting.remodeling@gmail.com"><?php esc_html_e( 'Email our team', 'superior-plus' ); ?></a></div></div></div>
+	<?php wp_footer(); ?>
 </body>
 </html>

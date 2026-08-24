@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises'
 
 const read = path => readFile(path, 'utf8')
-const [fields, admin, projectGallery, galleryPage, contentProvider, migration, workflow, plugin, rest, servicePage, pageLayout, contentPages, guidePages, areaPages, managedExtras] = await Promise.all([
+const [fields, admin, projectGallery, galleryPage, contentProvider, migration, workflow, plugin, rest, servicePage, pageLayout, contentPages, guidePages, areaPages, managedExtras, app, seo, contentTypes, router] = await Promise.all([
   read('wordpress-plugin/superior-plus-content/includes/class-spp-content-fields.php'),
   read('wordpress-plugin/superior-plus-content/assets/admin.js'),
   read('src/components/ProjectGallery.jsx'),
@@ -17,17 +17,21 @@ const [fields, admin, projectGallery, galleryPage, contentProvider, migration, w
   read('src/pages/GuidePages.jsx'),
   read('src/pages/ServiceAreaPages.jsx'),
   read('src/components/ManagedPageExtras.jsx'),
+  read('src/App.jsx'),
+  read('wordpress-plugin/superior-plus-content/includes/class-spp-content-seo.php'),
+  read('wordpress-plugin/superior-plus-content/includes/class-spp-content-types.php'),
+  read('src/RouterApp.jsx'),
 ])
 const requiredWorkflow = workflow.slice(workflow.indexOf('private function missing_required_fields'))
 const serviceRequiredBlock = requiredWorkflow.match(/'service'\s*=>\s*array\(([\s\S]*?)\n\s*\),\n\s*'project'/)?.[1] || ''
 const aestheticHeroes = [
-  'stock-main/about.webp',
-  'stock-main/services.webp',
-  'stock-main/additional-services.webp',
-  'stock-main/areas.webp',
-  'stock-main/gallery.webp',
-  'stock-main/faq.webp',
-  'stock-main/contact.webp',
+  'stock-main/about.jpg',
+  'stock-main/services.jpg',
+  'stock-main/additional-services.jpg',
+  'stock-main/areas.jpg',
+  'stock-main/gallery.jpg',
+  'stock-main/faq.jpg',
+  'stock-main/contact.jpg',
   'client/heroes/our-process-house-hero.jpg',
   'client/heroes/blog-house-hero.jpg',
 ]
@@ -51,6 +55,9 @@ const checks = [
   [servicePage.includes('const heroTitle=page.title === undefined') && !servicePage.includes('approved?.headline||'), 'editable service hero title controls the live heading'],
   [servicePage.includes("service.tone||serviceList.find(item=>item.slug===service.slug)?.tone||'cream'") && rest.includes("'tone'  => $tone"), 'related service cards retain canonical colour tones when live metadata is missing'],
   [pageLayout.includes('title===undefined?defaults.title:title') && pageLayout.includes('resolvedLabel&&destination'), 'blank page CTA fields do not restore hardcoded defaults'],
+  [pageLayout.includes("item:{'@type':'WebPage','@id':url,url,name}") && pageLayout.includes("const name=String(item.label??'').trim()||fallbackLabel"), 'breadcrumb schema always supplies ListItem and linked WebPage names'],
+  [fields.includes("'spp_home_additional_service_enabled'") && fields.includes("'spp_home_additional_service_image_id'"), 'homepage Additional Services card exposes optional copy and image controls'],
+  [app.includes("fieldValue(fields,'home_additional_service_enabled',false)") && app.includes("url:'/additional-services'") && app.includes('showAdditionalService?[...serviceCards,additionalServiceCard]:serviceCards'), 'Additional Services card is default-off, links correctly and preserves existing service selections'],
   [fields.includes("'spp_explicit_blank_fields'") && fields.includes("'' === $value && '' !== $existing"), 'only fields deliberately cleared by an editor receive an explicit-blank marker'],
   [fields.includes('! $was_configured && $this->is_blank_value') && fields.includes('$was_configured || $value'), 'saving one edit does not configure untouched blank text, media, card, or relationship controls'],
   [rest.includes('$explicit_blanks') && rest.includes("in_array( $key, $explicit_blanks, true )"), 'importer blanks fall back while explicitly cleared CTA fields remain removed'],
@@ -66,6 +73,14 @@ const checks = [
   [fields.includes('render_restore_control') && fields.includes('spp_restore_original_content_') && fields.includes("'page', 'spp_service', 'spp_project', 'spp_article', 'spp_testimonial', 'spp_faq'"), 'all bundled editable record types expose a guarded restore action'],
   [migration.includes('handle_restore_original') && migration.includes("check_admin_referer( 'spp_restore_original_content_'") && migration.includes("current_user_can( 'edit_post', $post_id )"), 'restore action is capability and nonce protected'],
   [migration.includes("0 === strpos( $key, 'spp_' )") && migration.includes("Site settings,\n\t * quote delivery") && migration.includes("get_post_meta( $post_id, '_spp_source_key'"), 'restore remains scoped to one managed record and away from Site Settings'],
+  [seo.includes("add_action( 'template_redirect'") && seo.includes('public static function legacy_redirects()'), 'exact legacy redirects are owned by one testable SEO layer'],
+  [seo.includes("'/painting-guides/' => '/blog/'") && seo.includes("'/roof-painting-melbourne/' => '/services/roof-painting-melbourne/'"), 'known duplicate routes have one-hop canonical destinations'],
+  [seo.includes("wpseo_sitemap_exclude_post_type") && seo.includes("wpseo_exclude_from_sitemap_by_post_ids"), 'Yoast sitemap exclusions cover embedded records and selected projects'],
+  [contentTypes.includes("'publicly_queryable'  => $front_public") && contentTypes.includes("'show_in_rest'        => true"), 'FAQ and testimonial records remain editable and REST-enabled without public thin pages'],
+  [fields.includes("'spp_seo_indexable'") && fields.includes('Allow this completed project page in Google'), 'projects require an explicit completed-case-study indexing choice'],
+  [app.includes("id=\"reviews\"") && app.includes('__SPP_SEO_SERVER_MANAGED__'), 'review redirects have a destination and server SEO suppresses duplicate homepage schema'],
+  [pageLayout.includes('__SPP_SEO_SERVER_MANAGED__'), 'server SEO suppresses duplicate inner-page schema'],
+  [router.includes('LegacyGuideRedirect') && router.includes('/painting-guides/:slug'), 'legacy guide routes converge on canonical blog routes during SPA navigation'],
   ...aestheticHeroes.map(path => [migration.includes(`'hero_asset' => '${path}'`), `approved hero assignment: ${path}`]),
 ]
 const failures = checks.filter(([passed]) => !passed).map(([, name]) => name)

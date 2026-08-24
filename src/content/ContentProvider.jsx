@@ -6,7 +6,7 @@ import {
   suburbs as fallbackAreas,
   testimonials as fallbackTestimonials,
 } from '../data/siteData'
-import { asset } from '../utils/assets'
+import { asset, compatibleThemeImageUrl } from '../utils/assets'
 import { toInternalAppPath } from '../utils/routes'
 
 /**
@@ -119,7 +119,7 @@ async function request(endpoint) {
   }).then(async response => {
     if (!response.ok) throw new Error(`Content request failed (${response.status})`)
     const payload = await response.json()
-    if (payload?.schema_version !== '1.0.0' || !Object.hasOwn(payload, 'data')) {
+    if (payload?.schema_version !== '1.0.0' || !Object.prototype.hasOwnProperty.call(payload, 'data')) {
       throw new Error('Unsupported Superior Plus content response')
     }
     resolved.set(endpoint, payload.data)
@@ -207,9 +207,9 @@ export function mergeContent(fallback, incoming) {
 }
 
 export function mediaUrl(media, fallback = '') {
-  if (media === undefined) return fallback
+  if (media === undefined) return compatibleThemeImageUrl(fallback)
   if (media === null || media === '') return ''
-  return typeof media === 'string' ? media : media?.url ?? fallback
+  return compatibleThemeImageUrl(typeof media === 'string' ? media : media?.url ?? fallback)
 }
 
 /**
@@ -218,7 +218,7 @@ export function mediaUrl(media, fallback = '') {
  * older responses remain compatible by treating an existing key as configured.
  */
 export function fieldValue(fields, key, fallback) {
-  if (!fields || !Object.hasOwn(fields, key)) return fallback
+  if (!fields || !Object.prototype.hasOwnProperty.call(fields, key)) return fallback
   const configured = fields.__configured
   if (Array.isArray(configured) && !configured.includes(key)) return fallback
   return fields[key]

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPP_VERSION', '3.6.0' );
+define( 'SPP_VERSION', '3.6.6' );
 define( 'SPP_PATH', get_template_directory() );
 define( 'SPP_URI', get_template_directory_uri() );
 
@@ -75,14 +75,77 @@ function spp_enqueue_assets() {
 	foreach ( isset( $entry['css'] ) ? $entry['css'] : array() as $index => $stylesheet ) {
 		wp_enqueue_style( 'spp-react-' . $index, SPP_URI . '/react-dist/' . ltrim( $stylesheet, '/' ), array(), SPP_VERSION );
 	}
-	wp_enqueue_script( 'spp-react-app', SPP_URI . '/react-dist/' . ltrim( $entry['file'], '/' ), array(), SPP_VERSION, true );
-	wp_add_inline_script(
-		'spp-react-app',
-		'window.__SPP_SITE_URL__=' . wp_json_encode( trailingslashit( home_url( '/' ) ) ) . ';window.__SPP_ROUTER_BASE__=' . wp_json_encode( spp_router_basename() ) . ';window.__SPP_CONTENT_API__=' . wp_json_encode( untrailingslashit( rest_url( 'spp/v1' ) ) ) . ';window.__SPP_REST_NONCE__=' . wp_json_encode( wp_create_nonce( 'wp_rest' ) ) . ';window.__SPP_FORM_NONCE__=' . wp_json_encode( wp_create_nonce( 'spp_quote_form' ) ) . ';',
-		'before'
-	);
+	// The hashed Vite entry is also imported by lazy chunks. A WordPress
+	// ?ver= query would give that same file two different module identities,
+	// loading React twice and causing error #321. The content hash already
+	// provides cache busting, so the module URL must remain query-free.
+	wp_enqueue_script( 'spp-react-app', SPP_URI . '/react-dist/' . ltrim( $entry['file'], '/' ), array(), null, true );
 }
 add_action( 'wp_enqueue_scripts', 'spp_enqueue_assets' );
+
+/**
+ * Print the runtime bridge before the deferred React module executes.
+ *
+ * Keeping this independent from the module handle prevents optimisation or
+ * script-tag filters from dropping the configuration required to load saved
+ * WordPress content.
+ */
+function spp_print_runtime_config() {
+	$config = 'window.__SPP_SITE_URL__=' . wp_json_encode( trailingslashit( home_url( '/' ) ) ) .
+		';window.__SPP_ROUTER_BASE__=' . wp_json_encode( spp_router_basename() ) .
+		';window.__SPP_CONTENT_API__=' . wp_json_encode( untrailingslashit( rest_url( 'spp/v1' ) ) ) .
+		';window.__SPP_REST_NONCE__=' . wp_json_encode( wp_create_nonce( 'wp_rest' ) ) .
+		';window.__SPP_FORM_NONCE__=' . wp_json_encode( wp_create_nonce( 'spp_quote_form' ) ) .
+		';window.__SPP_SEO_SERVER_MANAGED__=' . wp_json_encode( defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' ) ) . ';';
+
+	wp_print_inline_script_tag( $config, array( 'id' => 'spp-react-runtime-config' ) );
+}
+add_action( 'wp_head', 'spp_print_runtime_config', 1 );
+
+/**
+ * Remove page-builder assets from the public React shell.
+ *
+ * Elementor content stays in the database and remains editable in wp-admin;
+ * its frontend runtime is unnecessary here and can otherwise throw before
+ * React starts or leak builder CSS into the approved design.
+ *
+ * @param bool $scripts_only Whether to leave queued styles untouched.
+ */
+function spp_dequeue_builder_assets( $scripts_only = false ) {
+	$prefixes = array( 'elementor', 'elementor-pro', 'uael', 'uae-', 'hfe-', 'header-footer-elementor' );
+	$matches  = static function ( $handle ) use ( $prefixes ) {
+		foreach ( $prefixes as $prefix ) {
+			if ( 0 === strpos( (string) $handle, $prefix ) ) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	global $wp_scripts, $wp_styles;
+	if ( $wp_scripts instanceof WP_Scripts ) {
+		foreach ( (array) $wp_scripts->queue as $handle ) {
+			if ( $matches( $handle ) ) {
+				wp_dequeue_script( $handle );
+			}
+		}
+	}
+	if ( ! $scripts_only && $wp_styles instanceof WP_Styles ) {
+		foreach ( (array) $wp_styles->queue as $handle ) {
+			if ( $matches( $handle ) ) {
+				wp_dequeue_style( $handle );
+			}
+		}
+	}
+}
+add_action( 'wp_enqueue_scripts', 'spp_dequeue_builder_assets', PHP_INT_MAX );
+add_action(
+	'wp_print_footer_scripts',
+	static function () {
+		spp_dequeue_builder_assets( true );
+	},
+	0
+);
 
 function spp_react_module_script( $tag, $handle, $src ) {
 	if ( 'spp-react-app' !== $handle ) {
@@ -179,6 +242,9 @@ function spp_server_seo_data() {
 }
 
 function spp_server_document_title( $title ) {
+	if ( defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' ) ) {
+		return $title;
+	}
 	$data = spp_server_seo_data();
 	return ! empty( $data['title'] ) ? $data['title'] : $title;
 }

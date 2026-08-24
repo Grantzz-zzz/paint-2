@@ -62,7 +62,12 @@ async function createPage(browser, mode) {
   const page = await context.newPage()
   const runtimeErrors = []
   page.on('pageerror', error => runtimeErrors.push(error.message))
-  page.on('console', message => { if (message.type() === 'error') runtimeErrors.push(message.text()) })
+  page.on('console', message => {
+    if (message.type() === 'error') {
+      const source = message.location().url
+      runtimeErrors.push(`${message.text()}${source ? ` @ ${source}` : ''}`)
+    }
+  })
   await page.addInitScript(() => { window.__SPP_CONTENT_API__ = `${window.location.origin}/wp-json/spp/v1` })
   await page.route('**/wp-json/spp/v1/**', async route => {
     const endpoint = new URL(route.request().url()).pathname.split('/spp/v1')[1]

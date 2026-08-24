@@ -564,3 +564,18 @@ main .service-local-card p{max-width:780px;margin:0;color:var(--muted);font-size
 .process-step{min-width:0}
 .process-step span{overflow-wrap:anywhere}
 .process-grid-many .process-step i{display:none}
+
+/*
+ * Touch/iPad compatibility: old WebKit can leave 3D card faces blank or keep
+ * the back face composited after a tap. Preserve the same front/back content
+ * and tap interaction, but switch faces with a stable 2D display change.
+ */
+.spp-touch-ui .home-service-flip-inner,.spp-touch-ui .flip-feature-inner{transform:none!important;transform-style:flat;transition:none}
+.spp-touch-ui .home-service-face,.spp-touch-ui .flip-feature-face{backface-visibility:visible;-webkit-backface-visibility:visible;transform:none}
+.spp-touch-ui .home-service-front,.spp-touch-ui .flip-feature-front{display:flex;pointer-events:auto}
+.spp-touch-ui .home-service-back,.spp-touch-ui .flip-feature-back{display:none;pointer-events:none}
+.spp-touch-ui .home-service-flip.is-flipped .home-service-front,.spp-touch-ui .flip-feature.is-flipped .flip-feature-front{display:none;pointer-events:none}
+.spp-touch-ui .home-service-flip.is-flipped .home-service-back,.spp-touch-ui .flip-feature.is-flipped .flip-feature-back{display:flex;pointer-events:auto}
+.spp-touch-ui .home-service-flip:not(.is-flipped):focus-within .home-service-front,.spp-touch-ui .flip-feature:not(.is-flipped):focus-within .flip-feature-front{display:flex;pointer-events:auto}
+.spp-touch-ui .home-service-flip:not(.is-flipped):focus-within .home-service-back,.spp-touch-ui .flip-feature:not(.is-flipped):focus-within .flip-feature-back{display:none;pointer-events:none}
+@media(max-width:560px){.spp-touch-ui .home-service-flip.is-flipped .home-service-back{display:grid}}

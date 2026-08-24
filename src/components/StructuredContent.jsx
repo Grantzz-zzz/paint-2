@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
 import { Check } from 'lucide-react'
+import { compatibleThemeImageUrl } from '../utils/assets'
 
 function SectionEyebrow({ children }) {
   return <div className="eyebrow text-maroon"><span className="eyebrow-line"/>{children}</div>
@@ -89,13 +90,14 @@ export function ManagedContentSection({ section, index = 0, defaultEyebrow = '',
   const tone = section.style && section.style !== 'auto' ? section.style : (index % 2 ? 'cream' : 'white')
   const background = layout === 'image-background'
   const imageAlt = section.imageAlt || image?.alt || fallbackImageAlt || section.title
+  const imageUrl = compatibleThemeImageUrl(image?.url)
   return <section className={`inner-section managed-content-section tone-${tone} layout-${layout}`}>
     {background && <div className="managed-content-background" aria-hidden="true">
-      <img src={image.url} alt="" style={{ objectPosition: section.imagePosition }}/><span/>
+      <img src={imageUrl} alt="" style={{ objectPosition: section.imagePosition }}/><span/>
     </div>}
     <div className={`container managed-content-grid ${image && !background ? 'has-image' : ''}`}>
       {image && !background && <figure className="managed-content-media">
-        <img src={image.url} alt={imageAlt} loading="lazy" decoding="async" style={{ objectPosition: section.imagePosition }}/>
+        <img src={imageUrl} alt={imageAlt} loading="lazy" decoding="async" style={{ objectPosition: section.imagePosition }}/>
         <figcaption>Superior Plus project</figcaption>
       </figure>}
       <div className="managed-content-panel">

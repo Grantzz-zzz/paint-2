@@ -43,10 +43,11 @@ export default function ServicePage() {
   const {data:route,status}=useRouteContent(`/services/${slug}`)
   const cms=route?.content
   const approved=approvedContent.services[slug]
-  const itemSection=approved?.sections.find(section=>section.items?.length)
-  const stepSection=approved?.sections.find(section=>section.steps?.length)
-  const ctaSection=approved?.sections.at(-1)
-  const approvedNarrative=approved?.sections.filter(section=>section!==itemSection&&section!==stepSection&&section!==ctaSection)||[]
+  const approvedDocumentSections=approved?.sections||[]
+  const itemSection=approvedDocumentSections.find(section=>section.items?.length)
+  const stepSection=approvedDocumentSections.find(section=>section.steps?.length)
+  const ctaSection=approvedDocumentSections[approvedDocumentSections.length-1]
+  const approvedNarrative=approvedDocumentSections.filter(section=>section!==itemSection&&section!==stepSection&&section!==ctaSection)
   const approvedPage=approved?mergeContent(fallbackPage||{}, {
     eyebrow:approved.document_title,
     title:approved.headline,
@@ -75,8 +76,8 @@ export default function ServicePage() {
   }):approvedPage
   const page=cms?.copy_version==='pdf-verbatim-2026-08-01'?{
     ...mergedPage,
-    eyebrow:Object.hasOwn(cms.hero||{},'eyebrow')?cms.hero.eyebrow:mergedPage.eyebrow,
-    accent:Object.hasOwn(cms.hero||{},'accent')?cms.hero.accent:mergedPage.accent,
+    eyebrow:Object.prototype.hasOwnProperty.call(cms.hero||{},'eyebrow')?cms.hero.eyebrow:mergedPage.eyebrow,
+    accent:Object.prototype.hasOwnProperty.call(cms.hero||{},'accent')?cms.hero.accent:mergedPage.accent,
     scope:Array.isArray(cms.scope)?cms.scope.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.scope,
     process:Array.isArray(cms.process)?cms.process.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.process,
     benefits:Array.isArray(cms.benefits)?cms.benefits.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.benefits,

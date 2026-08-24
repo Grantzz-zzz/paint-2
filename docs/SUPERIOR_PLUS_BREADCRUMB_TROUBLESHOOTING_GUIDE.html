@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Superior Plus Breadcrumb Troubleshooting Guide</title>
+  <style>
+    @page { size:A4; margin:15mm 14mm 16mm; @bottom-right { content:"Page " counter(page) " of " counter(pages); color:#68726d; font:8pt Arial,sans-serif; } }
+    :root { --green:#1f5140; --dark:#12382e; --red:#982c27; --gold:#f2c419; --cream:#fbf6eb; --ink:#18211d; --muted:#5d6863; --line:#d7ddd9; --pale:#e8f2ed; --danger:#fae9e6; --blue:#e8f1fa; }
+    * { box-sizing:border-box; }
+    html { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+    body { margin:0; color:var(--ink); background:#fff; font:10.2pt/1.46 Arial,Helvetica,sans-serif; }
+    h1,h2,h3,h4 { margin:0 0 9px; line-height:1.15; }
+    h1 { font-size:29pt; letter-spacing:-1px; }
+    h2 { margin-top:2px; padding-bottom:7px; border-bottom:2px solid var(--gold); color:var(--green); font-size:18.5pt; }
+    h3 { margin-top:16px; color:var(--red); font-size:12.8pt; }
+    h4 { margin-top:12px; color:var(--dark); font-size:10.7pt; }
+    p { margin:0 0 9px; }
+    ul,ol { margin:6px 0 12px; padding-left:22px; }
+    li { margin:4px 0; }
+    code { font:9pt Consolas,monospace; overflow-wrap:anywhere; }
+    a { color:var(--red); overflow-wrap:anywhere; }
+    table { width:100%; margin:10px 0 15px; border-collapse:collapse; break-inside:avoid; }
+    th,td { padding:7px 8px; border:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { color:var(--dark); background:var(--cream); }
+    .compact th,.compact td { padding:5px 7px; }
+    .cover { min-height:254mm; padding:18mm 14mm; color:#fff; background:linear-gradient(145deg,var(--dark),var(--green) 67%,#2f6c57); display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+    .cover:before,.cover:after { content:""; position:absolute; border-radius:50%; transform:rotate(-14deg); }
+    .cover:before { width:190mm; height:82mm; right:-70mm; top:27mm; border:18mm solid rgba(255,255,255,.055); }
+    .cover:after { width:120mm; height:52mm; left:-48mm; bottom:38mm; border:13mm solid rgba(242,196,25,.12); }
+    .cover-content,.cover-meta { position:relative; z-index:1; }
+    .kicker { margin-bottom:23px; color:var(--gold); font-weight:700; letter-spacing:2.3px; text-transform:uppercase; }
+    .cover h1 { max-width:155mm; }
+    .lead { max-width:148mm; margin-top:17px; color:rgba(255,255,255,.87); font-size:13.4pt; }
+    .cover-meta { display:grid; grid-template-columns:1fr 1fr; gap:11px; padding-top:14px; border-top:1px solid rgba(255,255,255,.25); color:rgba(255,255,255,.8); }
+    .cover-meta b { display:block; color:#fff; }
+    .page { break-before:page; }
+    .label { display:inline-block; margin-bottom:9px; padding:5px 10px; border-radius:14px 4px; color:var(--red); background:var(--cream); font-size:8pt; font-weight:700; letter-spacing:1.05px; text-transform:uppercase; }
+    .notice { margin:11px 0 14px; padding:11px 13px; border-left:5px solid var(--gold); background:var(--cream); break-inside:avoid; }
+    .notice.good { border-color:var(--green); background:var(--pale); }
+    .notice.bad { border-color:var(--red); background:var(--danger); }
+    .notice.info { border-color:#3b78a5; background:var(--blue); }
+    .notice strong { color:var(--dark); }
+    .step { display:grid; grid-template-columns:28px 1fr; gap:9px; margin:8px 0; break-inside:avoid; }
+    .step .n { width:26px; height:26px; display:grid; place-items:center; border-radius:50%; color:#fff; background:var(--green); font-weight:700; }
+    .step p { margin:2px 0 0; }
+    .check { list-style:none; padding-left:0; }
+    .check li { position:relative; padding-left:23px; margin:6px 0; }
+    .check li:before { content:"\2610"; position:absolute; left:0; top:-2px; color:var(--green); font-size:15pt; }
+    .decision { margin:10px 0; padding:11px 13px; border:1px solid var(--line); border-radius:5px 15px; background:#fafbf9; break-inside:avoid; }
+    .decision b { color:var(--red); }
+    .codebox { margin:10px 0 14px; padding:10px 12px; border:1px solid #cdd6d1; border-radius:5px; background:#f5f7f5; break-inside:avoid; }
+    .codebox code { display:block; white-space:pre-wrap; }
+    .two { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:11px 0 15px; }
+    .card { padding:11px 12px; border:1px solid var(--line); border-radius:4px 14px; background:#fff; break-inside:avoid; }
+    .card h4 { margin-top:0; color:var(--green); }
+    .small { color:var(--muted); font-size:8.7pt; }
+    .footer { margin-top:17px; padding-top:8px; border-top:1px solid var(--line); color:var(--muted); font-size:8.3pt; }
+    .no-break { break-inside:avoid; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div class="cover-content">
+      <div class="kicker">Superior Plus Painting &amp; Remodeling</div>
+      <h1>Google Breadcrumb Issue Troubleshooting Guide</h1>
+      <p class="lead">A safe, client-ready process for identifying the affected URL, correcting current or historical breadcrumb markup, eliminating conflicts, clearing caches, and validating the repair with Google.</p>
+    </div>
+    <div class="cover-meta">
+      <div><b>Website</b>sppaintingremodeling.com.au</div>
+      <div><b>Prepared</b>9 August 2026</div>
+      <div><b>Audience</b>Website owner and WordPress administrator</div>
+      <div><b>Current packages</b>Theme 3.6.2 / Content plugin 2.7.1</div>
+    </div>
+  </section>
+
+  <section class="page">
+    <span class="label">Read this first</span>
+    <h2>What the warning means</h2>
+    <p>Google reported the breadcrumb error:</p>
+    <div class="notice bad"><strong>Either <code>name</code> or <code>item.name</code> should be specified in <code>itemListElement</code>.</strong></div>
+    <p>A breadcrumb trail tells Google where a page belongs in the website hierarchy, for example:</p>
+    <div class="codebox"><code>Home &gt; Services &gt; Residential Painting</code></div>
+    <p>Each breadcrumb entry is a <code>ListItem</code>. Google expects a position and a readable name. A blank page title, malformed schema, old cached script, or competing schema generator can leave one entry without that name.</p>
+
+    <h3>Important: an email alert is not a live diagnosis</h3>
+    <p>Search Console reports what Google found during an earlier crawl. The live website may already be fixed while the report still shows the old error. Always identify the exact affected URL and run a live test before changing settings.</p>
+    <div class="notice good"><strong>Current site-specific fix:</strong> Superior Plus theme 3.6.2 creates both a named breadcrumb <code>ListItem</code> and a named linked <code>WebPage</code>. This guards against empty or incomplete breadcrumb names.</div>
+
+    <h3>What this warning affects</h3>
+    <table>
+      <tr><th>It may affect</th><th>It does not normally mean</th></tr>
+      <tr><td>Breadcrumb enhancement eligibility and how a URL path can appear in Google results.</td><td>The whole website is broken or unavailable.</td></tr>
+      <tr><td>One page, one template, or one stale URL recorded by Google.</td><td>Every page has been removed from Google.</td></tr>
+      <tr><td>Google's understanding of the page hierarchy.</td><td>The visible navigation menu must be rebuilt.</td></tr>
+    </table>
+  </section>
+
+  <section class="page">
+    <span class="label">Phase 1</span>
+    <h2>Identify the exact affected URL</h2>
+    <div class="step"><span class="n">1</span><p>Sign in to the correct Google Search Console property for <strong>https://sppaintingremodeling.com.au/</strong>.</p></div>
+    <div class="step"><span class="n">2</span><p>Open <strong>Enhancements &gt; Breadcrumbs</strong>. Depending on the Search Console layout, Breadcrumbs may appear beneath <strong>Shopping and enhancements</strong>.</p></div>
+    <div class="step"><span class="n">3</span><p>Open the issue named <strong>Either 'name' or 'item.name' should be specified</strong>.</p></div>
+    <div class="step"><span class="n">4</span><p>Scroll to <strong>Examples</strong> or <strong>Why items are invalid</strong>. Copy every example URL into a document.</p></div>
+    <div class="step"><span class="n">5</span><p>Click one example, then choose the inspect or magnifying-glass option to open URL Inspection.</p></div>
+
+    <div class="notice"><strong>Do not troubleshoot only from the email screenshot.</strong> The email states the error type but usually does not identify the page. The affected URL inside Search Console determines the correct remedy.</div>
+
+    <h3>Record this evidence</h3>
+    <table class="compact">
+      <tr><th>Evidence</th><th>What to write down</th></tr>
+      <tr><td>Affected URL</td><td>The complete HTTPS URL, including its final path and slash.</td></tr>
+      <tr><td>Last crawl</td><td>The date Google last fetched the indexed version.</td></tr>
+      <tr><td>Canonical</td><td>User-declared canonical and Google-selected canonical.</td></tr>
+      <tr><td>Page status</td><td>Published page, redirect, 404, soft 404, noindex, or trashed WordPress page.</td></tr>
+      <tr><td>Live test</td><td>Whether Breadcrumbs are detected and whether the error appears now.</td></tr>
+    </table>
+
+    <h3>Site-specific legacy URL to recognise</h3>
+    <p>A malformed page previously used a path similar to:</p>
+    <div class="codebox"><code>https://sppaintingremodeling.com.au/https-sppaintingremodeling-com-au/</code></div>
+    <p>If this appears in the examples, do not restore it as another homepage. Keep it removed and treat it as an obsolete URL using the decision process later in this guide.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Phase 2</span>
+    <h2>Install the verified website correction</h2>
+    <p>The breadcrumb fix is part of the WordPress theme because the React frontend produces the site's breadcrumb structured data. The companion content plugin contains the matching editor update.</p>
+
+    <h3>Before updating</h3>
+    <ul class="check">
+      <li>Create a full hosting backup of files and the WordPress database.</li>
+      <li>Confirm that an administrator can restore the backup.</li>
+      <li>Use a staging copy first when hosting provides staging.</li>
+      <li>Do not delete current theme or plugin data before uploading replacements.</li>
+    </ul>
+
+    <h3>Upload the plugin</h3>
+    <ol>
+      <li>Open <strong>WordPress Dashboard &gt; Plugins &gt; Add Plugin &gt; Upload Plugin</strong>.</li>
+      <li>Select <strong>superior-plus-content-2.7.1.zip</strong>.</li>
+      <li>Click <strong>Install Now</strong>.</li>
+      <li>When WordPress detects the existing plugin, choose <strong>Replace current with uploaded</strong>.</li>
+      <li>Confirm that <strong>Superior Plus Content</strong> remains active.</li>
+    </ol>
+
+    <h3>Upload the theme</h3>
+    <ol>
+      <li>Open <strong>Appearance &gt; Themes &gt; Add New Theme &gt; Upload Theme</strong>.</li>
+      <li>Select <strong>superior-plus-3.6.2.zip</strong>.</li>
+      <li>Click <strong>Install Now</strong>, then <strong>Replace current with uploaded</strong>.</li>
+      <li>Confirm that <strong>Superior Plus Painting</strong> is still the active theme.</li>
+    </ol>
+
+    <div class="notice bad"><strong>Do not activate a generic WordPress theme to test this.</strong> The live design and structured-data implementation are delivered by the Superior Plus theme.</div>
+
+    <h3>Basic post-update check</h3>
+    <ul class="check">
+      <li>Homepage loads with the intended edited content.</li>
+      <li>Services, Areas, About, Our Process, FAQs, Blog and Contact open normally.</li>
+      <li>A service detail page displays <strong>Home / Services / Page name</strong>.</li>
+      <li>No page shows a blank screen or persistent loading screen.</li>
+    </ul>
+  </section>
+
+  <section class="page">
+    <span class="label">Phase 3</span>
+    <h2>Clear every cache layer</h2>
+    <p>A correct theme can still appear incorrect when a cache serves an older JavaScript bundle or older HTML. Clear caches from the inside out.</p>
+
+    <table>
+      <tr><th>Layer</th><th>Action</th></tr>
+      <tr><td>WordPress cache plugin</td><td>Use <strong>Purge All</strong>, <strong>Clear Cache</strong>, or the equivalent command.</td></tr>
+      <tr><td>Optimization/minification plugin</td><td>Clear generated CSS/JS. Temporarily disable JavaScript delay or combination only if the live test still receives old markup.</td></tr>
+      <tr><td>Hosting/server cache</td><td>Use the host dashboard's purge or flush command.</td></tr>
+      <tr><td>CDN or Cloudflare</td><td>Purge the affected URLs or purge the cache. Avoid changing DNS or security settings.</td></tr>
+      <tr><td>Browser</td><td>Use a private/incognito window or hard refresh. Browser cache does not control Google, but it confirms what visitors receive.</td></tr>
+    </table>
+
+    <h3>Confirm the new frontend is being served</h3>
+    <ol>
+      <li>Open an affected URL in a private browser.</li>
+      <li>Refresh it twice.</li>
+      <li>Confirm the visible breadcrumb uses readable text and the correct page hierarchy.</li>
+      <li>If the page still shows the old behavior, repeat the hosting/CDN purge before changing WordPress content.</li>
+    </ol>
+
+    <div class="notice info"><strong>Why cache matters:</strong> Googlebot fetches the publicly served page. If a CDN still serves the older theme bundle, Google can continue seeing the old breadcrumb even though WordPress shows the new version in the dashboard.</div>
+
+    <h3>What not to purge or reset</h3>
+    <ul>
+      <li>Do not reset the Superior Plus Content plugin.</li>
+      <li>Do not restore original page content merely to repair schema.</li>
+      <li>Do not delete service records, locations, images, or edited text.</li>
+      <li>Do not change permalinks unless a separate permalink problem has been confirmed.</li>
+    </ul>
+  </section>
+
+  <section class="page">
+    <span class="label">Phase 4</span>
+    <h2>Test the live structured data</h2>
+    <h3>A. Google Rich Results Test</h3>
+    <ol>
+      <li>Open <a href="https://search.google.com/test/rich-results">https://search.google.com/test/rich-results</a>.</li>
+      <li>Choose the <strong>URL</strong> test.</li>
+      <li>Paste the exact affected URL from Search Console.</li>
+      <li>Run the test and open the detected <strong>Breadcrumbs</strong> result.</li>
+      <li>Expand every breadcrumb item. Confirm each item has a readable <strong>name</strong> and sequential <strong>position</strong>.</li>
+      <li>Repeat on the homepage, Services directory, one service page, one area page and one blog article.</li>
+    </ol>
+
+    <h3>B. Search Console live URL test</h3>
+    <ol>
+      <li>Return to Search Console and paste the full affected URL into the top inspection bar.</li>
+      <li>First note the result under <strong>Google Index</strong>. This is Google's stored version.</li>
+      <li>Click <strong>Test live URL</strong>. This fetches the current website.</li>
+      <li>Open <strong>View tested page</strong> or enhancement details and verify that Breadcrumbs no longer show the error.</li>
+      <li>If the live test passes but the indexed result fails, the website is fixed and Google has not recrawled it yet.</li>
+    </ol>
+
+    <div class="two">
+      <div class="card"><h4>Indexed fails / Live passes</h4><p>Usually a stale Google copy. Request indexing, then validate the fix. Do not keep changing the site.</p></div>
+      <div class="card"><h4>Indexed and Live both fail</h4><p>A current page, cache, plugin, or schema-source issue remains. Follow the diagnostic branches on the next pages.</p></div>
+    </div>
+
+    <div class="notice"><strong>Expected processing time:</strong> Google's validation may take about two weeks and sometimes longer. A pending report does not mean the update failed.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Diagnostic branches</span>
+    <h2>If the live test still reports the error</h2>
+    <table>
+      <tr><th>Possible cause</th><th>How to recognise it</th><th>Safe remedy</th></tr>
+      <tr><td><strong>Blank or malformed page title</strong></td><td>The final breadcrumb has no readable name, or the WordPress page title is empty.</td><td>Edit the actual WordPress page, enter a real title, update, purge caches and retest.</td></tr>
+      <tr><td><strong>Old theme bundle is cached</strong></td><td>Dashboard shows theme 3.6.2, but the public test behaves like the older release.</td><td>Purge WordPress, optimizer, host and CDN caches. Retest the live URL.</td></tr>
+      <tr><td><strong>Two breadcrumb generators</strong></td><td>The test/source shows multiple <code>BreadcrumbList</code> blocks and one is invalid.</td><td>Keep one authoritative breadcrumb output. The Superior Plus theme already supplies it; remove a manually added Yoast block/shortcode or another breadcrumb plugin after confirming the duplicate source.</td></tr>
+      <tr><td><strong>Old page or malformed URL</strong></td><td>The affected URL is not a real current page, such as the old URL-shaped homepage slug.</td><td>Keep the obsolete page trashed. Return 404/410 or apply one deliberate redirect to the true replacement, then test the destination.</td></tr>
+      <tr><td><strong>Redirect chain</strong></td><td>The affected URL redirects multiple times or to an unexpected page.</td><td>Replace the chain with one direct redirect to the correct canonical page.</td></tr>
+      <tr><td><strong>Canonical mismatch</strong></td><td>Google-selected canonical differs from the intended live URL.</td><td>Check canonical URL, sitemap entry and internal links. Use one preferred HTTPS URL consistently.</td></tr>
+      <tr><td><strong>Noindex, robots or login block</strong></td><td>Live URL test cannot access or index the page.</td><td>For public pages, remove the accidental block. Do not expose private/admin pages.</td></tr>
+      <tr><td><strong>Optimization breaks JavaScript</strong></td><td>Markup appears only when delay/combine/minify is disabled.</td><td>Exclude the theme application bundle from unsafe delay/combination and regenerate the optimizer cache.</td></tr>
+      <tr><td><strong>Another schema plugin</strong></td><td>Schema source identifies another SEO/schema/breadcrumb plugin.</td><td>Disable only that plugin's breadcrumb output, not unrelated SEO titles, sitemaps or metadata.</td></tr>
+    </table>
+
+    <div class="notice bad"><strong>Never disable plugins randomly on the live site.</strong> Use staging or a maintenance window, change one source at a time, clear cache, and retest after each change.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Yoast and plugin conflicts</span>
+    <h2>How to handle multiple breadcrumb systems</h2>
+    <p>Yoast SEO can generate breadcrumb JSON-LD when its breadcrumb feature, block, shortcode, or theme integration is used. The Superior Plus theme also generates the website's breadcrumb trail. Multiple valid trails are not automatically an error, but a single malformed trail can keep the whole issue active.</p>
+
+    <h3>Preferred configuration for this website</h3>
+    <div class="notice good"><strong>Use the Superior Plus theme as the breadcrumb authority.</strong> It matches the React routes and now includes defensive names in theme 3.6.2. Yoast may continue handling SEO titles, descriptions, canonical settings and sitemaps.</div>
+
+    <h3>Check Yoast without deleting SEO work</h3>
+    <ol>
+      <li>Open <strong>Yoast SEO &gt; Settings &gt; Advanced &gt; Breadcrumbs</strong>.</li>
+      <li>Check whether theme breadcrumbs are enabled.</li>
+      <li>Edit the affected WordPress page and check for a <strong>Yoast Breadcrumbs</strong> block or <code>[wpseo_breadcrumb]</code> shortcode.</li>
+      <li>Check whether another breadcrumb or schema plugin is active under <strong>Plugins</strong>.</li>
+      <li>If the Rich Results Test identifies an invalid duplicate, disable or remove only that duplicate breadcrumb output.</li>
+      <li>Purge caches and run the live test again.</li>
+    </ol>
+
+    <h3>Do not remove these merely because Yoast is installed</h3>
+    <ul>
+      <li>SEO titles and meta descriptions</li>
+      <li>XML sitemap functionality</li>
+      <li>Canonical URLs that correctly point to the same live page</li>
+      <li>Organization or WebSite schema that does not duplicate a broken breadcrumb</li>
+    </ul>
+
+    <div class="decision"><b>If disabling Yoast breadcrumbs removes the visible trail:</b> restore the setting and obtain technical support before proceeding. The visual breadcrumb and JSON-LD need to remain coordinated.</div>
+    <div class="decision"><b>If the page source has only one BreadcrumbList and it is valid:</b> stop changing plugins. The remaining Search Console report is likely historical or crawl-related.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Old URLs and redirects</span>
+    <h2>What to do when the affected page no longer exists</h2>
+    <p>An obsolete URL does not need breadcrumb markup. The goal is to make its status unambiguous and prevent it from returning a thin or fake page.</p>
+
+    <h3>Choose the correct response</h3>
+    <table>
+      <tr><th>Situation</th><th>Correct handling</th></tr>
+      <tr><td>The old URL has a direct, equivalent replacement.</td><td>Use one permanent redirect to the replacement.</td></tr>
+      <tr><td>The URL was accidental and has no equivalent page.</td><td>Leave it unavailable with a real 404 or 410 response. Remove it from menus and sitemap.</td></tr>
+      <tr><td>The page is in WordPress Trash.</td><td>Do not republish it. Confirm the public URL no longer returns a content page.</td></tr>
+      <tr><td>The old URL redirects to the homepage only because it is missing.</td><td>Avoid blanket homepage redirects. They can be interpreted as soft 404s.</td></tr>
+    </table>
+
+    <h3>Verify the obsolete URL</h3>
+    <ol>
+      <li>Open it in a private browser.</li>
+      <li>Confirm whether it displays a true replacement, a real not-found page, or an unintended fake homepage.</li>
+      <li>Search the WordPress Pages list, including <strong>Trash</strong>, for its slug.</li>
+      <li>Check the sitemap and navigation for references to it.</li>
+      <li>Inspect the URL in Search Console and run <strong>Test live URL</strong>.</li>
+    </ol>
+
+    <div class="notice info"><strong>How Google closes the breadcrumb issue:</strong> if Google recrawls the URL and the invalid breadcrumb is gone, the instance can pass. That can occur because valid markup replaced it or because the obsolete page is no longer available.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Final validation</span>
+    <h2>Submit the repair to Google</h2>
+    <p>Only start validation after representative live URLs pass. Starting too early can cause an immediate failed validation.</p>
+
+    <h3>Pre-validation checklist</h3>
+    <ul class="check">
+      <li>Theme 3.6.2 is active.</li>
+      <li>All website and CDN caches were cleared.</li>
+      <li>The exact affected URL was identified.</li>
+      <li>Rich Results Test detects valid Breadcrumbs or correctly finds none on an obsolete URL.</li>
+      <li>Search Console <strong>Test live URL</strong> no longer reports the breadcrumb error.</li>
+      <li>No invalid duplicate BreadcrumbList remains.</li>
+      <li>The page is accessible and indexable if it is intended to appear in Google.</li>
+    </ul>
+
+    <h3>Validation steps</h3>
+    <ol>
+      <li>Open <strong>Search Console &gt; Breadcrumbs</strong>.</li>
+      <li>Open the exact error.</li>
+      <li>Click <strong>Validate fix</strong>.</li>
+      <li>Record the start date and do not repeatedly restart the process.</li>
+      <li>Monitor the states <strong>Started</strong>, <strong>Looking good</strong>, <strong>Passed</strong> or <strong>Failed</strong>.</li>
+      <li>If validation fails, open <strong>See details</strong>, copy the failed URL, and diagnose that URL specifically.</li>
+    </ol>
+
+    <div class="notice good"><strong>Live test passing is the main technical confirmation.</strong> Search Console's historical report can remain visible until Google recrawls enough affected URLs.</div>
+
+    <h3>Recommended sample after deployment</h3>
+    <ul>
+      <li><code>https://sppaintingremodeling.com.au/</code></li>
+      <li><code>https://sppaintingremodeling.com.au/services/</code></li>
+      <li>One residential or commercial service detail URL</li>
+      <li><code>https://sppaintingremodeling.com.au/additional-services/</code></li>
+      <li>One service-area URL and one blog article URL</li>
+    </ul>
+  </section>
+
+  <section class="page">
+    <span class="label">Escalation pack</span>
+    <h2>What to collect if the problem remains</h2>
+    <p>Send the following evidence to the website developer or hosting provider. This avoids guesswork and repeated changes.</p>
+    <ul class="check">
+      <li>Screenshot of the Breadcrumb issue details and affected URL list.</li>
+      <li>Exact URL that fails the live test.</li>
+      <li>Screenshot of indexed result and live result.</li>
+      <li>Rich Results Test share link or screenshot with the failing breadcrumb expanded.</li>
+      <li>WordPress theme version and Superior Plus Content plugin version.</li>
+      <li>List of active SEO, schema, cache and optimization plugins.</li>
+      <li>Confirmation of which WordPress, host and CDN caches were cleared.</li>
+      <li>Whether the URL is published, redirected, trashed, noindex or 404.</li>
+      <li>User-declared and Google-selected canonical URLs.</li>
+      <li>Date and time of the most recent live test.</li>
+    </ul>
+
+    <h3>Do not send</h3>
+    <ul>
+      <li>WordPress passwords, Google passwords or hosting passwords by email or chat.</li>
+      <li>OAuth tokens, recovery codes, API secrets or full backup archives.</li>
+      <li>Unredacted personal customer enquiries.</li>
+    </ul>
+
+    <h3>Completion record</h3>
+    <table class="compact">
+      <tr><th>Item</th><th>Result / date</th></tr>
+      <tr><td>Affected URL(s)</td><td></td></tr>
+      <tr><td>Theme/plugin updated</td><td></td></tr>
+      <tr><td>Caches cleared</td><td></td></tr>
+      <tr><td>Rich Results Test</td><td></td></tr>
+      <tr><td>Search Console live test</td><td></td></tr>
+      <tr><td>Validation started</td><td></td></tr>
+      <tr><td>Final validation status</td><td></td></tr>
+    </table>
+  </section>
+
+  <section class="page">
+    <span class="label">Reference</span>
+    <h2>Official guidance and quick decision tree</h2>
+    <h3>Quick decision tree</h3>
+    <div class="decision"><b>1. Can you see an affected URL in Search Console?</b><br>If no, open the Breadcrumb issue and its examples. Do not change the website from the email alone.</div>
+    <div class="decision"><b>2. Does Test live URL pass?</b><br>If yes, request indexing and validate the fix. If no, continue.</div>
+    <div class="decision"><b>3. Is it a real current page?</b><br>If yes, update/cache-test/schema-test it. If no, keep it removed or redirect it only to a genuine equivalent.</div>
+    <div class="decision"><b>4. Are multiple BreadcrumbList objects present?</b><br>If yes, identify which one is invalid and disable only that breadcrumb source.</div>
+    <div class="decision"><b>5. Does the Rich Results Test pass after caches are purged?</b><br>If yes, validate. If no, send the escalation pack to technical support.</div>
+
+    <h3>Official references</h3>
+    <ul>
+      <li><a href="https://developers.google.com/search/docs/appearance/structured-data/breadcrumb">Google Search Central: Breadcrumb structured data</a></li>
+      <li><a href="https://support.google.com/webmasters/answer/13300208?hl=en">Google Search Console: Fix structured data issues</a></li>
+      <li><a href="https://support.google.com/webmasters/answer/9012289?hl=en">Google Search Console: URL Inspection tool</a></li>
+      <li><a href="https://support.google.com/webmasters/answer/13300873?hl=en">Google Search Console: Rich result errors and solutions</a></li>
+      <li><a href="https://yoast.com/help/yoast-seo-settings-breadcrumbs/">Yoast: Breadcrumb settings</a></li>
+      <li><a href="https://yoast.com/help/how-to-implement-yoast-seo-breadcrumbs/">Yoast: Breadcrumb implementation</a></li>
+    </ul>
+
+    <div class="notice"><strong>Scope note:</strong> This guide addresses the breadcrumb structured-data warning. Indexing exclusions such as redirects, canonical alternatives, soft 404s, robots blocks and crawled/discovered-not-indexed URLs are separate reports and should be assessed by URL and intent.</div>
+    <p class="footer">Prepared for Superior Plus Painting &amp; Remodeling. Website interfaces can change over time; button names may vary slightly while the diagnostic order remains the same.</p>
+  </section>
+</body>
+</html>

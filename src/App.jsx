@@ -208,11 +208,24 @@ function Services({fields,serviceItems}) {
   const [flipped,setFlipped]=useState(null)
   const selectedIds=Array.isArray(fields?.home_service_ids)?fields.home_service_ids.map(String):[]
   const selected=selectedIds.length?serviceItems.filter(item=>selectedIds.includes(String(item.id))):[]
-  const fallbackCards=services.map(item=>({
-    ...item,
-    text:serviceList.find(service=>service.slug===item.slug)?.short||item.text,
-  }))
-  const cards=Array.isArray(fields?.home_service_ids)?selected.map((item,index)=>{
+  const managedBySlug=new Map((serviceItems||[]).filter(item=>item?.slug).map(item=>[item.slug,item]))
+  const fallbackCards=services.map((item,index)=>{
+    const managed=managedBySlug.get(item.slug)
+    const directoryFallback=serviceList.find(service=>service.slug===item.slug)
+    return {
+      ...item,
+      ...managed,
+      icon:item.icon,
+      title:managed?.title??item.title,
+      text:managed?.short??directoryFallback?.short??item.text,
+      tone:managed?.tone??item.tone,
+      url:managed?.url??`/services/${item.slug}`,
+      image:item.slug==='roof-painting-melbourne'?roofHomepageCardImage.src:(servicePages[item.slug]?.image||item.image),
+      imagePosition:item.imagePosition??'center',
+      id:managed?.id??item.slug??index,
+    }
+  })
+  const serviceCards=Array.isArray(fields?.home_service_ids)?selected.map((item,index)=>{
     const fallback=services.find(service=>service.slug===item.slug)||services[index%services.length]
     return {
       ...item,
@@ -223,6 +236,19 @@ function Services({fields,serviceItems}) {
       imagePosition:fallback.imagePosition??'center',
     }
   }):fallbackCards
+  const showAdditionalService=booleanValue(fieldValue(fields,'home_additional_service_enabled',false),false)
+  const additionalServiceCard={
+    id:'additional-services',
+    slug:'additional-services',
+    icon:Hammer,
+    title:fieldValue(fields,'home_additional_service_title','Additional Services'),
+    text:fieldValue(fields,'home_additional_service_summary','Painting-related repairs, preparation and property improvement services delivered with the same care.'),
+    tone:'terracotta',
+    url:'/additional-services',
+    image:mediaUrl(fieldValue(fields,'home_additional_service_image',undefined),asset('stock-main/additional-services.webp')),
+    imagePosition:'center',
+  }
+  const cards=showAdditionalService?[...serviceCards,additionalServiceCard]:serviceCards
   return <section id="services" className="section section-track services-section">
     <div className="container">
       <Reveal className="section-heading"><div>{fields?.home_services_eyebrow!==''&&<Eyebrow>{fields?.home_services_eyebrow??'What we paint'}</Eyebrow>}<h2>{fields?.home_services_title??'Every surface deserves'}{(fields?.home_services_accent??'the right finish.')&&<><br/><em>{fields?.home_services_accent??'the right finish.'}</em></>}</h2></div>{fields?.home_services_intro!==''&&<p>{fields?.home_services_intro??'From one carefully refreshed room to a complete commercial transformation, our experienced team brings the same care to every job.'}</p>}</Reveal>
@@ -446,7 +472,7 @@ export function Testimonials({items,className='',profile=googleReviewProfile}) {
   const sourceUrl=item.source_url||reviewProfile.url
   const initials=(item.name||'Verified reviewer').split(/\s+/).map(part=>part[0]).join('').slice(0,2).toUpperCase()
   if(!safeItems.length)return null
-  return <section className={`section testimonials google-reviews ${className}`}><div className="container testimonial-layout"><Reveal className="google-review-summary"><Eyebrow>Verified client feedback</Eyebrow><h2>Excellent</h2><strong>{rating.toFixed(1)}</strong><div className="google-summary-stars" aria-label={`${rating} out of 5 stars`}>{Array.from({length:5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><p>Based on <b>{reviewCount} reviews</b></p><GoogleWordmark/><a href={reviewProfile.url} target="_blank" rel="noreferrer">View all reviews on Google <ArrowRight size={17}/></a></Reveal><div><div className="quote-card google-review-card" aria-live="polite" aria-atomic="true" onPointerDown={beginSwipe} onPointerUp={finishSwipe} onPointerCancel={()=>{swipeStart.current=null}}><AnimatePresence mode="wait"><motion.article key={`${item.id||item.name}-${activeIndex}`} initial={{opacity:0,x:24}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-24}}><header><span className="review-avatar" aria-hidden="true">{initials}</span><div><b>{item.name}</b><small>{item.date||'Verified review'} · {source}</small></div><span className="google-g" aria-label="Google review">G</span></header><div className="stars" aria-label={`${item.rating||5} out of 5 stars`}>{Array.from({length:item.rating||5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><blockquote>“{item.quote}”</blockquote><a href={sourceUrl} target="_blank" rel="noreferrer">Read on Google</a></motion.article></AnimatePresence></div><div className="review-controls-row"><div className="slider-controls"><button onClick={previous} aria-label="Previous review"><ChevronLeft/></button><span aria-live="off">{String(activeIndex+1).padStart(2,'0')} / {String(safeItems.length).padStart(2,'0')}</span><button onClick={next} aria-label="Next review"><ChevronRight/></button><button className="review-playback" onClick={()=>setPaused(value=>!value)} aria-label={paused?'Resume automatic reviews':'Pause automatic reviews'} aria-pressed={paused}>{paused?<Play/>:<Pause/>}</button></div><p className="review-autoplay-status">{paused?'Automatic rotation paused':'Reviews change automatically'}<span> · Swipe to browse</span></p></div></div></div></section>
+  return <section id="reviews" className={`section testimonials google-reviews ${className}`}><div className="container testimonial-layout"><Reveal className="google-review-summary"><Eyebrow>Verified client feedback</Eyebrow><h2>Excellent</h2><strong>{rating.toFixed(1)}</strong><div className="google-summary-stars" aria-label={`${rating} out of 5 stars`}>{Array.from({length:5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><p>Based on <b>{reviewCount} reviews</b></p><GoogleWordmark/><a href={reviewProfile.url} target="_blank" rel="noreferrer">View all reviews on Google <ArrowRight size={17}/></a></Reveal><div><div className="quote-card google-review-card" aria-live="polite" aria-atomic="true" onPointerDown={beginSwipe} onPointerUp={finishSwipe} onPointerCancel={()=>{swipeStart.current=null}}><AnimatePresence mode="wait"><motion.article key={`${item.id||item.name}-${activeIndex}`} initial={{opacity:0,x:24}} animate={{opacity:1,x:0}} exit={{opacity:0,x:-24}}><header><span className="review-avatar" aria-hidden="true">{initials}</span><div><b>{item.name}</b><small>{item.date||'Verified review'} · {source}</small></div><span className="google-g" aria-label="Google review">G</span></header><div className="stars" aria-label={`${item.rating||5} out of 5 stars`}>{Array.from({length:item.rating||5},(_,x)=><Star key={x} fill="currentColor"/>)}</div><blockquote>“{item.quote}”</blockquote><a href={sourceUrl} target="_blank" rel="noreferrer">Read on Google</a></motion.article></AnimatePresence></div><div className="review-controls-row"><div className="slider-controls"><button onClick={previous} aria-label="Previous review"><ChevronLeft/></button><span aria-live="off">{String(activeIndex+1).padStart(2,'0')} / {String(safeItems.length).padStart(2,'0')}</span><button onClick={next} aria-label="Next review"><ChevronRight/></button><button className="review-playback" onClick={()=>setPaused(value=>!value)} aria-label={paused?'Resume automatic reviews':'Pause automatic reviews'} aria-pressed={paused}>{paused?<Play/>:<Pause/>}</button></div><p className="review-autoplay-status">{paused?'Automatic rotation paused':'Reviews change automatically'}<span> · Swipe to browse</span></p></div></div></div></section>
 }
 
 function Contact({fields,business}) {
@@ -475,7 +501,7 @@ function CountUpValue({ value }) {
   const frameRef = useRef(0)
   const hasAnimated = useRef(false)
   const match = String(value).trim().match(/^([\d,]+)(.*)$/)
-  const target = match ? Number(match[1].replaceAll(',', '')) : 0
+  const target = match ? Number(match[1].replace(/,/g, '')) : 0
   const suffix = match?.[2] || ''
   const [display, setDisplay] = useState(0)
 
@@ -610,7 +636,7 @@ export default function App() {
     const meta=document.querySelector('meta[name="description"]');if(meta)meta.content=description
     const link=document.querySelector('link[rel="canonical"]')||document.head.appendChild(Object.assign(document.createElement('link'),{rel:'canonical'}));link.href=canonical
     ;[['og:title',title],['og:description',description],['og:url',canonical]].forEach(([property,content])=>{let tag=document.querySelector(`meta[property="${property}"]`);if(!tag){tag=document.createElement('meta');tag.setAttribute('property',property);document.head.appendChild(tag)}tag.content=content})
-    let schema=document.getElementById('page-structured-data');if(!schema){schema=document.createElement('script');schema.id='page-structured-data';schema.type='application/ld+json';document.head.appendChild(schema)}schema.textContent=JSON.stringify({'@context':'https://schema.org','@type':'LocalBusiness',name:business.name,url:canonical,telephone:business.phone_href.replace('tel:',''),email:business.email,areaServed:business.location})
+    if(!window.__SPP_SEO_SERVER_MANAGED__){let schema=document.getElementById('page-structured-data');if(!schema){schema=document.createElement('script');schema.id='page-structured-data';schema.type='application/ld+json';document.head.appendChild(schema)}schema.textContent=JSON.stringify({'@context':'https://schema.org','@type':'LocalBusiness',name:business.name,url:canonical,telephone:business.phone_href.replace('tel:',''),email:business.email,areaServed:business.location})}
     const ctx=gsap.context(()=>{gsap.utils.toArray('.divider-path').forEach(path=>gsap.fromTo(path,{scaleX:0,transformOrigin:'left center'},{scaleX:1,duration:1.2,ease:'power3.out',scrollTrigger:{trigger:path,start:'top 92%'}}))})
     return()=>ctx.revert()
   },[seo?.description,seo?.canonical_url,seo?.title,business])

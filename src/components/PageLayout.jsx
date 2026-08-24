@@ -29,6 +29,21 @@ function breadcrumbItems(pathname,currentTitle){
   return items
 }
 
+function breadcrumbSchemaItems(pathname,currentTitle){
+  return breadcrumbItems(pathname,currentTitle).map((item,index)=>{
+    const url=publicRouteUrl(item.path)
+    const segments=item.path.split('/').filter(Boolean)
+    const fallbackLabel=item.path==='/'?'Home':segments[segments.length-1]?.replace(/-/g,' ')||'Page'
+    const name=String(item.label??'').trim()||fallbackLabel
+    return {
+      '@type':'ListItem',
+      position:index+1,
+      name,
+      item:{'@type':'WebPage','@id':url,url,name},
+    }
+  })
+}
+
 export function PageLayout({ children, title, description, pageType = 'WebPage', image = asset('client/projects/residential/residential-01.webp'), schemaData = {}, mainClassName = '' }) {
   const location = useLocation()
   const {business,location_band:locationBand}=useSiteContent()
@@ -46,16 +61,18 @@ export function PageLayout({ children, title, description, pageType = 'WebPage',
     upsertMeta('meta[name="twitter:card"]',{name:'twitter:card',content:'summary_large_image'})
     upsertMeta('meta[name="twitter:title"]',{name:'twitter:title',content:`${title} | Superior Plus Painting`})
     upsertMeta('link[rel="canonical"]',{tag:'link',rel:'canonical',href:canonical})
-    let script=document.getElementById('page-structured-data')
-    if(!script){script=document.createElement('script');script.id='page-structured-data';script.type='application/ld+json';document.head.appendChild(script)}
-    script.textContent=JSON.stringify({'@context':'https://schema.org','@graph':[
-      {'@type':'LocalBusiness','@id':`${siteUrl}#business`,name:business.name,url:siteUrl,telephone:business.phone_href.replace('tel:',''),email:business.email,areaServed:business.location,image:mediaUrl(business.logo,asset('logo.webp'))},
-      {'@type':pageType,name:title,description,url:canonical,provider:{'@id':`${siteUrl}#business`},...JSON.parse(schemaKey)},
-      {'@type':'BreadcrumbList','itemListElement':breadcrumbItems(location.pathname,title).map((item,index)=>({'@type':'ListItem',position:index+1,name:item.label,item:publicRouteUrl(item.path)}))}
-    ]})
+    if(!window.__SPP_SEO_SERVER_MANAGED__){
+      let script=document.getElementById('page-structured-data')
+      if(!script){script=document.createElement('script');script.id='page-structured-data';script.type='application/ld+json';document.head.appendChild(script)}
+      script.textContent=JSON.stringify({'@context':'https://schema.org','@graph':[
+        {'@type':'LocalBusiness','@id':`${siteUrl}#business`,name:business.name,url:siteUrl,telephone:business.phone_href.replace('tel:',''),email:business.email,areaServed:business.location,image:mediaUrl(business.logo,asset('logo.webp'))},
+        {'@type':pageType,name:title,description,url:canonical,provider:{'@id':`${siteUrl}#business`},...JSON.parse(schemaKey)},
+        {'@type':'BreadcrumbList','itemListElement':breadcrumbSchemaItems(location.pathname,title)}
+      ]})
+    }
   }, [location.pathname, title, description, canonical, image, pageType, schemaKey, business])
   const pageChildren=Children.toArray(children).filter(child=>child?.type!==AreasBand)
-  const finalChild=pageChildren.at(-1)
+  const finalChild=pageChildren[pageChildren.length-1]
   const endsWithClosingCta=finalChild?.type===ClosingCTA
   const placeAfterColoured=Boolean(locationBand?.after_coloured)
   const precedingChildren=endsWithClosingCta&&!placeAfterColoured?pageChildren.slice(0,-1):pageChildren

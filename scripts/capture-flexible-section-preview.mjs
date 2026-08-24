@@ -30,7 +30,7 @@ const sections = [{
   ],
   style: 'green',
   layout: 'image-left',
-  image: image('batch-097.webp'),
+  image: image('batch-097.jpg'),
   image_position: '50% 50%',
   order: 0,
 }, {
@@ -41,7 +41,7 @@ const sections = [{
   items: ['Careful surface preparation', 'Premium low-VOC coatings', 'Clean lines and consistent coverage', 'A tidy final handover'],
   style: 'gold',
   layout: 'image-right',
-  image: image('batch-073.webp'),
+  image: image('batch-073.jpg'),
   image_position: '50% 50%',
   order: 1,
 }, {
@@ -52,7 +52,7 @@ const sections = [{
   items: ['Responsive on mobile', 'Accessible text contrast', 'Optional project photography', 'Editable entirely through WordPress'],
   style: 'maroon',
   layout: 'image-background',
-  image: image('batch-145.webp'),
+  image: image('batch-145.jpg'),
   image_position: '50% 50%',
   order: 2,
 }]

@@ -3,7 +3,7 @@ Contributors: superiorplus
 Tags: content, rest-api, media-library
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 2.7.0
+Stable tag: 2.8.1
 License: GPLv2 or later
 
 Locked-design content management for the Superior Plus React WordPress website.
@@ -42,6 +42,22 @@ cream, green, maroon and gold brand treatments.
 7. Do not remove the React fallback content until parity QA is complete.
 
 == Changelog ==
+
+= 2.8.1 =
+* Use the theme's verified JPEG compatibility assets for fresh imports, restored defaults, blog images and video posters on older iPad Safari.
+* Preserve all existing editor content; previously saved theme WebP references are translated safely by theme 3.6.6 at render time.
+
+= 2.8.0 =
+* Add exact one-hop redirects for known duplicate service, area, guide and legacy page URLs.
+* Keep FAQ and testimonial records editable through WordPress and REST while preventing thin standalone public pages and Yoast sitemap entries.
+* Add an explicit opt-in Google indexing control for completed project case studies; existing project content remains visible and unchanged.
+* Exclude legacy Pages, incomplete projects, the Uncategorized term and the single author archive from Yoast sitemaps without deleting records.
+* Let explicit Yoast metadata win while safely reusing existing Superior Plus SEO fields when Yoast fields are empty.
+* Defer the plugin sitemap to Yoast when Yoast is active and preserve the fallback sitemap when it is not.
+
+= 2.7.1 =
+* Add an optional homepage Additional Services flip card with editable title, description and image.
+* Keep the new card disabled until an editor explicitly enables it.
 
 = 2.7.0 =
 * Make the homepage process-strip label, description and ordered steps editable.

@@ -1,7 +1,7 @@
 === Superior Plus Painting ===
 Requires at least: 6.4
 Requires PHP: 8.0
-Stable tag: 3.6.0
+Stable tag: 3.6.6
 
 Exact WordPress delivery of the approved Superior Plus Painting React frontend.
 
@@ -9,7 +9,7 @@ Exact WordPress delivery of the approved Superior Plus Painting React frontend.
 
 1. Back up the WordPress site and use staging.
 2. Open Appearance > Themes > Add New > Upload Theme.
-3. Upload superior-plus-3.6.0.zip and activate it on staging only.
+3. Upload superior-plus-3.6.6.zip and activate it on staging only.
 4. Install and activate the separately packaged Superior Plus Content plugin.
 5. Clear WordPress, hosting and CDN caches.
 6. Test the main menu, Services dropdown and all pages.
@@ -66,6 +66,29 @@ configured list is empty while preserving an explicit visibility control.
 Version 3.6.0 renders the editable homepage process strip and one reusable
 local-service location band on every route, with safe near-footer placement,
 responsive long-content handling and optional global move-down placement.
+Version 3.6.1 makes the default homepage service cards consume each service's
+editable Services-directory summary even when no custom card selection is saved.
+Version 3.6.2 hardens breadcrumb structured data with named WebPage items and
+renders the plugin-controlled Additional Services card in the existing flip grid.
+Version 3.6.3 prevents the React metadata layer from adding a second structured-
+data graph when Yoast or Rank Math already owns server-rendered schema. Direct
+page loads remain controlled by the SEO plugin while client navigation keeps
+titles, descriptions, canonicals and social tags aligned with the visible route.
+Version 3.6.4 restores compatibility with older iPadOS Safari releases by
+transpiling the production bundle for Safari 12 and supplying the small standard-
+API fallbacks needed before React renders. The frontend shell now uses
+`wp_head()` and `wp_footer()` so Yoast can output metadata normally, and a
+server-rendered branded loading/contact fallback prevents a blank white page if
+JavaScript or a cached asset fails before startup.
+Version 3.6.5 keeps the hashed React entry URL identical when it is loaded
+directly and imported by lazy chunks, preventing duplicate React runtimes and
+error #321. It prints the WordPress content API bridge independently before the
+module starts and removes unused Elementor/UAE frontend assets from the locked
+React shell without deleting any builder data.
+Version 3.6.6 replaces the built-in WebP photo library with verified progressive
+JPEG equivalents for older iPad Safari releases, translates saved plugin fields
+that still point to an earlier theme WebP URL, and uses stable 2D front/back card
+swaps on touch hardware while retaining the desktop flip animation.
 
 == Bundled media ==
 

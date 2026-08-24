@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPP_Content_Migration {
-	const VERSION = '2.7.0';
+	const VERSION = '2.8.1';
 	const APPROVED_HERO_VERSION = 'aesthetic-main-heroes-2026-08-02';
 	const STRUCTURAL_DEFAULTS_VERSION = 'restore-card-content-2026-08-05';
 
@@ -651,15 +651,15 @@ class SPP_Content_Migration {
 			'plaster-repairs-melbourne' => 'plaster',
 		);
 		$hero_assets = array(
-			'residential-painting-melbourne'    => 'client/projects/new-batch/batch-049.webp',
-			'commercial-painting-melbourne'     => 'client/projects/new-batch/batch-100.webp',
-			'interior-painting-melbourne'       => 'client/projects/new-batch/batch-157.webp',
-			'exterior-painting-melbourne'       => 'client/projects/new-batch/batch-165.webp',
-			'roof-painting-melbourne'           => 'client/projects/roof/roof-spray-coating.webp',
-			'fence-painting-melbourne'          => 'client/projects/new-batch/batch-002.webp',
-			'deck-painting-staining-melbourne'  => 'client/projects/new-batch/batch-108.webp',
-			'wallpaper-removal-melbourne'       => 'client/projects/new-batch/batch-005.webp',
-			'plaster-repairs-melbourne'         => 'client/projects/new-batch/batch-073.webp',
+			'residential-painting-melbourne'    => 'client/projects/new-batch/batch-049.jpg',
+			'commercial-painting-melbourne'     => 'client/projects/new-batch/batch-100.jpg',
+			'interior-painting-melbourne'       => 'client/projects/new-batch/batch-157.jpg',
+			'exterior-painting-melbourne'       => 'client/projects/new-batch/batch-165.jpg',
+			'roof-painting-melbourne'           => 'client/projects/roof/roof-spray-coating.jpg',
+			'fence-painting-melbourne'          => 'client/projects/new-batch/batch-002.jpg',
+			'deck-painting-staining-melbourne'  => 'client/projects/new-batch/batch-108.jpg',
+			'wallpaper-removal-melbourne'       => 'client/projects/new-batch/batch-005.jpg',
+			'plaster-repairs-melbourne'         => 'client/projects/new-batch/batch-073.jpg',
 		);
 		$ids = array();
 		foreach ( spp_default_services() as $slug => $service ) {
@@ -1106,7 +1106,7 @@ class SPP_Content_Migration {
 		$items = array();
 		foreach ( $roots as $relative_dir ) {
 			$directory = trailingslashit( get_stylesheet_directory() ) . 'react-dist/assets/' . $relative_dir;
-			foreach ( glob( $directory . '/*.webp' ) ?: array() as $file ) {
+			foreach ( glob( $directory . '/*.jpg' ) ?: array() as $file ) {
 				if ( false !== strpos( basename( $file ), '-poster.' ) ) {
 					continue;
 				}
@@ -1123,9 +1123,9 @@ class SPP_Content_Migration {
 					);
 				}
 			}
-			foreach ( glob( $directory . '/*-video-*-poster.webp' ) ?: array() as $poster_file ) {
+			foreach ( glob( $directory . '/*-video-*-poster.jpg' ) ?: array() as $poster_file ) {
 				$poster_relative = $relative_dir . '/' . basename( $poster_file );
-				$video_relative = preg_replace( '/-poster\.webp$/', '.mp4', $poster_relative );
+				$video_relative = preg_replace( '/-poster\.jpg$/', '.mp4', $poster_relative );
 				$alt = $subject . ' project video by Superior Plus Painting';
 				$video_id = $this->import_remote_video( $video_relative, $alt );
 				$poster_id = $this->import_asset( $poster_relative, $alt . ' poster' );
@@ -1138,7 +1138,7 @@ class SPP_Content_Migration {
 			}
 		}
 		foreach ( isset( $batch_indexes[ $category ] ) ? $batch_indexes[ $category ] : array() as $index ) {
-			$relative = 'client/projects/new-batch/batch-' . str_pad( (string) $index, 3, '0', STR_PAD_LEFT ) . '.webp';
+			$relative = 'client/projects/new-batch/batch-' . str_pad( (string) $index, 3, '0', STR_PAD_LEFT ) . '.jpg';
 			$alt = $subject . ' project by Superior Plus Painting';
 			$id = $this->import_asset( $relative, $alt );
 			if ( $id ) {
@@ -1156,7 +1156,7 @@ class SPP_Content_Migration {
 			$stem = 'client/projects/new-batch/batch-' . $batch_video;
 			$alt = $subject . ' project video by Superior Plus Painting';
 			$video_id = $this->import_remote_video( $stem . '.mp4', $alt );
-			$poster_id = $this->import_asset( $stem . '-poster.webp', $alt . ' poster' );
+			$poster_id = $this->import_asset( $stem . '-poster.jpg', $alt . ' poster' );
 			if ( $video_id ) {
 				$items[] = array(
 					'attachment_id' => $video_id,
@@ -1191,7 +1191,7 @@ class SPP_Content_Migration {
 		$pages = array(
 			'home' => array(
 				'title' => 'Home', 'template' => 'home', 'excerpt' => 'Premium residential and commercial painting across Melbourne.',
-				'hero_asset' => 'client/projects/brand/home-hero-ai-v2.webp',
+				'hero_asset' => 'client/projects/brand/home-hero-ai-v2.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'Melbourne painters who care', 'spp_hero_title' => 'Professional painting services', 'spp_accent' => 'in Melbourne',
 					'spp_home_hero_closing' => '',
@@ -1232,7 +1232,7 @@ class SPP_Content_Migration {
 			),
 			'about' => array(
 				'title' => 'About', 'template' => 'about', 'excerpt' => 'Melbourne painters committed to careful preparation and quality workmanship.',
-				'hero_asset' => 'stock-main/about.webp', 'editorial_asset' => 'client/projects/fence/fence-03.webp', 'archive_asset' => 'client/projects/brand/brand-01.webp',
+				'hero_asset' => 'stock-main/about.jpg', 'editorial_asset' => 'client/projects/fence/fence-03.jpg', 'archive_asset' => 'client/projects/brand/brand-01.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'Your trusted Melbourne painters', 'spp_hero_title' => 'Care in every coat.', 'spp_accent' => 'Pride in every detail.',
 					'spp_hero_intro' => 'Superior Plus Painting is a Melbourne-based team dedicated to high-quality residential and commercial painting with reliable service, honest communication and respect for every property.',
@@ -1245,7 +1245,7 @@ class SPP_Content_Migration {
 			),
 			'services' => array(
 				'title' => 'Services', 'template' => 'services_directory', 'excerpt' => 'Painting, preparation, repair and property improvement services.',
-				'hero_asset' => 'stock-main/services.webp',
+				'hero_asset' => 'stock-main/services.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'Everything under one careful eye', 'spp_hero_title' => 'Painting & property services', 'spp_accent' => 'made beautifully simple.',
 					'spp_hero_intro' => 'From complete residential and commercial painting to the preparation and repairs behind a lasting finish, our team can coordinate more of your project from one place.',
@@ -1274,7 +1274,7 @@ class SPP_Content_Migration {
 			),
 			'faqs' => array(
 				'title' => 'FAQs', 'template' => 'faqs', 'excerpt' => 'Answers about quotes, preparation, timing and booking.',
-				'hero_asset' => 'stock-main/faq.webp',
+				'hero_asset' => 'stock-main/faq.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'Straight answers before we start', 'spp_hero_title' => 'Frequently asked questions', 'spp_accent' => 'made easy.',
 					'spp_hero_intro' => 'Painting comes with practical questions. Here are clear answers about quoting, preparation, scheduling, products and what to expect from our team.',
@@ -1284,7 +1284,7 @@ class SPP_Content_Migration {
 			),
 			'contact' => array(
 				'title' => 'Contact', 'template' => 'contact', 'excerpt' => 'Arrange a free painting consultation and written quote.',
-				'hero_asset' => 'stock-main/contact.webp',
+				'hero_asset' => 'stock-main/contact.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'Tell us what you’re planning', 'spp_hero_title' => 'Get in touch', 'spp_accent' => 'and get a fresh start.',
 					'spp_hero_intro' => 'Share a few details about your property and the work you have in mind. We’ll follow up to arrange a free, no-obligation consultation and written quote.',
@@ -1312,7 +1312,7 @@ class SPP_Content_Migration {
 		$pages = array(
 			'service-areas' => array(
 				'title' => 'Service Areas', 'template' => 'service_areas', 'excerpt' => 'Professional painters across Melbourne’s eastern and south-eastern suburbs.',
-				'hero_asset' => 'stock-main/areas.webp',
+				'hero_asset' => 'stock-main/areas.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'Melbourne service areas', 'spp_hero_title' => 'Painters across Melbourne’s', 'spp_accent' => 'eastern & south-eastern suburbs.',
 					'spp_hero_intro' => 'Superior Plus Painting provides residential, commercial and specialist painting services across Melbourne’s east and south-east. Choose your suburb for relevant services, property types and a direct quote path.',
@@ -1325,7 +1325,7 @@ class SPP_Content_Migration {
 			),
 			'additional-services' => array(
 				'title' => 'Additional Services', 'template' => 'additional_services', 'excerpt' => 'Preparation, repairs and complementary property improvement services across Melbourne.',
-				'hero_asset' => 'stock-main/additional-services.webp',
+				'hero_asset' => 'stock-main/additional-services.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'More than the final coat', 'spp_hero_title' => 'Additional property services', 'spp_accent' => 'coordinated with care.',
 					'spp_hero_intro' => 'Selected preparation, repair and improvement services can be coordinated alongside residential and commercial painting.',
@@ -1352,7 +1352,7 @@ class SPP_Content_Migration {
 			),
 			'gallery' => array(
 				'title' => 'Gallery', 'template' => 'gallery', 'excerpt' => 'Real Superior Plus Painting projects across Melbourne.',
-				'hero_asset' => 'stock-main/gallery.webp',
+				'hero_asset' => 'stock-main/gallery.jpg',
 				'meta' => array(
 					'spp_eyebrow' => 'Real Melbourne projects', 'spp_hero_title' => 'Every project,', 'spp_accent' => 'all in one place.',
 					'spp_hero_intro' => 'Scroll through our complete project archive. Every photograph is from supplied Superior Plus Painting work and is organised by service so you can quickly find the finish that suits your property.',
@@ -1383,7 +1383,7 @@ class SPP_Content_Migration {
 			'how-often-repaint-house-melbourne' => array(
 				'title' => 'How Often Should You Repaint Your House in Melbourne?',
 				'excerpt' => 'A practical guide to interior and exterior repainting cycles, warning signs and preparation.',
-				'image' => 'client/projects/residential/residential-01.webp',
+				'image' => 'client/projects/residential/residential-01.jpg',
 				'sections' => array(
 					array( 'title' => 'How often should interiors be repainted?', 'text' => 'For most Australian homes, interior painting can last five to ten years. Living rooms and bedrooms commonly remain presentable for seven to ten years, while kitchens and bathrooms may need attention after five to seven years because of moisture and frequent cleaning.' ),
 					array( 'title' => 'How long does exterior paint last?', 'text' => 'Melbourne homes are exposed to sun, rain, wind and changing temperatures. Exterior coatings commonly need renewal within seven to ten years. Peeling, cracking, bubbling, fading, exposed timber and water staining are signs that an inspection is worthwhile.' ),
@@ -1393,7 +1393,7 @@ class SPP_Content_Migration {
 			'interior-vs-exterior-painting' => array(
 				'title' => 'Interior vs Exterior Painting: What Is the Difference?',
 				'excerpt' => 'Understand the products, preparation and protection requirements behind interior and exterior painting.',
-				'image' => 'client/projects/interior/interior-07.webp',
+				'image' => 'client/projects/interior/interior-07.jpg',
 				'sections' => array(
 					array( 'title' => 'What interior painting involves', 'text' => 'Interior painting covers walls, ceilings, doors, trims, feature areas and suitable cabinetry. Products are selected for appearance, washability and the demands of each room.' ),
 					array( 'title' => 'What exterior painting involves', 'text' => 'Exterior painting protects weatherboards, render, brick, fascia, eaves, fences, decks and other suitable surfaces from UV, rain, moisture and temperature changes.' ),
@@ -1403,7 +1403,7 @@ class SPP_Content_Migration {
 			'professional-painting-services-melbourne' => array(
 				'title' => 'Professional Painting Services in Melbourne',
 				'excerpt' => 'What complete professional painting should include from preparation to final handover.',
-				'image' => 'client/projects/commercial/commercial-12.webp',
+				'image' => 'client/projects/commercial/commercial-12.jpg',
 				'sections' => array(
 					array( 'title' => 'More than applying paint', 'text' => 'A high-quality paint job requires experience, detailed preparation, appropriate products and a team that can manage the property respectfully.' ),
 					array( 'title' => 'Standards to expect', 'text' => 'Clear communication, organised work areas, dependable scheduling, property protection and a final quality inspection are all part of professional service.' ),
@@ -1413,7 +1413,7 @@ class SPP_Content_Migration {
 			'experienced-painting-contractors-melbourne' => array(
 				'title' => 'How to Choose an Experienced Painting Contractor',
 				'excerpt' => 'Practical signs of an experienced contractor and questions worth asking before work begins.',
-				'image' => 'client/projects/fence/fence-03.webp',
+				'image' => 'client/projects/fence/fence-03.jpg',
 				'sections' => array(
 					array( 'title' => 'Experience shows in preparation', 'text' => 'An experienced contractor assesses cracks, damaged areas, timber condition, old coatings and bare surfaces before recommending repairs, primers and finish coats.' ),
 					array( 'title' => 'Professional team standards', 'text' => 'Quality control, safe and clean work practices, reliable communication and respect for the property are important signs of a well-run project.' ),
@@ -1425,77 +1425,77 @@ class SPP_Content_Migration {
 			'prepare-house-before-professional-painters-melbourne' => array(
 				'title' => 'How to Prepare Your House Before Professional Painters Arrive in Melbourne',
 				'excerpt' => 'A practical Melbourne checklist for moving furniture, protecting belongings, repairing surfaces and preparing your household before painters arrive.',
-				'image' => 'client/projects/interior/interior-04.webp',
+				'image' => 'client/projects/interior/interior-04.jpg',
 			),
 			'interior-house-painting-melbourne-complete-guide' => array(
 				'title' => 'Interior House Painting Melbourne: Complete Guide for Homeowners',
 				'excerpt' => 'Plan an interior repaint covering walls, ceilings, trims, colour selection, preparation, timing and professional finishes.',
-				'image' => 'client/projects/interior/interior-08.webp',
+				'image' => 'client/projects/interior/interior-08.jpg',
 			),
 			'exterior-house-painting-melbourne-weather-protection' => array(
 				'title' => 'Exterior House Painting Melbourne: Protect Your Home From Harsh Weather',
 				'excerpt' => 'How exterior painting protects weatherboards, render, brick, roofs, fascias and other Melbourne surfaces.',
-				'image' => 'client/projects/exterior/exterior-12.webp',
+				'image' => 'client/projects/exterior/exterior-12.jpg',
 			),
 			'commercial-painting-contractors-melbourne-businesses' => array(
 				'title' => 'Commercial Painting Contractors Melbourne: Professional Painting for Businesses',
 				'excerpt' => 'Office, retail, warehouse and managed-property painting planned to reduce business disruption.',
-				'image' => 'client/projects/commercial/commercial-09.webp',
+				'image' => 'client/projects/commercial/commercial-09.jpg',
 			),
 			'roof-painting-melbourne-benefits-process-cost-guide' => array(
 				'title' => 'Roof Painting Melbourne: Benefits, Process and Cost Guide',
 				'excerpt' => 'What roof painting involves, which factors affect a quotation, and why cleaning, repairs, priming and compatible coatings matter.',
-				'image' => 'client/projects/roof/roof-client-2026.webp',
+				'image' => 'client/projects/roof/roof-client-2026.jpg',
 			),
 			'how-professional-painters-repair-cracks-before-painting' => array(
 				'title' => 'How Professional Painters Repair Cracks Before Painting',
 				'excerpt' => 'How painters assess hairline cracks, plaster damage, gaps and water staining before preparing walls.',
-				'image' => 'client/projects/plaster/plaster-06.webp',
+				'image' => 'client/projects/plaster/plaster-06.jpg',
 			),
 			'best-paint-colours-australian-homes-2026' => array(
 				'title' => 'Best Paint Colours for Australian Homes in 2026',
 				'excerpt' => 'Warm neutrals, expressive accents, gentle pastels and practical ways to test a 2026 colour scheme.',
-				'image' => 'client/projects/residential/residential-08.webp',
+				'image' => 'client/projects/residential/residential-08.jpg',
 			),
 			'dulux-paint-systems-quality-paint-matters' => array(
 				'title' => 'Dulux Paint Systems: Why Quality Paint Matters for Your Home',
 				'excerpt' => 'Why preparation, compatible primers, washable interior finishes and exterior protection matter more than colour alone.',
-				'image' => 'client/projects/interior/interior-10.webp',
+				'image' => 'client/projects/interior/interior-10.jpg',
 			),
 			'new-home-painting-melbourne-builders' => array(
 				'title' => 'New Home Painting Melbourne: Why Builders Choose Professional Painters',
 				'excerpt' => 'How painters coordinate new construction preparation, builder timelines, quality finishes and final touch-ups.',
-				'image' => 'client/projects/residential/residential-06.webp',
+				'image' => 'client/projects/residential/residential-06.jpg',
 			),
 			'before-after-professional-painting-melbourne-homes' => array(
 				'title' => 'Before and After: How Professional Painting Transforms Melbourne Homes',
 				'excerpt' => 'How preparation, colour planning and professional application can refresh older homes and renovations.',
-				'image' => 'client/projects/residential/residential-11.webp',
+				'image' => 'client/projects/residential/residential-11.jpg',
 			),
 			'fence-painting-melbourne-outdoor-protection' => array(
 				'title' => 'Fence Painting Melbourne: Protect and Improve Your Outdoor Space',
 				'excerpt' => 'Preparation, brush or spray application and suitable exterior coatings for timber and paling fences.',
-				'image' => 'client/projects/fence/fence-10.webp',
+				'image' => 'client/projects/fence/fence-10.jpg',
 			),
 			'strata-body-corporate-painting-melbourne-guide' => array(
 				'title' => 'Strata and Body Corporate Painting Melbourne: Complete Guide',
 				'excerpt' => 'Plan apartment, common-area and body-corporate painting with clear scopes and stakeholder communication.',
-				'image' => 'client/projects/commercial/commercial-15.webp',
+				'image' => 'client/projects/commercial/commercial-15.jpg',
 			),
 			'how-long-professional-paint-job-lasts-melbourne' => array(
 				'title' => 'How Long Does a Professional Paint Job Last in Melbourne?',
 				'excerpt' => 'Factors affecting interior and exterior paint lifespan, warning signs and practical maintenance.',
-				'image' => 'client/projects/exterior/exterior-19.webp',
+				'image' => 'client/projects/exterior/exterior-19.jpg',
 			),
 			'why-hiring-insured-painting-contractor-matters' => array(
 				'title' => 'Why Hiring an Insured Painting Contractor Matters',
 				'excerpt' => 'Why insurance, safety practices, written scopes and professional standards matter when choosing a painter.',
-				'image' => 'client/projects/brand/brand-01.webp',
+				'image' => 'client/projects/brand/brand-01.jpg',
 			),
 			'painter-melbourne-near-me-choose-local-company' => array(
 				'title' => 'Painter Melbourne Near Me: How to Find the Right Local Painting Company',
 				'excerpt' => 'A checklist for comparing local painters, reviews, quotations, experience, preparation and quality controls.',
-				'image' => 'client/projects/brand/brand-02.webp',
+				'image' => 'client/projects/brand/brand-02.jpg',
 			),
 		);
 		foreach ( $expanded_guides as $slug => $guide ) {
@@ -1559,7 +1559,7 @@ class SPP_Content_Migration {
 			$pages[ 'service-areas/' . $slug ] = array(
 				'title' => 'Painters in ' . $area[0], 'template' => 'service_areas',
 				'excerpt' => 'Professional residential and commercial painting services in ' . $area[0] . ', Melbourne.',
-				'hero_asset' => 'client/projects/residential/residential-01.webp',
+				'hero_asset' => 'client/projects/residential/residential-01.jpg',
 				'meta' => array(
 					'spp_eyebrow' => $area[1] . ' service area', 'spp_hero_title' => 'Painters in ' . $area[0], 'spp_accent' => 'careful work, clearly planned.',
 					'spp_hero_intro' => 'Professional painting for homes, rentals, workplaces and managed properties in ' . $area[0] . ', with detailed preparation and a clean handover.',

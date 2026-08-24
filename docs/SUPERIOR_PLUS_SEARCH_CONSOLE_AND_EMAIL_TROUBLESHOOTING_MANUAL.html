@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Superior Plus Search Console and Email Troubleshooting Manual</title>
+  <style>
+    @page { size:A4; margin:16mm 15mm 17mm; }
+    :root { --green:#1f5140; --dark:#153b30; --red:#982c27; --gold:#f2c419; --cream:#fbf6eb; --ink:#17211d; --muted:#5d6863; --line:#d9dfdb; --pale:#e9f2ee; --danger:#f8e8e5; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#fff; color:var(--ink); font:10.4pt/1.48 Arial, Helvetica, sans-serif; }
+    h1,h2,h3 { margin:0 0 10px; line-height:1.14; }
+    h1 { font-size:29pt; letter-spacing:-1px; }
+    h2 { margin-top:4px; padding-bottom:7px; border-bottom:2px solid var(--gold); color:var(--green); font-size:19pt; }
+    h3 { margin-top:17px; color:var(--red); font-size:12.7pt; }
+    p { margin:0 0 10px; }
+    ul,ol { margin:7px 0 13px; padding-left:22px; }
+    li { margin:4px 0; }
+    code { font-family:Consolas, monospace; font-size:9.3pt; overflow-wrap:anywhere; }
+    a { color:var(--red); overflow-wrap:anywhere; }
+    .cover { min-height:252mm; padding:18mm 14mm; color:#fff; background:linear-gradient(145deg,var(--dark),var(--green) 65%,#2d6b56); display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+    .cover:before { content:""; position:absolute; width:180mm; height:80mm; right:-65mm; top:32mm; border:18mm solid rgba(255,255,255,.055); border-radius:50%; transform:rotate(-14deg); }
+    .cover .kicker { margin-bottom:22px; color:var(--gold); font-weight:700; letter-spacing:2.4px; text-transform:uppercase; }
+    .cover h1 { max-width:155mm; }
+    .cover .lead { max-width:145mm; margin-top:18px; color:rgba(255,255,255,.86); font-size:14pt; }
+    .cover .meta { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding-top:15px; border-top:1px solid rgba(255,255,255,.25); color:rgba(255,255,255,.8); }
+    .cover .meta b { display:block; color:#fff; }
+    .page { break-before:page; }
+    .label { display:inline-block; margin-bottom:10px; padding:5px 10px; border-radius:14px 4px; background:var(--cream); color:var(--red); font-size:8pt; font-weight:700; letter-spacing:1.1px; text-transform:uppercase; }
+    .notice { margin:13px 0 16px; padding:12px 14px; border-left:5px solid var(--gold); background:var(--cream); break-inside:avoid; }
+    .notice.good { border-color:var(--green); background:var(--pale); }
+    .notice.bad { border-color:var(--red); background:var(--danger); }
+    .notice strong { color:var(--dark); }
+    table { width:100%; margin:11px 0 16px; border-collapse:collapse; break-inside:avoid; }
+    th,td { padding:7px 8px; border:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { background:var(--cream); color:var(--dark); }
+    .compact th,.compact td { padding:6px 7px; }
+    .metric-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0 17px; }
+    .metric { padding:13px; border:1px solid var(--line); border-radius:4px 15px; background:var(--cream); break-inside:avoid; }
+    .metric b { display:block; margin-bottom:4px; color:var(--green); font-size:18pt; }
+    .step { display:grid; grid-template-columns:28px 1fr; gap:10px; margin:9px 0; break-inside:avoid; }
+    .step .n { width:26px; height:26px; border-radius:50%; display:grid; place-items:center; background:var(--green); color:#fff; font-weight:700; }
+    .step p { margin:2px 0 0; }
+    .check { list-style:none; padding-left:0; }
+    .check li { position:relative; padding-left:23px; margin:7px 0; }
+    .check li:before { content:"\2610"; position:absolute; left:0; top:-2px; color:var(--green); font-size:15pt; }
+    .route { padding:10px 12px; margin:7px 0; border:1px solid var(--line); border-radius:5px; background:#fafbf9; break-inside:avoid; }
+    .route b { color:var(--red); }
+    .small { color:var(--muted); font-size:8.8pt; }
+    .footer { margin-top:20px; padding-top:8px; border-top:1px solid var(--line); color:var(--muted); font-size:8.4pt; }
+    .no-break { break-inside:avoid; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div>
+      <div class="kicker">Superior Plus Painting &amp; Remodeling</div>
+      <h1>Search Console &amp; Website Email Troubleshooting Manual</h1>
+      <p class="lead">How to understand Google indexing reports, correct the current email delivery failure, and verify both systems safely.</p>
+    </div>
+    <div class="meta">
+      <div><b>Website</b>sppaintingremodeling.com.au</div>
+      <div><b>Prepared</b>8 August 2026</div>
+      <div><b>Audience</b>Website owner and administrator</div>
+      <div><b>Scope</b>Diagnosis, correction and verification</div>
+    </div>
+  </section>
+
+  <section class="page">
+    <span class="label">Start here</span>
+    <h2>These are two separate systems</h2>
+    <p>The screenshots describe two unrelated matters. Google Search Console reports how Google discovers and indexes website URLs. WordPress and WP Mail SMTP control delivery of quote-form and administrative email.</p>
+    <table>
+      <tr><th>System</th><th>What it controls</th><th>Current finding</th></tr>
+      <tr><td><strong>Google Search Console</strong></td><td>Crawling, canonical URLs, indexing and search visibility.</td><td>The report contains exclusions, but overall indexing has improved significantly.</td></tr>
+      <tr><td><strong>WordPress email</strong></td><td>Where quote enquiries are delivered and which mail service sends them.</td><td>The site attempted delivery to <code>admin@admin.com</code>, which is not the business inbox.</td></tr>
+    </table>
+    <div class="notice bad"><strong>Important:</strong> Search Console cannot change, block or repair WordPress email. Changing an indexing setting will not resolve the delivery failure.</div>
+
+    <h3>Recommended order</h3>
+    <ol>
+      <li>Correct the email recipient and send a fresh test. This affects customer enquiries and is the urgent task.</li>
+      <li>Review Search Console exclusions by URL, rather than treating every “Not indexed” row as an error.</li>
+      <li>Clean up legacy and duplicate URLs in WordPress/Yoast.</li>
+      <li>Submit the sitemap and validate only the problems that were actually fixed.</li>
+    </ol>
+
+    <div class="notice good"><strong>No website redesign is required for these tasks.</strong> The email correction is a settings change. Search cleanup primarily involves redirects, sitemap exclusions and removal of obsolete URLs.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Part 1 · Email</span>
+    <h2>What the delivery error means</h2>
+    <p>The failed message was addressed to <code>admin@admin.com</code>. Gmail attempted to contact the recipient server and reached:</p>
+    <div class="notice bad"><code>localhost.admin.com — 127.0.0.1 — timed out</code></div>
+    <p><code>127.0.0.1</code> is a loopback or localhost address. It is not the Superior Plus business mailbox. The message therefore cannot reach the intended recipient.</p>
+
+    <h3>What this does and does not indicate</h3>
+    <table class="compact">
+      <tr><th>Observation</th><th>Meaning</th></tr>
+      <tr><td>Gmail says “Delivery incomplete”</td><td>Gmail accepted the outgoing message but could not connect to the recipient domain.</td></tr>
+      <tr><td>The destination is <code>admin@admin.com</code></td><td>A placeholder or incorrect email address is still configured somewhere.</td></tr>
+      <tr><td>Gmail will retry</td><td>Only that already-queued message will be retried. Updating WordPress does not rewrite its destination.</td></tr>
+      <tr><td>Search Console shows exclusions</td><td>Unrelated. Indexing settings do not route email.</td></tr>
+    </table>
+
+    <h3>Correct destination</h3>
+    <p>Use the client-approved business inbox. The documented recipient for this website is:</p>
+    <div class="notice good"><strong>Quote recipient:</strong> <code>sppainting.remodeling@gmail.com</code></div>
+    <p class="small">If the client wants a different inbox, use the exact address they confirm. Do not invent a domain mailbox that has not been created.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Part 1 · Correction</span>
+    <h2>Fix the WordPress email recipient</h2>
+
+    <h3>A. Superior Plus quote recipient</h3>
+    <div class="step"><span class="n">1</span><p>Sign in to the WordPress dashboard.</p></div>
+    <div class="step"><span class="n">2</span><p>Open <strong>Superior Plus → Site Settings</strong>.</p></div>
+    <div class="step"><span class="n">3</span><p>Find <strong>Quote recipient email</strong>.</p></div>
+    <div class="step"><span class="n">4</span><p>Replace <code>admin@admin.com</code> with the approved real inbox, normally <code>sppainting.remodeling@gmail.com</code>.</p></div>
+    <div class="step"><span class="n">5</span><p>Click <strong>Update</strong> or <strong>Save Settings</strong>.</p></div>
+    <div class="step"><span class="n">6</span><p>Reload the page and confirm the saved address remains correct.</p></div>
+
+    <h3>B. WordPress administration email</h3>
+    <ol>
+      <li>Open <strong>Settings → General</strong>.</li>
+      <li>Inspect <strong>Administration Email Address</strong>.</li>
+      <li>If it says <code>admin@admin.com</code>, replace it with the client-approved administrator address.</li>
+      <li>Click <strong>Save Changes</strong>.</li>
+      <li>WordPress may send a confirmation link to the new address. Open that message and approve the change.</li>
+    </ol>
+    <div class="notice"><strong>Why check both fields?</strong> The quote-recipient field controls website enquiries. The WordPress administration email can receive system notices. They are separate settings and both should be valid.</div>
+
+    <h3>C. WP Mail SMTP sender</h3>
+    <ol>
+      <li>Open <strong>WP Mail SMTP → Settings → General</strong>.</li>
+      <li>Confirm the selected mailer is connected and authorised.</li>
+      <li>Confirm <strong>From Email</strong> is an address authorised by that mailer.</li>
+      <li>Do not use <code>admin@admin.com</code> as the From Email or recipient.</li>
+      <li>Save the settings if anything was corrected.</li>
+    </ol>
+  </section>
+
+  <section class="page">
+    <span class="label">Part 1 · Verification</span>
+    <h2>Test email from end to end</h2>
+
+    <h3>Test 1 — Mail service</h3>
+    <ol>
+      <li>Open <strong>WP Mail SMTP → Tools → Email Test</strong>.</li>
+      <li>Enter an inbox that you can personally inspect.</li>
+      <li>Send the test.</li>
+      <li>Confirm that it arrives in Inbox, Spam or All Mail. A green “sent” notice alone is not sufficient.</li>
+    </ol>
+
+    <h3>Test 2 — Real website form</h3>
+    <ol>
+      <li>Open the live website in a private/incognito browser window.</li>
+      <li>Submit a quote using clearly labelled test information.</li>
+      <li>Use a subject or message such as <strong>TEST QUOTE — PLEASE IGNORE</strong>.</li>
+      <li>Confirm it reaches the configured business recipient.</li>
+      <li>Press Reply and confirm the reply is addressed to the test customer email—not the website sender.</li>
+    </ol>
+
+    <h3>Pass checklist</h3>
+    <ul class="check">
+      <li>No setting contains <code>admin@admin.com</code>.</li>
+      <li>WP Mail SMTP test arrives.</li>
+      <li>Website quote arrives.</li>
+      <li>Reply-To points to the customer.</li>
+      <li>No new bounce message is received.</li>
+    </ul>
+    <div class="notice bad"><strong>Do not wait for the old failed message as the test.</strong> Gmail may retry it for approximately 23 hours, but it still targets the old incorrect address. Submit a completely new test after saving the correction.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Part 2 · Search Console</span>
+    <h2>What the Coverage export shows</h2>
+    <p>The supplied Search Console export is a report of URLs Google knows about. It is not evidence that the client damaged the website by opening Search Console.</p>
+    <div class="metric-grid">
+      <div class="metric"><b>55 indexed</b>Up from approximately 14–15 pages.</div>
+      <div class="metric"><b>306 excluded</b>Down from approximately 1,339 URLs.</div>
+      <div class="metric"><b>270</b>Crawled, currently not indexed.</div>
+      <div class="metric"><b>10</b>Discovered, currently not indexed.</div>
+    </div>
+    <p>The sharp reduction in excluded URLs and increase in indexed URLs is a positive trend. Google also states that 100% indexing is not the target: redirects, duplicates and deliberately hidden pages normally should not be indexed.</p>
+
+    <h3>Live checks completed on 8 August 2026</h3>
+    <ul class="check">
+      <li>The homepage returns HTTP 200.</li>
+      <li>The homepage has a self-referencing canonical URL.</li>
+      <li>The Residential Painting service page returns HTTP 200 and is self-canonical.</li>
+      <li>The public HTML pages checked do not send an X-Robots noindex header.</li>
+      <li><code>robots.txt</code> is reachable and does not globally block Google.</li>
+      <li>The Yoast sitemap index is reachable.</li>
+    </ul>
+    <div class="notice good"><strong>Current conclusion:</strong> the website is not globally blocked from Google. The remaining work is URL cleanup and selective troubleshooting.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Part 2 · Decision guide</span>
+    <h2>What each indexing status requires</h2>
+    <table class="compact">
+      <tr><th>Search Console status</th><th>Usually a problem?</th><th>Correct action</th></tr>
+      <tr><td>Page with redirect</td><td>Not if the redirect is intentional.</td><td>Confirm it reaches the correct final page and remove the old URL from the sitemap.</td></tr>
+      <tr><td>Excluded by noindex</td><td>Only when an important public page is affected.</td><td>Inspect examples. Keep noindex for intentionally private/thin pages; remove it from important pages.</td></tr>
+      <tr><td>Alternative page with proper canonical</td><td>Usually normal.</td><td>Confirm Google identifies the intended canonical URL. Avoid placing duplicate alternatives in the sitemap.</td></tr>
+      <tr><td>Not found (404)</td><td>Yes when the URL should exist or has useful links.</td><td>Restore it or create a relevant 301 redirect. Leave genuinely removed, unlinked URLs as 404/410.</td></tr>
+      <tr><td>Soft 404</td><td>Usually yes.</td><td>Ensure missing pages return a real 404/410, or redirect/restore the page when a replacement exists.</td></tr>
+      <tr><td>Blocked by robots.txt</td><td>Depends on the URL.</td><td>Unblock important pages. Leave intentionally blocked technical URLs alone.</td></tr>
+      <tr><td>Crawled — currently not indexed</td><td>Not automatically.</td><td>Check content quality, duplication, internal links and canonical signals. Do not request all 270 URLs at once.</td></tr>
+      <tr><td>Discovered — currently not indexed</td><td>Not automatically.</td><td>Ensure the URL is valuable, linked internally and present once in the sitemap; then allow Google time.</td></tr>
+    </table>
+    <div class="notice"><strong>Source column matters:</strong> “Website” means the cause is normally controlled by site configuration. “Google systems” means Google made an indexing decision; it does not necessarily indicate a technical failure.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Part 2 · Known cleanup</span>
+    <h2>URLs that should be reviewed</h2>
+    <p>The sitemap and live-site inspection found legacy or duplicate URL groups. These can dilute indexing signals even when the visible website appears normal.</p>
+
+    <div class="route"><b>Bogus home-like URL</b><br><code>/https-sppaintingremodeling-com-au/</code><br>Recommended: 301 redirect to the real homepage and remove it from the sitemap.</div>
+    <div class="route"><b>Old service URLs</b><br>Root-level service URLs coexist with newer <code>/services/...</code> pages.<br>Recommended: map each old URL to its corresponding canonical service page with a single 301 redirect.</div>
+    <div class="route"><b>Duplicate service-area URLs</b><br>Older named Camberwell and Hawthorn East URLs coexist with shorter current routes.<br>Recommended: retain one canonical URL per suburb and redirect the duplicate.</div>
+    <div class="route"><b>Duplicate article routes</b><br>The same topics appear under both <code>/painting-guides/...</code> and <code>/blog/...</code>.<br>Recommended: choose one route system, keep its pages self-canonical, and redirect the other set.</div>
+    <div class="route"><b>Default and archive pages</b><br><code>/hello-world/</code>, unused author archives and unused category archives.<br>Recommended: remove/redirect the sample post and disable unused archives in Yoast.</div>
+    <div class="route"><b>FAQ and testimonial query URLs</b><br>Standalone query URLs are included in the sitemap but canonicalise to the homepage.<br>Recommended: exclude these content types from Yoast XML sitemaps unless they have valuable standalone public pages.</div>
+
+    <div class="notice bad"><strong>Use one-to-one redirects.</strong> Do not redirect every obsolete URL blindly to the homepage. Each old service, area or article URL should point to the closest relevant replacement.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Part 2 · Safe workflow</span>
+    <h2>How to use Search Console correctly</h2>
+
+    <h3>Step 1 — Inspect examples</h3>
+    <ol>
+      <li>Open <strong>Search Console → Indexing → Pages</strong>.</li>
+      <li>Select one reason, such as <strong>Not found (404)</strong>.</li>
+      <li>Review or export the affected example URLs.</li>
+      <li>Decide whether each URL should exist, redirect or remain excluded.</li>
+      <li>Repeat for Soft 404 and Blocked by robots.txt first.</li>
+    </ol>
+
+    <h3>Step 2 — Correct the website</h3>
+    <ol>
+      <li>Apply relevant redirects.</li>
+      <li>Remove obsolete and duplicate URLs from the sitemap.</li>
+      <li>Confirm important pages remain indexable and self-canonical.</li>
+      <li>Clear WordPress/server cache if sitemap changes do not appear.</li>
+    </ol>
+
+    <h3>Step 3 — Submit the sitemap</h3>
+    <ol>
+      <li>Open <strong>Search Console → Indexing → Sitemaps</strong>.</li>
+      <li>Submit only the canonical Yoast sitemap:</li>
+    </ol>
+    <div class="notice good"><code>https://sppaintingremodeling.com.au/sitemap_index.xml</code></div>
+    <p>Submitting the same sitemap again does not force immediate indexing. It simply helps Google discover the current canonical URLs.</p>
+
+    <h3>Step 4 — Validate selectively</h3>
+    <ol>
+      <li>Use URL Inspection on the homepage and a few important service/area pages.</li>
+      <li>Run <strong>Test Live URL</strong>.</li>
+      <li>Request indexing only for important corrected or newly published pages.</li>
+      <li>Click <strong>Validate Fix</strong> for a category only after its underlying issue was corrected.</li>
+    </ol>
+  </section>
+
+  <section class="page">
+    <span class="label">Final verification</span>
+    <h2>Owner handoff checklist</h2>
+
+    <h3>Email</h3>
+    <ul class="check">
+      <li>Quote recipient is a real client-approved inbox.</li>
+      <li>WordPress administration email is valid and confirmed.</li>
+      <li>WP Mail SMTP sender is authorised.</li>
+      <li>Fresh WP Mail SMTP test arrives.</li>
+      <li>Fresh live quote-form test arrives and replies to the customer.</li>
+    </ul>
+
+    <h3>Search and indexing</h3>
+    <ul class="check">
+      <li>Homepage passes URL Inspection.</li>
+      <li>Important service and service-area pages return HTTP 200.</li>
+      <li>Obsolete URLs redirect to relevant replacements.</li>
+      <li>Only canonical URLs appear in the XML sitemap.</li>
+      <li><code>sitemap_index.xml</code> is submitted in Search Console.</li>
+      <li>Validation is started only for issues that were actually fixed.</li>
+    </ul>
+
+    <h3>What not to do</h3>
+    <ul>
+      <li>Do not treat every “Not indexed” URL as an error.</li>
+      <li>Do not repeatedly request indexing for hundreds of duplicate URLs.</li>
+      <li>Do not use <code>admin@admin.com</code> anywhere.</li>
+      <li>Do not redirect unrelated missing pages to the homepage.</li>
+      <li>Do not change theme content or design to fix a mail-routing problem.</li>
+    </ul>
+
+    <div class="notice good"><strong>Successful outcome:</strong> customer enquiries arrive at the approved inbox, the live site keeps one canonical URL for every valuable page, and Search Console gradually reports the corrected state after Google recrawls the site.</div>
+
+    <h3>Official Google references</h3>
+    <ul>
+      <li><a href="https://support.google.com/webmasters/answer/7440203?hl=en">Page indexing report — Search Console Help</a></li>
+      <li><a href="https://support.google.com/webmasters/answer/12482179?hl=en">Inspect and troubleshoot a single page — Search Console Help</a></li>
+      <li><a href="https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls">Canonical and duplicate URL guidance — Google Search Central</a></li>
+    </ul>
+    <p class="footer">Prepared from the supplied Search Console Coverage export, the supplied delivery-failure screenshot, and read-only checks of the live website on 8 August 2026.</p>
+  </section>
+</body>
+</html>

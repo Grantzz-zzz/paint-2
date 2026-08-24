@@ -52,6 +52,7 @@ final class SPP_Content_Plugin {
 		$rest = new SPP_Content_REST( $this->types, $this->fields );
 		new SPP_Content_Workflow( $this->types, $this->fields );
 		new SPP_Content_Routing();
+		new SPP_Content_SEO();
 		new SPP_Content_Migration( $this->types );
 		new SPP_Content_Enquiries( $this->types );
 		new SPP_Content_Recovery( $this->fields, $rest );

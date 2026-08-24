@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Superior Plus Gmail Reauthorization Guide</title>
+  <style>
+    @page { size:A4; margin:16mm 15mm 17mm; }
+    :root { --green:#1f5140; --dark:#153b30; --red:#982c27; --gold:#f2c419; --cream:#fbf6eb; --ink:#17211d; --muted:#5d6863; --line:#d9dfdb; --pale:#e9f2ee; --danger:#f8e8e5; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#fff; color:var(--ink); font:10.5pt/1.5 Arial, Helvetica, sans-serif; }
+    h1,h2,h3 { margin:0 0 10px; line-height:1.14; }
+    h1 { font-size:30pt; letter-spacing:-1.1px; }
+    h2 { margin-top:4px; padding-bottom:7px; border-bottom:2px solid var(--gold); color:var(--green); font-size:19pt; }
+    h3 { margin-top:17px; color:var(--red); font-size:12.8pt; }
+    p { margin:0 0 10px; }
+    ul,ol { margin:7px 0 13px; padding-left:22px; }
+    li { margin:4px 0; }
+    code { font-family:Consolas, monospace; font-size:9.2pt; overflow-wrap:anywhere; }
+    a { color:var(--red); overflow-wrap:anywhere; }
+    .cover { min-height:252mm; padding:18mm 14mm; color:#fff; background:linear-gradient(145deg,var(--dark),var(--green) 65%,#2d6b56); display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; }
+    .cover:before { content:""; position:absolute; width:180mm; height:80mm; right:-65mm; top:32mm; border:18mm solid rgba(255,255,255,.055); border-radius:50%; transform:rotate(-14deg); }
+    .cover .kicker { margin-bottom:22px; color:var(--gold); font-weight:700; letter-spacing:2.4px; text-transform:uppercase; }
+    .cover h1 { max-width:150mm; }
+    .cover .lead { max-width:145mm; margin-top:18px; color:rgba(255,255,255,.86); font-size:14pt; }
+    .cover .meta { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding-top:15px; border-top:1px solid rgba(255,255,255,.25); color:rgba(255,255,255,.8); }
+    .cover .meta b { display:block; color:#fff; }
+    .page { break-before:page; }
+    .label { display:inline-block; margin-bottom:10px; padding:5px 10px; border-radius:14px 4px; background:var(--cream); color:var(--red); font-size:8pt; font-weight:700; letter-spacing:1.1px; text-transform:uppercase; }
+    .notice { margin:13px 0 16px; padding:12px 14px; border-left:5px solid var(--gold); background:var(--cream); break-inside:avoid; }
+    .notice.good { border-color:var(--green); background:var(--pale); }
+    .notice.bad { border-color:var(--red); background:var(--danger); }
+    .notice strong { color:var(--dark); }
+    table { width:100%; margin:11px 0 16px; border-collapse:collapse; break-inside:avoid; }
+    th,td { padding:7px 8px; border:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { background:var(--cream); color:var(--dark); }
+    .step { display:grid; grid-template-columns:29px 1fr; gap:10px; margin:10px 0; break-inside:avoid; }
+    .step .n { width:27px; height:27px; border-radius:50%; display:grid; place-items:center; background:var(--green); color:#fff; font-weight:700; }
+    .step p { margin:2px 0 0; }
+    .check { list-style:none; padding-left:0; }
+    .check li { position:relative; padding-left:24px; margin:7px 0; }
+    .check li:before { content:"\2610"; position:absolute; left:0; top:-2px; color:var(--green); font-size:15pt; }
+    .codebox { margin:10px 0 15px; padding:12px 14px; border-radius:5px 14px; background:#17231f; color:#eff7f2; break-inside:avoid; }
+    .small { color:var(--muted); font-size:8.8pt; }
+    .footer { margin-top:20px; padding-top:8px; border-top:1px solid var(--line); color:var(--muted); font-size:8.4pt; }
+    .no-break { break-inside:avoid; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <div>
+      <div class="kicker">Superior Plus Painting &amp; Remodeling</div>
+      <h1>Reconnect Gmail to the Website</h1>
+      <p class="lead">A safe, step-by-step guide for restoring WordPress quote-form email after an expired Google authorisation.</p>
+    </div>
+    <div class="meta">
+      <div><b>Website</b>sppaintingremodeling.com.au</div>
+      <div><b>Prepared</b>9 August 2026</div>
+      <div><b>Sending account</b>sppainting.remodeling@gmail.com</div>
+      <div><b>Expected time</b>Approximately 10–15 minutes</div>
+    </div>
+  </section>
+
+  <section class="page">
+    <span class="label">Read this first</span>
+    <h2>What failed?</h2>
+    <p>The website’s content, form and recipient address are intact. Google rejected the website’s saved authorisation token:</p>
+    <div class="codebox"><code>invalid_grant<br>Token has been expired or revoked.</code></div>
+    <p>WordPress therefore reached the email-sending stage but WP Mail SMTP could not obtain permission from Google to send the message.</p>
+
+    <table>
+      <tr><th>Working correctly</th><th>Needs attention</th></tr>
+      <tr><td>Website contact form<br>Superior Plus recipient setting<br>WordPress REST/form token endpoints</td><td>Google OAuth publishing status<br>WP Mail SMTP Gmail authorisation</td></tr>
+    </table>
+
+    <div class="notice good"><strong>This procedure does not change website content or design.</strong> It only renews the permission that allows WordPress to send email through Gmail.</div>
+
+    <h3>Confirmed quote recipient</h3>
+    <div class="notice"><code>sppainting.remodeling@gmail.com</code></div>
+
+    <h3>Before beginning</h3>
+    <ul class="check">
+      <li>Have a WordPress Administrator account available.</li>
+      <li>Have access to <code>sppainting.remodeling@gmail.com</code>.</li>
+      <li>Keep the existing Google OAuth Client ID and Client Secret.</li>
+      <li>Use the Google Cloud project originally created for the website mail connection.</li>
+      <li>Never send passwords, Client Secrets, recovery codes or access tokens by email or chat.</li>
+    </ul>
+  </section>
+
+  <section class="page">
+    <span class="label">Step 1 · Google Cloud</span>
+    <h2>Prevent another seven-day expiry</h2>
+    <p>Before reconnecting WordPress, confirm that the Google OAuth application is not left in Testing mode.</p>
+
+    <div class="step"><span class="n">1</span><p>Sign into <a href="https://console.cloud.google.com/">Google Cloud Console</a> using <code>sppainting.remodeling@gmail.com</code>.</p></div>
+    <div class="step"><span class="n">2</span><p>Use the project selector at the top and select the project created for website email, commonly named <strong>Superior Plus Website Mail</strong>.</p></div>
+    <div class="step"><span class="n">3</span><p>Open <strong>Google Auth Platform → Audience</strong>. In an older Google interface this may appear under <strong>APIs &amp; Services → OAuth consent screen</strong>.</p></div>
+    <div class="step"><span class="n">4</span><p>Find <strong>Publishing status</strong>.</p></div>
+    <div class="step"><span class="n">5</span><p>If the status is <strong>Testing</strong>, choose <strong>Publish App</strong> or <strong>In production</strong> and confirm.</p></div>
+    <div class="step"><span class="n">6</span><p>If it already says <strong>In production</strong>, leave it unchanged and continue to the next page.</p></div>
+
+    <div class="notice bad"><strong>Why this matters:</strong> for an External OAuth app requesting Gmail permissions, Google normally expires refresh tokens after seven days while the app remains in Testing. Reconnecting without publishing can make the same failure return.</div>
+
+    <h3>Do not change these items</h3>
+    <ul>
+      <li>Do not delete the Google Cloud project.</li>
+      <li>Do not delete the existing OAuth Client ID.</li>
+      <li>Do not create a second project unless the original project is genuinely inaccessible.</li>
+      <li>Do not change the authorised redirect URI unless WP Mail SMTP reports a redirect mismatch.</li>
+    </ul>
+  </section>
+
+  <section class="page">
+    <span class="label">Step 2 · WordPress</span>
+    <h2>Remove the expired connection</h2>
+
+    <div class="step"><span class="n">1</span><p>Sign into the WordPress dashboard as an Administrator.</p></div>
+    <div class="step"><span class="n">2</span><p>Open <strong>WP Mail SMTP → Settings → General</strong>.</p></div>
+    <div class="step"><span class="n">3</span><p>Scroll to the <strong>Google / Gmail</strong> mailer section.</p></div>
+    <div class="step"><span class="n">4</span><p>Confirm the existing <strong>Client ID</strong> and <strong>Client Secret</strong> fields are populated. Do not copy or share their values.</p></div>
+    <div class="step"><span class="n">5</span><p>Click <strong>Remove OAuth Connection</strong> and confirm the removal.</p></div>
+    <div class="step"><span class="n">6</span><p>Save the WP Mail SMTP settings if the page requests it.</p></div>
+
+    <div class="notice good"><strong>Safe operation:</strong> removing the OAuth connection does not delete Gmail messages, WordPress enquiries, website content, the Client ID or the Client Secret. It removes only the expired access authorisation.</div>
+
+    <h3>Verify the sender settings</h3>
+    <table>
+      <tr><th>Setting</th><th>Required value</th></tr>
+      <tr><td>From Email</td><td><code>sppainting.remodeling@gmail.com</code></td></tr>
+      <tr><td>Force From Email</td><td>Enabled</td></tr>
+      <tr><td>From Name</td><td>Superior Plus Painting &amp; Remodeling</td></tr>
+      <tr><td>Mailer</td><td>Google / Gmail</td></tr>
+    </table>
+  </section>
+
+  <section class="page">
+    <span class="label">Step 3 · Reauthorise</span>
+    <h2>Allow WordPress to send again</h2>
+
+    <div class="step"><span class="n">1</span><p>On the WP Mail SMTP settings page, click <strong>Allow plugin to send emails using your Google account</strong>.</p></div>
+    <div class="step"><span class="n">2</span><p>When Google opens, select <code>sppainting.remodeling@gmail.com</code>. Do not authorise a developer’s or another employee’s account.</p></div>
+    <div class="step"><span class="n">3</span><p>Review the project/app name and requested Gmail permission.</p></div>
+    <div class="step"><span class="n">4</span><p>Click <strong>Allow</strong> or <strong>Continue</strong>.</p></div>
+    <div class="step"><span class="n">5</span><p>Wait for Google to return to the WordPress dashboard.</p></div>
+    <div class="step"><span class="n">6</span><p>Confirm WP Mail SMTP displays a successful connection for <code>sppainting.remodeling@gmail.com</code>.</p></div>
+
+    <div class="notice"><strong>If Google displays an unverified-app warning:</strong> continue only when the client recognises the exact private project created for this website. Never proceed when the project name, account or domain is unfamiliar.</div>
+
+    <h3>If authorisation is denied</h3>
+    <table>
+      <tr><th>Message</th><th>Action</th></tr>
+      <tr><td>Access blocked / app unavailable</td><td>Confirm the correct Google project and account. If the app remains in Testing, add the Gmail account as a Test User or publish the app.</td></tr>
+      <tr><td><code>redirect_uri_mismatch</code></td><td>Copy the exact Authorized Redirect URI displayed in WP Mail SMTP into the existing Google Web application credential.</td></tr>
+      <tr><td><code>invalid_client</code></td><td>Recheck the existing Client ID and Client Secret for accidental spaces or values from a different project.</td></tr>
+      <tr><td>Permission denied by an organisation</td><td>A Google Workspace administrator may need to permit the application. Do not bypass an organisational restriction.</td></tr>
+    </table>
+  </section>
+
+  <section class="page">
+    <span class="label">Step 4 · Verification</span>
+    <h2>Test email and the website form</h2>
+
+    <h3>Test A — WP Mail SMTP</h3>
+    <ol>
+      <li>Open <strong>WP Mail SMTP → Tools → Email Test</strong>.</li>
+      <li>Send a test to an inbox that can be checked immediately.</li>
+      <li>Confirm the WP Mail SMTP result is successful.</li>
+      <li>Confirm the message actually arrives in Inbox, Spam or All Mail.</li>
+    </ol>
+
+    <h3>Test B — Live website quote</h3>
+    <ol>
+      <li>Open <a href="https://sppaintingremodeling.com.au/contact/">the live Contact page</a> in a private/incognito window.</li>
+      <li>Complete every required field with controlled test details.</li>
+      <li>Enter <strong>NEW FORM TEST — PLEASE IGNORE</strong> in Project Details.</li>
+      <li>Submit the form and confirm the success screen appears.</li>
+      <li>Confirm the enquiry reaches <code>sppainting.remodeling@gmail.com</code>.</li>
+      <li>Press Reply and verify the reply is addressed to the customer email entered in the form.</li>
+    </ol>
+
+    <h3>Test C — Superior Plus status</h3>
+    <ol>
+      <li>Return to <strong>WordPress Dashboard → Superior Plus</strong>.</li>
+      <li>Under <strong>Quote form delivery</strong>, confirm the recipient is correct.</li>
+      <li>Confirm <strong>Last confirmed delivery</strong> updates to the new test time.</li>
+      <li>Confirm no newer <strong>Last mail failure</strong> appears.</li>
+    </ol>
+
+    <div class="notice good"><strong>Successful outcome:</strong> the SMTP test arrives, the website displays its success message, the quote reaches the business inbox, and the Superior Plus delivery timestamp updates.</div>
+  </section>
+
+  <section class="page">
+    <span class="label">Important distinction</span>
+    <h2>Older admin@admin.com failures</h2>
+    <p>Gmail may continue displaying delivery-failure notices for older messages that were previously addressed to <code>admin@admin.com</code>. Reauthorising Gmail cannot rewrite or cancel messages already queued by Google.</p>
+
+    <div class="notice bad"><strong>Judge only new tests.</strong> Compare the original message time and destination. A retry for an old message does not mean the newly repaired form used the old recipient.</div>
+
+    <h3>Check remaining WordPress addresses</h3>
+    <ul class="check">
+      <li><strong>Superior Plus → Quote form delivery:</strong> recipient is <code>sppainting.remodeling@gmail.com</code>.</li>
+      <li><strong>Settings → General:</strong> Administration Email Address is valid and has no pending confirmation.</li>
+      <li><strong>Users → All Users:</strong> no Administrator user has <code>admin@admin.com</code> as their account email.</li>
+      <li><strong>WP Mail SMTP → Settings:</strong> From Email is the authorised Gmail address.</li>
+    </ul>
+
+    <h3>When to request help</h3>
+    <p>Save a screenshot of the complete WP Mail SMTP error and record:</p>
+    <ul>
+      <li>The date and time of the test</li>
+      <li>Whether the error occurred during Google authorisation, Email Test or website-form submission</li>
+      <li>The error code and description</li>
+    </ul>
+    <p>Do not include the Client Secret, access token, refresh token, password or recovery codes in screenshots.</p>
+  </section>
+
+  <section class="page">
+    <span class="label">Final checklist</span>
+    <h2>Connection handoff</h2>
+    <ul class="check">
+      <li>Correct Google Cloud project selected.</li>
+      <li>OAuth publishing status changed from Testing to In production, if applicable.</li>
+      <li>Existing Client ID and Client Secret retained.</li>
+      <li>Expired OAuth connection removed.</li>
+      <li><code>sppainting.remodeling@gmail.com</code> reauthorised.</li>
+      <li>WP Mail SMTP Email Test delivered.</li>
+      <li>New live website quote delivered.</li>
+      <li>Superior Plus delivery timestamp updated.</li>
+      <li>No administrator account uses <code>admin@admin.com</code>.</li>
+    </ul>
+
+    <div class="notice good"><strong>No theme or Superior Plus plugin update is required.</strong> The failure is an expired external Google authorisation, and the repair is completed in Google Cloud and WP Mail SMTP.</div>
+
+    <h3>Official references</h3>
+    <ul>
+      <li><a href="https://developers.google.com/identity/protocols/oauth2">Google OAuth 2.0 and refresh-token expiration</a></li>
+      <li><a href="https://developers.google.com/identity/protocols/oauth2/production-readiness/overview">Google OAuth application publishing states</a></li>
+      <li><a href="https://wpmailsmtp.com/docs/how-to-set-up-the-gmail-mailer-in-wp-mail-smtp/">WP Mail SMTP Gmail mailer setup</a></li>
+    </ul>
+    <p class="footer">Prepared for Superior Plus Painting &amp; Remodeling from the WP Mail SMTP diagnostic reporting <code>invalid_grant: Token has been expired or revoked</code>.</p>
+  </section>
+</body>
+</html>

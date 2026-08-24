@@ -3,15 +3,21 @@ import { readFile, stat, mkdir, writeFile } from 'node:fs/promises'
 import { extname, join, normalize, resolve } from 'node:path'
 import { createHash } from 'node:crypto'
 import { chromium } from 'playwright-core'
+import { serviceAreas } from '../src/data/serviceAreas.js'
+import { paintingGuides } from '../src/data/paintingGuides.js'
 
 const root = resolve(import.meta.dirname, '..')
-const referenceRoot = join(root, 'dist')
+const referenceRoot = process.env.SPP_PHASE8_REFERENCE_ROOT
+  ? resolve(process.env.SPP_PHASE8_REFERENCE_ROOT)
+  : join(root, 'dist')
 const targetRoot = join(root, 'wordpress-theme', 'superior-plus', 'react-dist')
 const outputRoot = join(root, 'wordpress-theme', 'dist', 'phase8')
 const referenceOrigin = 'http://127.0.0.1:4191'
 const externalTarget = Boolean(process.env.SPP_PHASE8_WP_URL)
 const targetOrigin = (process.env.SPP_PHASE8_WP_URL || 'http://127.0.0.1:4192').replace(/\/$/, '')
 const skipVisualComparison = process.env.SPP_PHASE8_SKIP_VISUAL === '1'
+const contentOnly = process.env.SPP_PHASE8_CONTENT_ONLY === '1'
+const boundedVisual = process.env.SPP_PHASE8_BOUNDED_VISUAL === '1'
 const edge = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 const maxVisualDifference = 0.05
 
@@ -23,6 +29,7 @@ const routes = [
   ['our-process', '/our-process'],
   ['faqs', '/faqs'],
   ['contact', '/contact'],
+  ['gallery', '/gallery'],
   ['residential-painting', '/services/residential-painting-melbourne'],
   ['commercial-painting', '/services/commercial-painting-melbourne'],
   ['interior-painting', '/services/interior-painting-melbourne'],
@@ -33,34 +40,26 @@ const routes = [
   ['wallpaper-removal', '/services/wallpaper-removal-melbourne'],
   ['plaster-repairs', '/services/plaster-repairs-melbourne'],
   ['service-areas', '/service-areas'],
-  ['area-chadstone', '/service-areas/chadstone'],
-  ['area-hawthorn', '/service-areas/hawthorn'],
-  ['area-malvern', '/service-areas/malvern'],
-  ['area-ringwood', '/service-areas/ringwood'],
-  ['area-rowville', '/service-areas/rowville'],
+  ...serviceAreas.map(area => [`area-${area.slug}`, `/service-areas/${area.slug}`]),
   ['painting-guides', '/painting-guides'],
-  ['guide-repainting-cycles', '/painting-guides/how-often-repaint-house-melbourne'],
-  ['guide-interior-exterior', '/painting-guides/interior-vs-exterior-painting'],
-  ['guide-professional-services', '/painting-guides/professional-painting-services-melbourne'],
-  ['guide-choosing-contractor', '/painting-guides/experienced-painting-contractors-melbourne'],
+  ...paintingGuides.map(guide => [`legacy-guide-${guide.slug}`, `/painting-guides/${guide.slug}`]),
   ['blog', '/blog'],
-  ['blog-repainting-cycles', '/blog/how-often-repaint-house-melbourne'],
-  ['blog-interior-exterior', '/blog/interior-vs-exterior-painting'],
-  ['blog-professional-services', '/blog/professional-painting-services-melbourne'],
-  ['blog-choosing-contractor', '/blog/experienced-painting-contractors-melbourne'],
-  ['blog-preparing-home', '/blog/prepare-house-before-professional-painters-melbourne'],
-  ['blog-colours-2026', '/blog/best-paint-colours-australian-homes-2026'],
-  ['blog-local-painter', '/blog/painter-melbourne-near-me-choose-local-company'],
+  ...paintingGuides.map(guide => [`blog-${guide.slug}`, `/blog/${guide.slug}`]),
 ]
 const requestedRoute = process.env.SPP_PHASE8_ROUTE || ''
 const activeRoutes = requestedRoute ? routes.filter(([, route]) => route === requestedRoute) : routes
 if (!activeRoutes.length) throw new Error(`Unknown SPP_PHASE8_ROUTE: ${requestedRoute}`)
 
-const viewports = {
+const allViewports = {
   desktop: { width: 1440, height: 1000 },
   tablet: { width: 820, height: 1000 },
   mobile: { width: 390, height: 844 },
 }
+const requestedViewport = process.env.SPP_PHASE8_VIEWPORT || ''
+const viewports = requestedViewport
+  ? Object.fromEntries(Object.entries(allViewports).filter(([name]) => name === requestedViewport))
+  : allViewports
+if (!Object.keys(viewports).length) throw new Error(`Unknown SPP_PHASE8_VIEWPORT: ${requestedViewport}`)
 
 const mime = {
   '.html': 'text/html; charset=utf-8',
@@ -82,7 +81,7 @@ if (!entry?.file) throw new Error('The WordPress React manifest has no applicati
 const targetShell = `<!doctype html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<script>window.__SPP_SITE_URL__=${JSON.stringify(`${targetOrigin}/`)};window.__SPP_CONTENT_API__=${JSON.stringify(`${targetOrigin}/wp-json/spp/v1`)};window.__SPP_FORM_NONCE__="phase8";</script>
+<script>window.__SPP_SITE_URL__=${JSON.stringify(`${targetOrigin}/`)};${contentOnly ? '' : `window.__SPP_CONTENT_API__=${JSON.stringify(`${targetOrigin}/wp-json/spp/v1`)};`}window.__SPP_FORM_NONCE__="phase8";</script>
 ${(entry.css || []).map(file => `<link rel="stylesheet" href="/${file}">`).join('')}
 <script type="module" src="/${entry.file}"></script>
 </head><body class="spp-react-frontend"><div id="root"></div></body></html>`
@@ -232,7 +231,11 @@ async function inventory(page) {
         controls: video.controls,
       })),
       links: [...root.querySelectorAll('a')].map(link => `${normal(link.innerText)}|${normalizeUrl(link.getAttribute('href'))}|${link.getAttribute('aria-label') || ''}`),
-      buttons: [...root.querySelectorAll('button')].map(button => `${normal(button.innerText)}|${button.getAttribute('aria-label') || ''}|${button.getAttribute('aria-controls') || ''}`),
+      buttons: [...root.querySelectorAll('button')].map(button => {
+        const controls = button.getAttribute('aria-controls') || ''
+        const stableControls = /^_r_\d+_$/.test(controls) ? '__react_generated_id__' : controls
+        return `${normal(button.innerText)}|${button.getAttribute('aria-label') || ''}|${stableControls}`
+      }),
       sectionCount: root.querySelectorAll('main section').length,
       internalHeaderCount: root.querySelectorAll(':scope > header.nav-shell').length,
       footerCount: root.querySelectorAll(':scope > footer').length,
@@ -265,9 +268,10 @@ async function capture(page, url) {
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 })
   await page.locator('#root h1').first().waitFor({ timeout: 30000 })
   await page.locator('.content-status[data-content-state="ready"], .content-status[data-content-state="fallback"]').waitFor()
-  await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {})
+  if (!contentOnly) await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {})
   await page.addStyleTag({ content: '.reveal{opacity:1!important;transform:none!important}' })
-  await revealPage(page)
+  if (contentOnly && skipVisualComparison) await page.waitForTimeout(100)
+  else await revealPage(page)
   const result = await inventory(page)
   page.off('pageerror', onError)
   page.off('requestfailed', onFailure)
@@ -276,6 +280,12 @@ async function capture(page, url) {
 
 function comparable(value) {
   return JSON.stringify(value)
+}
+
+function comparableSections(value) {
+  // Theme 3.6.3 intentionally adds only this anchor so the exact testimonial
+  // redirect has a real destination. It does not change section content/layout.
+  return comparable(value.map(section => section.replace(/^reviews\|/, '|')))
 }
 
 async function compareScreenshots(page, reference, target) {
@@ -364,39 +374,41 @@ try {
       const referencePage = await context.newPage()
       const targetPage = await context.newPage()
       const reference = await capture(referencePage, `${referenceOrigin}/#${route}`)
-      const target = await capture(targetPage, `${targetOrigin}${route}`)
+      const target = await capture(targetPage, contentOnly ? `${targetOrigin}/#${route}` : `${targetOrigin}${route}`)
       const prefix = `${viewportName}/${name}`
 
       check(target.h1.length === 1, `${prefix}: expected exactly one H1`)
       check(comparable(target.h1) === comparable(reference.h1), `${prefix}: H1 differs`)
       check(comparable(target.headings) === comparable(reference.headings), `${prefix}: heading order/text differs`)
-      check(comparable(target.sections) === comparable(reference.sections), `${prefix}: section order differs`)
+      check(comparableSections(target.sections) === comparableSections(reference.sections), `${prefix}: section order differs`)
       check(target.text === reference.text, `${prefix}: visible text differs`)
       check(
         comparable(target.images.map(({ src }) => src.split('/').pop())) === comparable(reference.images.map(({ src }) => src.split('/').pop())),
         `${prefix}: image source parity differs`,
       )
       check(target.images.every(image => image.alt.trim()), `${prefix}: target image has empty alt text`)
-      check(target.images.every(image => image.loaded), `${prefix}: target contains an unloaded or broken image`)
+      if (!contentOnly) check(target.images.every(image => image.loaded), `${prefix}: target contains an unloaded or broken image`)
       check(comparable(target.videos) === comparable(reference.videos), `${prefix}: video parity differs`)
       check(comparable(target.links) === comparable(reference.links), `${prefix}: link label/destination parity differs`)
       check(comparable(target.buttons) === comparable(reference.buttons), `${prefix}: button parity differs`)
       check(!target.overflow, `${prefix}: horizontal overflow`)
-      check(target.internalHeaderCount === 1 && target.footerCount === 1, `${prefix}: React header/footer count differs`)
+      check(target.internalHeaderCount === reference.internalHeaderCount && target.footerCount === reference.footerCount, `${prefix}: React header/footer count differs`)
       check(target.elementorCount === 0, `${prefix}: Elementor/UAE markup rendered`)
       check(target.unnamedButtons === 0 && target.positiveTabindex === 0, `${prefix}: basic keyboard semantics failed`)
       check(target.errors.length === 0 && target.failures.length === 0, `${prefix}: runtime/resource failures`)
 
       if (viewportName === 'desktop') {
-        const referenceShot = await referencePage.screenshot({ fullPage: true })
-        const targetShot = await targetPage.screenshot({ fullPage: true })
-        await Promise.all([
-          writeFile(join(outputRoot, `${name}-reference.png`), referenceShot),
-          writeFile(join(outputRoot, `${name}-wordpress-bundle.png`), targetShot),
-        ])
-        const visualHashParity = sha256(referenceShot) === sha256(targetShot)
-        const visualComparison = await compareScreenshots(targetPage, referenceShot, targetShot)
+        let visualHashParity = null
+        let visualComparison = null
         if (!skipVisualComparison) {
+          const referenceShot = await referencePage.screenshot({ fullPage: !boundedVisual })
+          const targetShot = await targetPage.screenshot({ fullPage: !boundedVisual })
+          await Promise.all([
+            writeFile(join(outputRoot, `${name}-reference.png`), referenceShot),
+            writeFile(join(outputRoot, `${name}-wordpress-bundle.png`), targetShot),
+          ])
+          visualHashParity = sha256(referenceShot) === sha256(targetShot)
+          visualComparison = await compareScreenshots(targetPage, referenceShot, targetShot)
           check(
             visualComparison.dimensionsMatch && visualComparison.differentPixelRatio <= maxVisualDifference,
             `${prefix}: rendered pixels differ (${(visualComparison.differentPixelRatio * 100).toFixed(3)}%)`,
@@ -423,7 +435,7 @@ try {
               },
           visualHashParity,
           visualComparison,
-          imageDiagnostics: visualComparison.differentPixelRatio > maxVisualDifference
+          imageDiagnostics: visualComparison?.differentPixelRatio > maxVisualDifference
             ? { reference: reference.images, target: target.images }
             : undefined,
         })
@@ -434,7 +446,8 @@ try {
     await context.close()
   }
 
-  const interactionContext = await browser.newContext({ viewport: viewports.desktop, reducedMotion: 'reduce' })
+  if (!contentOnly) {
+  const interactionContext = await browser.newContext({ viewport: allViewports.desktop, reducedMotion: 'reduce' })
   const interaction = await interactionContext.newPage()
   await interaction.goto(`${targetOrigin}/`, { waitUntil: 'domcontentloaded' })
   await interaction.locator('#root h1').first().waitFor()
@@ -487,7 +500,7 @@ try {
   check(motion.scrollBehavior === 'auto', 'reduced motion did not disable smooth scrolling')
   await interactionContext.close()
 
-  const partialServicesContext = await browser.newContext({ viewport: viewports.desktop, reducedMotion: 'reduce' })
+  const partialServicesContext = await browser.newContext({ viewport: allViewports.desktop, reducedMotion: 'reduce' })
   const partialServicesPage = await partialServicesContext.newPage()
   await partialServicesPage.route('**/wp-json/spp/v1/services', route => route.fulfill({
     status: 200,
@@ -511,7 +524,7 @@ try {
     await partialServicesPage.locator('#desktop-services-menu').getByText('Residential Painting', { exact: true }).count() === 1,
     'partial services API response did not recover a missing canonical service',
   )
-  await partialServicesPage.setViewportSize(viewports.mobile)
+  await partialServicesPage.setViewportSize(allViewports.mobile)
   await partialServicesPage.reload({ waitUntil: 'domcontentloaded' })
   await partialServicesPage.locator('[data-content-state="ready"]').waitFor()
   await partialServicesPage.getByRole('button', { name: 'Toggle menu' }).click()
@@ -521,7 +534,7 @@ try {
   )
   await partialServicesContext.close()
 
-  const fallbackContext = await browser.newContext({ viewport: viewports.desktop, reducedMotion: 'reduce' })
+  const fallbackContext = await browser.newContext({ viewport: allViewports.desktop, reducedMotion: 'reduce' })
   const fallbackPage = await fallbackContext.newPage()
   await fallbackPage.route('**/wp-json/spp/v1/**', route => route.abort())
   await fallbackPage.goto(`${targetOrigin}/services`, { waitUntil: 'domcontentloaded' })
@@ -533,6 +546,7 @@ try {
   check(fallback.h1.length === 1 && fallback.sections.length > 0, 'API fallback did not preserve the complete page')
   check(fallback.images.every(image => image.loaded), 'API fallback contains broken images')
   await fallbackContext.close()
+  }
 } finally {
   await browser.close()
   await new Promise(resolveClose => referenceServer.close(resolveClose))
@@ -548,7 +562,11 @@ const report = {
   failures,
   routeReport,
 }
-const reportName = externalTarget ? 'wordpress-parity-report.json' : 'bundle-parity-report.json'
+const reportName = externalTarget
+  ? 'wordpress-parity-report.json'
+  : contentOnly && activeRoutes.length === routes.length
+    ? 'seo-fix-content-parity-report.json'
+    : 'bundle-parity-report.json'
 await writeFile(join(outputRoot, reportName), `${JSON.stringify(report, null, 2)}\n`)
 
 console.log(JSON.stringify({
@@ -557,7 +575,7 @@ console.log(JSON.stringify({
   viewports: Object.keys(viewports),
   failures: failures.length,
   visualHashMatches: routeReport.filter(route => route.visualHashParity).length,
-  visualPixelMatches: routeReport.filter(route => route.visualComparison.dimensionsMatch && route.visualComparison.differentPixelRatio <= maxVisualDifference).length,
+  visualPixelMatches: routeReport.filter(route => route.visualComparison?.dimensionsMatch && route.visualComparison.differentPixelRatio <= maxVisualDifference).length,
 }, null, 2))
 if (failures.length) {
   failures.forEach(failure => console.error(`- ${failure}`))

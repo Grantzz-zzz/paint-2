@@ -189,8 +189,8 @@ try {
         ])))
         check(Object.keys(homeServiceImages).length===9, `${label}: expected nine homepage service images`)
         check(Object.values(homeServiceImages).every(source=>source.includes('/new-batch/')||source.includes('/projects/roof/')), `${label}: an outdated homepage service image remains (${JSON.stringify(homeServiceImages)})`)
-        check(homeServiceImages['Roof Painting']?.includes('/roof-commercial-coating.webp'), `${label}: roof card is not using the requested commercial-roof photo`)
-        check(homeServiceImages['Deck Painting & Staining']?.includes('/batch-108.webp'), `${label}: deck card no longer matches its service hero`)
+        check(homeServiceImages['Roof Painting']?.includes('/roof-commercial-coating.jpg'), `${label}: roof card is not using the requested commercial-roof photo`)
+        check(homeServiceImages['Deck Painting & Staining']?.includes('/batch-108.jpg'), `${label}: deck card no longer matches its service hero`)
         const badgeLayout=await page.locator('.home-project-stats .footer-trust-image').evaluateAll(elements=>elements.map(element=>({
           width:Math.round(element.getBoundingClientRect().width),
           height:Math.round(element.getBoundingClientRect().height),
@@ -236,7 +236,7 @@ try {
           image:element.querySelector('img')?.getAttribute('src')||'',
         }))
         check(localArea.paragraphSize>=(viewportName==='mobile'?20:24),`${label}: service-area copy is below the prominent type target (${localArea.paragraphSize}px)`)
-        check(localArea.image.includes('exterior-07.webp'),`${label}: service-area feature image is not the approved completed-home photograph`)
+        check(localArea.image.includes('exterior-07.jpg'),`${label}: service-area feature image is not the approved completed-home photograph`)
         check((await page.locator('.closing-cta').innerText()).toLowerCase().includes('quote'),`${label}: client-approved quote section is missing`)
       }
       if(route==='/additional-services'){
@@ -331,7 +331,7 @@ try {
   const page = await interactionContext.newPage()
 
   await page.goto(`${origin}#/`, { waitUntil: 'domcontentloaded' })
-  check((await page.locator('.hero-bg img').getAttribute('src')).includes('client/projects/brand/home-hero-ai-v2.webp'),'homepage hero: high-impact generated branded image is missing')
+  check((await page.locator('.hero-bg img').getAttribute('src')).includes('client/projects/brand/home-hero-ai-v2.jpg'),'homepage hero: high-impact generated branded image is missing')
   const initialReviewNumber=await page.locator('.slider-controls>span').textContent()
   await page.waitForFunction(previous=>document.querySelector('.slider-controls>span')?.textContent!==previous,initialReviewNumber,{timeout:4500})
   check((await page.locator('.review-autoplay-status').textContent()).startsWith('Reviews change automatically'),'homepage reviews: automatic carousel status is missing')
@@ -508,7 +508,7 @@ try {
 
   await page.goto(`${origin}#/services/roof-painting-melbourne`, { waitUntil: 'domcontentloaded' })
   const roofHeroSource=await page.locator('.page-hero-visual img').getAttribute('src')
-  check(roofHeroSource?.includes('/roof-spray-coating.webp'), `roof service hero: expected the new roof-spraying photo, found ${roofHeroSource}`)
+  check(roofHeroSource?.includes('/roof-spray-coating.jpg'), `roof service hero: expected the new roof-spraying photo, found ${roofHeroSource}`)
   check((await page.locator('main').innerText()).includes('We provide roof painting services across Melbourne, including Chadstone, Mount Waverley, Glen Waverley, Oakleigh, Mulgrave, Clayton, Dandenong, Noble Park, Springvale, Keysborough, Berwick, Narre Warren, Endeavour Hills and surrounding suburbs.'),'roof service local areas: exact PDF paragraph is missing')
 
   await page.goto(`${origin}#/services/fence-painting-melbourne`, { waitUntil: 'domcontentloaded' })

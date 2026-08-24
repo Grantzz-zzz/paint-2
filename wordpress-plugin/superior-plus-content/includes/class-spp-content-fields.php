@@ -161,6 +161,7 @@ class SPP_Content_Fields {
 			return array_merge(
 				$project_fields,
 				array(
+					'spp_seo_indexable'    => array( 'label' => 'Allow this completed project page in Google and the XML sitemap', 'type' => 'checkbox', 'default' => 0 ),
 					'spp_project_type'      => array( 'label' => 'Project type', 'type' => 'text', 'max' => 180 ),
 					'spp_featured_media_id' => array( 'label' => 'Featured project image', 'type' => 'media', 'mime' => 'image' ),
 					'spp_object_position'   => array( 'label' => 'Image crop position (example: 50% 50%)', 'type' => 'position' ),
@@ -210,6 +211,10 @@ class SPP_Content_Fields {
 					'spp_home_services_accent'    => array( 'label' => 'Services accent', 'type' => 'text', 'max' => 180 ),
 					'spp_home_services_intro'     => array( 'label' => 'Services introduction', 'type' => 'textarea', 'max' => 700 ),
 					'spp_home_service_ids'        => array( 'label' => 'Homepage service cards', 'type' => 'relationships', 'post_type' => 'spp_service' ),
+					'spp_home_additional_service_enabled' => array( 'label' => 'Show Additional Services card on homepage', 'type' => 'checkbox', 'default' => 0 ),
+					'spp_home_additional_service_title' => array( 'label' => 'Additional Services card title', 'type' => 'text', 'max' => 180 ),
+					'spp_home_additional_service_summary' => array( 'label' => 'Additional Services card description', 'type' => 'textarea', 'max' => 700 ),
+					'spp_home_additional_service_image_id' => array( 'label' => 'Additional Services card image', 'type' => 'media', 'mime' => 'image' ),
 					'spp_home_commercial_title'   => array( 'label' => 'Commercial feature title', 'type' => 'text', 'max' => 180 ),
 					'spp_home_commercial_accent'  => array( 'label' => 'Commercial feature accent', 'type' => 'text', 'max' => 180 ),
 					'spp_home_commercial_text'    => array( 'label' => 'Commercial feature text', 'type' => 'textarea', 'max' => 900 ),

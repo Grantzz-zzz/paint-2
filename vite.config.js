@@ -7,5 +7,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
     manifest: true,
+    target: ['es2018', 'safari12'],
   },
 })

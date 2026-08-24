@@ -16,7 +16,7 @@
           "settings": {
             "_css_classes": "spp-el-hero-image",
             "image": {
-              "url": "{{SPP_THEME_URI}}/assets/images/projects/brand/home-hero-ai-v2.webp",
+              "url": "{{SPP_THEME_URI}}/assets/images/projects/brand/home-hero-ai-v2.jpg",
               "id": "",
               "alt": "Superior Plus painters transforming a premium Melbourne home exterior",
               "source": "library"
@@ -1080,7 +1080,7 @@
                       "settings": {
                         "_css_classes": "",
                         "image": {
-                          "url": "{{SPP_THEME_URI}}/assets/images/projects/interior/interior-04.webp",
+                          "url": "{{SPP_THEME_URI}}/assets/images/projects/interior/interior-04.jpg",
                           "id": "",
                           "alt": "Warm modern interior",
                           "source": "library"
@@ -1128,7 +1128,7 @@
                       "settings": {
                         "_css_classes": "",
                         "image": {
-                          "url": "{{SPP_THEME_URI}}/assets/images/projects/exterior/exterior-07.webp",
+                          "url": "{{SPP_THEME_URI}}/assets/images/projects/exterior/exterior-07.jpg",
                           "id": "",
                           "alt": "Exterior transformation",
                           "source": "library"
@@ -1176,7 +1176,7 @@
                       "settings": {
                         "_css_classes": "",
                         "image": {
-                          "url": "{{SPP_THEME_URI}}/assets/images/projects/commercial/commercial-12.webp",
+                          "url": "{{SPP_THEME_URI}}/assets/images/projects/commercial/commercial-12.jpg",
                           "id": "",
                           "alt": "Commercial precision",
                           "source": "library"

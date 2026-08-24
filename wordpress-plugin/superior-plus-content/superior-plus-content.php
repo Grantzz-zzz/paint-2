@@ -3,7 +3,7 @@
  * Plugin Name: Superior Plus Content
  * Plugin URI: https://sppaintingremodeling.com.au/
  * Description: Locked-design content management and REST API for the Superior Plus React website.
- * Version: 2.7.0
+ * Version: 2.8.1
  * Author: Superior Plus Painting
  * Text Domain: superior-plus-content
  * Requires at least: 6.4
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPP_CONTENT_VERSION', '2.7.0' );
+define( 'SPP_CONTENT_VERSION', '2.8.1' );
 define( 'SPP_CONTENT_SCHEMA_VERSION', '1.0.0' );
 define( 'SPP_CONTENT_FILE', __FILE__ );
 define( 'SPP_CONTENT_PATH', plugin_dir_path( __FILE__ ) );
@@ -27,6 +27,7 @@ require_once SPP_CONTENT_PATH . 'includes/class-spp-content-fields.php';
 require_once SPP_CONTENT_PATH . 'includes/class-spp-content-rest.php';
 require_once SPP_CONTENT_PATH . 'includes/class-spp-content-workflow.php';
 require_once SPP_CONTENT_PATH . 'includes/class-spp-content-routing.php';
+require_once SPP_CONTENT_PATH . 'includes/class-spp-content-seo.php';
 require_once SPP_CONTENT_PATH . 'includes/class-spp-content-migration.php';
 require_once SPP_CONTENT_PATH . 'includes/class-spp-content-enquiries.php';
 require_once SPP_CONTENT_PATH . 'includes/class-spp-content-recovery.php';

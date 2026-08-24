@@ -20,6 +20,7 @@ $required = array(
 	'includes/class-spp-content-rest.php',
 	'includes/class-spp-content-workflow.php',
 	'includes/class-spp-content-routing.php',
+	'includes/class-spp-content-seo.php',
 	'includes/class-spp-content-migration.php',
 	'includes/class-spp-content-enquiries.php',
 	'includes/class-spp-content-recovery.php',
@@ -94,6 +95,9 @@ $checks = array(
 		'spp_quote_last_failure',
 		'spp_export_content_backup',
 		'spp_import_content_backup',
+		'wpseo_sitemap_exclude_post_type',
+		'wpseo_exclude_from_sitemap_by_post_ids',
+		'spp_seo_indexable',
 		'confirm_restore',
 		'hash_equals',
 	),
@@ -138,6 +142,6 @@ $result = array(
 
 echo json_encode( $result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . PHP_EOL;
 
-if ( $missing || $failed_checks || ! $theme_compatible || ! $uninstall_preserves_content || '2.7.0' !== $result['plugin_version'] ) {
+if ( $missing || $failed_checks || ! $theme_compatible || ! $uninstall_preserves_content || '2.8.0' !== $result['plugin_version'] ) {
 	exit( 1 );
 }
