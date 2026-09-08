@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowRight, Award, BookOpen, Check, ChevronDown, ClipboardCheck, ExternalLink, Hammer, Mail, MapPin, PaintRoller, Palette, Phone, RotateCw, ShieldCheck, SprayCan, Trees } from 'lucide-react'
 import { PageLayout, PageHero, TrustStrip, SectionIntro, TestimonialBand, AreasBand, ClosingCTA } from '../components/PageLayout'
 import { Reveal, Divider, Testimonials } from '../App'
@@ -315,6 +315,7 @@ export function FAQsPage() {
 }
 
 export function ContactPage() {
+  const location=useLocation()
   const {business}=useSiteContent()
   const enquiry=useEnquirySubmission()
   const approved=approvedContent.documents.contact
@@ -330,6 +331,11 @@ export function ContactPage() {
   const mapQuery=mapAddress
   const mapUrl=business.google_maps_url??`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`
   const mapEmbedUrl=business.google_maps_embed_url??'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1574.426042956306!2d145.0931577603448!3d-37.88714169706206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad66b1a91253ba3%3A0x5219727b7db56b2d!2sSuperior%20plus%20painting%20%26%20remodeling!5e0!3m2!1sen!2sph!4v1785206391867!5m2!1sen!2sph'
+  useEffect(() => {
+    if (location.hash !== '#enquiry-form') return
+    let frame=window.requestAnimationFrame(() => window.requestAnimationFrame(() => document.querySelector('.full-quote-form')?.scrollIntoView({ block: 'start' })) )
+    return () => window.cancelAnimationFrame(frame)
+  }, [location.hash])
   return <PageLayout title={seo?.title||'Get a Free Quote'} description={seo?.description||'Contact Superior Plus Painting for a free residential, commercial or property-painting quote across Melbourne.'} image={mediaUrl(seo?.social_image,hero.image)} pageType="ContactPage">
     <PageHero {...hero}/>
     <section className="quote-page"><div className="container quote-page-grid"><Reveal className="quote-side"><ShieldCheck/><h2>What happens next?</h2><ol>{steps.map(([title,text],index)=><li key={`${title}-${index}`}>{title&&<b>{title}</b>}{text&&<span>{text}</span>}</li>)}</ol>{business.phone_display&&<a href={business.phone_href}><Phone/>{business.phone_display}</a>}{business.email&&<a href={`mailto:${business.email}`}><Mail/>{business.email}</a>}</Reveal><Reveal delay={.1}><form className="full-quote-form" onSubmit={enquiry.submit} aria-busy={enquiry.pending}>{enquiry.sent?<div className="form-success"><span><Check/></span><h3>Thanks — your project is ready for review.</h3><p>Your enquiry was delivered successfully. Our team will contact you about the next step.</p><button type="button" className="text-link" onClick={enquiry.reset}>Send another enquiry</button></div>:<><div className="form-heading"><span>Free quote request</span><small>* Required information</small></div><input className="spp-honeypot" name="website" tabIndex="-1" autoComplete="off" aria-hidden="true"/><input type="hidden" name="source" value="contact-page"/><div className="form-row"><label>{fieldAt(0)[0]}<input name="name" required autoComplete="name" placeholder={fieldAt(0)[1]}/></label><label>{fieldAt(1)[0]}<input name="phone" required type="tel" autoComplete="tel" placeholder={fieldAt(1)[1]}/></label></div><div className="form-row"><label>{fieldAt(2)[0]}<input name="email" required type="email" autoComplete="email" placeholder={fieldAt(2)[1]}/></label><label>{fieldAt(3)[0]}<input name="suburb" required autoComplete="address-level2" placeholder={fieldAt(3)[1]}/></label></div><label>{fieldAt(4)[0]}<input name="address" autoComplete="street-address" placeholder={fieldAt(4)[1]}/></label><div className="form-row"><label>Service required *<select name="service" required defaultValue=""><option value="" disabled>Select a service</option>{serviceOptions.map(s=><option key={s}>{s}</option>)}</select></label><label>Property type<select name="property_type" defaultValue={propertyOptions[0]??''}>{propertyOptions.map(option=><option key={option}>{option}</option>)}</select></label></div><label>{fieldAt(5)[0]}<textarea name="details" required minLength="10" rows="5" placeholder={fieldAt(5)[1]}/></label>{enquiry.privacyText&&<label className="form-consent"><input name="consent" value="yes" type="checkbox" required/><span>{enquiry.privacyText}</span></label>}{enquiry.error&&<p className="form-error" role="alert">{enquiry.error}</p>}<button className="btn btn-wide" disabled={enquiry.pending}>{enquiry.pending?'Sending…':<>Request my free quote<ArrowRight/></>}</button>{fieldValue(fields,'contact_form_note','No obligation. Form delivery and privacy consent must be confirmed before launch.')&&<p className="form-note"><ShieldCheck/>{fieldValue(fields,'contact_form_note','No obligation. Form delivery and privacy consent must be confirmed before launch.')}</p>}</>}</form></Reveal></div></section>

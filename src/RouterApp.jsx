@@ -24,7 +24,7 @@ function RouteScrollReset() {
     const root=document.documentElement
     const previous=root.style.scrollBehavior
     root.style.scrollBehavior='auto'
-    window.scrollTo(0,0)
+    if(!location.hash) window.scrollTo(0,0)
     root.style.scrollBehavior=previous
   },[location.pathname])
   return null

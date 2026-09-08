@@ -50,7 +50,7 @@ export function PageLayout({ children, title, description, pageType = 'WebPage',
   const canonical = publicRouteUrl(location.pathname)
   const schemaKey = JSON.stringify(schemaData)
   useEffect(() => {
-    window.scrollTo(0, 0)
+    if (!location.hash) window.scrollTo(0, 0)
     document.title = `${title} | Superior Plus Painting`
     upsertMeta('meta[name="description"]',{name:'description',content:description})
     upsertMeta('meta[property="og:title"]',{property:'og:title',content:`${title} | Superior Plus Painting`})

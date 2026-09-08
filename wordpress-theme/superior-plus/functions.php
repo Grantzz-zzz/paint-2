@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPP_VERSION', '3.6.6' );
+define( 'SPP_VERSION', '3.6.8' );
 define( 'SPP_PATH', get_template_directory() );
 define( 'SPP_URI', get_template_directory_uri() );
 
@@ -101,6 +101,27 @@ function spp_print_runtime_config() {
 	wp_print_inline_script_tag( $config, array( 'id' => 'spp-react-runtime-config' ) );
 }
 add_action( 'wp_head', 'spp_print_runtime_config', 1 );
+
+/**
+ * Honour the navbar quote-form anchor on the PHP fallback contact page.
+ *
+ * @return void
+ */
+function spp_scroll_to_enquiry_form() {
+	if ( ! is_page( 'contact' ) ) {
+		return;
+	}
+	?>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			if (window.location.hash !== '#enquiry-form') return;
+			var form = document.querySelector('.spp-contact-form');
+			if (form) form.scrollIntoView({ block: 'start' });
+		});
+	</script>
+	<?php
+}
+add_action( 'wp_footer', 'spp_scroll_to_enquiry_form', 20 );
 
 /**
  * Remove page-builder assets from the public React shell.
