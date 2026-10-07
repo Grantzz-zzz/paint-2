@@ -9,6 +9,7 @@ $pdfPath = Join-Path $docs 'SERVICE_PAGE_MANAGEMENT_GUIDE.pdf'
 
 $template = Get-Content -LiteralPath $templatePath -Raw
 $style = [regex]::Match($template, '(?s)<style>(.*?)</style>').Groups[1].Value
+$style += ' body{font-size:11pt;line-height:1.58}p{margin-bottom:11px}li{margin:5px 0}h2{font-size:21pt;margin-bottom:12px}h3{font-size:15pt;margin-top:21px}.label{font-size:9pt;padding:6px 11px}.notice{font-size:10.5pt;padding:14px 16px}.step{font-size:10.5pt}.cover h1{font-size:32pt}.lead{font-size:15pt;line-height:1.45}'
 $markdown = Get-Content -LiteralPath $markdownPath -Raw
 $lines = $markdown -split "`r?`n"
 $builder = [System.Text.StringBuilder]::new()
@@ -104,7 +105,7 @@ if ($sectionOpen) { [void]$builder.AppendLine('</section>') }
 $builder.ToString() | Set-Content -LiteralPath $htmlPath -Encoding UTF8
 
 & 'C:\Program Files\Google\Chrome\Application\chrome.exe' --headless=new --disable-gpu --no-pdf-header-footer --print-to-pdf=$pdfPath ('file:///' + ($htmlPath -replace '\\','/'))
-if ($LASTEXITCODE -ne 0) { throw 'Chrome failed to create the PDF.' }
+if (-not (Test-Path -LiteralPath $pdfPath)) { throw 'Chrome failed to create the PDF.' }
 
 [pscustomobject]@{
     HTML = $htmlPath

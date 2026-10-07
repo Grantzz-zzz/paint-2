@@ -21,6 +21,26 @@ Prepare the following before creating the page:
 - An SEO title, meta description and preferred URL slug.
 
 Do not edit the theme files or create a normal WordPress Page for a service. Use the dedicated Service content type so the route, API response, navigation and React page remain connected.
+## Important: how blank fields behave
+
+This plugin deliberately separates an untouched field from an intentional deletion.
+
+- If a field has never been configured and is left blank, the plugin ignores the blank value and the original approved theme/React content remains visible.
+- If a field already contains saved editor content and you clear it, the plugin records that as an intentional blank. The original fallback does not return.
+- The same rule applies to scope lists, process steps, benefits, flexible sections, galleries, related services, homepage selections and images.
+- Client-edited records are marked as modified and are protected from later approved-content imports.
+- Original content returns only when an administrator deliberately selects **Restore original Superior Plus content** for that specific record.
+
+Example: changing only a service title will not erase an untouched hero introduction, CTA, gallery or benefits list. To intentionally remove one of those, clear the field that already contains saved content, save the record, and verify the preview.
+
+## Safe editing rules
+
+1. Edit content through the Superior Plus fields, not the theme editor, Elementor or an ordinary WordPress Page.
+2. Save a JSON backup before major content changes or package updates.
+3. Preview the saved record before publishing it.
+4. Do not change a published slug without checking redirects.
+5. Do not run a full-site import or restore to fix one record.
+6. Use **Restore original Superior Plus content** only for the specific damaged record.
 
 ## Create a new service page
 
