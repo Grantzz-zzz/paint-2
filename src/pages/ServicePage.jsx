@@ -57,7 +57,8 @@ export default function ServicePage() {
     scope:itemSection?.items||[],
     process:stepSection?.steps||[],
   }):fallbackPage
-  const mergedPage=cms?.copy_version==='pdf-verbatim-2026-08-01'?mergeContent(approvedPage||{},{
+  const mergedPage=cms?mergeContent(approvedPage||fallbackPage||{},{
+    tone:cms.tone,
     eyebrow:cms.hero?.eyebrow,
     title:cms.hero?.title ?? cms.title,
     accent:cms.hero?.accent,
@@ -74,7 +75,7 @@ export default function ServicePage() {
     gallery:cms.gallery,
     sectionLabels:cms.section_labels,
   }):approvedPage
-  const page=cms?.copy_version==='pdf-verbatim-2026-08-01'?{
+  const page=cms?{
     ...mergedPage,
     eyebrow:Object.prototype.hasOwnProperty.call(cms.hero||{},'eyebrow')?cms.hero.eyebrow:mergedPage.eyebrow,
     accent:Object.prototype.hasOwnProperty.call(cms.hero||{},'accent')?cms.hero.accent:mergedPage.accent,
@@ -83,7 +84,7 @@ export default function ServicePage() {
     benefits:Array.isArray(cms.benefits)?cms.benefits.map(item=>typeof item==='string'?item:item?.text).filter(Boolean):mergedPage.benefits,
     gallery:Array.isArray(cms.gallery)?cms.gallery:mergedPage.gallery,
   }:mergedPage
-  const approvedSections=cms?.copy_version==='pdf-verbatim-2026-08-01'&&Array.isArray(cms.document_sections)
+  const approvedSections=cms&&Array.isArray(cms.document_sections)
       ?structuredSections(cms.document_sections)
       :structuredSections(approvedNarrative)
   const addedSections=structuredSections(cms?.content_sections,[])
