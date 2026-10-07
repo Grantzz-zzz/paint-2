@@ -43,7 +43,7 @@ function CloseList {
 }
 
 foreach ($line in $lines) {
-    if ($line -eq '```') {
+    if ($line -match '^`{3}') {
         CloseList $builder
         if ($inCode) {
             [void]$builder.AppendLine('</pre>')

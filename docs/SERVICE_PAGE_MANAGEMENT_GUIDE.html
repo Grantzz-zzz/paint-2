@@ -52,116 +52,102 @@
 <li>Select <strong>Create draft and start editing</strong>.</li>
 </ol>
 <p>The plugin creates a draft and generates a slug from the title. The public route will be:</p>
-<p>```text</p>
-<p>/services/epoxy-garage-floor-coatings/</p>
 <pre>
-
-The draft is not public until it is published.
-
-## Complete the service editor
-
-### WordPress title and URL
-
-- **Title:** The visible service name.
-- **Slug:** The final URL segment. Use lowercase words separated by hyphens.
-- Keep the slug short and stable. Once the URL has been published and indexed, do not change it casually.
-
-### Hero fields
-
-Complete these fields first:
-
-- **Hero eyebrow:** Short context above the main heading.
-- **Hero title:** The main service heading. Leave this aligned with the page title unless there is a deliberate reason to vary it.
-- **Hero accent line:** The short highlighted line in the hero.
-- **Hero introduction:** A useful, specific summary of the service.
-- **Hero image:** Select an image from the Media Library.
-- **Hero image alt text:** Describe the image for accessibility; do not stuff it with keywords.
-
-### Directory and service content
-
-- **Services-directory summary:** A short description used in the service directory and cards.
-- **Scope heading:** Heading for the included work.
-- **Scope items:** One service deliverable per line.
-- **Process introduction:** Explain how the work is planned and delivered.
-- **Process steps:** One step per line, in the order customers should expect.
-- **Benefits:** One customer benefit per line.
-
-Use plain language. Each list item should stand on its own and should not contain a bullet character because the design adds the bullets.
-
-### Flexible content sections
-
-Use **Imported service sections** for the established service-section pattern. Use **Additional flexible sections** for extra approved content blocks.
-
-For each section, check:
-
-- Eyebrow
-- Heading
-- Description
-- List items, if needed
-- Image, if needed
-- Approved layout or brand style, if the editor exposes those options
-
-Do not use flexible sections to recreate the whole page or introduce a new layout. If the page needs a new design pattern, ask the developer to add it to the locked design system.
-
-### Gallery and related services
-
-- **Service gallery:** Add only relevant, high-quality project images. Order the images deliberately.
-- **Related services:** Select existing published services that a customer may also need.
-
-Related services only appear if the selected services are published.
-
-### Closing CTA and SEO
-
-Complete the closing call to action:
-
-- CTA title
-- CTA text
-- Button label
-- CTA destination, normally `/contact/` or the approved quote path
-
-Then complete:
-
-- **SEO title:** Keep it clear and close to the search intent.
-- **SEO description:** Summarise the service, location and next step.
-- **Canonical URL:** Leave blank unless there is an approved canonical requirement.
-- **Social sharing image:** Optional but recommended for important pages.
-
-## Save and preview before publishing
-
-1. Select **Save Draft** or **Update**.
-2. In the **Superior Plus publishing** panel, confirm the locked template is `service`.
-3. Confirm the route shown is `/services/your-slug/`.
-4. Select **Content preview** or **Preview exact React design**.
-5. Review the page at desktop and mobile widths.
-6. Check the title, hero image, copy, lists, gallery, related services and CTA.
-7. Return to the editor and correct anything that looks wrong.
-
-The structured preview shows the saved field values. The React preview shows how those values render in the approved design. Check both when troubleshooting.
-
-## Publish the page
-
-Publish only after the preview is approved.
-
-1. Confirm the title and slug.
-2. Confirm the hero image has useful alt text.
-3. Confirm the directory summary is complete.
-4. Confirm the CTA points to the correct destination.
-5. Confirm the SEO title and description are present.
-6. Select **Publish**.
-
-The plugin protects incomplete managed content. For service pages, the title is the technical minimum, but a page should not be published for a client until the editorial checklist above is complete.
-
-If WordPress changes the item back to Draft, read the red publishing notice and complete the missing fields. Do not force-publish it through another post type.
-
-## Verify the live page
-
-Use a private/incognito browser window after publishing.
-
-### Public URL
-
-Open:
-
-```text
+/services/epoxy-garage-floor-coatings/
+</pre>
+<p>The draft is not public until it is published.</p>
+</section>
+<section class="page"><span class="label">Service pages</span><h2>Complete the service editor</h2>
+<h3>WordPress title and URL</h3>
+<ul>
+<li><strong>Title:</strong> The visible service name.</li>
+<li><strong>Slug:</strong> The final URL segment. Use lowercase words separated by hyphens.</li>
+<li>Keep the slug short and stable. Once the URL has been published and indexed, do not change it casually.</li>
+</ul>
+<h3>Hero fields</h3>
+<p>Complete these fields first:</p>
+<ul>
+<li><strong>Hero eyebrow:</strong> Short context above the main heading.</li>
+<li><strong>Hero title:</strong> The main service heading. Leave this aligned with the page title unless there is a deliberate reason to vary it.</li>
+<li><strong>Hero accent line:</strong> The short highlighted line in the hero.</li>
+<li><strong>Hero introduction:</strong> A useful, specific summary of the service.</li>
+<li><strong>Hero image:</strong> Select an image from the Media Library.</li>
+<li><strong>Hero image alt text:</strong> Describe the image for accessibility; do not stuff it with keywords.</li>
+</ul>
+<h3>Directory and service content</h3>
+<ul>
+<li><strong>Services-directory summary:</strong> A short description used in the service directory and cards.</li>
+<li><strong>Scope heading:</strong> Heading for the included work.</li>
+<li><strong>Scope items:</strong> One service deliverable per line.</li>
+<li><strong>Process introduction:</strong> Explain how the work is planned and delivered.</li>
+<li><strong>Process steps:</strong> One step per line, in the order customers should expect.</li>
+<li><strong>Benefits:</strong> One customer benefit per line.</li>
+</ul>
+<p>Use plain language. Each list item should stand on its own and should not contain a bullet character because the design adds the bullets.</p>
+<h3>Flexible content sections</h3>
+<p>Use <strong>Imported service sections</strong> for the established service-section pattern. Use <strong>Additional flexible sections</strong> for extra approved content blocks.</p>
+<p>For each section, check:</p>
+<ul>
+<li>Eyebrow</li>
+<li>Heading</li>
+<li>Description</li>
+<li>List items, if needed</li>
+<li>Image, if needed</li>
+<li>Approved layout or brand style, if the editor exposes those options</li>
+</ul>
+<p>Do not use flexible sections to recreate the whole page or introduce a new layout. If the page needs a new design pattern, ask the developer to add it to the locked design system.</p>
+<h3>Gallery and related services</h3>
+<ul>
+<li><strong>Service gallery:</strong> Add only relevant, high-quality project images. Order the images deliberately.</li>
+<li><strong>Related services:</strong> Select existing published services that a customer may also need.</li>
+</ul>
+<p>Related services only appear if the selected services are published.</p>
+<h3>Closing CTA and SEO</h3>
+<p>Complete the closing call to action:</p>
+<ul>
+<li>CTA title</li>
+<li>CTA text</li>
+<li>Button label</li>
+<li>CTA destination, normally <code>/contact/</code> or the approved quote path</li>
+</ul>
+<p>Then complete:</p>
+<ul>
+<li><strong>SEO title:</strong> Keep it clear and close to the search intent.</li>
+<li><strong>SEO description:</strong> Summarise the service, location and next step.</li>
+<li><strong>Canonical URL:</strong> Leave blank unless there is an approved canonical requirement.</li>
+<li><strong>Social sharing image:</strong> Optional but recommended for important pages.</li>
+</ul>
+</section>
+<section class="page"><span class="label">Service pages</span><h2>Save and preview before publishing</h2>
+<ol>
+<li>Select <strong>Save Draft</strong> or <strong>Update</strong>.</li>
+<li>In the <strong>Superior Plus publishing</strong> panel, confirm the locked template is <code>service</code>.</li>
+<li>Confirm the route shown is <code>/services/your-slug/</code>.</li>
+<li>Select <strong>Content preview</strong> or <strong>Preview exact React design</strong>.</li>
+<li>Review the page at desktop and mobile widths.</li>
+<li>Check the title, hero image, copy, lists, gallery, related services and CTA.</li>
+<li>Return to the editor and correct anything that looks wrong.</li>
+</ol>
+<p>The structured preview shows the saved field values. The React preview shows how those values render in the approved design. Check both when troubleshooting.</p>
+</section>
+<section class="page"><span class="label">Service pages</span><h2>Publish the page</h2>
+<p>Publish only after the preview is approved.</p>
+<ol>
+<li>Confirm the title and slug.</li>
+<li>Confirm the hero image has useful alt text.</li>
+<li>Confirm the directory summary is complete.</li>
+<li>Confirm the CTA points to the correct destination.</li>
+<li>Confirm the SEO title and description are present.</li>
+<li>Select <strong>Publish</strong>.</li>
+</ol>
+<p>The plugin protects incomplete managed content. For service pages, the title is the technical minimum, but a page should not be published for a client until the editorial checklist above is complete.</p>
+<p>If WordPress changes the item back to Draft, read the red publishing notice and complete the missing fields. Do not force-publish it through another post type.</p>
+</section>
+<section class="page"><span class="label">Service pages</span><h2>Verify the live page</h2>
+<p>Use a private/incognito browser window after publishing.</p>
+<h3>Public URL</h3>
+<p>Open:</p>
+<pre>
 https://YOUR-DOMAIN.example/services/your-slug/
 </pre>
 <p>Check:</p>
@@ -179,78 +165,63 @@ https://YOUR-DOMAIN.example/services/your-slug/
 <p>If the service should appear as a homepage service card, edit the homepage/site settings and add it to <strong>Homepage service cards</strong>. Publishing a service does not necessarily select it for the limited homepage card list.</p>
 <h3>REST API checks</h3>
 <p>Replace <code>YOUR-DOMAIN.example</code> and <code>your-slug</code> with the live values:</p>
-<p>```text</p>
-<p>https://YOUR-DOMAIN.example/wp-json/spp/v1/services</p>
-<p>https://YOUR-DOMAIN.example/wp-json/spp/v1/services/your-slug</p>
-<p>https://YOUR-DOMAIN.example/wp-json/spp/v1/routes/services/your-slug</p>
 <pre>
-
-The first endpoint should list the published service. The second should return the full service payload. The third should return the route data consumed by the React page.
-
-Confirm the JSON includes the expected title, slug, hero data, scope, process, benefits, gallery and related services.
-
-### Browser check
-
-Open the published page, open the browser developer tools, and check the Network tab. The page should successfully load the relevant `/wp-json/spp/v1/` requests. A failed request or a response containing the wrong slug usually indicates a WordPress publish, permalink, cache or plugin issue.
-
-## Editing an existing service
-
-1. Open **Superior Plus &#226;†’ Services**.
-2. Select the service title.
-3. Change only the fields that need updating.
-4. Select **Update**.
-5. Use **Content preview** to review the saved result.
-6. Check the public URL and API endpoints again.
-
-If changing the slug is unavoidable, record the old and new URLs first and ask the site administrator/developer to add or verify a permanent redirect. A slug change can break bookmarks, search results, internal links and existing campaign URLs.
-
-## Troubleshooting
-
-### The service is not visible publicly
-
-Check that:
-
-- The post status is **Published**, not Draft or Pending.
-- The service has the `service` locked template.
-- The URL uses `/services/`, not `/service/`.
-- The plugin is active on the live site.
-- The live site is not serving a cached page.
-- The service appears in `/wp-json/spp/v1/services`.
-
-### The page shows old content
-
-Check the single-service endpoint first. If the API has the new content but the page does not, clear page/CDN/browser caches and verify the theme bundle is current. If the API is old, the WordPress edit may not have been saved or the live site may be connected to a different WordPress installation.
-
-### The page is a 404 after publishing
-
-Check the exact slug and permalink structure. Save WordPress **Settings &#226;†’ Permalinks** once to flush rewrite rules, then retest the public route and the REST route.
-
-### Images are missing
-
-Confirm the image is in the live Media Library, not only in a local development environment. Re-select the image, save the service, and retest the public page.
-
-### The homepage card is missing
-
-The service can be published and visible in the Services directory while still being absent from the homepage card selection. Add it to the homepage&#39;s **Homepage service cards** relationship field, save, and verify the homepage.
-
-## Completion record
-
-For each new service, record:
-
-- Service title
-- Final slug and public URL
-- Date published
-- Editor who approved it
-- Hero image and alt text
-- Whether it was added to homepage cards
-- Preview approved: yes/no
-- Public URL checked: yes/no
-- Services directory checked: yes/no
-- REST API checked: yes/no
-- Mobile layout checked: yes/no
-- Quote/contact CTA checked: yes/no
-
+https://YOUR-DOMAIN.example/wp-json/spp/v1/services
+https://YOUR-DOMAIN.example/wp-json/spp/v1/services/your-slug
+https://YOUR-DOMAIN.example/wp-json/spp/v1/routes/services/your-slug
 </pre>
+<p>The first endpoint should list the published service. The second should return the full service payload. The third should return the route data consumed by the React page.</p>
+<p>Confirm the JSON includes the expected title, slug, hero data, scope, process, benefits, gallery and related services.</p>
+<h3>Browser check</h3>
+<p>Open the published page, open the browser developer tools, and check the Network tab. The page should successfully load the relevant <code>/wp-json/spp/v1/</code> requests. A failed request or a response containing the wrong slug usually indicates a WordPress publish, permalink, cache or plugin issue.</p>
+</section>
+<section class="page"><span class="label">Service pages</span><h2>Editing an existing service</h2>
+<ol>
+<li>Open <strong>Superior Plus &#226;†’ Services</strong>.</li>
+<li>Select the service title.</li>
+<li>Change only the fields that need updating.</li>
+<li>Select <strong>Update</strong>.</li>
+<li>Use <strong>Content preview</strong> to review the saved result.</li>
+<li>Check the public URL and API endpoints again.</li>
+</ol>
+<p>If changing the slug is unavoidable, record the old and new URLs first and ask the site administrator/developer to add or verify a permanent redirect. A slug change can break bookmarks, search results, internal links and existing campaign URLs.</p>
+</section>
+<section class="page"><span class="label">Service pages</span><h2>Troubleshooting</h2>
+<h3>The service is not visible publicly</h3>
+<p>Check that:</p>
+<ul>
+<li>The post status is <strong>Published</strong>, not Draft or Pending.</li>
+<li>The service has the <code>service</code> locked template.</li>
+<li>The URL uses <code>/services/</code>, not <code>/service/</code>.</li>
+<li>The plugin is active on the live site.</li>
+<li>The live site is not serving a cached page.</li>
+<li>The service appears in <code>/wp-json/spp/v1/services</code>.</li>
+</ul>
+<h3>The page shows old content</h3>
+<p>Check the single-service endpoint first. If the API has the new content but the page does not, clear page/CDN/browser caches and verify the theme bundle is current. If the API is old, the WordPress edit may not have been saved or the live site may be connected to a different WordPress installation.</p>
+<h3>The page is a 404 after publishing</h3>
+<p>Check the exact slug and permalink structure. Save WordPress <strong>Settings &#226;†’ Permalinks</strong> once to flush rewrite rules, then retest the public route and the REST route.</p>
+<h3>Images are missing</h3>
+<p>Confirm the image is in the live Media Library, not only in a local development environment. Re-select the image, save the service, and retest the public page.</p>
+<h3>The homepage card is missing</h3>
+<p>The service can be published and visible in the Services directory while still being absent from the homepage card selection. Add it to the homepage&#39;s <strong>Homepage service cards</strong> relationship field, save, and verify the homepage.</p>
+</section>
+<section class="page"><span class="label">Service pages</span><h2>Completion record</h2>
+<p>For each new service, record:</p>
+<ul>
+<li>Service title</li>
+<li>Final slug and public URL</li>
+<li>Date published</li>
+<li>Editor who approved it</li>
+<li>Hero image and alt text</li>
+<li>Whether it was added to homepage cards</li>
+<li>Preview approved: yes/no</li>
+<li>Public URL checked: yes/no</li>
+<li>Services directory checked: yes/no</li>
+<li>REST API checked: yes/no</li>
+<li>Mobile layout checked: yes/no</li>
+<li>Quote/contact CTA checked: yes/no</li>
+</ul>
 </section>
 <p class="footer">Superior Plus Service Page Management Guide &middot; Prepared for sppaintingremodeling.com.au</p></body></html>
 
